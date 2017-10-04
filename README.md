@@ -1,2 +1,10 @@
-# awooos
-some kind of operating system
+# awooOS
+
+Some kind of operating system.
+
+## Build dependencies
+
+* Clang
+* NASM
+* GNU Make
+

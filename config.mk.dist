@@ -1,0 +1,9 @@
+TARGET := i686
+
+CC     := clang
+AS     := nasm
+AR     := ar
+RANLIB := ranlib
+LD     := ld
+
+QEMU   := qemu-system-x86_64
