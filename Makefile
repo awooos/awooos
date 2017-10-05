@@ -14,13 +14,14 @@ override LDFLAGS += -nostdlib -g -melf_i386
 override ASFLAGS += -felf32
 
 include config.mk
+include make/${TARGET}.mk
 
 SRCFILES := $(shell find 'src' '(' -name '*.c' -o -name '*.asm' ')')
 OBJFILES := $(patsubst %.asm, %.o, $(patsubst %.c, %.o, ${SRCFILES}))
 
 BUILDINFO := $(shell ./bin/buildinfo.sh ${BUILD_TYPE} ${TARGET} > ./include/buildinfo.h)
 
-all: config.mk iso
+all: config.mk src/kernel.exe
 
 config.mk:
 	@printf "You will need to copy config.mk.dist to config.mk first.\n"
@@ -32,12 +33,15 @@ config.mk:
 %.o: %.asm
 	${AS} ${ASFLAGS} -o $@ $<
 
-%.exe: libs $(filter %, ${OBJFILES})
-	${LD} -o $@ ${LDFLAGS} $(filter-out libs, $^) -L src/libraries
+%.exe: libs ${OBJFILES}
+	${LD} -o $@ ${LDFLAGS} $(filter $*/%,$^) -L src/libraries
 
-%.lib: $(filter %, ${OBJFILES})
-	${AR} rc $@ $^
+%.lib: ${OBJFILES}
+	${AR} rc $@ $(filter $*/%,$^)
 	${RANLIB} $@
+
+src/kernel.exe: ${BOOTSTRAP_TARGETS} libs modules $(filter %,${OBJFILES})
+	${LD} -o $@ ${LDFLAGS} ${KERNEL_LDFLAGS} $(filter src/bootstrap/% src/kernel/%,$^) -L src/libraries
 
 # ASSUMPTION: Any library with a hyphen in the name are platform-specific.
 #
@@ -82,7 +86,7 @@ clean:
 	@find ./src -name '*.d'   -delete
 	@rm -f ${ISO_FILE}
 
-.PHONY: all iso clean test qemu qemu-monitor clean
+.PHONY: all iso libs modules clean test qemu qemu-monitor clean
 
 # Don't auto-delete .o files.
 .SECONDARY: ${OBJFILES}
