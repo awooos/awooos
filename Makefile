@@ -13,6 +13,7 @@ override LDFLAGS += -nostdlib -g -melf_i386
 
 override ASFLAGS += -felf32
 
+include make/despair.mk
 include config.mk
 include make/${TARGET}.mk
 
@@ -34,14 +35,14 @@ config.mk:
 	${AS} ${ASFLAGS} -o $@ $<
 
 %.exe: libs ${OBJFILES}
-	${LD} -o $@ ${LDFLAGS} $(filter $*/%,$^) -L src/libraries
+	# The various ${$(call ...)} things expand in such a way that if
+	# this rule matches src/kernel.exe, it adds the following:
+	#   ${KERNEL_EXE_LDFLAGS} ${KERNEL_EXE_TARGETS}
+	${LD} -o $@ ${LDFLAGS} ${$(call rule_var,$@,LDFLAGS)} ${$(call rule_var,$@,TARGETS)} $(filter $*/%,$^) -L src/libraries
 
 %.lib: ${OBJFILES}
 	${AR} rc $@ $(filter $*/%,$^)
 	${RANLIB} $@
-
-src/kernel.exe: ${BOOTSTRAP_TARGETS} libs modules ${OBJFILES}
-	${LD} -o $@ ${LDFLAGS} ${KERNEL_LDFLAGS} $(filter src/bootstrap/% src/kernel/%,$^) -L src/libraries
 
 # ASSUMPTION: Any library with a hyphen in the name are platform-specific.
 #
