@@ -40,7 +40,7 @@ config.mk:
 	${AR} rc $@ $(filter $*/%,$^)
 	${RANLIB} $@
 
-src/kernel.exe: ${BOOTSTRAP_TARGETS} libs modules $(filter %,${OBJFILES})
+src/kernel.exe: ${BOOTSTRAP_TARGETS} libs modules ${OBJFILES}
 	${LD} -o $@ ${LDFLAGS} ${KERNEL_LDFLAGS} $(filter src/bootstrap/% src/kernel/%,$^) -L src/libraries
 
 # ASSUMPTION: Any library with a hyphen in the name are platform-specific.
