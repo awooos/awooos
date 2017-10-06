@@ -1,4 +1,4 @@
-TARGET := i686
+TARGET := i386
 
 CC     := clang
 AS     := nasm

@@ -2,17 +2,20 @@ NAME := awoo
 
 BUILD_TYPE ?= debug
 
-TARGET ?= i686
-
 ISO_DIR  ?= iso/
 ISO_FILE ?= ${ISO_DIR}/${NAME}-${TARGET}.iso
 
-override CFLAGS += -std=c11 -pedantic-errors -gdwarf-2 -m32 -nostdinc -ffreestanding -fno-stack-protector -fno-builtin -fdiagnostics-show-option -Wall -Wextra -Wpedantic -Wunused -Wformat=2 -Winit-self -Wmissing-include-dirs -Wstrict-overflow=4 -Wfloat-equal -Wwrite-strings -Wconversion -Wundef -Wtrigraphs -Wunused-parameter -Wunknown-pragmas -Wcast-align -Wswitch-enum -Waggregate-return -Wmissing-noreturn -Wmissing-format-attribute -Wpacked -Wredundant-decls -Wunreachable-code -Winline -Winvalid-pch -Wdisabled-optimization -Wsystem-headers -Wbad-function-cast -Wunused-function -Werror=implicit-function-declaration
+override CFLAGS += -std=c11 -pedantic-errors -gdwarf-2 -nostdinc -ffreestanding -fno-stack-protector -fno-builtin -fdiagnostics-show-option -Wall -Wextra -Wpedantic -Wunused -Wformat=2 -Winit-self -Wmissing-include-dirs -Wstrict-overflow=4 -Wfloat-equal -Wwrite-strings -Wconversion -Wundef -Wtrigraphs -Wunused-parameter -Wunknown-pragmas -Wcast-align -Wswitch-enum -Waggregate-return -Wmissing-noreturn -Wmissing-format-attribute -Wpacked -Wredundant-decls -Wunreachable-code -Winline -Winvalid-pch -Wdisabled-optimization -Wsystem-headers -Wbad-function-cast -Wunused-function -Werror=implicit-function-declaration
 
-override LDFLAGS += -nostdlib -g -melf_i386
+override LDFLAGS += -nostdlib -g
 
-override ASFLAGS += -felf32
+override ASFLAGS +=
 
+# If config.mk doesn't exist, it triggers the corresponding rule.
+# If ${TARGET} is undefined, this triggers the "make/.mk" rule.
+#
+# Also, the LAST INCLUDED FILE is attempted first, because... reasons?
+# So we need config.mk last.
 include make/despair.mk
 include config.mk
 include make/${TARGET}.mk
@@ -22,11 +25,16 @@ OBJFILES := $(patsubst %.asm, %.o, $(patsubst %.c, %.o, ${SRCFILES}))
 
 BUILDINFO := $(shell ./bin/buildinfo.sh ${BUILD_TYPE} ${TARGET} > ./include/buildinfo.h)
 
-all: config.mk src/kernel.exe
+all: src/kernel.exe
 
+# Make sure config.mk exists. This shouldn't be automated, so print an error.
 config.mk:
-	@printf "You will need to copy config.mk.dist to config.mk first.\n"
-	@false
+	$(error Please copy config.mk.dist to config.mk and adjust it as needed)
+
+# This rule is triggered by "include make/${TARGET}.mk" if TARGET is undefined.
+# This shouldn't be automated, so print an error.
+make/.mk:
+	$(error TARGET is undefined. Set it on the command line or in config.mk)
 
 %.o: %.c
 	${CC} ${CFLAGS} -c $< -o $@
