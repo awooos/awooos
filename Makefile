@@ -20,7 +20,21 @@ include make/despair.mk
 include config.mk
 include make/${TARGET}.mk
 
-SRCFILES := $(shell find 'src' '(' -name '*.c' -o -name '*.asm' ')')
+# == Begin gross bullshit for only matching things for the current platform. ==
+
+# We're searching for .c and .asm files.
+SOURCE_SUFFIXES := '(' -name '*.c' -o -name '*.asm' ')'
+
+# E.g. src/bootstrap/i386, src/libraries/hal-i386, etc. (But for the specific
+#      target we're building for.)
+INCLUDE_CURRENT_TARGET_DIRECTORIES := '(' -wholename 'src/*/${TARGET}/*' -o -wholename 'src/*/*-${TARGET}/*' ')'
+
+# Ignore things that are target
+EXCLUDE_ALL_TARGET_DIRECTORIES := '(' '!' -wholename 'src/*/*-*/*' -a '!' -wholename 'src/bootstrap/*' ')'
+
+# == End gross bullshit for only matching things for the current platform.   ==
+
+SRCFILES := $(shell find 'src' ${SOURCE_SUFFIXES} ${EXCLUDE_ALL_TARGET_DIRECTORIES}) $(shell find 'src' ${SOURCE_SUFFIXES} -a ${INCLUDE_CURRENT_TARGET_DIRECTORIES})
 OBJFILES := $(patsubst %.asm, %.o, $(patsubst %.c, %.o, ${SRCFILES}))
 
 BUILDINFO := $(shell ./bin/buildinfo.sh ${BUILD_TYPE} ${TARGET} > ./include/buildinfo.h)
