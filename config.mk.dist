@@ -6,4 +6,4 @@ AR     := ar
 RANLIB := ranlib
 LD     := ld
 
-QEMU   := qemu-system-x86_64
+QEMU   := qemu-system-i386
