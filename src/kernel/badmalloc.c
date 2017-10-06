@@ -16,6 +16,3 @@ void *badmalloc(size_t size) {
 
     return (ptr - size);
 }
-
-/* Honestly, this is only here because I have OCD. -@duckinator */
-void badfree(){}
