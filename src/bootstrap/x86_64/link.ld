@@ -2,37 +2,40 @@ ENTRY(_start)
 
 SECTIONS {
 	. = 0x100000;
-	start = .;
+	kernel_start = .;
 
 	.debug_info : {
-		debug_info_start = .;
+		kernel_debug_info_start = .;
 		*(.debug_info)
-		debug_info_end = .;
+		kernel_debug_info_end = .;
 	}
 
 	.text : ALIGN (0x1000) {
+		kernel_code_start = .;
 		*(.mboot)
 		*(.text)
+		kernel_code_end = .;
 	}
 
 	.rodata ALIGN (0x1000) : {
+		kernel_rodata_start = .;
 		*(.rodata)
+		kernel_rodata_end = .;
 	}
 
 	.data ALIGN (0x1000) : {
+		kernel_data_start = .;
 		*(.data)
-		start_tests = .;
-		*(tests*)
-		end_tests = .;
+		kernel_data_end = .;
 	}
 
 	.bss ALIGN (0x1000) : {
-		sbss = .;
+		kernel_bss_start = .;
 		*(COMMON)
 		*(.bss)
-		ebss = .;
+		kernel_bss_end = .;
 	}
 
-	end = .;
+	kernel_end = .;
 }
 
