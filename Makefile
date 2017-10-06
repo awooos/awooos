@@ -29,7 +29,7 @@ SOURCE_SUFFIXES := '(' -name '*.c' -o -name '*.asm' ')'
 #      target we're building for.)
 INCLUDE_CURRENT_TARGET_DIRECTORIES := '(' -wholename 'src/*/${TARGET}/*' -o -wholename 'src/*/*-${TARGET}/*' ')'
 
-# Ignore things that are target
+# Ignore things that are target-specific.
 EXCLUDE_ALL_TARGET_DIRECTORIES := '(' '!' -wholename 'src/*/*-*/*' -a '!' -wholename 'src/bootstrap/*' ')'
 
 # == End gross bullshit for only matching things for the current platform.   ==
