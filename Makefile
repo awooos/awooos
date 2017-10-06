@@ -25,8 +25,8 @@ include make/${TARGET}.mk
 # We're searching for .c and .asm files.
 SOURCE_SUFFIXES := '(' -name '*.c' -o -name '*.asm' ')'
 
-# E.g. src/bootstrap/i386, src/libraries/hal-i386, etc. (But for the specific
-#      target we're building for.)
+# E.g. src/bootstrap/i386, src/libraries/hal-i386, etc.
+#      (But for the specific target we're building for.)
 INCLUDE_CURRENT_TARGET_DIRECTORIES := '(' -wholename 'src/*/${TARGET}/*' -o -wholename 'src/*/*-${TARGET}/*' ')'
 
 # Ignore things that are target-specific.
