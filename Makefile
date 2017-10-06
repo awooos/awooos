@@ -34,7 +34,7 @@ EXCLUDE_ALL_TARGET_DIRECTORIES := '(' '!' -wholename 'src/*/*-*/*' -a '!' -whole
 
 # == End gross bullshit for only matching things for the current platform.   ==
 
-SRCFILES := $(shell find 'src' ${SOURCE_SUFFIXES} ${EXCLUDE_ALL_TARGET_DIRECTORIES}) $(shell find 'src' ${SOURCE_SUFFIXES} -a ${INCLUDE_CURRENT_TARGET_DIRECTORIES})
+SRCFILES := $(shell find 'src' ${SOURCE_SUFFIXES} ${EXCLUDE_ALL_TARGET_DIRECTORIES}) $(shell find 'src' ${SOURCE_SUFFIXES} ${INCLUDE_CURRENT_TARGET_DIRECTORIES})
 OBJFILES := $(patsubst %.asm, %.o, $(patsubst %.c, %.o, ${SRCFILES}))
 
 BUILDINFO := $(shell ./bin/buildinfo.sh ${BUILD_TYPE} ${TARGET} > ./include/buildinfo.h)
