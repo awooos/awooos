@@ -1,10 +1,11 @@
 /* Technically a memory allocator. */
 
 #include <stddef.h>
+#include "badmalloc.h"
 
 extern size_t *kernel_end;
 
-void *badmalloc (size_t size) {
+void *badmalloc(size_t size) {
     static size_t *ptr = 0;
 
     if (ptr == 0) {
