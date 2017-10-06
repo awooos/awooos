@@ -57,9 +57,9 @@ make/.mk:
 	${AS} ${ASFLAGS} -o $@ $<
 
 %.exe: libs ${OBJFILES}
-	# The various ${$(call ...)} things expand in such a way that if
-	# this rule matches src/kernel.exe, it adds the following:
-	#   ${KERNEL_EXE_LDFLAGS} ${KERNEL_EXE_TARGETS}
+	@# The various ${$(call ...)} things expand in such a way that if
+	@# this rule matches src/kernel.exe, it adds the following:
+	@#   ${KERNEL_EXE_LDFLAGS} ${KERNEL_EXE_TARGETS}
 	${LD} -o $@ ${LDFLAGS} ${$(call rule_var,$@,LDFLAGS)} ${$(call rule_var,$@,TARGETS)} $(filter $*/%,$^) -L src/libraries
 
 %.lib: ${OBJFILES}
