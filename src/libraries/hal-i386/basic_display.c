@@ -2,6 +2,7 @@
 
 #include <kernel/hal_basic_display.h>
 #include <stdint.h>
+#include <stddef.h>
 
 const uint16_t *VIDEO_RAM = (const uint16_t*)0xB8000;
 
@@ -22,8 +23,8 @@ void hal_basic_display_print(const char *string)
     static uint8_t row = 0;
     static uint8_t col = 0;
 
-    uint16_t text_index;
-    uint16_t color_index;
+    size_t text_index;
+    size_t color_index;
 
     if (video == 0) {
         video = (char*)VIDEO_RAM;
