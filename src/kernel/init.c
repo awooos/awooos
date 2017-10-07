@@ -4,5 +4,5 @@
 
 void kernel_init(uint32_t magic, void *arg)
 {
-    hal_basic_display_print("Hello, world!\nmeep\r\nmoop\r\n");
+    hal_basic_display_print("Hello, world!\r\nmeep\r\nmoop");
 }
