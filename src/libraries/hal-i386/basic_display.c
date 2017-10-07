@@ -22,8 +22,8 @@ void hal_basic_display_print(const char *string)
     static uint8_t row = 0;
     static uint8_t col = 0;
 
-    uint8_t text_index;
-    uint8_t color_index;
+    uint16_t text_index;
+    uint16_t color_index;
 
     if (video == 0) {
         video = (char*)VIDEO_RAM;
@@ -34,17 +34,17 @@ void hal_basic_display_print(const char *string)
         if (*string == '\r') {
             col = 0;
         } else if (*string == '\n') {
-//            col = 0;
+            col = 0;
             row += 1;
         } else {
-/*            if (col >= VIDEO_WIDTH) {
+            if (col >= VIDEO_WIDTH) {
                 col = 0;
                 row += 1;
             }
             if (row >= VIDEO_HEIGHT) {
                 row = 0; // TODO: deal with scrolling.
             }
-*/
+
             text_index = ((row * VIDEO_WIDTH) + col) * 2;
             color_index = text_index + 1;
             video[text_index] = *string;
