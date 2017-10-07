@@ -60,9 +60,9 @@ make/.mk:
 	@# The various ${$(call ...)} things expand in such a way that if
 	@# this rule matches src/kernel.exe, it adds the following:
 	@#   ${KERNEL_EXE_LDFLAGS} ${KERNEL_EXE_TARGETS}
-	${LD} -o $@ ${LDFLAGS} ${$(call rule_var,$@,LDFLAGS)} ${$(call rule_var,$@,TARGETS)} $(filter $*/%,$^) -L src/libraries
+	${LD} -o $@ -L src/libraries ${LDFLAGS} ${$(call rule_var,$@,LDFLAGS)} ${$(call rule_var,$@,TARGETS)} $(filter $*/%,$^) ${$(call rule_var,$@,LIBRARIES)}
 
-%.lib: ${OBJFILES}
+%.a: ${OBJFILES}
 	${AR} rc $@ $(filter $*/%,$^)
 	${RANLIB} $@
 
@@ -75,7 +75,7 @@ make/.mk:
 # For each directory that matches src/libraries/*-${TARGET}, it includes
 # that library. (Using the same src/libraries/X -> src/libraries/X.lib rule
 # as above.)
-libs: $(shell find src/libraries -mindepth 1 -type d -not -name "*-*" -exec printf {}.lib \;) $(shell find src/libraries -mindepth 1 -type d -wholename "src/libraries/*-${TARGET}" -exec printf {}.lib \;)
+libs: $(shell find src/libraries -mindepth 1 -type d -not -name "*-*" -o -wholename "src/libraries/*-${TARGET}" -exec printf {}.a \;)
 
 # Same deal as the "libs" target, but with modules.
 modules: $(shell find src/modules -mindepth 1 -type d -not -name "*-*" -exec printf {}.exe \;) $(shell find src/modules -mindepth 1 -type d -wholename "src/modules/*-${TARGET}" -exec printf {}.exe \;)
@@ -86,7 +86,7 @@ iso: src/kernel.exe libs modules
 	cp -r data/isofs/ isofs/
 	mkdir -p isofs/system isofs/libraries
 	cp src/*.exe isofs/system
-	cp src/libraries/*.lib isofs/libraries
+	cp src/libraries/*.a isofs/libraries
 	genisoimage --boot-info-table -R -b boot/grub/stage2_eltorito -no-emul-boot -boot-load-size 4 -input-charset utf-8 -o ${ISO_FILE} isofs
 
 test: iso
@@ -104,6 +104,7 @@ vbox: iso
 clean:
 	@rm -rf ./isofs
 	@find ./src -name '*.o'   -delete
+	@find ./src -name '*.a'   -delete
 	@find ./src -name '*.lib' -delete
 	@find ./src -name '*.exe' -delete
 	@find ./src -name '*.d'   -delete

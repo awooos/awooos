@@ -9,5 +9,6 @@ override ASFLAGS += -felf32
 KERNEL_EXE_TARGETS := src/bootstrap/i386/start.o
 # Have src/kernel.exe use the bootstrap linker script.
 KERNEL_EXE_LDFLAGS := -T src/bootstrap/i386/link.ld
+KERNEL_EXE_LIBRARIES := -l :hal-i386.a
 
 QEMU ?= qemu-system-i386
