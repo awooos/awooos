@@ -5,6 +5,6 @@
 
 #define __awoo__
 
-#define AWOO_INFO "awooOS "AWOO_TARGET" "AWOO_VERSION
+#define AWOO_INFO "awooOS "AWOO_TARGET_PRETTY" "AWOO_VERSION
 
 #endif
