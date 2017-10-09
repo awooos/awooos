@@ -4,6 +4,7 @@
 # Temporary files
 /isofs/
 /include/buildinfo.h
+/include/awoo/build_info.h
 
 # Configuration files
 config.mk
