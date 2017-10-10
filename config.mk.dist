@@ -7,3 +7,4 @@ RANLIB := ranlib
 LD     := ld
 
 QEMU   := qemu-system-i386
+BOCHS  := bochs

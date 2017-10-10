@@ -98,6 +98,9 @@ qemu: iso
 qemu-monitor: iso
 	${QEMU} -monitor stdio -cdrom ${ISO_FILE}
 
+bochs: iso
+	cd iso && ${BOCHS} -q -f bochsrc-${TARGET}.txt
+
 vbox: iso
 	VirtualBox --startvm ${NAME} --debug-statistics --debug-command-line --start-running
 
