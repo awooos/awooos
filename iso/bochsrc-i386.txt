@@ -1,0 +1,3 @@
+boot: cdrom
+megs: 75
+ata0-master: type=cdrom, path=awoo-i386.iso, status=inserted

@@ -8,6 +8,7 @@
 
 # Configuration files
 config.mk
+/iso/bx_enh_dbg.ini
 
 # Prerequisites
 *.d
