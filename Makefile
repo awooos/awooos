@@ -83,7 +83,7 @@ modules: $(shell find src/modules -mindepth 1 -type d -not -name "*-*" -exec pri
 
 iso: src/kernel.exe libs modules
 	mkdir -p ${ISO_DIR}
-	cp -r data/isofs/ isofs/
+	cp -r assets/isofs/ ./
 	mkdir -p isofs/system isofs/libraries
 	cp src/*.exe isofs/system
 	cp src/libraries/*.a isofs/libraries
