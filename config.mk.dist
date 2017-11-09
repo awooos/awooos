@@ -1,10 +1,13 @@
-TARGET := i386
+TARGET  := i386
 
-CC     := clang
-AS     := nasm
-AR     := ar
-RANLIB := ranlib
-LD     := ld
+CC      := clang
+AS      := nasm
+AR      := ar
+RANLIB  := ranlib
+LD      := ld
 
-QEMU   := qemu-system-i386
-BOCHS  := bochs
+QEMU    := qemu-system-i386
+BOCHS   := bochs
+
+# NOTE: xorriso, mkisofs, _and_ genisoimage may all have different defaults.
+MKISOFS := xorriso -as mkisofs
