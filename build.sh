@@ -17,4 +17,19 @@ else
     docker build . -t "${REPONAME}"
 fi
 
-docker run --rm -it ${MOUNTS} -u $(id -u) "${REPONAME}" "$@"
+for real_arg in "$@"; do
+  arg="$real_arg"
+
+  adjusted=false
+  case $arg in
+    qemu*|bochs|vbox)
+      arg="all"
+      adjusted=true
+  esac
+
+  docker run --rm -it ${MOUNTS} -u $(id -u) "${REPONAME}" "$arg"
+
+  if $adjusted; then
+    make "$real_arg"
+  fi
+done
