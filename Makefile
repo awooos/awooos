@@ -70,11 +70,11 @@ make/.mk:
 #
 # For each directory in src/libraries/ that does not include a hyphen, it
 # includes that library. So, e.g., src/libraries/libc becomes
-# src/libraries/libc.lib.
+# src/libraries/libc.a.
 #
 # For each directory that matches src/libraries/*-${TARGET}, it includes
-# that library. (Using the same src/libraries/X -> src/libraries/X.lib rule
-# as above.)
+# that library.
+# (Using the same src/libraries/X -> src/libraries/X.a rule as above.)
 libs: $(shell find src/libraries -mindepth 1 -type d -not -name "*-*" -o -wholename "src/libraries/*-${TARGET}" -exec printf {}.a \;)
 
 # Same deal as the "libs" target, but with modules.
