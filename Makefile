@@ -94,10 +94,10 @@ test: iso
 	./bin/test.sh "${QEMU}"
 
 qemu: iso
-	${QEMU} -vga std -serial stdio -cdrom ${ISO_FILE}
+	${QEMU} ${QEMU_FLAGS} -vga std -serial stdio -cdrom ${ISO_FILE}
 
 qemu-monitor: iso
-	${QEMU} -monitor stdio -cdrom ${ISO_FILE}
+	${QEMU} ${QEMU_FLAGS} -monitor stdio -cdrom ${ISO_FILE}
 
 bochs: iso
 	cd iso && ${BOCHS} -q -f bochsrc-${TARGET}.txt
