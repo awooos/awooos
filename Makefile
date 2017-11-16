@@ -17,7 +17,8 @@ override ASFLAGS +=
 # Also, the LAST INCLUDED FILE is attempted first, because... reasons?
 # So we need config.mk last.
 include make/despair.mk
-include config.mk
+AWOO_MAKE_CONFIG ?= config.mk
+include ${AWOO_MAKE_CONFIG}
 include make/${TARGET}.mk
 
 # == Begin gross bullshit for only matching things for the current platform. ==
