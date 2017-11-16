@@ -9,7 +9,10 @@ MOUNTS="-v $(pwd):/tmp/build -w /tmp/build"
 
 image=$(docker images --format "{{.Repository}}\t{{.Tag}}\t{{.CreatedAt}}" "${REPONAME}:${TAG}")
 
-[ -n "${image}" ]       && BUILD=true
+if [ -n "${image}" ]; then
+  BUILD=true
+fi
+
 if [ "$1" == "--build" ]; then
   BUILD=true
   shift
