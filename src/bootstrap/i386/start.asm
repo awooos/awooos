@@ -33,7 +33,7 @@ section .text
     ; This, generally speaking, probably shouldn't happen.
 
     cli                   ; Stop interrupts.
-    hlt                  ; Halt the machine.
+    hlt                   ; Halt the machine.
 
 
 ; Data section.
