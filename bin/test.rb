@@ -1,11 +1,13 @@
 #!/usr/bin/env ruby
 
+require 'open3'
+
 class Qemu
   def call(platform:, memory:, args: [], &block)
     qemu = find_qemu(platform)
     command = [qemu, *args]
 
-    IO.popen3(command, &block)
+    Open3.popen3(command, &block)
   end
 
   def find_qemu(platform)
@@ -58,7 +60,7 @@ class QemuTest < Qemu
     end
 
     def print
-
+      puts "TODO"
     end
 
     def status
