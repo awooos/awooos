@@ -20,7 +20,7 @@ Some kind of operating system.
 
 ## Development
 
-After checking out the repo, run `bin/setup` to install dependencies. Then, run `bin/make test` to run the tests.
+After checking out the repo, run `bin/make test` to run the tests.
 
 ## Contributing
 
