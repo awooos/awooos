@@ -57,11 +57,11 @@ make/.mk:
 %.o: %.asm
 	${AS} ${ASFLAGS} -o $@ $<
 
-%.exe: libs ${OBJFILES}
+%.exe: modules ${OBJFILES}
 	@# The various ${$(call ...)} things expand in such a way that if
 	@# this rule matches src/kernel.exe, it adds the following:
 	@#   ${KERNEL_EXE_LDFLAGS} ${KERNEL_EXE_TARGETS}
-	${LD} -o $@ -L src/libraries ${LDFLAGS} ${$(call rule_var,$@,LDFLAGS)} ${$(call rule_var,$@,TARGETS)} $(filter $*/%,$^) ${$(call rule_var,$@,LIBRARIES)}
+	${LD} -o $@ -L src/modules -L src/libraries ${LDFLAGS} ${$(call rule_var,$@,LDFLAGS)} ${$(call rule_var,$@,TARGETS)} $(filter $*/%,$^) ${$(call rule_var,$@,MODULES)}
 
 %.a: ${OBJFILES}
 	${AR} rc $@ $(filter $*/%,$^)
@@ -76,18 +76,19 @@ make/.mk:
 # For each directory that matches src/libraries/*-${TARGET}, it includes
 # that library.
 # (Using the same src/libraries/X -> src/libraries/X.a rule as above.)
-libs: $(shell find src/libraries -mindepth 1 -type d -not -name "*-*" -o -wholename "src/libraries/*-${TARGET}" -exec printf {}.a \;)
+libraries: $(shell find src/libraries -mindepth 1 -type d -not -name "*-*" -o -wholename "src/libraries/*-${TARGET}" -exec printf {}.a \;)
 
-# Same deal as the "libs" target, but with modules.
-modules: $(shell find src/modules -mindepth 1 -type d -not -name "*-*" -exec printf {}.exe \;) $(shell find src/modules -mindepth 1 -type d -wholename "src/modules/*-${TARGET}" -exec printf {}.exe \;)
+# Same deal as the "libraries" target, but with modules.
+modules: $(shell find src/modules -mindepth 1 -type d -not -name "*-*" -exec printf {}.exe \;) $(shell find src/modules -mindepth 1 -type d -wholename "src/modules/*-${TARGET}" -exec printf {}.a \;)
 
 
-iso: src/kernel.exe libs modules
+iso: src/kernel.exe libraries modules
 	mkdir -p ${ISO_DIR}
 	cp -r assets/isofs/ ./
-	mkdir -p isofs/system isofs/libraries
+	mkdir -p isofs/system isofs/libraries isofs/modules
 	cp src/*.exe isofs/system
-	cp src/libraries/*.a isofs/libraries
+	@#cp src/libraries/*.a isofs/libraries
+	cp src/modules/*.a isofs/modules
 	${MKISOFS} -boot-info-table -R -b boot/grub/stage2_eltorito -no-emul-boot -boot-load-size 4 -input-charset utf-8 -o ${ISO_FILE} isofs
 
 test: iso
@@ -114,7 +115,7 @@ clean:
 	@find ./src -name '*.d'   -delete
 	@rm -f ${ISO_FILE}
 
-.PHONY: all iso libs modules clean test qemu qemu-monitor clean
+.PHONY: all iso libraries modules clean test qemu qemu-monitor clean
 
 # Don't auto-delete .o files.
 .SECONDARY: ${OBJFILES}
