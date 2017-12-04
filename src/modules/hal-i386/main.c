@@ -1,4 +1,9 @@
-void hal_init(void)
+#include <kernel.h>
+#include "basic_display.h"
+#include "basic_uart.h"
+
+void hal_init()
 {
-    /* TODO */
+    hal_basic_display_init();
+    hal_basic_uart_init();
 }

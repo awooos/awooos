@@ -1,6 +1,6 @@
 /// Mmmmmm, that sweet memory-mapped VGA goodness.
 
-#include <kernel/hal_basic_display.h>
+#include "basic_display.h"
 #include "ports.h"
 #include <stdint.h>
 
@@ -89,4 +89,9 @@ void hal_basic_display_clear()
     row = 0;
     col = 0;
     hal_basic_display_move_cursor(row, col);
+}
+
+void hal_basic_display_init()
+{
+    hal_basic_display_clear();
 }
