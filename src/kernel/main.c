@@ -6,5 +6,5 @@
 void kernel_main(uint32_t magic, void *arg)
 {
     hal_init();
-    kprint(AWOO_INFO);
+    kprint(AWOO_INFO "\r\n");
 }
