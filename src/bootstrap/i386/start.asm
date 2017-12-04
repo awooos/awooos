@@ -1,7 +1,7 @@
 global _start       ; Make entrypoint visible to linker.
 global stack_bottom ; Bottom of the stack.
 global stack_top    ; Top of the stack.
-extern kernel_init  ; Defined in kernel/init.c.
+extern kernel_main  ; Defined in kernel/main.c.
 
 ; Amount of space to reserve for the stack.
 STACKSIZE equ 0x4000 ; That's 16KB.
@@ -24,10 +24,10 @@ section .text
 
   _start:
     mov  esp, stack_top   ; Set up the stack.
-    push ebx              ; Argument to kernel_init.
+    push ebx              ; Argument to kernel_main.
     push eax              ; Provided by Multiboot-compliant bootloaders.
 
-    call kernel_init      ; Call kernel proper.
+    call kernel_main      ; Call kernel proper.
 
     ; We only get here if the kernel returns.
     ; This, generally speaking, probably shouldn't happen.
