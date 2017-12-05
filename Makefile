@@ -3,7 +3,7 @@ NAME := awoo
 BUILD_TYPE ?= debug
 
 ISO_DIR  ?= iso/
-ISO_FILE ?= ${ISO_DIR}/${NAME}-${TARGET}.iso
+ISO_FILE ?= ${ISO_DIR}/${NAME}-${TARGET}-${BUILD_TYPE}.iso
 
 override CFLAGS += -std=c11 -pedantic-errors -gdwarf-2 -nostdinc -ffreestanding -fno-stack-protector -fno-builtin -fdiagnostics-show-option -Wall -Wextra -Wpedantic -Wunused -Wformat=2 -Winit-self -Wmissing-include-dirs -Wstrict-overflow=4 -Wfloat-equal -Wwrite-strings -Wconversion -Wundef -Wtrigraphs -Wunused-parameter -Wunknown-pragmas -Wcast-align -Wswitch-enum -Waggregate-return -Wmissing-noreturn -Wmissing-format-attribute -Wpacked -Wredundant-decls -Wunreachable-code -Winline -Winvalid-pch -Wdisabled-optimization -Wsystem-headers -Wbad-function-cast -Wunused-function -Werror=implicit-function-declaration -Iinclude
 
@@ -14,12 +14,22 @@ override ASFLAGS +=
 # If config.mk doesn't exist, it triggers the corresponding rule.
 # If ${TARGET} is undefined, this triggers the "make/.mk" rule.
 #
-# Also, the LAST INCLUDED FILE is attempted first, because... reasons?
-# So we need config.mk last.
+# Also, the LAST INCLUDED FILE is included first, because... reasons?
+#
+# Given that and config.mk needing to be loaded after ${TARGET}.mk,
+# (to allow config.mk to override defaults), we include it _before_
+# ${TARGET}.mk, so it's loaded afterwards.
+# 
+# I hate Make so much.
 include make/despair.mk
 AWOO_MAKE_CONFIG ?= config.mk
 include ${AWOO_MAKE_CONFIG}
 include make/${TARGET}.mk
+
+ifeq (${BUILD_TYPE},test)
+override QEMU_FLAGS += -no-reboot
+endif
+
 
 # == Begin gross bullshit for only matching things for the current platform. ==
 
