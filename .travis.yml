@@ -7,12 +7,7 @@ env:
   global:
     - MAKEFLAGS="-j 2"
 
-jobs:
-  include:
-    - stage: build
-      script: time ./bin/make iso
-    - stage: test
-      script: time ./bin/make qemu
+script: time ./bin/make BUILD_TYPE=test qemu
 
 notifications:
   email:
