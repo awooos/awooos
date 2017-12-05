@@ -21,11 +21,4 @@ override CFLAGS  += -m64
 override LDFLAGS += -melf_x86_64
 override ASFLAGS += -felf64
 
-
-# Add bootstrap/x86_64/start.o as a target for kernel.exe.
-KERNEL_EXE_TARGETS := src/bootstrap/x86_64/start.o
-# Have src/kernel.exe use the bootstrap linker script.
-KERNEL_EXE_LDFLAGS := -T src/bootstrap/x86_64/link.ld
-
-
 QEMU ?= qemu-system-x86_64

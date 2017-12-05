@@ -36,8 +36,13 @@ ifeq (${BUILD_TYPE},test)
 override QEMU_FLAGS += -no-reboot -device isa-debug-exit,iobase=0xf4,iosize=0x04
 endif
 
-# kernel.exe always needs libc.a.
-override KERNEL_EXE_LIBRARIES += -l :libc.a -l :ktest.a -l :badmalloc.a
+
+# Add bootstrap/*/start.o as a target for kernel.exe.
+KERNEL_EXE_TARGETS := src/bootstrap/${TARGET}/start.o
+# Have src/kernel.exe use the bootstrap linker script.
+KERNEL_EXE_LDFLAGS := -T src/bootstrap/${TARGET}/link.ld
+# Have src/kernel.exe link to the various libraries necessary.
+KERNEL_EXE_LIBRARIES += -l :libc.a -l :ktest.a -l :badmalloc.a -l :hal-${TARGET}.a
 
 # == Begin gross bullshit for only matching things for the current platform. ==
 
