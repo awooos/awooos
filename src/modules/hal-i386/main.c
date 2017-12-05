@@ -40,3 +40,9 @@ void hal_hard_shutdown()
 
 	hal_outb(0x60, 0xFE); // Keyboard RESET.
 }
+
+void kprint(const char *string)
+{
+    hal_basic_display_print(string);
+    hal_basic_uart_print(string);
+}
