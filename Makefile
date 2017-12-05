@@ -91,7 +91,10 @@ make/.mk:
 	${RANLIB} $@
 
 # Any directory directly under src/libraries/ is treated as a library.
-libraries: $(shell find src/libraries -mindepth 1 -type d -exec printf {}.a\  \;)
+libraries: generic_libraries target_libraries
+
+generic_libraries: $(shell find src/libraries -mindepth 1 -type d -not -name "*-*" -exec printf "{}.a " \;)
+target_libraries: $(shell find src/libraries -mindepth 1 -type d -wholename "src/libraries/*-${TARGET}" -exec printf "{}.a " \;)
 
 # ASSUMPTION: Any module with a hyphen in the name are platform-specific.
 #
