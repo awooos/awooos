@@ -45,8 +45,7 @@ void hal_basic_display_print(const char *string)
         video = (char*)VIDEO_RAM;
     }
 
-    for (; 0 != *string; string++)
-    {
+    for (; 0 != *string; string++) {
         if (*string == '\r') {
             col = 0;
         } else if (*string == '\n') {
