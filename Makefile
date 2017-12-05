@@ -127,7 +127,10 @@ clean:
 	@find ./src -name '*.d'   -delete
 	@rm -f ${ISO_FILE}
 
-.PHONY: all iso libraries modules clean test qemu qemu-monitor clean
+dockerhub-release:
+	curl --data build=true https://registry.hub.docker.com/u/duckinator/awooos-builder/trigger/${DOCKERHUB_TRIGGER_TOKEN}/
+
+.PHONY: all iso libraries modules clean test qemu qemu-monitor clean dockerhub-release
 
 # Don't auto-delete .o files.
 .SECONDARY: ${OBJFILES}

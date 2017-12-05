@@ -11,3 +11,5 @@ BOCHS   := bochs
 
 # NOTE: xorriso, mkisofs, _and_ genisoimage may all have different defaults.
 MKISOFS := xorriso -as mkisofs
+
+# DOCKERHUB_TRIGGER_TOKEN := INSERT TOKEN HERE
