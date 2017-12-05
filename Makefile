@@ -30,6 +30,8 @@ ifeq (${BUILD_TYPE},test)
 override QEMU_FLAGS += -no-reboot
 endif
 
+# kernel.exe always needs libc.a.
+override KERNEL_EXE_MODULES += -l :libc.a
 
 # == Begin gross bullshit for only matching things for the current platform. ==
 
@@ -67,7 +69,7 @@ make/.mk:
 %.o: %.asm
 	${AS} ${ASFLAGS} -o $@ $<
 
-%.exe: modules ${OBJFILES}
+%.exe: libraries modules ${OBJFILES}
 	@# The various ${$(call ...)} things expand in such a way that if
 	@# this rule matches src/kernel.exe, it adds the following:
 	@#   ${KERNEL_EXE_LDFLAGS} ${KERNEL_EXE_TARGETS}
@@ -77,18 +79,18 @@ make/.mk:
 	${AR} rc $@ $(filter $*/%,$^)
 	${RANLIB} $@
 
-# ASSUMPTION: Any library with a hyphen in the name are platform-specific.
-#
-# For each directory in src/libraries/ that does not include a hyphen, it
-# includes that library. So, e.g., src/libraries/libc becomes
-# src/libraries/libc.a.
-#
-# For each directory that matches src/libraries/*-${TARGET}, it includes
-# that library.
-# (Using the same src/libraries/X -> src/libraries/X.a rule as above.)
-libraries: $(shell find src/libraries -mindepth 1 -type d -not -name "*-*" -o -wholename "src/libraries/*-${TARGET}" -exec printf {}.a \;)
+# Any directory directly under src/libraries/ is treated as a library.
+libraries: $(shell find src/libraries -mindepth 1 -type d -exec printf {}.a \;)
 
-# Same deal as the "libraries" target, but with modules.
+# ASSUMPTION: Any module with a hyphen in the name are platform-specific.
+#
+# For each directory in src/modules/ that does not include a hyphen, it
+# includes that module. So, e.g., src/modules/libc becomes
+# src/modules/libc.a.
+#
+# For each directory that matches src/modules/*-${TARGET}, it includes
+# that module.
+# (Using the same src/modules/X -> src/modules/X.a rule as above.)
 modules: $(shell find src/modules -mindepth 1 -type d -not -name "*-*" -exec printf {}.exe \;) $(shell find src/modules -mindepth 1 -type d -wholename "src/modules/*-${TARGET}" -exec printf {}.a \;)
 
 
