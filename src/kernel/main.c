@@ -1,6 +1,6 @@
-#include "main.h"
 #include <awoo.h>
 #include <kernel.h>
+#include <stdint.h>
 #include <string.h>
 #include <badmalloc.h>
 #include <ktest.h>
