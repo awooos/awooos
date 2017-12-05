@@ -3,7 +3,11 @@ sudo: required
 services:
   - docker
 
-script: time ./bin/make BUILD_TYPE=test clean all qemu
+env:
+  global:
+    - MAKEFLAGS="-j 2"
+
+script: time ./bin/make BUILD_TYPE=test qemu
 
 notifications:
   email:
