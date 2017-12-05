@@ -3,10 +3,7 @@ sudo: required
 services:
   - docker
 
-env:
-  - AWOO_MAKE_CONFIG=config.mk.dist
-
-script: time ./build.sh all qemu-monitor
+script: time ./bin/make clean all qemu
 
 notifications:
   email:
