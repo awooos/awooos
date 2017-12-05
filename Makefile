@@ -82,13 +82,11 @@ make/.mk:
 	${LD} -o $@ -L src/modules -L src/libraries ${LDFLAGS} ${$(call rule_var,$@,LDFLAGS)} ${$(call rule_var,$@,TARGETS)} $(filter $*/%,$^) ${$(call rule_var,$@,MODULES)}
 
 %.a: ${OBJFILES}
-	echo $*
-	echo $(filter $*/%,$^)
 	${AR} rc $@ $(filter $*/%,$^)
 	${RANLIB} $@
 
 # Any directory directly under src/libraries/ is treated as a library.
-libraries: $(shell find src/libraries -mindepth 1 -type d -exec printf {}.a \;)
+libraries: $(shell find src/libraries -mindepth 1 -type d -exec printf {}.a\  \;)
 
 # ASSUMPTION: Any module with a hyphen in the name are platform-specific.
 #
@@ -99,7 +97,7 @@ libraries: $(shell find src/libraries -mindepth 1 -type d -exec printf {}.a \;)
 # For each directory that matches src/modules/*-${TARGET}, it includes
 # that module.
 # (Using the same src/modules/X -> src/modules/X.a rule as above.)
-modules: $(shell find src/modules -mindepth 1 -type d -not -name "*-*" -exec printf {}.exe \;) $(shell find src/modules -mindepth 1 -type d -wholename "src/modules/*-${TARGET}" -exec printf {}.a \;)
+modules: $(shell find src/modules -mindepth 1 -type d -not -name "*-*" -exec printf {}.exe\  \;) $(shell find src/modules -mindepth 1 -type d -wholename "src/modules/*-${TARGET}" -exec printf {}.a\  \;)
 
 
 iso: src/kernel.exe libraries
