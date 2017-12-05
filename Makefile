@@ -138,7 +138,7 @@ clean:
 	@find ./src -name '*.lib' -delete
 	@find ./src -name '*.exe' -delete
 	@find ./src -name '*.d'   -delete
-	@rm -f ${ISO_FILE}
+	@find ./iso -name '*.iso' -delete
 
 dockerhub-release:
 	curl --data build=true https://registry.hub.docker.com/u/duckinator/awooos-builder/trigger/${DOCKERHUB_TRIGGER_TOKEN}/
