@@ -94,13 +94,12 @@ libraries: $(shell find src/libraries -mindepth 1 -type d -exec printf {}.a \;)
 modules: $(shell find src/modules -mindepth 1 -type d -not -name "*-*" -exec printf {}.exe \;) $(shell find src/modules -mindepth 1 -type d -wholename "src/modules/*-${TARGET}" -exec printf {}.a \;)
 
 
-iso: src/kernel.exe libraries modules
+iso: src/kernel.exe libraries
 	mkdir -p ${ISO_DIR}
 	cp -r assets/isofs/ ./
-	mkdir -p isofs/system isofs/libraries isofs/modules
+	mkdir -p isofs/system isofs/libraries
 	cp src/*.exe isofs/system
-	@#cp src/libraries/*.a isofs/libraries
-	cp src/modules/*.a isofs/modules
+	cp src/libraries/*.a isofs/libraries
 	${MKISOFS} -boot-info-table -R -b boot/grub/stage2_eltorito -no-emul-boot -boot-load-size 4 -input-charset utf-8 -o ${ISO_FILE} isofs
 
 test: iso
