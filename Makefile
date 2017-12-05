@@ -80,7 +80,7 @@ make/.mk:
 %.o: %.asm
 	${AS} ${ASFLAGS} -o $@ $<
 
-%.exe: libraries modules ${OBJFILES}
+%.exe: libraries ${OBJFILES}
 	@# The various ${$(call ...)} things expand in such a way that if
 	@# this rule matches src/kernel.exe, it adds the following:
 	@#   ${KERNEL_EXE_LDFLAGS} ${KERNEL_EXE_TARGETS}
@@ -102,7 +102,7 @@ libraries: $(shell find src/libraries -mindepth 1 -type d -exec printf {}.a\  \;
 # For each directory that matches src/modules/*-${TARGET}, it includes
 # that module.
 # (Using the same src/modules/X -> src/modules/X.a rule as above.)
-modules: $(shell find src/modules -mindepth 1 -type d -not -name "*-*" -exec printf {}.exe\  \;) $(shell find src/modules -mindepth 1 -type d -wholename "src/modules/*-${TARGET}" -exec printf {}.a\  \;)
+#modules: $(shell find src/modules -mindepth 1 -type d -not -name "*-*" -exec printf {}.exe\  \;) $(shell find src/modules -mindepth 1 -type d -wholename "src/modules/*-${TARGET}" -exec printf {}.a\  \;)
 
 
 iso: src/kernel.exe libraries
