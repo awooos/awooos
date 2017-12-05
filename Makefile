@@ -37,7 +37,7 @@ override QEMU_FLAGS += -no-reboot -device isa-debug-exit,iobase=0xf4,iosize=0x04
 endif
 
 # kernel.exe always needs libc.a.
-override KERNEL_EXE_MODULES += -l :libc.a
+override KERNEL_EXE_LIBRARIES += -l :libc.a -l :ktest.a -l :badmalloc.a
 
 # == Begin gross bullshit for only matching things for the current platform. ==
 
@@ -79,7 +79,7 @@ make/.mk:
 	@# The various ${$(call ...)} things expand in such a way that if
 	@# this rule matches src/kernel.exe, it adds the following:
 	@#   ${KERNEL_EXE_LDFLAGS} ${KERNEL_EXE_TARGETS}
-	${LD} -o $@ -L src/modules -L src/libraries ${LDFLAGS} ${$(call rule_var,$@,LDFLAGS)} ${$(call rule_var,$@,TARGETS)} $(filter $*/%,$^) ${$(call rule_var,$@,MODULES)}
+	${LD} -o $@ -L src/modules -L src/libraries ${LDFLAGS} ${$(call rule_var,$@,LDFLAGS)} ${$(call rule_var,$@,TARGETS)} $(filter $*/%,$^) ${$(call rule_var,$@,LIBRARIES)} ${$(call rule_var,$@,MODULES)}
 
 %.a: ${OBJFILES}
 	${AR} rc $@ $(filter $*/%,$^)
