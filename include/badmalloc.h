@@ -3,6 +3,6 @@
 
 #include <stddef.h>
 
-void *badmalloc(size_t size);
+extern void *badmalloc(size_t size);
 
 #endif /* BADMALLOC_H */

@@ -27,7 +27,13 @@ include ${AWOO_MAKE_CONFIG}
 include make/${TARGET}.mk
 
 ifeq (${BUILD_TYPE},test)
-override QEMU_FLAGS += -no-reboot
+# 1. Don't reboot on exit.
+# 2. Add isa-debug-exit device, to allow to have qemu exit with a non-zero exit status.
+#
+# This combination allows us to do a clean shutdown and have qemu return a
+# zero status code, or do a non-clean shutdown (using isa-debug-exit) and
+# have qemu return a nonzero status code.
+override QEMU_FLAGS += -no-reboot -device isa-debug-exit,iobase=0xf4,iosize=0x04
 endif
 
 # kernel.exe always needs libc.a.
@@ -76,6 +82,8 @@ make/.mk:
 	${LD} -o $@ -L src/modules -L src/libraries ${LDFLAGS} ${$(call rule_var,$@,LDFLAGS)} ${$(call rule_var,$@,TARGETS)} $(filter $*/%,$^) ${$(call rule_var,$@,MODULES)}
 
 %.a: ${OBJFILES}
+	echo $*
+	echo $(filter $*/%,$^)
 	${AR} rc $@ $(filter $*/%,$^)
 	${RANLIB} $@
 

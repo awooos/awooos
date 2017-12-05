@@ -1,7 +1,7 @@
 /* Technically a memory allocator. */
 
 #include <stddef.h>
-#include "badmalloc.h"
+#include <badmalloc.h>
 
 extern size_t *kernel_end;
 
