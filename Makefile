@@ -84,7 +84,7 @@ make/.mk:
 	@# The various ${$(call ...)} things expand in such a way that if
 	@# this rule matches src/kernel.exe, it adds the following:
 	@#   ${KERNEL_EXE_LDFLAGS} ${KERNEL_EXE_TARGETS}
-	${LD} -o $@ -L src/modules -L src/libraries ${LDFLAGS} ${$(call rule_var,$@,LDFLAGS)} ${$(call rule_var,$@,TARGETS)} $(filter $*/%,$^) ${$(call rule_var,$@,LIBRARIES)} ${$(call rule_var,$@,MODULES)}
+	${LD} -o $@ -L src/modules -L src/libraries ${LDFLAGS} ${$(call rule_var,$@,LDFLAGS)} ${$(call rule_var,$@,TARGETS)} $(filter $*/%,$^) ${$(call rule_var,$@,LIBRARIES)}
 
 %.a: ${OBJFILES}
 	${AR} rc $@ $(filter $*/%,$^)
