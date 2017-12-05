@@ -2,6 +2,7 @@
 #include "badmalloc.h"
 #include <awoo.h>
 #include <kernel.h>
+#include <string.h>
 
 void kernel_main(uint32_t magic, void *arg)
 {
@@ -9,7 +10,7 @@ void kernel_main(uint32_t magic, void *arg)
     kprint(AWOO_INFO "\r\n");
 
     //test_run();
-    //if (strcmp(AWOO_BUILD_TYPE, "TEST") == 0) {
+    if (strcmp(AWOO_BUILD_TYPE, "TEST") == 0) {
         hal_hard_shutdown();
-    //}
+    }
 }
