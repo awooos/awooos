@@ -13,8 +13,13 @@ void kernel_main(uint32_t magic, void *arg)
     badmalloc_init(kernel_end);
     kprint(AWOO_INFO "\r\n");
 
-    test_run_all();
-    if (strcmp(AWOO_BUILD_TYPE, "TEST") == 0) {
+    bool continue_booting = test_run_all();
+
+    if (!continue_booting) {
+        hal_test_fail_shutdown();
+    } else if (strcmp(AWOO_BUILD_TYPE, "TEST") == 0) {
         hal_hard_shutdown();
     }
+
+    // Hooray, tests passed! Now to actually do something.
 }

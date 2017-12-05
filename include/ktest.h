@@ -2,6 +2,7 @@
 #define KTEST_H
 
 #include <stddef.h>
+#include <stdbool.h>
 
 typedef struct {
 	int status;
@@ -16,7 +17,7 @@ typedef struct TestCase_s {
 } TestCase;
 
 void test_init();
-void test_run_all();
+bool test_run_all();
 TestCase *test_add(const char *n, TestReturn* (*fn)());
 
 #define TEST(NAME) test_add(#NAME, (TestReturn* (*)())NAME##_test)

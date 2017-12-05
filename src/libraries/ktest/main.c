@@ -91,7 +91,7 @@ int test_run(size_t ran, TestCase *test)
     return ret->status;
 }
 
-void test_run_all()
+bool test_run_all()
 {
     TestCase *test;
     int status;
@@ -129,9 +129,11 @@ void test_run_all()
 
     if (fatal > 0) {
         kprint("Fatal error encountered; not booting.\n");
-        hal_test_fail_shutdown();
+        return false;
     } else if (failed > passed) {
         kprint("Majority of tests failed; not booting.\n");
-        hal_test_fail_shutdown();
+        return false;
     }
+
+    return true;
 }
