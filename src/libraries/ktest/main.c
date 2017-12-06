@@ -187,6 +187,9 @@ bool test_run_all()
     kprint("\n");
 
     kprint("\n");
+    kprint("should be 0:    ");
+    kprint(str(0));
+    kprint("\n");
     kprint("should be 1:    ");
     kprint(str(1));
     kprint("\n");
