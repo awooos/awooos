@@ -121,6 +121,7 @@ bool test_run_all()
 
     kprint("\n\n");
 
+    kprint("TODO: Print total/passed/failed/fatal/skipped test numbers.\n");
     /*printf("Total tests: %i\n", ran);
       printf("     Passed: %i\n", passed);
       printf("     Failed: %i\n", failed);
