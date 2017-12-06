@@ -6,7 +6,7 @@ void *memset(void *s, int c, size_t n)
     char *cs = (char*)s;
 
     for (size_t i = 0; i < n; i++) {
-        cs[i] = 0;
+        cs[i] = c;
     }
 
     return s;
