@@ -16,12 +16,8 @@ uint64_t uint64_div(uint64_t a, uint64_t b)
         return 0;
     }
 
-    while (a > b) {
+    while (a >= b) {
         a -= b;
-        tmp += 1;
-    }
-
-    if (a > 0) {
         tmp += 1;
     }
 
@@ -47,6 +43,10 @@ size_t _decimal_places_in_uint(uint64_t n, size_t radix)
         tmp = uint64_div(tmp, radix);
     }
 
+    if (tmp == 0) {
+        tmp = 1;
+    }
+
     return decimal_places;
 }
 
@@ -67,8 +67,8 @@ char *uint64_to_str_radix(uint64_t n, size_t radix)
 
     for (size_t idx = 0; idx < decimal_places; idx++) {
         result[idx] = '0' + (char)uint64_mod(tmp, radix);
-        //tmp = uint64_div(tmp, radix);
-        tmp = (uint64_t)(((uint32_t)tmp) / radix);
+        tmp = uint64_div(tmp, radix);
+        //tmp = (uint64_t)(((uint32_t)tmp) / radix);
     }
 
     result[decimal_places] = 0;
