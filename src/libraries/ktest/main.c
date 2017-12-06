@@ -122,12 +122,12 @@ bool test_run_all()
 
     kprint("\n\n");
 
-    /*if (_decimal_places_in_uint(0, 10) == 1) {
+    if (_decimal_places_in_uint(0, 10) == 1) {
         kprint("0  yay!\n");
     } else {
         kprint("0  oh.\n");
     }
-    if (_decimal_places_in_uint(10, 10) == 2) {
+    /*if (_decimal_places_in_uint(10, 10) == 2) {
         kprint("10 yay!\n");
     } else {
         kprint("10 oh.\n");

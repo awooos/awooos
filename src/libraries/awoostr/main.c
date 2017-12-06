@@ -63,8 +63,6 @@ char *uint64_to_str_radix(uint64_t n, size_t radix)
     result = (char*)badmalloc(decimal_places);
     memset(result, 0, decimal_places);
 
-    result[0]='a';
-
     for (size_t idx = 0; idx < decimal_places; idx++) {
         result[idx] = '0' + (char)uint64_mod(tmp, radix);
         tmp = uint64_div(tmp, radix);
