@@ -122,7 +122,7 @@ bool test_run_all()
 
     kprint("\n\n");
 
-    if (_decimal_places_in_uint(0, 10) == 1) {
+    /*if (_decimal_places_in_uint(0, 10) == 1) {
         kprint("0  yay!\n");
     } else {
         kprint("0  oh.\n");
@@ -146,7 +146,7 @@ bool test_run_all()
         kprint("21 yay!\n");
     } else {
         kprint("21 oh.\n");
-    }
+    }*/
 
     /*if (uint64_mod(10, 10) == 0) {
         kprint("10 % 10 == 0\n");
@@ -179,7 +179,7 @@ bool test_run_all()
         kprint("10 %  3 != 1?\n");
     }*/
 
-    kprint("should be 10:   ");
+    /*kprint("should be 10:   ");
     kprint(uint64_to_str_radix(10, 10));
     kprint("\n");
     kprint("should be 10:   ");
@@ -201,7 +201,7 @@ bool test_run_all()
     kprint("\n");
     kprint("should be 9001: ");
     kprint(str(9001));
-    kprint("\n");
+    kprint("\n");*/
 
     kprint("TODO: Print total/passed/failed/fatal/skipped test numbers.\n");
     kprint("Total tests: ");
