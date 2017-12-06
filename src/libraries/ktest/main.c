@@ -2,6 +2,7 @@
 #include <stddef.h>
 #include <badmalloc.h>
 #include <kernel.h>
+#include <awoostr.h>
 
 /*
  * Test suite for the AwooOS kernel.
@@ -28,10 +29,10 @@ static TestCase *firsttest = NULL;
 static TestCase *lasttest = NULL;
 
 static const char *test_status_messages[4] = {
-	"PASS",
-	"FAIL",
-	"FATAL",
-	"SKIP",
+    "PASS",
+    "FAIL",
+    "FATAL",
+    "SKIP",
 };
 
 TestCase *test_add(const char *n, TestReturn* (*fn)())
@@ -121,7 +122,80 @@ bool test_run_all()
 
     kprint("\n\n");
 
+/*    if (_decimal_places_in_uint(10, 10) == 2) {
+        kprint("10 yay!\n");
+    } else {
+        kprint("10 oh.\n");
+    }
+    if (_decimal_places_in_uint(11, 10) == 2) {
+        kprint("11 yay!\n");
+    } else {
+        kprint("11 oh.\n");
+    }
+    if (_decimal_places_in_uint(20, 10) == 2) {
+        kprint("20 yay!\n");
+    } else {
+        kprint("20 oh.\n");
+    }
+    if (_decimal_places_in_uint(21, 10) == 2) {
+        kprint("21 yay!\n");
+    } else {
+        kprint("21 oh.\n");
+    }*/
+
+
+    kprint("should be 10:   ");
+    kprint(_uint64_to_str_radix_with_negative_check(10, 10, false));
+    kprint("\n");
+    kprint("should be 10:   ");
+    kprint(_uint64_to_str_radix_with_negative_check(10, 10, false));
+    kprint("\n");
+
+    kprint("should be 1:    ");
+    kprint(str(1));
+    kprint("\n");
+    kprint("should be 2:    ");
+    kprint(str(2));
+    kprint("\n");
+    kprint("should be 10:   ");
+    kprint(str(10));
+    kprint("\n");
+    kprint("should be 9001: ");
+    kprint(str(9001));
+    kprint("\n");
+    kprint("should be 1:    ");
+    kprint(str(1));
+    kprint("\n");
+    kprint("should be 2:    ");
+    kprint(str(2));
+    kprint("\n");
+    kprint("should be 10:   ");
+    kprint(str(10));
+    kprint("\n");
+    kprint("should be 9001: ");
+    kprint(str(9001));
+    kprint("\n");
+
     kprint("TODO: Print total/passed/failed/fatal/skipped test numbers.\n");
+    kprint("Total tests: ");
+    kprint(str(ran));
+    kprint("\n");
+
+    kprint("     Passed: ");
+    kprint(str(passed));
+    kprint("\n");
+
+    kprint("     Failed: ");
+    kprint(str(failed));
+    kprint("\n");
+
+    kprint("      Fatal: ");
+    kprint(str(fatal));
+    kprint("\n");
+
+    kprint("    Skipped: ");
+    kprint(str(skipped));
+    kprint("\n\n");
     /*printf("Total tests: %i\n", ran);
       printf("     Passed: %i\n", passed);
       printf("     Failed: %i\n", failed);

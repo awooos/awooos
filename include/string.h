@@ -3,6 +3,8 @@
 
 #include <stddef.h>
 
+extern void *memset(void *s, int c, size_t n);
+
 // extern char *strcpy(char *dest, const char *src);
 // extern char *strncpy(char *dest, const char *src, size_t n);
 
