@@ -73,7 +73,7 @@ char *uint64_to_str_radix(uint64_t n, size_t radix)
 
     result[decimal_places] = 0;
 
-    return result;
+    return strrev(result);
 }
 
 // Converts an unsigned integer to a string, in base 10.
