@@ -143,14 +143,45 @@ bool test_run_all()
         kprint("21 oh.\n");
     }*/
 
+    /*if (uint64_mod(10, 10) == 0) {
+        kprint("10 % 10 == 0\n");
+    } else {
+        kprint("10 % 10 != 0?\n");
+    }
+    if (uint64_mod(13, 10) == 3) {
+        kprint("13 % 10 == 3\n");
+    } else {
+        kprint("13 % 10 != 3?\n");
+    }
+    if (uint64_mod(53, 12) == 5) {
+        kprint("53 % 12 == 5\n");
+    } else {
+        kprint("53 % 12 != 5?\n");
+    }
+    if (uint64_mod(53, 13) == 1) {
+        kprint("53 % 13 == 1\n");
+    } else {
+        kprint("53 % 13 != 1?\n");
+    }
+    if (uint64_mod(3, 10) == 3) {
+        kprint(" 3 % 10 == 3\n");
+    } else {
+        kprint(" 3 % 10 != 3?\n");
+    }
+    if (uint64_mod(10, 3) == 1) {
+        kprint("10 %  3 == 1\n");
+    } else {
+        kprint("10 %  3 != 1?\n");
+    }*/
 
     kprint("should be 10:   ");
-    kprint(_uint64_to_str_radix_with_negative_check(10, 10, false));
+    kprint(uint64_to_str_radix(10, 10));
     kprint("\n");
     kprint("should be 10:   ");
-    kprint(_uint64_to_str_radix_with_negative_check(10, 10, false));
+    kprint(uint64_to_str_radix(10, 10));
     kprint("\n");
 
+    kprint("\n");
     kprint("should be 1:    ");
     kprint(str(1));
     kprint("\n");
@@ -160,17 +191,8 @@ bool test_run_all()
     kprint("should be 10:   ");
     kprint(str(10));
     kprint("\n");
-    kprint("should be 9001: ");
-    kprint(str(9001));
-    kprint("\n");
-    kprint("should be 1:    ");
-    kprint(str(1));
-    kprint("\n");
-    kprint("should be 2:    ");
-    kprint(str(2));
-    kprint("\n");
-    kprint("should be 10:   ");
-    kprint(str(10));
+    kprint("should be 123:  ");
+    kprint(str(123));
     kprint("\n");
     kprint("should be 9001: ");
     kprint(str(9001));

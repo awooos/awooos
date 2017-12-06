@@ -50,41 +50,30 @@ size_t _decimal_places_in_uint(uint64_t n, size_t radix)
     return decimal_places;
 }
 
-// Converts a +uint64_t+ to a string, using the base specified in +radix+,
-// prepending a negative sign if told to do so.
+// Converts a +uint64_t+ to a string, using the base specified in +radix+.
 //
 // ASSUMPTION: radix is small enough that all values can fit in a char.
-char *_uint64_to_str_radix_with_negative_check(uint64_t n, size_t radix, bool is_negative)
+char *uint64_to_str_radix(uint64_t n, size_t radix)
 {
     char *result;
     uint64_t tmp = n;
-    uint8_t start = 0;
 
     size_t decimal_places = decimal_places_in(n, radix);
-    if (is_negative) {
-        decimal_places += 1;
-        start = 1;
-    }
 
-    result = (char*)badmalloc(decimal_places + 1);
-    memset(result, 0, decimal_places + 1);
+    result = (char*)badmalloc(decimal_places);
+    memset(result, 0, decimal_places);
 
-    for (size_t idx = decimal_places - 1; idx <= start; idx -= 1) {
+    result[0]='a';
+
+    for (size_t idx = 0; idx < decimal_places; idx++) {
         result[idx] = '0' + (char)uint64_mod(tmp, radix);
-        tmp = uint64_div(tmp, radix);
+        //tmp = uint64_div(tmp, radix);
+        tmp = (uint64_t)(((uint32_t)tmp) / radix);
     }
 
-    if (is_negative) {
-        result[0] = '-';
-    }
+    result[decimal_places] = 0;
 
     return result;
-}
-
-// Converts an unsigned integer to a string, in the base specified by +radix+.
-char *uint64_to_str_radix(uint64_t n, size_t radix)
-{
-    return _uint64_to_str_radix_with_negative_check(n, radix, false);
 }
 
 // Converts an unsigned integer to a string, in base 10.
@@ -102,7 +91,7 @@ char *int64_to_str_radix(int64_t n, size_t radix)
         n = -n;
     }
 
-    return _uint64_to_str_radix_with_negative_check((uint64_t)n, radix, is_negative);
+    return uint64_to_str_radix((uint64_t)n, radix);
 }
 
 // Converts an integer to a string, in base 10.

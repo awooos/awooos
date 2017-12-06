@@ -4,8 +4,6 @@
 #include <stddef.h>
 #include <stdint.h>
 
-char *_uint64_to_str_radix_with_negative_check(uint64_t n, size_t radix, bool is_negative);
-
 size_t _decimal_places_in_uint(uint64_t n, size_t radix);
 
 uint64_t uint64_div(uint64_t a, uint64_t b);
