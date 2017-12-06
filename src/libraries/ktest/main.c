@@ -206,7 +206,6 @@ bool test_run_all()
     kprint(str(9001));
     kprint("\n");
 
-    kprint("TODO: Print total/passed/failed/fatal/skipped test numbers.\n");
     kprint("Total tests: ");
     kprint(str(ran));
     kprint("\n");
