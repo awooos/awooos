@@ -43,8 +43,8 @@ size_t _decimal_places_in_uint(uint64_t n, size_t radix)
         tmp = uint64_div(tmp, radix);
     }
 
-    if (tmp == 0) {
-        tmp = 1;
+    if (decimal_places == 0) {
+        decimal_places = 1;
     }
 
     return decimal_places;
