@@ -25,8 +25,8 @@
  *    If message is NULL, no explanatory message is printed.
  */
 
-static TestCase *firsttest = NULL;
-static TestCase *lasttest = NULL;
+static TestCase *first_test = NULL;
+static TestCase *last_test = NULL;
 
 static const char *test_status_messages[4] = {
     "PASS",
@@ -43,28 +43,30 @@ TestCase *test_add(const char *n, TestResult* (*fn)())
     t->name = n;
     t->func = fn;
 
-    if(firsttest == NULL) {
-        firsttest = t;
-        firsttest->prev = NULL;
-        firsttest->next = NULL;
+    if(first_test == NULL) {
+        first_test = t;
+        first_test->prev = NULL;
+        first_test->next = NULL;
     }
-    if(lasttest == NULL) {
-        lasttest = t;
+    if(last_test == NULL) {
+        last_test = t;
 
-        for(tmp = firsttest; tmp->next != NULL; tmp = tmp->next)
-            ;
-
-        if(tmp != lasttest) {
-            lasttest->prev = tmp;
-            tmp->next = lasttest;
+        tmp = first_test;
+        while(tmp->next != NULL) {
+            tmp = tmp->next;
         }
 
+        if(tmp != last_test) {
+            last_test->prev = tmp;
+            tmp->next = last_test;
+        }
     } else {
-        lasttest->next = t;
-        lasttest->prev = lasttest;
-        lasttest = t;
-        lasttest->next = NULL;
+        last_test->next = t;
+        last_test->prev = last_test;
+        last_test = t;
+        last_test->next = NULL;
     }
+
     return t;
 }
 
@@ -104,7 +106,7 @@ bool test_run_all()
 
     kprint("\nRunning tests:\n\n");
 
-    for(test = firsttest; test != NULL; test=test->next) {
+    for(test = first_test; test != NULL; test = test->next) {
         status = test_run(ran, test);
         ran++;
 
