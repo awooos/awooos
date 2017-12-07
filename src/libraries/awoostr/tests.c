@@ -97,5 +97,4 @@ TestResult *test_decimal_places_in_uint()
 void add_awoostr_tests()
 {
     TEST(decimal_places_in_uint);
-
 }
