@@ -69,7 +69,7 @@ char *strrev(char *str)
     size_t half_length = length / 2;
     char tmp;
 
-    for (int idx = 0; idx < half_length; idx++) {
+    for (size_t idx = 0; idx < half_length; idx++) {
         tmp = str[idx];
         str[idx] = str[length - idx - 1];
         str[length - idx - 1] = tmp;
