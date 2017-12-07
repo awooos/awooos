@@ -3,33 +3,42 @@
 
 #include <stddef.h>
 #include <stdbool.h>
+#include <badmalloc.h>
 
 typedef struct {
 	int status;
 	const char *message;
-} TestReturn;
+} TestResult;
 
 typedef struct TestCase_s {
 	const char *name;
-	TestReturn* (*func) ();
+	TestResult* (*func) ();
 	struct TestCase_s *next;
 	struct TestCase_s *prev;
 } TestCase;
 
 void test_init();
+TestResult *test_assert(char *code, bool result);
+TestCase *test_add(const char *n, TestResult* (*fn)());
 bool test_run_all();
-TestCase *test_add(const char *n, TestReturn* (*fn)());
 
-#define TEST(NAME) test_add(#NAME, (TestReturn* (*)())NAME##_test)
+#define TEST(NAME) test_add(#NAME, (TestResult* (*)())test_##NAME)
 
 #define TEST_SUCCESS 0
-#define TEST_FAIL    1
+#define TEST_FAILURE 1
 #define TEST_FATAL   2
 #define TEST_SKIP    3
 
-#define TEST_RETURN(STATUS, MESSAGE) TestReturn *ret = (TestReturn*)kmalloc(sizeof(TestReturn)); \
+#define kmalloc badmalloc
+#define TEST_RETURN(STATUS, MESSAGE) TestResult *ret = (TestResult*)kmalloc(sizeof(TestResult)); \
                                      ret->status = STATUS;                                       \
                                      ret->message = MESSAGE;                                    \
                                      return ret;
+
+#define TEST_ASSERT(CODE)   if (CODE) { \
+                                TEST_RETURN(TEST_SUCCESS, #CODE);    \
+                            } else {                                \
+                                TEST_RETURN(TEST_FAILURE, #CODE);    \
+                            }
 
 #endif /* KTEST_H */

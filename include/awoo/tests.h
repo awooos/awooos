@@ -5,8 +5,10 @@
 #include <awoo.h>
 #include <string.h>
 
-void add_kernel_tests();
-TestReturn *memory_allocation_test();
-TestReturn *frame_allocation_test();
+//void add_kernel_tests();
+//TestResult *memory_allocation_test();
+//TestResult *frame_allocation_test();
+
+void add_awoostr_tests();
 
 #endif /* end of include guard: KERNEL_TESTS_H */
