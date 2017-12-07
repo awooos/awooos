@@ -1,4 +1,4 @@
-FROM alpine:3.6
+FROM alpine:edge
 
 ENV AWOO_MAKE_CONFIG config.mk.dist
 ENV QEMU_FLAGS -display none
