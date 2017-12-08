@@ -74,9 +74,7 @@ TestResult *test_run(size_t ran, TestCase *test)
     if(ret->status == TEST_SUCCESS) {
         kprint(".");
     } else {
-        if (ran > 0) {
-            kprint("\n");
-        }
+        kprint("\n");
 
         // X) <test name>
         kprint(str(ran + 1));
