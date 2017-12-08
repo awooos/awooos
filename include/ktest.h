@@ -3,7 +3,9 @@
 
 #include <stddef.h>
 #include <stdbool.h>
+#include <kernel.h>
 #include <badmalloc.h>
+#include <string.h>
 
 typedef struct {
 	int status;
@@ -31,7 +33,6 @@ bool test_run_all();
 #define TEST_SKIP               2
 #define TEST_ASSERTION_FAILURE  3
 
-#include <kernel.h>
 #define kmalloc badmalloc
 #define _TEST_RETURN(STATUS, MESSAGE, PASSED_ASSERTIONS) \
         TestResult *ret = (TestResult*)kmalloc(sizeof(TestResult));         \

@@ -1,11 +1,8 @@
 #include <awoo.h>
-#include <kernel.h>
 #include <stdint.h>
-#include <string.h>
 #include <badmalloc.h>
 #include <ktest.h>
 #include <awoo/tests.h>
-#include <awoostr.h>
 
 extern size_t *kernel_end;
 
@@ -15,38 +12,20 @@ extern size_t *kernel_end;
         kprint("Done!\n");                              \
     };
 
-void add_tests()
+void kernel_main()
 {
-    ADD_TESTS(awoostr);
-}
-
-void kernel_main(uint32_t magic, UNUSED void *arg)
-{
-    bool continue_booting = true;
-
     hal_init();
     badmalloc_init(kernel_end);
     kprint(AWOO_INFO "\r\n");
 
-    if (magic != MULTIBOOT_MAGIC) {
-        kprint("Not booted with a multiboot-compliant bootloader!\n");
-        kprint("Expected: ");
-        kprint(str(MULTIBOOT_MAGIC));
-        kprint("\n");
-        kprint("Got:      ");
-        kprint(str(magic));
-        kprint("\n");
-        continue_booting = false;
-    } else {
-        add_tests();
-        continue_booting = test_run_all();
-    }
+    ADD_TESTS(hal);
+    ADD_TESTS(awoostr);
 
-    if (!continue_booting) {
+    if (!test_run_all()) {
         hal_test_fail_shutdown();
     }
 
-    if (strcmp(AWOO_BUILD_TYPE, "TEST") == 0) {
+    if (AWOO_BUILD_TYPE_NUMBER == AWOO_TEST_BUILD) {
         hal_hard_shutdown();
     }
 
