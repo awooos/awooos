@@ -29,11 +29,12 @@
 static TestCase *first_test = NULL;
 static TestCase *last_test = NULL;
 
-static const char *test_status_messages[4] = {
-    "PASS",
-    "FAIL",
-    "FATAL",
-    "SKIP",
+static const char *test_status_messages[5] = {
+    "Passed",
+    "Failure",
+    "Fatal error",
+    "Skipped",
+    "Assertion failed",
 };
 
 TestCase *test_add(const char *name, TestResult* (*function_ptr)())
@@ -42,7 +43,9 @@ TestCase *test_add(const char *name, TestResult* (*function_ptr)())
 
     memset(test_case, 0, sizeof(TestCase));
 
-    test_case->name = name;
+    char *name_ = (char*)badmalloc(sizeof(char) * strlen(name));
+    strcpy(name_, name);
+    test_case->name = name_;
     test_case->func = function_ptr;
 
     if(first_test == NULL) {
@@ -66,7 +69,6 @@ TestCase *test_add(const char *name, TestResult* (*function_ptr)())
 int test_run(size_t ran, TestCase *test)
 {
     TestResult *ret;
-
     ret = test->func();
 
     if(ret->status == TEST_SUCCESS) {
@@ -76,11 +78,34 @@ int test_run(size_t ran, TestCase *test)
             kprint("\n");
         }
 
+        // X) <test name>
+        kprint(str(ran + 1));
+        kprint(") ");
+        kprint(test->name);
+        kprint("\n");
+
+        // Padding to line up with "X) " from above.
+        kprint("   ");
+
         kprint(test_status_messages[ret->status]);
         kprint(": ");
-        kprint(test->name);
-        kprint(": ");
+
+        // Failed assertions don't currently have a useful name.
+        if (ret->status != TEST_ASSERTION_FAILURE) {
+            kprint(test->name);
+            kprint(": ");
+        }
+
         kprint(ret->message);
+        kprint("\n");
+
+        // Padding to line up with prior lines.
+        kprint("   ");
+
+        kprint("In ");
+        kprint(ret->file);
+        kprint(":");
+        kprint(str(ret->line));
         kprint("\n");
     }
 

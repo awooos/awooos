@@ -1,6 +1,7 @@
 #include <string.h>
 #include <stddef.h>
 
+#include <kernel.h>
 void *memset(void *s, int c, size_t n)
 {
     int *cs = (int*)s;
@@ -12,7 +13,14 @@ void *memset(void *s, int c, size_t n)
     return s;
 }
 
-// char *strcpy(char *dest, const char *src);
+char *strcpy(char *dest, const char *src)
+{
+    size_t len = strlen(src);
+    for (size_t i = 0; i <= len; i++) {
+        dest[i] = src[i];
+    }
+    return dest;
+}
 // char *strncpy(char *dest, const char *src, size_t n);
 
 // char *strcat(char *dest, const char *src);

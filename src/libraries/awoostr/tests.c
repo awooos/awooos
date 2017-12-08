@@ -4,9 +4,9 @@
 
 extern size_t _decimal_places_in_uint(uint64_t n, size_t radix);
 
-TestResult *test_decimal_places_in_uint()
+TestResult *test_awoostr_assertions()
 {
-    TEST_ASSERT(_decimal_places_in_uint(0, 10) == 1);
+    TEST_ASSERT(_decimal_places_in_uint(0, 10) == 12);
 }
 
 /*if (_decimal_places_in_uint(0, 10) == 1) {
@@ -96,5 +96,5 @@ TestResult *test_decimal_places_in_uint()
 
 void add_awoostr_tests()
 {
-    TEST(decimal_places_in_uint);
+    TEST(awoostr_assertions);
 }
