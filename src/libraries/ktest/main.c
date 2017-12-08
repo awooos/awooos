@@ -130,7 +130,7 @@ bool test_run_all()
 
         if(status == TEST_SUCCESS) {
             passed++;
-        } else if (status == TEST_FAILURE) {
+        } else if (status == TEST_FAILURE || status == TEST_ASSERTION_FAILURE) {
             failed++;
         } else if (status == TEST_FATAL) {
             failed++;
