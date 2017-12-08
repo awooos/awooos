@@ -11,13 +11,13 @@ void badmalloc_init(size_t *kernel_end_)
 }
 
 void *badmalloc(size_t size) {
-    static size_t *ptr = 0;
+    static size_t *ptr = NULL;
 
-    if (ptr == 0) {
+    if (ptr == NULL) {
         ptr = badmalloc_kernel_end;
     }
 
     ptr += size;
 
-    return (ptr - size);
+    return (size_t*)(&ptr - size);
 }
