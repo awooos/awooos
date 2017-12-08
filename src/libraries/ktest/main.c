@@ -39,7 +39,6 @@ static const char *test_status_messages[4] = {
 TestCase *test_add(const char *name, TestResult* (*function_ptr)())
 {
     TestCase *test_case = (TestCase*)badmalloc(sizeof(TestCase));
-    TestCase *tmp;
 
     memset(test_case, 0, sizeof(TestCase));
 
@@ -92,7 +91,7 @@ bool test_run_all()
 {
     TestCase *test;
     int status;
-    size_t ran = 0;
+    size_t total = 0;
     size_t passed = 0;
     size_t failed = 0;
     size_t fatal  = 0;
@@ -101,8 +100,8 @@ bool test_run_all()
     kprint("\nRunning tests:\n\n");
 
     for(test = first_test; test != NULL; test = test->next) {
-        status = test_run(ran, test);
-        ran++;
+        status = test_run(total, test);
+        total++;
 
         if(status == TEST_SUCCESS) {
             passed++;
@@ -116,8 +115,10 @@ bool test_run_all()
         }
     }
 
+    kprint("\n\n");
+
     kprint("Total tests: ");
-    kprint(str(ran));
+    kprint(str(total));
     kprint("\n");
 
     kprint("     Passed: ");
