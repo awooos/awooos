@@ -17,10 +17,11 @@ extern size_t *kernel_end;
 
 void add_tests()
 {
+    ADD_TESTS(hal);
     ADD_TESTS(awoostr);
 }
 
-void kernel_main(uint32_t magic, UNUSED void *arg)
+void kernel_main()
 {
     bool continue_booting = true;
 
@@ -28,19 +29,8 @@ void kernel_main(uint32_t magic, UNUSED void *arg)
     badmalloc_init(kernel_end);
     kprint(AWOO_INFO "\r\n");
 
-    if (magic != MULTIBOOT_MAGIC) {
-        kprint("Not booted with a multiboot-compliant bootloader!\n");
-        kprint("Expected: ");
-        kprint(str(MULTIBOOT_MAGIC));
-        kprint("\n");
-        kprint("Got:      ");
-        kprint(str(magic));
-        kprint("\n");
-        continue_booting = false;
-    } else {
-        add_tests();
-        continue_booting = test_run_all();
-    }
+    add_tests();
+    continue_booting = test_run_all();
 
     if (!continue_booting) {
         hal_test_fail_shutdown();

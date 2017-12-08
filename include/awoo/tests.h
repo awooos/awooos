@@ -10,5 +10,6 @@
 //TestResult *frame_allocation_test();
 
 void add_awoostr_tests();
+void add_hal_tests();
 
 #endif /* end of include guard: KERNEL_TESTS_H */
