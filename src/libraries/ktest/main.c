@@ -3,6 +3,7 @@
 #include <badmalloc.h>
 #include <kernel.h>
 #include <awoostr.h>
+#include <string.h>
 
 /*
  * Test suite for the AwooOS kernel.
@@ -35,39 +36,32 @@ static const char *test_status_messages[4] = {
     "SKIP",
 };
 
-TestCase *test_add(const char *n, TestResult* (*fn)())
+TestCase *test_add(const char *name, TestResult* (*function_ptr)())
 {
-    TestCase *t = (TestCase*)badmalloc(sizeof(TestCase));
+    TestCase *test_case = (TestCase*)badmalloc(sizeof(TestCase));
     TestCase *tmp;
 
-    t->name = n;
-    t->func = fn;
+    memset(test_case, 0, sizeof(TestCase));
+
+    test_case->name = name;
+    test_case->func = function_ptr;
 
     if(first_test == NULL) {
-        first_test = t;
+        first_test = test_case;
         first_test->prev = NULL;
         first_test->next = NULL;
     }
-    if(last_test == NULL) {
-        last_test = t;
 
-        tmp = first_test;
-        while(tmp->next != NULL) {
-            tmp = tmp->next;
-        }
-
-        if(tmp != last_test) {
-            last_test->prev = tmp;
-            tmp->next = last_test;
-        }
-    } else {
-        last_test->next = t;
+    if (last_test == NULL) {
+        last_test = first_test;
+    } else if (last_test != NULL) {
+        last_test->next = test_case;
         last_test->prev = last_test;
-        last_test = t;
+        last_test = test_case;
         last_test->next = NULL;
     }
 
-    return t;
+    return test_case;
 }
 
 int test_run(size_t ran, TestCase *test)
