@@ -1,11 +1,9 @@
 #include <awoo.h>
-#include <kernel.h>
 #include <stdint.h>
 #include <string.h>
 #include <badmalloc.h>
 #include <ktest.h>
 #include <awoo/tests.h>
-#include <awoostr.h>
 
 extern size_t *kernel_end;
 
@@ -15,12 +13,6 @@ extern size_t *kernel_end;
         kprint("Done!\n");                              \
     };
 
-void add_tests()
-{
-    ADD_TESTS(hal);
-    ADD_TESTS(awoostr);
-}
-
 void kernel_main()
 {
     bool continue_booting = true;
@@ -29,7 +21,9 @@ void kernel_main()
     badmalloc_init(kernel_end);
     kprint(AWOO_INFO "\r\n");
 
-    add_tests();
+    ADD_TESTS(hal);
+    ADD_TESTS(awoostr);
+
     continue_booting = test_run_all();
 
     if (!continue_booting) {
