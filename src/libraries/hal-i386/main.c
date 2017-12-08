@@ -7,6 +7,13 @@
 static uint32_t magic;
 static void *arg;
 
+extern size_t *kernel_end;
+
+size_t *hal_badmalloc_start_address()
+{
+    return kernel_end;
+}
+
 uint32_t hal_get_magic()
 {
     return magic;

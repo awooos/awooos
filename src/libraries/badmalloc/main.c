@@ -2,12 +2,13 @@
 
 #include <stddef.h>
 #include <badmalloc.h>
+#include <kernel.h>
 
 static size_t *ptr;
 
-void badmalloc_init(size_t *kernel_end_)
+void badmalloc_init()
 {
-    ptr = kernel_end_ + 1;
+    ptr = hal_badmalloc_start_address() + 1;
 }
 
 void *badmalloc(size_t size) {
