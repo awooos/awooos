@@ -42,7 +42,7 @@ KERNEL_EXE_TARGETS := src/bootstrap/${TARGET}/start.o
 # Have src/kernel.exe use the bootstrap linker script.
 KERNEL_EXE_LDFLAGS := -T src/bootstrap/${TARGET}/link.ld
 # Have src/kernel.exe link to the various libraries necessary.
-KERNEL_EXE_LIBRARIES += -l :libc.a -l :ktest.a -l :badmalloc.a -l :hal-${TARGET}.a
+KERNEL_EXE_LIBRARIES += -l :libc.a -l :awoostr.a -l :ktest.a -l :badmalloc.a -l :hal-${TARGET}.a
 
 # == Begin gross bullshit for only matching things for the current platform. ==
 

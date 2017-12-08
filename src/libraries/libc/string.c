@@ -1,7 +1,26 @@
 #include <string.h>
 #include <stddef.h>
 
-// char *strcpy(char *dest, const char *src);
+#include <kernel.h>
+void *memset(void *s, int c, size_t n)
+{
+    int *cs = (int*)s;
+
+    for (size_t i = 0; i < n; i++) {
+        cs[i] = c;
+    }
+
+    return s;
+}
+
+char *strcpy(char *dest, const char *src)
+{
+    size_t len = strlen(src);
+    for (size_t i = 0; i <= len; i++) {
+        dest[i] = src[i];
+    }
+    return dest;
+}
 // char *strncpy(char *dest, const char *src, size_t n);
 
 // char *strcat(char *dest, const char *src);
@@ -50,4 +69,19 @@ size_t strlen(const char *str)
     }
 
     return i;
+}
+
+char *strrev(char *str)
+{
+    size_t length = strlen(str);
+    size_t half_length = length / 2;
+    char tmp;
+
+    for (size_t idx = 0; idx < half_length; idx++) {
+        tmp = str[idx];
+        str[idx] = str[length - idx - 1];
+        str[length - idx - 1] = tmp;
+    }
+
+    return str;
 }
