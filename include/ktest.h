@@ -47,7 +47,7 @@ bool test_run_all();
         ret->line = __LINE__;                                               \
         return ret;
 
-#define TEST_RETURN(STATUS, MESSAGE) _TEST_RETURN(STATUS, MESSAGE, 0, 0)
+#define TEST_RETURN(STATUS, MESSAGE) _TEST_RETURN(STATUS, MESSAGE, 0)
 
 #define TEST_HAS_ASSERTIONS() size_t passed_assertions = 0;
 
