@@ -29,7 +29,7 @@ TestResult *test_awoostr_assertions()
     TEST_ASSERT(strcmp(str(1), "1") == 0);
     TEST_ASSERT(strcmp(str(2), "2") == 0);
     TEST_ASSERT(strcmp(str(123), "123") == 0);
-    TEST_ASSERT(strcmp(str(9001), "123") == 0);
+    TEST_ASSERT(strcmp(str(9001), "9001") == 0);
 
     TEST_ASSERTIONS_RETURN();
 }
