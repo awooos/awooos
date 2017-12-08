@@ -1,0 +1,16 @@
+---
+version: 2
+plugins:
+  duplication:
+    enabled: true
+    config:
+      languages:
+      - c
+  fixme:
+    enabled: true
+  gnu-complexity:
+    enabled: true
+  structure:
+    enabled: true
+exclude_paths:
+- "**~"
