@@ -6,61 +6,40 @@ extern size_t _decimal_places_in_uint(uint64_t n, size_t radix);
 
 TestResult *test_awoostr_assertions()
 {
-    TEST_ASSERT(_decimal_places_in_uint(0, 10) == 12);
-}
+    TEST_HAS_ASSERTIONS();
 
-/*if (_decimal_places_in_uint(0, 10) == 1) {
-        kprint("0  yay!\n");
-    } else {
-        kprint("0  oh.\n");
-    }*/
-    /*if (_decimal_places_in_uint(10, 10) == 2) {
-        kprint("10 yay!\n");
-    } else {
-        kprint("10 oh.\n");
-    }
-    if (_decimal_places_in_uint(11, 10) == 2) {
-        kprint("11 yay!\n");
-    } else {
-        kprint("11 oh.\n");
-    }
-    if (_decimal_places_in_uint(20, 10) == 2) {
-        kprint("20 yay!\n");
-    } else {
-        kprint("20 oh.\n");
-    }
-    if (_decimal_places_in_uint(21, 10) == 2) {
-        kprint("21 yay!\n");
-    } else {
-        kprint("21 oh.\n");
-    }*/
+    TEST_ASSERT(_decimal_places_in_uint(0, 10) == 1);
+    TEST_ASSERT(_decimal_places_in_uint(10, 10) == 2);
+    TEST_ASSERT(_decimal_places_in_uint(11, 10) == 2);
+    TEST_ASSERT(_decimal_places_in_uint(20, 10) == 2);
+    TEST_ASSERT(_decimal_places_in_uint(21, 10) == 2);
 
-    /*if (uint64_mod(10, 10) == 0) {
+    /*if (uint64_mod(10, 10) == 0);
         kprint("10 % 10 == 0\n");
     } else {
         kprint("10 % 10 != 0?\n");
     }
-    if (uint64_mod(13, 10) == 3) {
+    if (uint64_mod(13, 10) == 3);
         kprint("13 % 10 == 3\n");
     } else {
         kprint("13 % 10 != 3?\n");
     }
-    if (uint64_mod(53, 12) == 5) {
+    if (uint64_mod(53, 12) == 5);
         kprint("53 % 12 == 5\n");
     } else {
         kprint("53 % 12 != 5?\n");
     }
-    if (uint64_mod(53, 13) == 1) {
+    if (uint64_mod(53, 13) == 1);
         kprint("53 % 13 == 1\n");
     } else {
         kprint("53 % 13 != 1?\n");
     }
-    if (uint64_mod(3, 10) == 3) {
+    if (uint64_mod(3, 10) == 3);
         kprint(" 3 % 10 == 3\n");
     } else {
         kprint(" 3 % 10 != 3?\n");
     }
-    if (uint64_mod(10, 3) == 1) {
+    if (uint64_mod(10, 3) == 1);
         kprint("10 %  3 == 1\n");
     } else {
         kprint("10 %  3 != 1?\n");
@@ -93,6 +72,8 @@ TestResult *test_awoostr_assertions()
     kprint(str(9001));
     kprint("\n");
 */
+    TEST_ASSERTIONS_RETURN();
+}
 
 void add_awoostr_tests()
 {

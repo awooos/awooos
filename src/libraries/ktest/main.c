@@ -66,7 +66,7 @@ TestCase *test_add(const char *name, TestResult* (*function_ptr)())
     return test_case;
 }
 
-int test_run(size_t ran, TestCase *test)
+TestResult *test_run(size_t ran, TestCase *test)
 {
     TestResult *ret;
     ret = test->func();
@@ -109,12 +109,13 @@ int test_run(size_t ran, TestCase *test)
         kprint("\n");
     }
 
-    return ret->status;
+    return ret;
 }
 
 bool test_run_all()
 {
     TestCase *test;
+    TestResult *ret;
     int status;
     size_t total = 0;
     size_t passed = 0;
@@ -124,8 +125,12 @@ bool test_run_all()
     kprint("\nRunning tests:\n\n");
 
     for(test = first_test; test != NULL; test = test->next) {
-        status = test_run(total, test);
+        ret = test_run(total, test);
+        status = ret->status;
         total++;
+
+        passed += ret->passed_assertions;
+        total += ret->passed_assertions;
 
         if(status == TEST_SUCCESS) {
             passed++;
