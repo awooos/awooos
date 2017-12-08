@@ -29,10 +29,9 @@
 static TestCase *first_test = NULL;
 static TestCase *last_test = NULL;
 
-static const char *test_status_messages[5] = {
+static const char *test_status_messages[4] = {
     "Passed",
     "Failure",
-    "Fatal error",
     "Skipped",
     "Assertion failed",
 };
