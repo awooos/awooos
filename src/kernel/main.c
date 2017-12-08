@@ -4,8 +4,6 @@
 #include <ktest.h>
 #include <awoo/tests.h>
 
-extern size_t *kernel_end;
-
 #define ADD_TESTS(TEST_CATEGORY) { \
         kprint("Adding " #TEST_CATEGORY " tests... ");  \
         add_##TEST_CATEGORY##_tests();                  \
@@ -15,7 +13,7 @@ extern size_t *kernel_end;
 void kernel_main()
 {
     hal_init();
-    badmalloc_init(kernel_end);
+    badmalloc_init();
     kprint(AWOO_INFO "\r\n");
 
     ADD_TESTS(hal);
