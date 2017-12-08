@@ -36,25 +36,21 @@ ifeq (${BUILD_TYPE},test)
 override QEMU_FLAGS += -no-reboot -device isa-debug-exit,iobase=0xf4,iosize=0x04
 endif
 
-
-# Add bootstrap/*/start.o as a target for kernel.exe.
-KERNEL_EXE_TARGETS := src/bootstrap/${TARGET}/start.o
-# Have src/kernel.exe use the bootstrap linker script.
-KERNEL_EXE_LDFLAGS := -T src/bootstrap/${TARGET}/link.ld
+# Have src/kernel.exe use the target-specific linker script.
+KERNEL_EXE_LDFLAGS := -T src/link-${TARGET}.ld
 # Have src/kernel.exe link to the various libraries necessary.
-KERNEL_EXE_LIBRARIES += -l :awoostr.a -l :ktest.a -l :badmalloc.a -l :hal-${TARGET}.a -l :libc.a
+KERNEL_EXE_LIBRARIES += -l :bootstrap-${TARGET}.a -l :awoostr.a -l :ktest.a -l :badmalloc.a -l :hal-${TARGET}.a -l :libc.a
 
 # == Begin gross bullshit for only matching things for the current platform. ==
 
 # We're searching for .c and .asm files.
 SOURCE_SUFFIXES := '(' -name '*.c' -o -name '*.asm' ')'
 
-# E.g. src/bootstrap/i386, src/libraries/hal-i386, etc.
-#      (But for the specific target we're building for.)
-INCLUDE_CURRENT_TARGET_DIRECTORIES := '(' -wholename 'src/*/${TARGET}/*' -o -wholename 'src/*/*-${TARGET}/*' ')'
-
 # Ignore things that are target-specific.
-EXCLUDE_ALL_TARGET_DIRECTORIES := '(' '!' -wholename 'src/*/*-*/*' -a '!' -wholename 'src/bootstrap/*' ')'
+EXCLUDE_ALL_TARGET_DIRECTORIES := '(' '!' -wholename 'src/*/*-*/*' ')'
+
+# src/libraries/bootstrap-${TARGET}, src/libraries/hal-${TARGET}, etc.
+INCLUDE_CURRENT_TARGET_DIRECTORIES := '(' -wholename 'src/*/*-${TARGET}/*' ')'
 
 # == End gross bullshit for only matching things for the current platform.   ==
 
