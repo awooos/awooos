@@ -27,9 +27,8 @@ bool test_run_all();
 
 #define TEST_SUCCESS            0
 #define TEST_FAILURE            1
-#define TEST_FATAL              2
-#define TEST_SKIP               3
-#define TEST_ASSERTION_FAILURE  4
+#define TEST_SKIP               2
+#define TEST_ASSERTION_FAILURE  3
 
 #include <kernel.h>
 #define kmalloc badmalloc

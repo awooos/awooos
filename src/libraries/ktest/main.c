@@ -119,7 +119,6 @@ bool test_run_all()
     size_t total = 0;
     size_t passed = 0;
     size_t failed = 0;
-    size_t fatal  = 0;
     size_t skipped = 0;
 
     kprint("\nRunning tests:\n\n");
@@ -132,9 +131,6 @@ bool test_run_all()
             passed++;
         } else if (status == TEST_FAILURE || status == TEST_ASSERTION_FAILURE) {
             failed++;
-        } else if (status == TEST_FATAL) {
-            failed++;
-            fatal++;
         } else if (status == TEST_SKIP) {
             skipped++;
         }
@@ -154,24 +150,16 @@ bool test_run_all()
     kprint(str(failed));
     kprint("\n");
 
-    kprint("      Fatal: ");
-    kprint(str(fatal));
-    kprint("\n");
-
     kprint("    Skipped: ");
     kprint(str(skipped));
     kprint("\n\n");
     /*printf("Total tests: %i\n", ran);
       printf("     Passed: %i\n", passed);
       printf("     Failed: %i\n", failed);
-      printf("      Fatal: %i\n", fatal);
       printf("    Skipped: %i\n\n", skipped);*/
 
-    if (fatal > 0) {
-        kprint("Fatal error encountered; not booting.\n");
-        return false;
-    } else if (failed > passed) {
-        kprint("Majority of tests failed; not booting.\n");
+    if (failed > 0) {
+        kprint("Encountered failing tests; not booting.\n");
         return false;
     }
 
