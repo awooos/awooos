@@ -79,20 +79,13 @@ TestResult *test_run(size_t ran, TestCase *test)
         // X) <test name>
         kprint(str(ran + 1));
         kprint(") ");
-        kprint(test->name);
-        kprint("\n");
-
-        // Padding to line up with "X) " from above.
-        kprint("   ");
 
         kprint(test_status_messages[ret->status]);
         kprint(": ");
 
-        // Failed assertions don't currently have a useful name.
-        if (ret->status != TEST_ASSERTION_FAILURE) {
-            kprint(test->name);
-            kprint(": ");
-        }
+        kprint(test->name);
+        kprint("\n");
+        kprint("        ");
 
         kprint(ret->message);
         kprint("\n");
