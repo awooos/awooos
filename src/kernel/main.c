@@ -7,8 +7,8 @@
 extern size_t *kernel_end;
 
 #define ADD_TESTS(TEST_CATEGORY) { \
-        kprint("Adding " #TEST_CATEGORY " tests... ");   \
-        add_##TEST_CATEGORY##_tests();                   \
+        kprint("Adding " #TEST_CATEGORY " tests... ");  \
+        add_##TEST_CATEGORY##_tests();                  \
         kprint("Done!\n");                              \
     };
 
