@@ -1,5 +1,10 @@
 sudo: required
-language: bash
+language: python
+python:
+  - "3"
+
+install:
+  - pip install whaledo
 
 services:
   - docker
