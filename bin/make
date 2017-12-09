@@ -6,4 +6,4 @@ import whaledo
 make_config_flags = 'AWOO_MAKE_CONFIG=config.mk.dist'
 qemu_flags = "QEMU_FLAGS=-display none"
 
-whaledo.handle(["whaledo", "os-development-x86", "make", make_config_flags, qemu_flags, *sys.argv[1:]])
+whaledo.run("os-development-x86", ["make", make_config_flags, qemu_flags, *sys.argv[1:]])
