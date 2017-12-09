@@ -13,7 +13,7 @@ env:
   global:
     - MAKEFLAGS="-j 2"
 
-script: ./bin/make BUILD_TYPE=test qemu
+script: ./bin/make test
 
 notifications:
   email:
