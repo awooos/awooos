@@ -112,8 +112,8 @@ iso: src/kernel.exe libraries
 	cp src/libraries/*.a isofs/libraries
 	${MKISOFS} -boot-info-table -R -b boot/grub/stage2_eltorito -no-emul-boot -boot-load-size 4 -input-charset utf-8 -o ${ISO_FILE} isofs
 
-test: iso
-	./bin/test.sh "${QEMU}"
+test:
+	$(MAKE) BUILD_TYPE=test qemu
 
 qemu: iso
 	${QEMU} ${QEMU_FLAGS} -vga std -serial stdio -cdrom ${ISO_FILE}
@@ -135,9 +135,6 @@ clean:
 	@find ./src -name '*.exe' -delete
 	@find ./src -name '*.d'   -delete
 	@find ./iso -name '*.iso' -delete
-
-dockerhub-release:
-	curl --data build=true https://registry.hub.docker.com/u/duckinator/awooos-builder/trigger/${DOCKERHUB_TRIGGER_TOKEN}/
 
 .PHONY: all iso libraries modules clean test qemu qemu-monitor clean dockerhub-release
 

@@ -2,25 +2,17 @@
 
 Some kind of operating system.
 
-## Dependencies
-
-### Build dependencies
+## Development Dependencies
 
 * Docker
-* Bash
+* Python, with pip
 
-### Test dependencies
+# Development
 
-* Qemu
-* Bash
+    $ pip install whaledo # Required for ./bin/make.
+    $ ./bin/make clean test
 
-### Optional test dependencies
-
-* VirtualBox
-
-## Development
-
-After checking out the repo, run `bin/make test` to run the tests.
+This'll run the test suite in Docker and print the results.
 
 ## Contributing
 

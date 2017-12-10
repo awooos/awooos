@@ -1,7 +1,12 @@
-#!/usr/bin/env bash
+#!/usr/bin/env python
 
-DIR="$(dirname $(readlink -f $0))"
+import sys
+import whaledo
 
-MOUNTS="-v ${DIR}/..:/tmp/build -w /tmp/build"
+make_config_flags = 'AWOO_MAKE_CONFIG=config.mk.dist'
+qemu_flags = "QEMU_FLAGS=-display none"
 
-docker run --rm -it ${MOUNTS} -u $(id -u) "duckinator/awooos-builder" "$@"
+command = ["make", make_config_flags, qemu_flags]
+command += sys.argv[1:]
+
+whaledo.run("os-development-x86", command)
