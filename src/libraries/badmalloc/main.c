@@ -3,6 +3,7 @@
 #include <stddef.h>
 #include <badmalloc.h>
 #include <kernel.h>
+#include <string.h>
 
 static size_t *ptr;
 
@@ -12,6 +13,8 @@ void badmalloc_init()
 }
 
 void *badmalloc(size_t size) {
+    memset(ptr, 0, size);
+
     ptr += size;
 
     return ptr - size;
