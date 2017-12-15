@@ -17,6 +17,7 @@ void kernel_main()
     kprint(AWOO_INFO "\r\n");
 
     ADD_TESTS(hal);
+    ADD_TESTS(badmalloc);
     ADD_TESTS(awoostr);
 
     if (!test_run_all()) {
