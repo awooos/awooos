@@ -3,4 +3,5 @@
 import sys
 import whaledo
 
-whaledo.run("os-development-x86", ["make"] + sys.argv[1:])
+exit_code = whaledo.run("os-development-x86", ["make"] + sys.argv[1:])
+exit(exit_code)
