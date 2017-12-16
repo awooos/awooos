@@ -1,6 +1,16 @@
 # awooOS
 
-Some kind of operating system.
+awooOS is an experimental operating system, bringing together old ideas and
+new technology.
+
+It is designed around a microkernel, with as much moved into libraries
+and services as possible. The kernel proper is less than 50 lines of code.
+
+Notable features:
+
+* [Docker](https://docker.com)-based build environment, for builds consistency.
+* Automated test suite, using Docker, Qemu, and a custom testing framework.
+* Continuous integration using [Travis CI](https://travis-ci.org/).
 
 ## Development Dependencies
 
