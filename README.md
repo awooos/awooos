@@ -8,7 +8,7 @@ and services as possible. The kernel proper is less than 50 lines of code.
 
 Notable features:
 
-* [Docker](https://docker.com)-based build environment, for builds consistency.
+* [Docker](https://docker.com)-based build environment, for build consistency.
 * Automated test suite, using Docker, Qemu, and a custom testing framework.
 * Continuous integration using [Travis CI](https://travis-ci.org/).
 
