@@ -18,13 +18,10 @@ void panic_stack_dump_hex(size_t *_stack)
     for (size_t original_stack = (size_t)stack;
             (size_t)stack < ((original_stack + 0x1000) & (size_t)(~(0x1000 - 1)));
             stack++) {
-//        kprint("0x");
-//        kprint(n_to_str_radix(stack, 16));
-//        kprint(": 0x");
-//        kprint(n_to_str_radix(*stack, 16));
-        kprint(str((size_t)stack));
-        kprint(": ");
-        kprint(str(*stack));
+        kprint("0x");
+        kprint(n_to_str_radix((size_t)stack, 16));
+        kprint(": 0x");
+        kprint(n_to_str_radix(*stack, 16));
         kprint("\n");
 
         if (*stack == 0x0) {
