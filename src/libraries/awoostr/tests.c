@@ -28,8 +28,10 @@ TestResult *test_awoostr_assertions()
     TEST_ASSERT(uint64_mod(3, 10) == 3);
     TEST_ASSERT(uint64_mod(10, 3) == 1);
 
-    TEST_ASSERT(strcmp(n_to_str_radix(10, 10), "10") == 0);
-    TEST_ASSERT(strcmp(n_to_str_radix(10, 10), "10") == 0);
+    TEST_ASSERT(strcmp(n_to_str_radix(10, 16), "a") == 0);
+    TEST_ASSERT(strcmp(n_to_str_radix(30, 16), "1e") == 0);
+    TEST_ASSERT(strcmp(n_to_str_radix(430, 16), "1ae") == 0);
+    TEST_ASSERT(strcmp(n_to_str_radix(430, 26), "ge") == 0);
 
     TEST_ASSERT(strcmp(str(0), "0") == 0);
     TEST_ASSERT(strcmp(str(1), "1") == 0);
