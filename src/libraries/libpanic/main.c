@@ -3,6 +3,7 @@
 #include <stdint.h>
 #include <stdbool.h>
 #include <awoostr.h>
+#include <awoo.h>
 
 // stack_dump() is an assembly stub (in libpanic-i386/main.asm), which calls
 // panic_stack_dump_hex() with the argument being the stack pointer (esp).
@@ -44,6 +45,8 @@ noreturn _panic(const char *message, const char *function,
 
         hal_init();
         kprint("!!! Kernel panic !!!\r\n\r\n");
+        kprint(AWOO_INFO);
+        kprint("\r\n\r\n");
 
         kprint(message);
         kprint("\r\n\r\n");
@@ -51,9 +54,21 @@ noreturn _panic(const char *message, const char *function,
         kprint("Stack dump:\r\n\r\n");
 
         stack_dump();
+
+        kprint("\r\n\r\n");
+
+        kprint("Kernel panic: ");
+        kprint(message);
+        kprint("\r\n ");
+        kprint(filename);
+        kprint(":");
+        kprint(str(line));
+        kprint(" (");
+        kprint(function);
+        kprint(")\r\n");
     }
 
     while (true) {
-        __asm__ volatile ("cli; hlt");
+        __asm__ volatile ("cli\r\nhlt");
     }
 }
