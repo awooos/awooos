@@ -1,9 +1,9 @@
-extern panic_dump_hex
+extern panic_stack_dump_hex
 global stack_dump
 
 stack_dump:
 	push ebp
 	mov ebp, esp
-	call panic_dump_hex
+	call panic_stack_dump_hex
 	pop ebp
 	ret
