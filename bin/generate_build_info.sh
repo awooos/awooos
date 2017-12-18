@@ -3,8 +3,8 @@
 TARGET_NORMAL="$2"
 TARGET=$(echo "$2" | tr [a-z] [A-Z])
 
-UPPER_CASE_BUILD_TYPE=$(echo "$1" | tr [a-z] [A-Z])
-LOWER_CASE_BUILD_TYPE=$(echo "$1" | tr [A-Z] [a-z])
+UPPER_CASE_BUILD_TYPE=$(echo "$1" | tr "[a-z]" "[A-Z]")
+LOWER_CASE_BUILD_TYPE=$(echo "$1" | tr "[A-Z]" "[a-z]")
 
 VERSION=$(git describe --tags HEAD --always | cut -c2-)-${LOWER_CASE_BUILD_TYPE}
 

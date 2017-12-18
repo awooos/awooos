@@ -29,4 +29,5 @@ void kernel_main()
     }
 
     // Hooray, tests passed! Now to actually do something.
+    panic("halp");
 }
