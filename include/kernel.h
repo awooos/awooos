@@ -9,6 +9,7 @@ void hal_shutdown();
 void hal_hard_shutdown();
 void hal_test_fail_shutdown();
 size_t *hal_badmalloc_start_address();
+char *hal_compiler_information();
 void kprint(const char *string);
 
 noreturn _panic(const char *message, const char *function,
