@@ -16,6 +16,10 @@ void kernel_main()
     badmalloc_init();
     kprint(AWOO_INFO "\r\n");
 
+    kprint("Compiled with ");
+    kprint(hal_compiler_information());
+    kprint("\r\n\r\n");
+
     ADD_TESTS(hal);
     ADD_TESTS(badmalloc);
     ADD_TESTS(awoostr);
