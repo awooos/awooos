@@ -5,6 +5,7 @@
 #include <awoo/modifiers.h>
 
 void hal_init();
+void hal_events_init();
 void hal_shutdown();
 void hal_hard_shutdown();
 void hal_test_fail_shutdown();

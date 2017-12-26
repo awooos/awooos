@@ -2,6 +2,7 @@
 #include "basic_display.h"
 #include "basic_uart.h"
 #include "ports.h"
+#include "events.h"
 #include <stddef.h>
 
 static uint32_t magic;

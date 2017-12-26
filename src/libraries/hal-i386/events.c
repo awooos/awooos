@@ -1,9 +1,12 @@
 #include <eventually.h>
+#include <scheduler.h>
+#include <kernel.h>
 
-#define TIMER_INTERRUPT 0
+#define REGISTER_HANDLER(name, callback) \
+    kprint("Adding event handler for " name ": " # callback ".\n"); \
+    eventually_add_handler(name, &callback)
 
 void hal_events_init()
 {
-    //hal_irq_install_handler(TIMER_INTERRUPT, &eventually);
+    REGISTER_HANDLER("timer", scheduler_callback);
 }
-

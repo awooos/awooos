@@ -61,8 +61,8 @@ MAY_PANIC void scheduler_destroy_process(size_t pid)
 
 MAY_PANIC bool scheduler_next()
 {
-    // TODO: This should eventually probably panic.
     if (number_of_processes == 0) {
+        // TODO: start init process? When one exists? Maybe? fuck if I know.
         return false;
     }
 
@@ -82,4 +82,9 @@ bool scheduler_start_process()
     number_of_processes += 1;
 
     return true;
+}
+
+MAY_PANIC void scheduler_callback(UNUSED char *event_name, UNUSED void *data)
+{
+    scheduler_next();
 }
