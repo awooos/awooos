@@ -29,22 +29,17 @@ hal_exception_common:
     iret
 
 
-%macro EXCEPTION_COMMON_WITH_ERROR 1
+%macro EXCEPTION_COMMON 1
 global hal_exception_%1
 hal_exception_%1:
     cli
-    ; Stack already contains an error code.
-    push byte %1
-    jmp hal_exception_common
-    iret
-%endmacro
 
+    ; Exceptions 8 and 10-14 already push an error code to the stack.
+    ; For everything else, we push a fake error code of zero.
+    %ifn %1 == 8 || (%1 >= 10 && %1 <= 14)
+      push 0 ; Fake error code.
+    %endif
 
-%macro EXCEPTION_COMMON_NO_ERROR 1
-global hal_exception_%1
-hal_exception_%1:
-    cli
-    push byte 0 ; Push a fake error code to the stack.
     push byte %1
     jmp hal_exception_common
     iret
@@ -52,7 +47,9 @@ hal_exception_%1:
 
 section .text
 
-; Generate ISR handlers -- exceptions 0 to 31.
+; Generate ISR and IRQ handlers.
+; - ISRs are exceptions 0 to 31.
+; - IRQs are exceptions 32 to 47.
 ;
 ; Lots of inspiration, and documentation, from http://www.osdever.net/bkerndev/Docs/isrs.htm
 ;
@@ -79,39 +76,8 @@ section .text
 ; 18          | Machine Check Exception (Pentium/586+)  | No
 ; 19 to 31    | Reserved Exceptions                     | No
 
-; ISRs 0-7 don't include an error.
 %assign i 0
-%rep    8 ; 0-7 = 8 total.
-  EXCEPTION_COMMON_NO_ERROR i
-%assign i i + 1
-%endrep
-
-
-EXCEPTION_COMMON_WITH_ERROR 8
-EXCEPTION_COMMON_NO_ERROR   9
-
-
-; ISRs 10-14 include an error.
-%assign i 10
-%rep    5 ; 10-14 = 5 total.
-  EXCEPTION_COMMON_WITH_ERROR i
-%assign i i + 1
-%endrep
-
-
-; ISRs 15-31 don't include an error.
-%assign i 15
-%rep    16 ; 15-31 = 16 total.
-  EXCEPTION_COMMON_NO_ERROR i
-%assign i i + 1
-%endrep
-
-; Generate IRQ handlers.
-
-; IRQs don't include an error.
-; There are 16 IRQs (0-15), which map to exceptions 32 to 47.
-%assign i 32
-%rep    16 ; 32-47 = 16 total.
-  EXCEPTION_COMMON_NO_ERROR i
+%rep 48
+  EXCEPTION_COMMON i
 %assign i i + 1
 %endrep
