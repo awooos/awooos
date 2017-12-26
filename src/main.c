@@ -6,5 +6,6 @@
 void dmm_init(unsigned int last_used_address, unsigned int end_memory)
 {
     dmm_frames_init(end_memory);
-    dmm_paging_init(last_used_address);
+    dmm_paging_init();
+    dmm_placement_allocator_init(last_used_address);
 }
