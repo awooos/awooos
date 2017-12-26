@@ -86,5 +86,6 @@ bool scheduler_start_process()
 
 MAY_PANIC void scheduler_callback(UNUSED char *event_name, UNUSED void *data)
 {
+    kprint("Scheduling!\r\n");
     scheduler_next();
 }

@@ -3,9 +3,6 @@
 #include <string.h>
 #include <eventually.h>
 
-#include <kernel.h>
-
-
 // ASSUMPTION: No more than 50 events, and no more than 50 handlers per event.
 
 static EvEventGroup event_groups[EVENTUALLY_MAX_EVENT_GROUPS + 1] = {
@@ -44,11 +41,12 @@ EvEventGroup *eventually_create_group(const char *event_name)
         return NULL;
     }
 
-    group = &(event_groups[number_of_events + 1]);
+    group = &(event_groups[number_of_events]);
 
     memset(group, 0, sizeof(EvEventGroup));
 
     group->name = event_name;
+    number_of_events++;
 
     return group;
 }
@@ -90,7 +88,6 @@ bool eventually_trigger_event(const char *event_name, void *data)
 
     // If there's no registered event handlers, return false.
     if (group->number_of_handlers == 0) {
-        kprint("eh?");
         return false;
     }
 

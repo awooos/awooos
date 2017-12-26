@@ -8,5 +8,5 @@
 
 void hal_events_init()
 {
-    REGISTER_HANDLER("timer", scheduler_callback);
+    REGISTER_HANDLER("IRQ 0 timer", scheduler_callback);
 }
