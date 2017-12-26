@@ -3,15 +3,17 @@
 #include <string.h>
 #include <eventually.h>
 
+#include <kernel.h>
+
 
 // ASSUMPTION: No more than 50 events, and no more than 50 handlers per event.
 
 static EvEventGroup event_groups[EVENTUALLY_MAX_EVENT_GROUPS + 1] = {
-    NULL, NULL, NULL, NULL, NULL, /*  5 */ NULL, NULL, NULL, NULL, NULL, /* 10 */
-    NULL, NULL, NULL, NULL, NULL, /* 15 */ NULL, NULL, NULL, NULL, NULL, /* 20 */
-    NULL, NULL, NULL, NULL, NULL, /* 25 */ NULL, NULL, NULL, NULL, NULL, /* 30 */
-    NULL, NULL, NULL, NULL, NULL, /* 35 */ NULL, NULL, NULL, NULL, NULL, /* 40 */
-    NULL, NULL, NULL, NULL, NULL, /* 45 */ NULL, NULL, NULL, NULL, NULL, /* 50 */
+    0, 0, 0, 0, 0, /*  5 */ 0, 0, 0, 0, 0, /* 10 */
+    0, 0, 0, 0, 0, /* 15 */ 0, 0, 0, 0, 0, /* 20 */
+    0, 0, 0, 0, 0, /* 25 */ 0, 0, 0, 0, 0, /* 30 */
+    0, 0, 0, 0, 0, /* 35 */ 0, 0, 0, 0, 0, /* 40 */
+    0, 0, 0, 0, 0, /* 45 */ 0, 0, 0, 0, 0, /* 50 */
     NULL,
 };
 
@@ -20,9 +22,11 @@ static size_t number_of_events = 0;
 
 EvEventGroup *eventually_find_group(const char *event_name)
 {
-    EvEventGroup *group = &(event_groups[0]);
+    EvEventGroup *group;
 
-    for (; group != NULL; group++) {
+    for (size_t i = 0; i < number_of_events; i++){
+        group = &(event_groups[i]);
+
         if (strcmp(event_name, group->name) == 0) {
             return group;
         }
@@ -81,6 +85,12 @@ bool eventually_trigger_event(const char *event_name, void *data)
 
     // If no group is found, return false.
     if (group == NULL) {
+        return false;
+    }
+
+    // If there's no registered event handlers, return false.
+    if (group->number_of_handlers == 0) {
+        kprint("eh?");
         return false;
     }
 
