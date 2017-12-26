@@ -4,6 +4,7 @@
 #include "ports.h"
 #include "events.h"
 #include "exceptions.h"
+#include "gdt.h"
 #include <stddef.h>
 
 static uint32_t magic;
@@ -35,6 +36,7 @@ void hal_store_magic(uint32_t magic_, void *arg_)
 
 void hal_init()
 {
+    hal_gdt_init();
     hal_basic_display_init();
     hal_basic_uart_init();
     hal_exceptions_init();
