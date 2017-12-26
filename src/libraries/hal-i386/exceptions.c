@@ -68,7 +68,7 @@ static const char *irq_names[16] = {
 void hal_exception_handler(Registers *r)
 {
     Registers *r2 = badmalloc(sizeof(r));
-    memcpy(r, r2, sizeof(Registers));
+    memcpy(r2, r, sizeof(Registers));
 
     /*if (r->int_no == SYSCALL_INTERRUPT) {
         HalSyscallHandler(r);
