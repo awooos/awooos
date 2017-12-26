@@ -2,13 +2,20 @@
 #include "basic_display.h"
 #include "basic_uart.h"
 #include "ports.h"
+#include "events.h"
+#include "exceptions.h"
+#include "gdt.h"
+#include "idt.h"
 #include <stddef.h>
+#include <stdbool.h>
 
 static uint32_t magic;
 static void *arg;
 
 extern char kernel_comment_start;
 extern size_t kernel_end;
+
+static bool hal_initialized = false;
 
 size_t *hal_badmalloc_start_address()
 {
@@ -33,8 +40,19 @@ void hal_store_magic(uint32_t magic_, void *arg_)
 
 void hal_init()
 {
+    if (!hal_initialized) {
+        hal_gdt_init();
+        hal_idt_init();
+    }
+
     hal_basic_display_init();
     hal_basic_uart_init();
+
+    if (!hal_initialized) {
+        hal_exceptions_init();
+    }
+
+    hal_initialized = true;
 }
 
 void hal_shutdown()
@@ -43,29 +61,34 @@ void hal_shutdown()
     kprint("TODO: Implement an ACPI-based hal_shutdown().");
 }
 
+void hal_enable_interrupts()
+{
+    __asm__ volatile ("sti");
+}
+
 void hal_disable_interrupts()
 {
-	__asm__ volatile ("cli");
+    __asm__ volatile ("cli");
 }
 
 void hal_hard_shutdown()
 {
-	kprint("\r\n");
-	kprint("Doing a hard shutdown.\r\n");
+    kprint("\r\n");
+    kprint("Doing a hard shutdown.\r\n");
 
-	hal_disable_interrupts();
+    hal_disable_interrupts();
 
-	while ((hal_inb(0x64) & 2) != 0) {
-		// Wait until condition is true before continuing.
-	}
+    while ((hal_inb(0x64) & 2) != 0) {
+        // Wait until condition is true before continuing.
+    }
 
-	hal_outb(0x64, 0xD1);
+    hal_outb(0x64, 0xD1);
 
-	while ((hal_inb(0x64) & 2) != 0) {
-		// Wait until condition is true before continuing.
-	}
+    while ((hal_inb(0x64) & 2) != 0) {
+        // Wait until condition is true before continuing.
+    }
 
-	hal_outb(0x60, 0xFE); // Keyboard RESET.
+    hal_outb(0x60, 0xFE); // Keyboard RESET.
 }
 
 // Used to shut down after test failures.

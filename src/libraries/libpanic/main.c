@@ -33,6 +33,8 @@ void panic_stack_dump_hex(size_t *_stack)
 noreturn _panic(const char *message, const char *function,
                     const char* filename, size_t line)
 {
+    hal_disable_interrupts();
+
     /*
      * If we're recursively panicking, we don't want to run this block of code,
      * because this is probably what's causing the recursive panic!
@@ -41,6 +43,7 @@ noreturn _panic(const char *message, const char *function,
         in_panic = true;
 
         hal_init();
+
         kprint("!!! Kernel panic !!!\r\n\r\n");
         kprint(AWOO_INFO);
         kprint("\r\n\r\n");

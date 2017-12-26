@@ -20,6 +20,12 @@ void kernel_main()
     kprint(hal_compiler_information());
     kprint("\r\n\r\n");
 
+    hal_events_init();
+    extern void hal_enable_interrupts();
+    hal_enable_interrupts();
+
+    kprint("\r\n");
+
     ADD_TESTS(hal);
     ADD_TESTS(badmalloc);
     ADD_TESTS(awoostr);
@@ -32,6 +38,8 @@ void kernel_main()
         hal_hard_shutdown();
     }
 
+    while(1){}
+
     // Hooray, tests passed! Now to actually do something.
-    panic("halp");
+    panic("Reached the end of the kernel!");
 }

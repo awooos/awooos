@@ -1,7 +1,38 @@
 #include <string.h>
+#include <stdlib.h>
 #include <stddef.h>
-
+#include <stdint.h>
 #include <kernel.h>
+
+void *memcpy(void *dest, const void *src, size_t n)
+{
+    uint8_t *udest = (uint8_t*)dest;
+    uint8_t *usrc = (uint8_t*)src;
+
+    for (size_t i = 0; i < n; i++) {
+        udest[i] = usrc[i];
+    }
+
+    return dest;
+}
+
+// NOTE: memmove_tmp() is nonstandard!
+void *memmove_tmp(void *dest, const char *src, size_t n, void *tmp)
+{
+    memcpy(tmp, src, n);
+    memcpy(dest, tmp, n);
+
+    return tmp;
+}
+
+
+/*void *memmove(void *dest, const char *src, size_t n)
+{
+    void *tmp = malloc(n);
+
+    return memmove_tmp(dest, src, n, tmp);
+}*/
+
 void *memset(void *s, int c, size_t n)
 {
     int *cs = (int*)s;
@@ -15,13 +46,17 @@ void *memset(void *s, int c, size_t n)
 
 char *strcpy(char *dest, const char *src)
 {
-    size_t len = strlen(src);
-    for (size_t i = 0; i <= len; i++) {
+    return strncpy(dest, src, strlen(src));
+}
+
+char *strncpy(char *dest, const char *src, size_t n)
+{
+    for (size_t i = 0; i <= n; i++) {
         dest[i] = src[i];
     }
+
     return dest;
 }
-// char *strncpy(char *dest, const char *src, size_t n);
 
 // char *strcat(char *dest, const char *src);
 // char *strncat(char *dest, const char *src, size_t n);
