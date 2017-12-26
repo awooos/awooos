@@ -3,6 +3,7 @@
 #include "basic_uart.h"
 #include "ports.h"
 #include "events.h"
+#include "exceptions.h"
 #include <stddef.h>
 
 static uint32_t magic;
@@ -36,6 +37,7 @@ void hal_init()
 {
     hal_basic_display_init();
     hal_basic_uart_init();
+    hal_exceptions_init();
 }
 
 void hal_shutdown()
