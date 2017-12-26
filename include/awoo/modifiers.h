@@ -12,8 +12,11 @@
 #define noreturn __attribute__((noreturn)) void
 
 /* ==== Function pseudo modifiers. ==== */
-
+// These indicate intent without changing functionality.
 #define MAY_PANIC
+#define NONSTANDARD
+#define PARTIAL_IMPLEMENTATION
+#define UNTESTED
 
 /* ==== Argument pseudo modifiers. ==== */
 // These indicate intent without changing functionality.
@@ -24,7 +27,6 @@
 
 /* ==== Argument modifiers ==== */
 // These affect how a variable is treated.
-
 #define UNUSED __attribute__((unused))
 
 #endif /* MODIFIERS_H */
