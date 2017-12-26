@@ -5,6 +5,7 @@
 #include "events.h"
 #include "exceptions.h"
 #include "gdt.h"
+#include "idt.h"
 #include <stddef.h>
 #include <stdbool.h>
 
@@ -41,6 +42,7 @@ void hal_init()
 {
     if (!hal_initialized) {
         hal_gdt_init();
+        hal_idt_init();
     }
 
     hal_basic_display_init();
