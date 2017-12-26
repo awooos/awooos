@@ -1,14 +1,14 @@
 #include <dmm.h>
 #include "placement_allocator.h"
 
-unsigned int placement = 0;
+unsigned int placement;
 
-unsigned int *dmm_pa_kernel_end;
+unsigned int dmm_pa_kernel_end;
 
-void dmm_placement_allocator_init(unsigned int *kernel_end)
+void dmm_placement_allocator_init(unsigned int kernel_end)
 {
     dmm_pa_kernel_end = kernel_end;
-    placement = (unsigned int)dmm_pa_kernel_end;
+    placement = dmm_pa_kernel_end;
 }
 
 /* malloc(size, flags)
