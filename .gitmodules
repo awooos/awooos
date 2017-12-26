@@ -1,0 +1,3 @@
+[submodule "src/libraries/dux-mm-i386"]
+	path = src/libraries/dux-mm-i386
+	url = git@github.com:duckinator/dux-mm.git
