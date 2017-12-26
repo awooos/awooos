@@ -1,4 +1,5 @@
 #include <dmm.h>
+#include <kernel.h> // Provided by the system using this library.
 #include "frames.h"
 
 static unsigned int *frames;
