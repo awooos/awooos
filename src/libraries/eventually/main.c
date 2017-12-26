@@ -51,7 +51,7 @@ EvEventGroup *eventually_create_group(const char *event_name)
     return group;
 }
 
-bool eventually_add_handler(const char *event_name, EvEventHandler *handler)
+bool eventually_event_watch(const char *event_name, EvEventHandler *handler)
 {
     EvEventGroup *group = eventually_find_group(event_name);
 
@@ -77,7 +77,7 @@ bool eventually_add_handler(const char *event_name, EvEventHandler *handler)
     return true;
 }
 
-bool eventually_trigger_event(const char *event_name, void *data)
+bool eventually_event_trigger(const char *event_name, void *data)
 {
     EvEventGroup *group = eventually_find_group(event_name);
 

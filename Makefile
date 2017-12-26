@@ -39,7 +39,7 @@ endif
 # Have src/kernel.exe use the target-specific linker script.
 KERNEL_EXE_LDFLAGS := -T src/link-${TARGET}.ld
 # Have src/kernel.exe link to the various libraries necessary.
-KERNEL_EXE_LIBRARIES += -l :bootstrap-${TARGET}.a -l :awoostr.a -l :ktest.a -l :badmalloc.a -l :hal-${TARGET}.a -l :eventually.a -l :scheduler.a -l :libpanic.a -l :libpanic-${TARGET}.a -l :libc.a
+KERNEL_EXE_LIBRARIES += -l :bootstrap-${TARGET}.a -l :awoostr.a -l :ktest.a -l :badmalloc.a -l :hal-${TARGET}.a -l :scheduler.a -l :eventually.a -l :libpanic.a -l :libpanic-${TARGET}.a -l :libc.a
 
 # == Begin gross bullshit for only matching things for the current platform. ==
 

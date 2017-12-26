@@ -79,7 +79,7 @@ void hal_exception_handler(Registers *r)
     } else {
         // TODO: Determine if it's okay to pass `r` around like this.
         //       E.g., is it going to be overwritten unexpectedly or something?
-        eventually_trigger_event(irq_names[r->int_no - 32], r2);
+        eventually_event_trigger(irq_names[r->int_no - 32], r2);
     }
 
     // Interrupts 32+ are IRQs, so we need to send EOIs.

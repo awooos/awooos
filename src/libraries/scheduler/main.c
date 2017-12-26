@@ -3,23 +3,21 @@
 #include <stdint.h>
 #include <stdbool.h>
 #include <scheduler.h>
+#include <eventually.h>
 
 // NOTE: This scheduler is implemented so that it does not need malloc().
 //       Mostly because I'm too lazy to implement a good allocator. —@duckinator
 
 // WARNING: I highly doubt this will work at all with multiple cores enabled.
 
-
-#define MAX_PROCESSES 2048
-
-Process processes[MAX_PROCESSES];
+SchedulerState state;
 
 size_t current_process = 0;
 size_t number_of_processes = 0;
 
 void scheduler_init()
 {
-    memset(processes, 0, sizeof(Process) * MAX_PROCESSES);
+    memset(state.processes, 0, sizeof(Process) * MAX_PROCESSES);
 }
 
 // Compacts the array of processes, so there are no empty chunks.
@@ -33,8 +31,8 @@ void scheduler_reflow_processes()
     Process tmp;
 
     for (size_t i = 0; i < number_of_processes; i++) {
-        current = &processes[i];
-        next = &processes[i + 1];
+        current = &state.processes[i];
+        next = &state.processes[i + 1];
 
         if (current->used == 0) {
             memcpy((void*)current, (void*)next, sizeof(Process));
@@ -46,7 +44,7 @@ void scheduler_reflow_processes()
 
 MAY_PANIC void scheduler_destroy_process(size_t pid)
 {
-    Process *proc = &processes[pid];
+    Process *proc = &state.processes[pid];
 
     memset(proc, 0, sizeof(Process));
 
@@ -59,33 +57,22 @@ MAY_PANIC void scheduler_destroy_process(size_t pid)
     number_of_processes -= 1;
 }
 
-MAY_PANIC bool scheduler_next()
-{
-    if (number_of_processes == 0) {
-        // TODO: start init process? When one exists? Maybe? fuck if I know.
-        return false;
-    }
-
-    return true;
-}
-
 bool scheduler_start_process()
 {
     size_t pid;
 
     // Don't start a new process if we don't have enough space!
-    if ((number_of_processes + 1) >= MAX_PROCESSES) {
+    if ((state.number_of_processes + 1) >= MAX_PROCESSES) {
         return false;
     }
 
-    pid = number_of_processes;
-    number_of_processes += 1;
+    pid = state.number_of_processes;
+    state.number_of_processes += 1;
 
     return true;
 }
 
 MAY_PANIC void scheduler_callback(UNUSED char *event_name, UNUSED void *data)
 {
-    kprint("Scheduling!\r\n");
-    scheduler_next();
+    eventually_event_trigger("HAL scheduler next", &state);
 }
