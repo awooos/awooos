@@ -46,9 +46,9 @@ MAY_PANIC void scheduler_destroy_process(size_t pid)
 {
     Process *proc = &state.processes[pid];
 
-    memset(proc, 0, sizeof(Process));
-
-    if (proc->used != 0) {
+    if (eventually_event_trigger("HAL scheduler destroy process", &state)) {
+        memset(proc, 0, sizeof(Process));
+    } else {
         // TODO: implement format().
         panic(/*format(*/"Unable to destroy process! {}"/*, pid)*/);
     }
