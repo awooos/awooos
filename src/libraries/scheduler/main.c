@@ -7,6 +7,8 @@
 // NOTE: This scheduler is implemented so that it does not need malloc().
 //       Mostly because I'm too lazy to implement a good allocator. —@duckinator
 
+// WARNING: I highly doubt this will work at all with multiple cores enabled.
+
 
 #define MAX_PROCESSES 2048
 
@@ -36,6 +38,8 @@ void scheduler_reflow_processes()
 
         if (current->used == 0) {
             memcpy((void*)current, (void*)next, sizeof(Process));
+            // the following memset() implicitly sets 
+            memset((void*)next, 0, sizeof(Process));
         }
     }
 }
@@ -52,6 +56,7 @@ MAY_PANIC void scheduler_destroy_process(size_t pid)
     }
 
     scheduler_reflow_processes();
+    number_of_processes -= 1;
 }
 
 MAY_PANIC bool scheduler_next()
@@ -75,8 +80,6 @@ bool scheduler_start_process()
 
     pid = number_of_processes;
     number_of_processes += 1;
-
-    scheduler_destroy_process(pid);
 
     return true;
 }
