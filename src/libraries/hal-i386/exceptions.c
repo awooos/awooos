@@ -1,4 +1,5 @@
 #include <kernel.h>
+#include <awoostr.h>
 #include "idt.h"
 #include "exceptions.h"
 #include "ports.h"
@@ -46,6 +47,24 @@ void hal_exception_handler(Registers *r)
         // call a debugger.
     } else*/ if(r->int_no < 32){
         panic((char*)exceptions[r->int_no]);
+    } else {
+        kprint("IRQ received: ");
+        kprint(str(r->int_no));
+        kprint("\r\n");
+    }
+
+    // Interrupts 32+ are IRQs, so we need to send EOIs.
+    if (r->int_no > 31) {
+        /* We need to send an EOI to the
+         *  interrupt controllers too */
+
+        // If it's involved, send an EOI to the "slave" controller.
+        // (It's involved for IRQs 9 and up.
+        if (r->int_no > (31 + 8)) {
+            hal_outb(0xA0, 0x20);
+        }
+
+        hal_outb(0x20, 0x20);
     }
 }
 

@@ -46,6 +46,11 @@ void hal_shutdown()
     kprint("TODO: Implement an ACPI-based hal_shutdown().");
 }
 
+void hal_enable_interrupts()
+{
+    __asm__ volatile ("sti");
+}
+
 void hal_disable_interrupts()
 {
 	__asm__ volatile ("cli");

@@ -21,6 +21,8 @@ void kernel_main()
     kprint("\r\n\r\n");
 
     hal_events_init();
+    extern void hal_enable_interrupts();
+    hal_enable_interrupts();
 
     kprint("\r\n");
 
@@ -35,6 +37,8 @@ void kernel_main()
     if (AWOO_BUILD_TYPE_NUMBER == AWOO_TEST_BUILD) {
         hal_hard_shutdown();
     }
+
+    while(1) { __asm__ volatile("hlt"); }
 
     // Hooray, tests passed! Now to actually do something.
     panic("Reached the end of the kernel!");
