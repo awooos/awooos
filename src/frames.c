@@ -5,6 +5,8 @@
 static unsigned int *frames;
 static unsigned int *end_memory;
 
+#define DMM_ASSERT(code) if (!(code)) { panic(#code); }
+
 /* set_frame(addr)
  * Allocates a frame in the frames array. It is assumed to be large enough to
  * hold whatever address you are allocating!
@@ -63,7 +65,7 @@ int dmm_alloc_frame(PageTableEntry *page, int is_kernel, int is_writable)
     addr = dmm_first_frame();
     dmm_set_frame(addr);
 
-    assert((addr>>12) < 1048576); // (addr>>12) < 2^20
+    DMM_ASSERT((addr>>12) < 1048576); // (addr>>12) < 2^20
 
     page->present = 1;
     page->user = is_kernel ? 0 : 1;
