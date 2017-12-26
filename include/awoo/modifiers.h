@@ -11,6 +11,9 @@
 // Specify a function should never return.
 #define noreturn __attribute__((noreturn)) void
 
+/* ==== Function pseudo modifiers. ==== */
+
+#define MAY_PANIC
 
 /* ==== Argument pseudo modifiers. ==== */
 // These indicate intent without changing functionality.
