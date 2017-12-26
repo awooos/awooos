@@ -3,7 +3,7 @@
 #include "frames.h"
 
 static unsigned int *frames;
-static unsigned int *end_memory;
+static unsigned int end_memory;
 
 #define DMM_ASSERT(code) if (!(code)) { panic(#code); }
 
@@ -85,8 +85,10 @@ void dmm_free_frame(PageTableEntry *page)
 
 /* setup_frames()
 */
-void dmm_frames_init()
+void dmm_frames_init(unsigned int _end_memory)
 {
+    end_memory = _end_memory;
+
     frames = (unsigned int*) kmalloc_int(end_memory / 0x1000, 0);
     memset(frames, 0, end_memory / 0x1000 / 8);
 }

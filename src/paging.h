@@ -33,6 +33,6 @@ typedef struct {
 
 void clear_page_directory(PageDirEntry* page_directory);
 void idmap_page_table(PageTableEntry* page_table, unsigned int address);
-void dmm_init_paging();
+void dmm_paging_init();
 
 #endif
