@@ -3,6 +3,9 @@
 #include "idt.h"
 #include "exceptions.h"
 #include "ports.h"
+#include <eventually.h>
+#include <string.h>
+#include <badmalloc.h>
 
 static const char *exceptions[32] = {
     "0 #DE Divide Error",
@@ -39,8 +42,34 @@ static const char *exceptions[32] = {
     "31 - Intel reserved. Do not use."
 };
 
+// https://en.wikipedia.org/wiki/Interrupt_request_%28PC_architecture%29#x86_IRQs
+static const char *irq_names[16] = {
+    // PIC 1.
+    "IRQ 0 timer",
+    "IRQ 1 keyboard",
+    "IRQ 2", // Cascaded signals from IRQs 8-15 on the second PIC.
+    "IRQ 3 serial 1",
+    "IRQ 4 serial 2",
+    "IRQ 5 parallel 2/3",
+    "IRQ 6 floppy controller",
+    "IRQ 7 parallel 1"
+
+    // PIC 2.
+    "IRQ 8 real-time clock",
+    "IRQ 9 ACPI",
+    "IRQ 10", // For peripherals.
+    "IRQ 11", // For peripherals.
+    "IRQ 12", // PS/2 mouse.
+    "IRQ 13", // Co-processor, FPU, or inter-processor interrupt.
+    "IRQ 14 ATA",
+    "IRQ 15 ATA",
+};
+
 void hal_exception_handler(Registers *r)
 {
+    Registers *r2 = badmalloc(sizeof(r));
+    memcpy(r, r2, sizeof(Registers));
+
     /*if (r->int_no == SYSCALL_INTERRUPT) {
         HalSyscallHandler(r);
     } else if(r->int_no == 3) {
@@ -48,9 +77,9 @@ void hal_exception_handler(Registers *r)
     } else*/ if(r->int_no < 32){
         panic((char*)exceptions[r->int_no]);
     } else {
-        kprint("IRQ received: ");
-        kprint(str(r->int_no));
-        kprint("\r\n");
+        // TODO: Determine if it's okay to pass `r` around like this.
+        //       E.g., is it going to be overwritten unexpectedly or something?
+        eventually_trigger_event(irq_names[r->int_no - 32], r2);
     }
 
     // Interrupts 32+ are IRQs, so we need to send EOIs.
