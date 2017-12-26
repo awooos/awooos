@@ -17,7 +17,7 @@ size_t number_of_processes = 0;
 
 void scheduler_init()
 {
-    memset(state.processes, 0, sizeof(Process) * MAX_PROCESSES);
+    memset(&state, 0, sizeof(SchedulerState));
 }
 
 // Compacts the array of processes, so there are no empty chunks.
@@ -42,8 +42,25 @@ void scheduler_reflow_processes()
     }
 }
 
-MAY_PANIC void scheduler_destroy_process(size_t pid)
+MAY_PANIC void scheduler_process_start(const char *event_name, void *data)
 {
+    size_t pid;
+
+    // Don't start a new process if we don't have enough space!
+    if ((state.number_of_processes + 1) >= MAX_PROCESSES) {
+        return;
+    }
+
+    pid = state.number_of_processes;
+    state.number_of_processes += 1;
+
+    return;
+}
+
+MAY_PANIC void scheduler_process_stop(const char *event_name, void *data)
+{
+    ProcessReference *process_reference = (ProcessReference*)data;
+    size_t pid = process_reference->id;
     Process *proc = &state.processes[pid];
 
     if (eventually_event_trigger("HAL scheduler destroy process", &state)) {
@@ -57,22 +74,9 @@ MAY_PANIC void scheduler_destroy_process(size_t pid)
     number_of_processes -= 1;
 }
 
-bool scheduler_start_process()
+MAY_PANIC void scheduler_process_next(const char *event_name, void *data)
 {
-    size_t pid;
-
-    // Don't start a new process if we don't have enough space!
-    if ((state.number_of_processes + 1) >= MAX_PROCESSES) {
-        return false;
-    }
-
-    pid = state.number_of_processes;
-    state.number_of_processes += 1;
-
-    return true;
-}
-
-MAY_PANIC void scheduler_callback(UNUSED char *event_name, UNUSED void *data)
-{
+    state.data = data;
     eventually_event_trigger("HAL scheduler next", &state);
+    state.data = NULL;
 }
