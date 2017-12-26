@@ -76,7 +76,6 @@ MAY_PANIC void scheduler_process_stop(const char *event_name, void *data)
 
 MAY_PANIC void scheduler_process_next(const char *event_name, void *data)
 {
-    state.data = data;
+    state.processes[current_process].data = data;
     eventually_event_trigger("HAL scheduler next", &state);
-    state.data = NULL;
 }
