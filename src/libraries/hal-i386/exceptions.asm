@@ -42,7 +42,6 @@ hal_exception_%1:
 
     push byte %1
     jmp hal_exception_common
-    iret
 %endmacro
 
 section .text
