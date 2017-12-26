@@ -6,12 +6,15 @@
 #include "exceptions.h"
 #include "gdt.h"
 #include <stddef.h>
+#include <stdbool.h>
 
 static uint32_t magic;
 static void *arg;
 
 extern char kernel_comment_start;
 extern size_t kernel_end;
+
+static bool hal_initialized = false;
 
 size_t *hal_badmalloc_start_address()
 {
@@ -36,10 +39,18 @@ void hal_store_magic(uint32_t magic_, void *arg_)
 
 void hal_init()
 {
-    hal_gdt_init();
+    if (!hal_initialized) {
+        hal_gdt_init();
+    }
+
     hal_basic_display_init();
     hal_basic_uart_init();
-    hal_exceptions_init();
+
+    if (!hal_initialized) {
+        hal_exceptions_init();
+    }
+
+    hal_initialized = true;
 }
 
 void hal_shutdown()

@@ -38,8 +38,6 @@ void kernel_main()
         hal_hard_shutdown();
     }
 
-    while(1) { __asm__ volatile("hlt"); }
-
     // Hooray, tests passed! Now to actually do something.
     panic("Reached the end of the kernel!");
 }
