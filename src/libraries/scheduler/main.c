@@ -38,7 +38,7 @@ void scheduler_reflow_processes()
 
         if (current->used == 0) {
             memcpy((void*)current, (void*)next, sizeof(Process));
-            // the following memset() implicitly sets 
+            // the following memset() implicitly sets next->used to zero.
             memset((void*)next, 0, sizeof(Process));
         }
     }
