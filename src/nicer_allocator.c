@@ -1,4 +1,5 @@
 #include <dmm.h>
+#include <stddef.h>
 #include "nicer_allocator.h"
 
 static Header base;
@@ -25,7 +26,7 @@ static Header *morecore(unsigned nu)
     up = cp;
     up->s.size = nu;
 
-    free((void *)(up+1));
+    kfree((void *)(up+1));
 
     return freep;
 }
