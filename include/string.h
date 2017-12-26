@@ -3,6 +3,8 @@
 
 #include <stddef.h>
 
+extern void *memmove_tmp(void *dest, const char *src, size_t n, void *tmp);
+//extern void *memmove(void *dest, const char *src, size_t n);
 extern void *memset(void *s, int c, size_t n);
 
 extern char *strcpy(char *dest, const char *src);

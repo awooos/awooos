@@ -4,17 +4,6 @@
 #include <stdint.h>
 #include <kernel.h>
 
-void *memset(void *s, int c, size_t n)
-{
-    int *cs = (int*)s;
-
-    for (size_t i = 0; i < n; i++) {
-        cs[i] = c;
-    }
-
-    return s;
-}
-
 void *memcpy(void *dest, const void *src, size_t n)
 {
     uint8_t *udest = (uint8_t*)dest;
@@ -27,14 +16,32 @@ void *memcpy(void *dest, const void *src, size_t n)
     return dest;
 }
 
-void *memmove(void *dest, const char *src, size_t n)
+// NOTE: memmove_tmp() is nonstandard!
+void *memmove_tmp(void *dest, const char *src, size_t n, void *tmp)
 {
-    void *tmp = malloc(n);
-
     memcpy(tmp, src, n);
     memcpy(dest, tmp, n);
 
     return tmp;
+}
+
+
+/*void *memmove(void *dest, const char *src, size_t n)
+{
+    void *tmp = malloc(n);
+
+    return memmove_tmp(dest, src, n, tmp);
+}*/
+
+void *memset(void *s, int c, size_t n)
+{
+    int *cs = (int*)s;
+
+    for (size_t i = 0; i < n; i++) {
+        cs[i] = c;
+    }
+
+    return s;
 }
 
 char *strcpy(char *dest, const char *src)
