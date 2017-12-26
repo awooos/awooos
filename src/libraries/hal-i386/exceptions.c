@@ -1,6 +1,7 @@
 #include <kernel.h>
 #include "idt.h"
 #include "exceptions.h"
+#include "ports.h"
 
 static const char *exceptions[32] = {
     "0 #DE Divide Error",
@@ -48,11 +49,37 @@ void hal_exception_handler(Registers *r)
     }
 }
 
+void hal_irq_remap()
+{
+    // Starts the initialization sequence.
+    hal_outb(PIC1_COMMAND, ICW1_INIT + ICW1_ICW4);
+    hal_outb(PIC2_COMMAND, ICW1_INIT + ICW1_ICW4);
+
+    // Define the PIC vectors.
+    hal_outb(PIC1_DATA, 0x20);
+    hal_outb(PIC2_DATA, 0x28);
+
+    // Continue initialization sequence.
+    hal_outb(PIC1_DATA, 4);
+    hal_outb(PIC2_DATA, 2);
+
+    hal_outb(PIC1_DATA, ICW4_8086);
+    hal_outb(PIC2_DATA, ICW4_8086);
+
+    // Unmask all interrupts on PIC1.
+    hal_outb(PIC1_DATA, 0x0);
+
+    // Unmask all interrupts on PIC2.
+    hal_outb(PIC2_DATA, 0x0);
+}
+
 #define EXCEPTION(n) extern void hal_exception_##n(); \
-                        hal_idt_register_exception(n, (size_t)hal_exception_##n);
+    hal_idt_register_exception(n, (size_t)hal_exception_##n);
 
 void hal_exceptions_init()
 {
+    hal_irq_remap();
+
     EXCEPTION(0);
     EXCEPTION(1);
     EXCEPTION(2);
