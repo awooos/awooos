@@ -66,27 +66,27 @@ void hal_enable_interrupts()
 
 void hal_disable_interrupts()
 {
-	__asm__ volatile ("cli");
+    __asm__ volatile ("cli");
 }
 
 void hal_hard_shutdown()
 {
-	kprint("\r\n");
-	kprint("Doing a hard shutdown.\r\n");
+    kprint("\r\n");
+    kprint("Doing a hard shutdown.\r\n");
 
-	hal_disable_interrupts();
+    hal_disable_interrupts();
 
-	while ((hal_inb(0x64) & 2) != 0) {
-		// Wait until condition is true before continuing.
-	}
+    while ((hal_inb(0x64) & 2) != 0) {
+        // Wait until condition is true before continuing.
+    }
 
-	hal_outb(0x64, 0xD1);
+    hal_outb(0x64, 0xD1);
 
-	while ((hal_inb(0x64) & 2) != 0) {
-		// Wait until condition is true before continuing.
-	}
+    while ((hal_inb(0x64) & 2) != 0) {
+        // Wait until condition is true before continuing.
+    }
 
-	hal_outb(0x60, 0xFE); // Keyboard RESET.
+    hal_outb(0x60, 0xFE); // Keyboard RESET.
 }
 
 // Used to shut down after test failures.
