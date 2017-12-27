@@ -6,6 +6,8 @@
 #include "exceptions.h"
 #include "gdt.h"
 #include "idt.h"
+#include "tiny_multiboot.h"
+#include "hal_dmm.h"
 #include <stddef.h>
 #include <stdbool.h>
 
@@ -20,6 +22,11 @@ static bool hal_initialized = false;
 size_t *hal_badmalloc_start_address()
 {
     return &kernel_end;
+}
+
+size_t hal_end_memory()
+{
+    return ((MultibootInfo*)arg)->mem_upper * 1024;
 }
 
 char *hal_compiler_information()
@@ -51,6 +58,8 @@ void hal_init()
     if (!hal_initialized) {
         hal_exceptions_init();
     }
+
+    hal_dmm_init();
 
     hal_initialized = true;
 }

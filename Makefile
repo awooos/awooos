@@ -41,6 +41,9 @@ KERNEL_EXE_LDFLAGS := -T src/link-${TARGET}.ld
 # Have src/kernel.exe link to the various libraries necessary.
 KERNEL_EXE_LIBRARIES += -l :bootstrap-${TARGET}.a -l :awoostr.a -l :ktest.a -l :badmalloc.a -l :hal-${TARGET}.a -l :scheduler.a -l :eventually.a -l :libpanic.a -l :libpanic-${TARGET}.a -l :libc.a
 
+
+KERNEL_EXE_LIBRARIES += ${KERNEL_EXE_LIBRARIES_APPEND}
+
 # == Begin gross bullshit for only matching things for the current platform. ==
 
 # We're searching for .c and .asm files.
