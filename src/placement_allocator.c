@@ -17,8 +17,6 @@ void dmm_placement_allocator_init(unsigned int kernel_end)
  */
 void *kmalloc_int(unsigned int size, unsigned int flags)
 {
-    unsigned int old_placement = placement;
-
     // Otherwise, increment to next placement address.
     placement += size;
 
@@ -28,5 +26,5 @@ void *kmalloc_int(unsigned int size, unsigned int flags)
         placement += 0x1000;
     }
 
-    return (void*)old_placement;
+    return (void*)placement;
 }
