@@ -1,3 +1,5 @@
+; asmsyntax=nasm
+
 ; Borrowed with love from a prior operating system development excursion.
 ; https://github.com/duckinator/dux/blob/main/src/lib/hal/gdt.asm
 
