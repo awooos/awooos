@@ -1,3 +1,5 @@
+; asmsyntax=nasm
+
 global _start           ; Make entrypoint visible to linker.
 global stack_bottom     ; Bottom of the stack.
 global stack_top        ; Top of the stack.

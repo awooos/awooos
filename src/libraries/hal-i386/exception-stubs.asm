@@ -1,3 +1,5 @@
+; asmsyntax=nasm
+
 ; ISR and IRQ handlers.
 
 bits 32

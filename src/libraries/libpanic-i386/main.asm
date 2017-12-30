@@ -1,3 +1,5 @@
+; asmsyntax=nasm
+
 extern panic_stack_dump_hex
 global stack_dump
 
