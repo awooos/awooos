@@ -9,7 +9,7 @@ extern kernel_init  ; Defined in kernel/init.c.
 STACKSIZE equ 0x4000 ; That's 16KB.
 
 ; Multiboot header. See GRUB documentation for details.
-; TODO: Find link to GRUB documentation. ¯\_(ツ)_/¯
+; https://www.gnu.org/software/grub/manual/multiboot2/multiboot.html
 MODULEALIGN equ  1<<0            ; Align modules on page boundaries.
 MEMINFO     equ  1<<1            ; Provide memory map.
 FLAGS       equ  MODULEALIGN | MEMINFO  ; Multiboot flag field.
