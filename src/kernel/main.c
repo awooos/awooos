@@ -30,18 +30,20 @@ void kernel_main()
     ADD_TESTS(badmalloc);
     ADD_TESTS(awoostr);
 
+    bool test_status = test_run_all();
+
     switch (AWOO_TEST_SECTION) {
     case 0:
         // Not a test build.
         break;
     case 1:
-        hal_test_shutdown(test_run_all());
+        hal_test_shutdown(test_status);
         break;
     case 2:
-        test_panic("Successful kernel panic!");
+        run_panic_test();
         break;
     default:
-        panic("Unknown test section!");
+        panic("Encountered unknown test section!");
         break;
     }
 
