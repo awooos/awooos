@@ -6,6 +6,7 @@
 #include <kernel.h>
 #include <badmalloc.h>
 #include <string.h>
+#include <stdlib.h>
 
 typedef struct {
 	int status;

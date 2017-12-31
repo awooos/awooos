@@ -4,6 +4,7 @@
 #include <kernel.h>
 #include <awoostr.h>
 #include <string.h>
+#include <stdlib.h>
 
 /*
  * Test suite for the AwooOS kernel.
