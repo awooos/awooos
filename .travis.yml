@@ -10,8 +10,11 @@ services:
 env:
   global:
     - MAKEFLAGS="-j 2"
+  matrix:
+    - TEST_SECTION=general
+    - TEST_SECTION=panic
 
-script: ./bin/make test
+script: "./bin/make clean test-${TEST_SECTION}"
 
 notifications:
   email:
