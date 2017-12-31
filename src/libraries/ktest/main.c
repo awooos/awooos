@@ -39,11 +39,12 @@ static const char *test_status_messages[4] = {
 
 TestCase *test_add(const char *name, TestResult* (*function_ptr)())
 {
-    TestCase *test_case = (TestCase*)badmalloc(sizeof(TestCase));
+    extern void *kmalloc_int(unsigned int size, unsigned int flags);
+    TestCase *test_case = (TestCase*)kmalloc_int(sizeof(TestCase), 0);
 
     memset(test_case, 0, sizeof(TestCase));
 
-    char *name_ = (char*)badmalloc(sizeof(char) * strlen(name));
+    char *name_ = (char*)kmalloc_int(sizeof(char) * strlen(name), 0);
     strcpy(name_, name);
     test_case->name = name_;
     test_case->func = function_ptr;

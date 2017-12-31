@@ -6,7 +6,7 @@ void add_awoostr_tests();
 void add_badmalloc_tests();
 void add_hal_tests();
 //void add_ktest_tests(); // Let's get meta!
-//void add_libc_tests();
+void add_libc_tests();
 
 
 void run_panic_test();
