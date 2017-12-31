@@ -108,6 +108,15 @@ void hal_test_fail_shutdown()
     hal_hard_shutdown();
 }
 
+void hal_test_shutdown(bool success)
+{
+    if (success) {
+        hal_hard_shutdown();
+    } else {
+        hal_test_fail_shutdown();
+    }
+}
+
 void kprint(const char *string)
 {
     hal_basic_display_print(string);

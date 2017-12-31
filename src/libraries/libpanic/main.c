@@ -31,7 +31,7 @@ void panic_stack_dump_hex(size_t *_stack)
 }
 
 noreturn _panic(const char *message, const char *function,
-                    const char* filename, size_t line)
+                    const char* filename, size_t line, bool automated)
 {
     hal_disable_interrupts();
 
@@ -67,6 +67,11 @@ noreturn _panic(const char *message, const char *function,
         kprint(function);
         kprint(")\r\n");
     }
+
+    if (automated) {
+        hal_hard_shutdown();
+    }
+
 
     while (true) {
         __asm__ volatile ("cli\r\nhlt");

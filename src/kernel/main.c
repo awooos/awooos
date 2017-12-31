@@ -30,15 +30,22 @@ void kernel_main()
     ADD_TESTS(badmalloc);
     ADD_TESTS(awoostr);
 
-    if (!test_run_all()) {
-        hal_test_fail_shutdown();
+    switch (AWOO_TEST_SECTION) {
+    case 0:
+        // Not a test build.
+        break;
+    case 1:
+        hal_test_shutdown(test_run_all());
+        break;
+    case 2:
+        test_panic("Successful kernel panic!");
+        break;
+    default:
+        panic("Unknown test section!");
+        break;
     }
 
-    if (AWOO_BUILD_TYPE_NUMBER == AWOO_TEST_BUILD) {
-        hal_hard_shutdown();
-    }
-
-    while(1){}
+    //while(1){}
 
     // Hooray, tests passed! Now to actually do something.
     panic("Reached the end of the kernel!");
