@@ -28,7 +28,7 @@ size_t *hal_badmalloc_start_address()
 
 size_t hal_dmm_start_address()
 {
-    return ((size_t)badmalloc(0)) + 1;
+    return ((size_t)badmalloc(0)) + 1 + 2048; // HACK: Give badmalloc some space to work with.
 }
 
 size_t hal_end_memory()
