@@ -18,8 +18,8 @@ static Header *morecore(unsigned nu)
         return NULL;
     }
 
-    // first_frame() cannot fail: failures trigger panics.
-    tmp = first_frame();
+    // dmm_first_frame() cannot fail: failures trigger panics.
+    tmp = dmm_first_frame();
 
 
     cp = (void*)tmp;
