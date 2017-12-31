@@ -4,8 +4,8 @@
 #include <stddef.h>
 #include <stdbool.h>
 #include <kernel.h>
+#include <badmalloc.h>
 #include <string.h>
-#include <stdlib.h>
 
 typedef struct {
 	int status;
@@ -33,12 +33,13 @@ bool test_run_all();
 #define TEST_SKIP               2
 #define TEST_ASSERTION_FAILURE  3
 
+#define kmalloc badmalloc
 #define _TEST_RETURN(STATUS, MESSAGE, PASSED_ASSERTIONS) \
-        TestResult *ret = (TestResult*)malloc(sizeof(TestResult));         \
+        TestResult *ret = (TestResult*)kmalloc(sizeof(TestResult));         \
         memset(ret, 0, sizeof(TestResult));                                 \
-        char *__msg = (char*)malloc(sizeof(char) * strlen(MESSAGE));       \
+        char *__msg = (char*)kmalloc(sizeof(char) * strlen(MESSAGE));       \
         strcpy(__msg, MESSAGE);                                             \
-        char *__file = (char*)malloc(sizeof(char) * strlen("" __FILE__));  \
+        char *__file = (char*)kmalloc(sizeof(char) * strlen("" __FILE__));  \
         strcpy(__file, __FILE__);                                           \
         ret->status = STATUS;                                               \
         ret->message = __msg;                                               \
