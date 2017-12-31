@@ -1,9 +1,9 @@
 #include <ktest.h>
 #include <stddef.h>
-#include <badmalloc.h>
 #include <kernel.h>
 #include <awoostr.h>
 #include <string.h>
+#include <stdlib.h>
 
 /*
  * Test suite for the AwooOS kernel.
@@ -38,11 +38,11 @@ static const char *test_status_messages[4] = {
 
 TestCase *test_add(const char *name, TestResult* (*function_ptr)())
 {
-    TestCase *test_case = (TestCase*)badmalloc(sizeof(TestCase));
+    TestCase *test_case = (TestCase*)malloc(sizeof(TestCase));
 
     memset(test_case, 0, sizeof(TestCase));
 
-    char *name_ = (char*)badmalloc(sizeof(char) * strlen(name));
+    char *name_ = (char*)malloc(sizeof(char) * strlen(name));
     strcpy(name_, name);
     test_case->name = name_;
     test_case->func = function_ptr;

@@ -2,6 +2,7 @@
 #include <stdint.h>
 #include <awoostr.h>
 #include <awoo/tests.h>
+#include <badmalloc.h>
 
 TestResult *test_badmalloc_initializes_buffer()
 {
