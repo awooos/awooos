@@ -11,8 +11,8 @@ env:
   global:
     - MAKEFLAGS="-j 2"
   matrix:
-    - TEST_SECTION=1
-    - TEST_SECTION=2
+    - TEST_SECTION=general
+    - TEST_SECTION=panic
 
 script: "./bin/make clean test-${TEST_SECTION}"
 
