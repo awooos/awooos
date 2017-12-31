@@ -1,6 +1,5 @@
 #include <awoo.h>
 #include <stdint.h>
-#include <badmalloc.h>
 #include <ktest.h>
 #include <awoo/tests.h>
 
@@ -13,7 +12,6 @@
 void kernel_main()
 {
     hal_init();
-    badmalloc_init();
     kprint(AWOO_INFO "\r\n");
 
     kprint("Compiled with ");
@@ -27,7 +25,7 @@ void kernel_main()
     kprint("\r\n");
 
     ADD_TESTS(hal);
-    ADD_TESTS(badmalloc);
+    ADD_TESTS(libc);
     ADD_TESTS(awoostr);
 
     bool test_status = test_run_all();

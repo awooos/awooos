@@ -7,7 +7,8 @@
 #include "gdt.h"
 #include "idt.h"
 #include "tiny_multiboot.h"
-#include "hal_dmm.h"
+#include "dmm.h"
+#include "../libc/malloc.h"
 #include <stddef.h>
 #include <stdbool.h>
 
@@ -19,9 +20,9 @@ extern size_t kernel_end;
 
 static bool hal_initialized = false;
 
-size_t *hal_badmalloc_start_address()
+size_t hal_dmm_start_address()
 {
-    return &kernel_end;
+    return kernel_end + 1;
 }
 
 size_t hal_end_memory()
@@ -57,7 +58,8 @@ void hal_init()
 
     if (!hal_initialized) {
         hal_exceptions_init();
-        hal_dmm_init();
+        dmm_init(hal_dmm_start_address(), hal_end_memory());
+        memory_manager_init(&kmalloc, &kfree);
     }
 
     hal_initialized = true;
