@@ -69,7 +69,7 @@ noreturn _panic(const char *message, const char *function,
     }
 
     if (automated) {
-//        hal_hard_shutdown();
+        hal_hard_shutdown();
     }
 
 
