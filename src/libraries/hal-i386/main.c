@@ -57,9 +57,8 @@ void hal_init()
 
     if (!hal_initialized) {
         hal_exceptions_init();
+        hal_dmm_init();
     }
-
-    hal_dmm_init();
 
     hal_initialized = true;
 }
