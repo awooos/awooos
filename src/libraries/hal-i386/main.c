@@ -11,7 +11,6 @@
 #include "../libc/malloc.h"
 #include <stddef.h>
 #include <stdbool.h>
-#include <badmalloc.h>
 
 static uint32_t magic;
 static void *arg;
@@ -20,11 +19,6 @@ extern char kernel_comment_start;
 extern size_t kernel_end;
 
 static bool hal_initialized = false;
-
-size_t *hal_badmalloc_start_address()
-{
-    return &kernel_end + 4096; // HACK: Start badmalloc() 4KB(?) after the kernel end, so dmm gets dibs..
-}
 
 size_t hal_dmm_start_address()
 {

@@ -1,6 +1,5 @@
 #include <ktest.h>
 #include <stddef.h>
-#include <badmalloc.h>
 #include <kernel.h>
 #include <awoostr.h>
 #include <string.h>

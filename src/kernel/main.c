@@ -1,6 +1,5 @@
 #include <awoo.h>
 #include <stdint.h>
-#include <badmalloc.h>
 #include <ktest.h>
 #include <awoo/tests.h>
 
