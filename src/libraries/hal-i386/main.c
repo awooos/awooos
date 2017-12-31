@@ -23,12 +23,12 @@ static bool hal_initialized = false;
 
 size_t *hal_badmalloc_start_address()
 {
-    return &kernel_end;
+    return &kernel_end + 4096; // HACK: Start badmalloc() 4KB(?) after the kernel end, so dmm gets dibs..
 }
 
 size_t hal_dmm_start_address()
 {
-    return ((size_t)badmalloc(0)) + 1 + 2048; // HACK: Give badmalloc some space to work with.
+    return kernel_end + 1;
 }
 
 size_t hal_end_memory()
