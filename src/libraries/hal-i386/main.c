@@ -11,6 +11,7 @@
 #include "../libc/malloc.h"
 #include <stddef.h>
 #include <stdbool.h>
+#include <badmalloc.h>
 
 static uint32_t magic;
 static void *arg;
@@ -23,6 +24,11 @@ static bool hal_initialized = false;
 size_t *hal_badmalloc_start_address()
 {
     return &kernel_end;
+}
+
+size_t hal_dmm_start_address()
+{
+    return ((size_t)badmalloc(0)) + 1;
 }
 
 size_t hal_end_memory()
@@ -58,7 +64,7 @@ void hal_init()
 
     if (!hal_initialized) {
         hal_exceptions_init();
-        dmm_init(kernel_end + 1, hal_end_memory());
+        dmm_init(hal_dmm_start_address(), hal_end_memory());
         memory_manager_init(&kmalloc, &kfree);
     }
 
