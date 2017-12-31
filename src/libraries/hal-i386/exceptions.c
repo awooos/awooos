@@ -5,7 +5,7 @@
 #include "ports.h"
 #include <eventually.h>
 #include <string.h>
-#include <badmalloc.h>
+#include <stdlib.h>
 
 static const char *exceptions[32] = {
     "0 #DE Divide Error",
@@ -67,7 +67,7 @@ static const char *irq_names[16] = {
 
 void hal_exception_handler(Registers *r)
 {
-    Registers *r2 = badmalloc(sizeof(r));
+    Registers *r2 = malloc(sizeof(r));
     memcpy(r2, r, sizeof(Registers));
 
     /*if (r->int_no == SYSCALL_INTERRUPT) {
