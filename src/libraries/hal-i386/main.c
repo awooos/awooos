@@ -7,7 +7,8 @@
 #include "gdt.h"
 #include "idt.h"
 #include "tiny_multiboot.h"
-#include "hal_dmm.h"
+#include "dmm.h"
+#include "../libc/malloc.h"
 #include <stddef.h>
 #include <stdbool.h>
 
@@ -57,7 +58,8 @@ void hal_init()
 
     if (!hal_initialized) {
         hal_exceptions_init();
-        hal_dmm_init();
+        dmm_init(kernel_end + 1, hal_end_memory());
+        memory_manager_init(&kmalloc, &kfree);
     }
 
     hal_initialized = true;
