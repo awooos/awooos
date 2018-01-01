@@ -16,6 +16,16 @@ void memory_manager_init(MallocFn *mallocfn, FreeFn *freefn)
 
 void *malloc(size_t size)
 {
+    void *result = mmfns.malloc(size);
+
+    if (result != NULL) {
+        memset(result, 0, size);
+    }
+
+    return result;
+
+    /*
+
     size_t real_size = size + sizeof(MallocHeader);
     MallocHeader *result = (MallocHeader*)mmfns.malloc(real_size);
 
@@ -32,12 +42,12 @@ void *malloc(size_t size)
     result->data = ((void*)result) + sizeof(MallocHeader);
 
 
-    return result->data;
+    return result->data;*/
 }
 
 void free(void *ptr)
 {
-    MallocHeader *header = (MallocHeader*)(ptr - sizeof(MallocHeader));
+    MallocHeader *header = (MallocHeader*)(ptr) - 1;
 
     if (header->prev != NULL && header->next != NULL) {
         header->next->prev = header->prev;
@@ -68,7 +78,7 @@ void *realloc(void *ptr, size_t size)
         return malloc(size);
     }
 
-    header = (MallocHeader*)(ptr - sizeof(MallocHeader));
+    header = (MallocHeader*)(ptr) - 1;
     new_ptr = malloc(size);
     min_size = (size < header->size) ? size : header->size;
 

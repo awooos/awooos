@@ -3,8 +3,23 @@
 #include <awoostr.h>
 #include <awoo/tests.h>
 #include <stdlib.h>
+#include "malloc.h"
 
-TestResult *test_malloc_initializes_buffer()
+size_t test_malloc_sets_header()
+{
+    TEST_HAS_ASSERTIONS();
+
+    size_t length = 100;
+    void *buffer = malloc(length);
+    MallocHeader *malloc_header = (MallocHeader*)(buffer) - 1;
+
+    TEST_ASSERT(malloc_header->size == length);
+    TEST_ASSERT(malloc_header->data == buffer);
+
+    TEST_ASSERTIONS_RETURN();
+}
+
+size_t test_malloc_initializes_buffer()
 {
     size_t length = 100;
     uint8_t *buffer = malloc(length);
@@ -20,5 +35,6 @@ TestResult *test_malloc_initializes_buffer()
 
 void add_libc_tests()
 {
+    TEST(malloc_sets_header);
     TEST(malloc_initializes_buffer);
 }

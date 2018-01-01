@@ -11,7 +11,7 @@
  * How to add a test:
  *    Assume for this example your test is named "cow"
  * 
- *    TestResult *TestCow()
+ *    size_t TestCow()
  *    {
  *       TEST_RETURN(status, message);
  *    }
@@ -26,8 +26,15 @@
  *    If message is NULL, no explanatory message is printed.
  */
 
-static TestCase *first_test = NULL;
-static TestCase *last_test = NULL;
+static TestCase test_cases[2048];
+
+static size_t last_test_index = 0;
+
+size_t total = 0;
+size_t passed = 0;
+size_t failed = 0;
+size_t skipped = 0;
+
 
 static const char *test_status_messages[4] = {
     "Passed",
@@ -36,100 +43,70 @@ static const char *test_status_messages[4] = {
     "Assertion failed",
 };
 
-TestCase *test_add(const char *name, TestResult* (*function_ptr)())
+void test_add(const char *name, size_t (*function_ptr)())
 {
-    extern void *kmalloc_int(unsigned int size, unsigned int flags);
-    TestCase *test_case = (TestCase*)kmalloc_int(sizeof(TestCase), 0);
+    size_t idx = last_test_index;
 
-    memset(test_case, 0, sizeof(TestCase));
+    strcpy(test_cases[idx].name, name);
+    test_cases[idx].func = function_ptr;
 
-    char *name_ = (char*)kmalloc_int(sizeof(char) * strlen(name), 0);
-    strcpy(name_, name);
-    test_case->name = name_;
-    test_case->func = function_ptr;
-
-    if(first_test == NULL) {
-        first_test = test_case;
-        first_test->prev = NULL;
-        first_test->next = NULL;
-    }
-
-    if (last_test == NULL) {
-        last_test = first_test;
-    } else if (last_test != NULL) {
-        last_test->next = test_case;
-        last_test->prev = last_test;
-        last_test = test_case;
-        last_test->next = NULL;
-    }
-
-    return test_case;
+    last_test_index += 1;
 }
 
-TestResult *test_run(size_t ran, TestCase *test)
+void test_print_results(size_t status,
+        const char *message, const char *file, size_t line)
 {
-    TestResult *ret;
-    ret = test->func();
+    if(status == TEST_SUCCESS) {
+        passed++;
+    } else if (status == TEST_FAILURE || status == TEST_ASSERTION_FAILURE) {
+        failed++;
+    } else if (status == TEST_SKIP) {
+        skipped++;
+    }
 
-    if(ret->status == TEST_SUCCESS) {
+
+    if(status == TEST_SUCCESS) {
         kprint(".");
     } else {
         kprint("\n");
 
         // X) <test name>
-        kprint(str(ran + 1));
+        kprint(str(total + 1));
         kprint(") ");
 
-        kprint(test_status_messages[ret->status]);
+        kprint(test_status_messages[status]);
         kprint(": ");
 
-        kprint(test->name);
+        kprint(test_cases[total].name);
         kprint("\n");
         kprint("        ");
 
-        kprint(ret->message);
+        kprint(message);
         kprint("\n");
 
         // Padding to line up with prior lines.
         kprint("   ");
 
         kprint("In ");
-        kprint(ret->file);
+        kprint(file);
         kprint(":");
-        kprint(str(ret->line));
+        kprint(str(line));
         kprint("\n");
     }
-
-    return ret;
 }
 
 bool test_run_all()
 {
-    TestCase *test;
-    TestResult *ret;
-    int status;
-    size_t total = 0;
-    size_t passed = 0;
-    size_t failed = 0;
-    size_t skipped = 0;
+    size_t passed_assertions;
 
     kprint("\nRunning tests:\n\n");
 
-    for(test = first_test; test != NULL; test = test->next) {
-        ret = test_run(total, test);
-        status = ret->status;
+    for(size_t idx = 0; idx < last_test_index; idx++) {
+        passed_assertions = test_cases[idx].func();
         total++;
 
-        passed += ret->passed_assertions;
-        total += ret->passed_assertions;
-
-        if(status == TEST_SUCCESS) {
-            passed++;
-        } else if (status == TEST_FAILURE || status == TEST_ASSERTION_FAILURE) {
-            failed++;
-        } else if (status == TEST_SKIP) {
-            skipped++;
-        }
+        passed += passed_assertions;
+        total += passed_assertions;
     }
 
     kprint("\n\n");

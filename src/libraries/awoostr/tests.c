@@ -3,7 +3,7 @@
 #include <awoostr.h>
 #include <awoo/tests.h>
 
-TestResult *test_awoostr_assertions()
+size_t test_awoostr_assertions()
 {
     TEST_HAS_ASSERTIONS();
 
