@@ -52,7 +52,7 @@ size_t test_malloc_initializes_buffer()
     TEST_RETURN(TEST_SUCCESS, "malloc() initializes entire buffer to null bytes.");
 }
 
-size_t test_calloc_uses_correct_size()
+size_t test_calloc_allocates_correct_size()
 {
     TEST_HAS_ASSERTIONS();
 
@@ -78,4 +78,5 @@ void add_libc_tests()
     TEST(malloc_sets_header);
     TEST(free_adjusts_header);
     TEST(malloc_initializes_buffer);
+    TEST(calloc_allocates_correct_size);
 }
