@@ -121,6 +121,9 @@ test--%:
 test-general: test--1
 test-panic: test--2
 
+test-lint:
+	clang-check $(find -name '*.c') -- -I include -I src/libraries/dux-mm-i386/include
+
 test: test-general test-panic
 
 qemu: iso

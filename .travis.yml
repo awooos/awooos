@@ -22,10 +22,10 @@ env:
   matrix:
     - TEST_SECTION=general
     - TEST_SECTION=panic
+    - TEST_SECTION=lint
 
 script:
   - "./bin/make clean test-${TEST_SECTION}"
-  - "./bin/lint"
 
 notifications:
   email:
