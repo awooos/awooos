@@ -30,6 +30,7 @@ static TestCase test_cases[2048];
 
 static size_t last_test_index = 0;
 
+size_t ran = 0;
 size_t total = 0;
 size_t passed = 0;
 size_t failed = 0;
@@ -77,7 +78,7 @@ void test_print_results(size_t status,
         kprint(test_status_messages[status]);
         kprint(": ");
 
-        kprint(test_cases[total].name);
+        kprint(test_cases[ran].name);
         kprint("\n");
         kprint("        ");
 
@@ -101,8 +102,11 @@ bool test_run_all()
 
     kprint("\nRunning tests:\n\n");
 
+    total = 0;
+
     for(size_t idx = 0; idx < last_test_index; idx++) {
         passed_assertions = test_cases[idx].func();
+        ran++;
         total++;
 
         passed += passed_assertions;
