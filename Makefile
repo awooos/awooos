@@ -123,6 +123,7 @@ test-panic: test--2
 
 test-lint:
 	clang-check $(shell find -name '*.c') -- -I include -I src/libraries/dux-mm-i386/include
+lint: test-lint
 
 test: test-general test-panic
 
