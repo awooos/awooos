@@ -14,7 +14,25 @@ size_t test_malloc_sets_header()
     MallocHeader *malloc_header = (MallocHeader*)(buffer) - 1;
 
     TEST_ASSERT(malloc_header->size == length);
+    TEST_ASSERT(malloc_header->used == true);
     TEST_ASSERT(malloc_header->data == buffer);
+
+    TEST_ASSERTIONS_RETURN();
+}
+
+size_t test_free_adjusts_header()
+{
+    TEST_HAS_ASSERTIONS();
+
+    size_t length = 100;
+    void *buffer = malloc(length);
+    MallocHeader *malloc_header = (MallocHeader*)(buffer) - 1;
+
+    TEST_ASSERT(malloc_header->used == true);
+
+    free(buffer);
+
+    TEST_ASSERT(malloc_header->used == false);
 
     TEST_ASSERTIONS_RETURN();
 }
@@ -36,5 +54,6 @@ size_t test_malloc_initializes_buffer()
 void add_libc_tests()
 {
     TEST(malloc_sets_header);
+    TEST(free_adjusts_header);
     TEST(malloc_initializes_buffer);
 }

@@ -27,6 +27,7 @@ void *malloc(size_t size)
     memset(result, 0, real_size);
 
     result->size = size;
+    result->used = true;
     result->data = (void*)(result + 1);
 
     return result->data;
@@ -34,9 +35,11 @@ void *malloc(size_t size)
 
 void free(void *ptr)
 {
-    MallocHeader *real_ptr = (MallocHeader*)(ptr) - 1;
+    MallocHeader *header = (MallocHeader*)(ptr) - 1;
 
-    mmfns.free(real_ptr);
+    header->used = false;
+
+    mmfns.free(header);
 }
 
 void *calloc(size_t nmemb, size_t size)
