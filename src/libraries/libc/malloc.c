@@ -14,6 +14,13 @@ void memory_manager_init(MallocFn *mallocfn, FreeFn *freefn)
     mmfns.free = freefn;
 }
 
+size_t _mm_allocation_size(void *ptr)
+{
+    MallocHeader *header = ((MallocHeader*)ptr) - 1;
+
+    return header->size;
+}
+
 void *malloc(size_t size)
 {
     size_t real_size = size + sizeof(MallocHeader);
