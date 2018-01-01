@@ -70,11 +70,7 @@ void hal_exception_handler(Registers *r)
     Registers *r2 = malloc(sizeof(r));
     memcpy(r2, r, sizeof(Registers));
 
-    /*if (r->int_no == SYSCALL_INTERRUPT) {
-        HalSyscallHandler(r);
-    } else if(r->int_no == 3) {
-        // call a debugger.
-    } else*/ if(r->int_no < 32){
+    if(r->int_no < 32){
         panic((char*)exceptions[r->int_no]);
     } else {
         // TODO: Determine if it's okay to pass `r` around like this.
