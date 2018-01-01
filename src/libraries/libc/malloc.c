@@ -19,35 +19,24 @@ void *malloc(size_t size)
     size_t real_size = size + sizeof(MallocHeader);
     MallocHeader *result = (MallocHeader*)mmfns.malloc(real_size);
 
-    if (first == NULL) {
-        first = result;
-    }
-
     if (result == NULL) {
         return NULL;
     }
 
+    // Zeroing allocated memory makes this malloc() implementation nonstandard.
     memset(result, 0, real_size);
 
-    result->data = ((void*)result) + sizeof(MallocHeader);
+    result->size = size;
+    result->data = (void*)(result + 1);
 
     return result->data;
 }
 
 void free(void *ptr)
 {
-    MallocHeader *header = (MallocHeader*)(ptr) - 1;
+    MallocHeader *real_ptr = (MallocHeader*)(ptr) - 1;
 
-    if (header->prev != NULL && header->next != NULL) {
-        header->next->prev = header->prev;
-        header->prev->next = header->next;
-    } else if (header->prev != NULL && header->next == NULL) {
-        header->prev->next = NULL;
-    } else if (header->prev == NULL && header->next != NULL) {
-        header->next->prev = NULL;
-    }
-
-    mmfns.free(header);
+    mmfns.free(real_ptr);
 }
 
 void *calloc(size_t nmemb, size_t size)
@@ -56,7 +45,6 @@ void *calloc(size_t nmemb, size_t size)
     return malloc(nmemb * size);
 }
 
-// TODO: Implement realloc().
 void *realloc(void *ptr, size_t size)
 {
     MallocHeader *header;
@@ -68,6 +56,7 @@ void *realloc(void *ptr, size_t size)
     }
 
     header = (MallocHeader*)(ptr) - 1;
+    // ASSUMPTION: malloc() zeroes allocated memory.
     new_ptr = malloc(size);
     min_size = (size < header->size) ? size : header->size;
 
