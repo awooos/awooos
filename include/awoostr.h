@@ -29,9 +29,11 @@ char *int64_to_str(int64_t n);
                                                 uint16_t: uint64_to_str_radix, \
                                                 uint32_t: uint64_to_str_radix, \
                                                 uint64_t: uint64_to_str_radix, \
+                                                unsigned long: uint64_to_str_radix, \
                                                 int8_t:   int64_to_str_radix,  \
                                                 int16_t:  int64_to_str_radix,  \
                                                 int32_t:  int64_to_str_radix,  \
-                                                int64_t:  int64_to_str_radix)(n, radix)
+                                                int64_t:  int64_to_str_radix,  \
+                                                signed long: int64_to_str_radix)(n, radix)
 
 #endif
