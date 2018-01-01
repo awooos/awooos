@@ -57,7 +57,7 @@ void hal_basic_display_print(const char *string)
                 row += 1;
             }
             if (row >= VIDEO_HEIGHT) {
-                row = 0; // No scrolling, this display gets replaced ASAP.
+                row = 0; // No scrolling; see comment at the top of the file.
             }
 
             text_index = ((row * VIDEO_WIDTH) + col) * 2;
