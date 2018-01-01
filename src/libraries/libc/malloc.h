@@ -6,9 +6,6 @@
 typedef void *(MallocFn)(size_t size);
 typedef void (FreeFn)(void *ptr);
 
-void memory_manager_init(MallocFn *mallocfn, FreeFn *freefn);
-size_t _mm_allocation_size(void *ptr);
-
 typedef struct malloc_header_s {
     size_t size;
     bool used;
@@ -19,5 +16,8 @@ typedef struct memory_manager_functions_s {
     MallocFn *malloc;
     FreeFn *free;
 } MemoryManagerFunctions;
+
+void memory_manager_init(MallocFn *mallocfn, FreeFn *freefn);
+MallocHeader *_malloc_header_for(void *ptr);
 
 #endif
