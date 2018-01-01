@@ -3,14 +3,13 @@
 #include "basic_uart.h"
 #include "ports.h"
 #include <stdint.h>
+#include <stdbool.h>
 
 // http://wiki.osdev.org/Serial_ports
 static uint16_t PORT = 0x3F8;
 static uint16_t LINE_CONTROL_REGISTER;
 
-/*
- * UART initialization.
- */
+// Initialize the serial port.
 void hal_basic_uart_init()
 {
     LINE_CONTROL_REGISTER = PORT + 5;
@@ -24,23 +23,23 @@ void hal_basic_uart_init()
     hal_outb(PORT + 4, 0x0B);    // IRQs enabled, RTS/DSR set
 }
 
-uint8_t hal_basic_uart_transmit_empty()
+// Returns true if you can transmit, or false otherwise.
+bool hal_basic_uart_can_send()
 {
-    return hal_inb(LINE_CONTROL_REGISTER) & 0x20; // TODO: Document magic number.
+    return (hal_inb(LINE_CONTROL_REGISTER) & 0x20) != 0;
 }
 
+// Print a single character via the serial port.
 void hal_basic_uart_print_character(uint8_t c)
 {
-    while(hal_basic_uart_transmit_empty() == 0) {
-        // FIXME: Unbounded busy loops are very bad!
+    while(!hal_basic_uart_can_send()) {
+        // Do nothing until it's okay to send data.
     }
 
     hal_outb(PORT, c);
 }
 
-/*
- * Very basic function for printing text.
- */
+// Print a string via the serial port.
 void hal_basic_uart_print(const char *string)
 {
     for (; 0 != *string; string++)

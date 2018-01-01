@@ -1,8 +1,11 @@
-/// Mmmmmm, that sweet memory-mapped VGA goodness.
+/* NOTE: This display driver does NOT implement scrolling.
+ *       It's meant to be replaced ASAP during the boot process by a service.
+ */
 
 #include "basic_display.h"
 #include "ports.h"
 #include <stdint.h>
+#include <string.h>
 
 const uint16_t *VIDEO_RAM = (const uint16_t*)0xB8000;
 
@@ -19,9 +22,10 @@ static char BACKGROUND_COLOR = 0x07; /* Light gray on black. */
 static uint8_t row = 0;
 static uint8_t col = 0;
 
-void hal_basic_display_move_cursor(uint16_t row, uint16_t col)
+// Move the cursor to a different position, and update row/column accordingly.
+void hal_basic_display_move_cursor(uint16_t row_, uint16_t col_)
 {
-    uint16_t position = (row * VIDEO_WIDTH) + col;
+    uint16_t position = (row_ * VIDEO_WIDTH) + col_;
 
     hal_outb(VGA_CTRL_REGISTER, 14);                // Tell it we're setting high cursor byte.
     hal_outb(VGA_DATA_REGISTER, (position >> 8));   // Actually set it.
@@ -29,11 +33,7 @@ void hal_basic_display_move_cursor(uint16_t row, uint16_t col)
     hal_outb(VGA_DATA_REGISTER, (uint8_t)position); // Actually set it.
 }
 
-/*
- * Very basic function for printing text.
- *
- * TODO: Scrolling?
- */
+// Print a string to the display.
 void hal_basic_display_print(const char *string)
 {
     static char *video = 0;
@@ -57,7 +57,7 @@ void hal_basic_display_print(const char *string)
                 row += 1;
             }
             if (row >= VIDEO_HEIGHT) {
-                row = 0; // TODO: deal with scrolling.
+                row = 0; // No scrolling; see comment at the top of the file.
             }
 
             text_index = ((row * VIDEO_WIDTH) + col) * 2;
