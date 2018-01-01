@@ -6,7 +6,7 @@
 
 uint32_t hal_get_magic();
 
-TestResult *test_hal_assertions()
+size_t test_hal_assertions()
 {
     TEST_HAS_ASSERTIONS();
 
