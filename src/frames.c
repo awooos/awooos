@@ -1,10 +1,11 @@
 #include <dmm.h>
 #include <kernel.h> // Provided by the system using this library.
+#include <stddef.h>
 #include <string.h> // Provided by the system using this library.
 #include "frames.h"
 
-static unsigned int *frames;
-static unsigned int end_memory;
+static size_t *frames;
+static size_t end_memory;
 
 #define DMM_ASSERT(code) if (!(code)) { panic(#code); }
 
@@ -12,20 +13,20 @@ static unsigned int end_memory;
  * Allocates a frame in the frames array. It is assumed to be large enough to
  * hold whatever address you are allocating!
  */
-void dmm_set_frame(unsigned int addr)
+void dmm_set_frame(size_t addr)
 {
-    unsigned int frame = addr/0x1000;
-    frames[frame/32] |= (unsigned int)0x1<<frame%32;
+    size_t frame = addr/0x1000;
+    frames[frame/32] |= (size_t)0x1<<frame%32;
 }
 
 /* clear_frame(addr)
  * Clears a frame in the frames array. It is assumed to be large enough to
  * hold whatever address you are clearing!
  */
-void dmm_clear_frame(unsigned int addr)
+void dmm_clear_frame(size_t addr)
 {
-    unsigned int frame = addr/0x1000;
-    frames[frame/32] &= ~((unsigned int)0x1<<frame%32);
+    size_t frame = addr/0x1000;
+    frames[frame/32] &= ~((size_t)0x1<<frame%32);
 }
 
 /* test_frame(addr)
@@ -33,15 +34,15 @@ void dmm_clear_frame(unsigned int addr)
  * will not cause data loss if frame is not large enough, but will produce
  * erratic results.
  */
-unsigned int dmm_test_frame(unsigned int addr)
+size_t dmm_test_frame(size_t addr)
 {
-    unsigned int frame = addr/0x1000;
-    return frames[frame/32] & ((unsigned int)0x1<<frame%32);
+    size_t frame = addr/0x1000;
+    return frames[frame/32] & ((size_t)0x1<<frame%32);
 }
 
-unsigned int dmm_first_frame()
+size_t dmm_first_frame()
 {
-    unsigned int i;
+    size_t i;
 
     for (i = 0; i < end_memory; i+=0x1000) {
         if (!dmm_test_frame(i)) {
@@ -57,7 +58,7 @@ unsigned int dmm_first_frame()
  */
 int dmm_alloc_frame(PageTableEntry *page, int is_kernel, int is_writable)
 {
-    unsigned int addr;
+    size_t addr;
 
     // Was the frame already allocated?
     if (page->address != 0)
@@ -80,16 +81,16 @@ int dmm_alloc_frame(PageTableEntry *page, int is_kernel, int is_writable)
  */
 void dmm_free_frame(PageTableEntry *page)
 {
-    dmm_clear_frame((unsigned int)page->address<<12);
+    dmm_clear_frame((size_t)page->address<<12);
     page->address = 0x0;
 }
 
 /* setup_frames()
 */
-void dmm_frames_init(unsigned int _end_memory)
+void dmm_frames_init(size_t _end_memory)
 {
     end_memory = _end_memory;
 
-    frames = (unsigned int*) kmalloc_int(end_memory / 0x1000, 0);
+    frames = (size_t*) kmalloc_int(end_memory / 0x1000, 0);
     memset(frames, 0, end_memory / 0x1000 / 8);
 }

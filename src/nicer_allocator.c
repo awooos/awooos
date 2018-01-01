@@ -10,7 +10,7 @@ static Header *morecore(unsigned nu)
 {
     Header *cp;
     Header *up;
-    unsigned int tmp;
+    size_t tmp;
 
     if (nu <= NALLOC) {
         nu = NALLOC;
@@ -31,7 +31,7 @@ static Header *morecore(unsigned nu)
     return freep;
 }
 
-void *kmalloc(unsigned int nbytes)
+void *kmalloc(size_t nbytes)
 {
     Header *p, *prevp;
     unsigned nunits;
