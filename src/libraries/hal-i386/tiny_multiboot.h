@@ -1,4 +1,4 @@
-#ifndef TINY_MULTIOBOOT_H
+#ifndef TINY_MULTIBOOT_H
 #define TINY_MULTIBOOT_H
 
 // The bare minimum required to get access to mem_upper.
