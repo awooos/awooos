@@ -5,7 +5,7 @@
 #include <stddef.h>
 #include <stdbool.h>
 
-typedef void EvEventHandler(const char *name, void *data);
+typedef void EvEventHandler(const char *name, void *data, size_t data_size);
 
 #define EVENTUALLY_MAX_EVENT_GROUPS 50
 #define EVENTUALLY_MAX_HANDLERS_PER_GROUP 50
@@ -17,6 +17,6 @@ typedef struct eventually_event_group {
 } EvEventGroup;
 
 bool eventually_event_watch(const char *event_name, EvEventHandler *handler);
-bool eventually_event_trigger(const char *event_name, void *data);
+bool eventually_event_trigger(const char *event_name, void *data, size_t data_size);
 
 #endif

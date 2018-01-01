@@ -67,15 +67,10 @@ static const char *irq_names[16] = {
 
 void hal_exception_handler(Registers *r)
 {
-    Registers *r2 = malloc(sizeof(r));
-    memcpy(r2, r, sizeof(Registers));
-
     if(r->int_no < 32){
         panic((char*)exceptions[r->int_no]);
     } else {
-        // TODO: Determine if it's okay to pass `r` around like this.
-        //       E.g., is it going to be overwritten unexpectedly or something?
-        eventually_event_trigger(irq_names[r->int_no - 32], r2);
+        eventually_event_trigger(irq_names[r->int_no - 32], r, sizeof(Registers));
     }
 
     // Interrupts 32+ are IRQs, so we need to send EOIs.

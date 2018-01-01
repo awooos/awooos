@@ -1,10 +1,11 @@
+#include <stdlib.h>
 #include <scheduler.h>
 #include <awoo/modifiers.h>
 #include "exceptions.h"
 
 #define SCHEDULER_MAX_TICKS_PER_TURN 20
 
-MAY_PANIC void hal_scheduler_process_next(const char *event_name, void *_state)
+MAY_PANIC void hal_scheduler_process_next(const char *event_name, void *_state, size_t data_size)
 {
     SchedulerState *state = (SchedulerState*)_state;
 
@@ -20,18 +21,24 @@ MAY_PANIC void hal_scheduler_process_next(const char *event_name, void *_state)
     }
 
     // ...
+
+    free(state);
 }
 
 MAY_PANIC void hal_scheduler_process_start(const char *event_name,
-        void *_state)
+        void *_state, size_t data_size)
 {
     SchedulerState *state = (SchedulerState*)_state;
     // ...
+
+    free(state);
 }
 
 MAY_PANIC void hal_scheduler_process_stop(const char *event_name,
-        void *_state)
+        void *_state, size_t data_size)
 {
     SchedulerState *state = (SchedulerState*)_state;
     // ...
+
+    free(state);
 }
