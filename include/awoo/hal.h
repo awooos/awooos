@@ -7,9 +7,6 @@
 // Needed by greeter.
 char *hal_compiler_information();
 
-// Needed by ???.
-size_t hal_end_memory();
-
 // Used for event handlers.
 
 void hal_shutdown_hard(UNUSED const char *name, UNUSED void *data,
