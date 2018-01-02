@@ -15,7 +15,6 @@
 static uint32_t magic;
 static void *arg;
 
-extern char kernel_comment_start;
 extern size_t kernel_end;
 
 static bool hal_initialized = false;
@@ -30,10 +29,6 @@ size_t hal_end_memory()
     return ((MultibootInfo*)arg)->mem_upper * 1024;
 }
 
-char *hal_compiler_information()
-{
-    return &kernel_comment_start;
-}
 
 uint32_t hal_get_magic()
 {
