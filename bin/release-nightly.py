@@ -14,9 +14,10 @@ lines = contents.split("\n")
 version_line = next((x for x in lines if "AWOO_VERSION" in x), None)
 version = version_line.split(" ")[2]
 
-iso_name = "awoos-{}-{}.iso".format(date, version)
+iso_name = "awoos-{}-nightly-{}.iso".format(date, version)
 
-command = ["make", "BUILD_TYPE=nightly", "clean", "iso"]
+command = ["make", "BUILD_TYPE=nightly",
+            "NAME_SUFFIX=-{}".format(date), "clean", "iso"]
 status = whaledo.run("os-development-x86", command)
 
 if status != 0:
