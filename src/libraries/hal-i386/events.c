@@ -2,6 +2,7 @@
 #include <scheduler.h>
 #include <awoo/hal.h>
 #include <kernel.h>
+#include "interrupts.h"
 #include "hal_init.h"
 #include "text.h"
 #include "metadata.h"

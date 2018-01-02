@@ -1,4 +1,4 @@
-#include <awoo/hal.h>
+#include "interrupts.h"
 
 void hal_enable_interrupts()
 {

@@ -1,8 +1,7 @@
-#include "ports.h"
-#include <stdbool.h>
-#include <awoo/hal.h>
 #include <awoo/modifiers.h>
 #include <kernel.h>
+#include "ports.h"
+#include "interrupts.h"
 
 void hal_shutdown()
 {
