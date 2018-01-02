@@ -41,8 +41,8 @@ void scheduler_reflow_processes()
     }
 }
 
-MAY_PANIC void scheduler_process_start(const char *event_name, void *data,
-        size_t data_size)
+MAY_PANIC void scheduler_process_start(UNUSED const char *event_name,
+        void *data, size_t data_size)
 {
     size_t pid;
 
@@ -57,8 +57,8 @@ MAY_PANIC void scheduler_process_start(const char *event_name, void *data,
     return;
 }
 
-MAY_PANIC void scheduler_process_stop(const char *event_name, void *data,
-        size_t data_size)
+MAY_PANIC void scheduler_process_stop(UNUSED const char *event_name,
+        void *data, size_t data_size)
 {
     ProcessReference *process_reference = (ProcessReference*)data;
     size_t pid = process_reference->id;
@@ -75,8 +75,8 @@ MAY_PANIC void scheduler_process_stop(const char *event_name, void *data,
     number_of_processes -= 1;
 }
 
-MAY_PANIC void scheduler_process_next(const char *event_name, void *data,
-        size_t data_size)
+MAY_PANIC void scheduler_process_next(UNUSED const char *event_name,
+        void *data, size_t data_size)
 {
     state.processes[current_process].data = data;
     eventually_event_trigger("HAL scheduler process next", &state, sizeof(SchedulerState));
