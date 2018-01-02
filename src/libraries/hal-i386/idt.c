@@ -1,4 +1,3 @@
-#include <kernel.h>
 #include <stdint.h>
 #include <string.h>
 #include "idt.h"
