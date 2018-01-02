@@ -5,7 +5,6 @@
 #include "basic_display.h"
 #include "ports.h"
 #include <stdint.h>
-#include <string.h>
 
 const uint16_t *VIDEO_RAM = (const uint16_t*)0xB8000;
 
