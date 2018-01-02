@@ -39,7 +39,7 @@ endif
 # Have src/kernel.exe use the target-specific linker script.
 KERNEL_EXE_LDFLAGS := -T src/link-${TARGET}.ld
 # Have src/kernel.exe link to the various libraries necessary.
-KERNEL_EXE_LIBRARIES += -l :bootstrap-${TARGET}.a -l :awoostr.a -l :ktest.a -l :hal-${TARGET}.a -l :scheduler.a -l :eventually.a -l :libpanic.a -l :libpanic-${TARGET}.a -l :libc.a
+KERNEL_EXE_LIBRARIES += -l :bootstrap-${TARGET}.a -l :tests.a -l :ktest.a -l :eventually.a -l :hal-${TARGET}.a -l :memory_manager-${TARGET}.a -l :libpanic.a -l :libpanic-${TARGET}.a -l :scheduler.a -l :libc.a -l :awoostr.a -l :greeter.a
 
 
 KERNEL_EXE_LIBRARIES += ${KERNEL_EXE_LIBRARIES_APPEND}
@@ -122,7 +122,7 @@ test-general: test--1
 test-panic: test--2
 
 test-lint:
-	clang-check $(shell find -name '*.c') -- -I include -I src/libraries/dux-mm-i386/include
+	clang-check $(shell find -name '*.c') -- -I include -I src/libraries/memory_manager-${TARGET}/include
 lint: test-lint
 
 test: test-general test-panic

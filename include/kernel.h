@@ -3,22 +3,14 @@
 
 #include <stddef.h>
 #include <stdbool.h>
+#include <eventually.h>
 #include <awoo/modifiers.h>
 
-void hal_init();
+void hal_register_events();
+void tests_register_events();
+void greeter_register_events();
 
-void hal_enable_interrupts();
-void hal_disable_interrupts();
-
-void hal_events_init();
-
-void hal_shutdown();
-void hal_hard_shutdown();
-void hal_test_shutdown(bool success);
-
-char *hal_compiler_information();
-
-void kprint(const char *string);
+#define kprint(STRING) eventually_event_trigger_immediate("kernel print", (char*)STRING, 0)
 
 noreturn _panic(const char *message, const char *function,
                 const char* filename, size_t line, bool automated);

@@ -4,6 +4,7 @@
 #include <stdbool.h>
 #include <awoostr.h>
 #include <awoo.h>
+#include <eventually.h>
 
 // stack_dump() is an assembly stub (in libpanic-i386/main.asm), which calls
 // panic_stack_dump_hex() with the argument being the stack pointer (esp).
@@ -33,7 +34,7 @@ void panic_stack_dump_hex(size_t *_stack)
 noreturn _panic(const char *message, const char *function,
                     const char* filename, size_t line, bool automated)
 {
-    hal_disable_interrupts();
+    eventually_event_trigger_immediate("HAL interrupts disable", NULL, 0);
 
     /*
      * If we're recursively panicking, we don't want to run this block of code,
@@ -42,7 +43,7 @@ noreturn _panic(const char *message, const char *function,
     if (!in_panic) {
         in_panic = true;
 
-        hal_init();
+        eventually_event_trigger_immediate("HAL init", NULL, 0);
 
         kprint("!!! Kernel panic !!!\r\n\r\n");
         kprint(AWOO_INFO);
@@ -69,7 +70,7 @@ noreturn _panic(const char *message, const char *function,
     }
 
     if (automated) {
-        hal_hard_shutdown();
+        eventually_event_trigger_immediate("HAL shutdown hard", NULL, 0);
     }
 
 

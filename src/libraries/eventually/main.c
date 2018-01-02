@@ -62,7 +62,6 @@ bool eventually_event_watch(const char *event_name, EvEventHandler *handler)
 
     // If we failed to make one, return false.
     if (group == NULL) {
-    
         return false;
     }
 
@@ -78,7 +77,8 @@ bool eventually_event_watch(const char *event_name, EvEventHandler *handler)
     return true;
 }
 
-bool eventually_event_trigger(const char *event_name, void *data, size_t data_size)
+bool eventually_event_trigger_immediate(const char *event_name, void *data,
+        size_t data_size)
 {
     EvEventGroup *group = eventually_find_group(event_name);
     void *tmp_data;
@@ -94,11 +94,27 @@ bool eventually_event_trigger(const char *event_name, void *data, size_t data_si
     }
 
     for (size_t i = 0; i < group->number_of_handlers; i++) {
-        tmp_data = malloc(data_size);
-        memcpy(tmp_data, data, data_size);
+        if (data != NULL && data_size != 0) {
+            // If data and size is provided, then copy it.
+            tmp_data = malloc(data_size);
+            memcpy(tmp_data, data, data_size);
+        } else if (data != NULL && data_size == 0) {
+            // If data is provided, but size is not, assign it directly.
+            tmp_data = data;
+        } else {
+            // Otherwise, give them NULL.
+            tmp_data = NULL;
+            data_size = 0;
+        }
+
         group->handlers[i](event_name, tmp_data, data_size);
     }
 
     return true;
 }
 
+// Can be replaced with a not-immediate variant later on, if wanted.
+bool eventually_event_trigger(const char *event_name, void *data, size_t data_size)
+{
+    return eventually_event_trigger_immediate(event_name, data, data_size);
+}
