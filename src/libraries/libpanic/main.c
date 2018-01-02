@@ -1,6 +1,5 @@
 #include <kernel.h>
 #include <stddef.h>
-#include <stdint.h>
 #include <stdbool.h>
 #include <awoostr.h>
 #include <awoo.h>
