@@ -23,8 +23,6 @@ MAY_PANIC void hal_scheduler_process_next(UNUSED const char *event_name,
     }
 
     // ...
-
-    free(state);
 }
 
 MAY_PANIC void hal_scheduler_process_start(UNUSED const char *event_name,
@@ -32,8 +30,6 @@ MAY_PANIC void hal_scheduler_process_start(UNUSED const char *event_name,
 {
     SchedulerState *state = (SchedulerState*)_state;
     // ...
-
-    free(state);
 }
 
 MAY_PANIC void hal_scheduler_process_stop(UNUSED const char *event_name,
@@ -41,6 +37,4 @@ MAY_PANIC void hal_scheduler_process_stop(UNUSED const char *event_name,
 {
     SchedulerState *state = (SchedulerState*)_state;
     // ...
-
-    free(state);
 }

@@ -64,7 +64,7 @@ MAY_PANIC void scheduler_process_stop(UNUSED const char *event_name,
     size_t pid = process_reference->id;
     Process *proc = &state.processes[pid];
 
-    if (eventually_event_trigger("HAL scheduler process stop", &state, sizeof(state))) {
+    if (eventually_event_trigger("HAL scheduler process stop", &state, 0)) {
         memset(proc, 0, sizeof(Process));
     } else {
         // TODO: implement format().
@@ -79,5 +79,5 @@ MAY_PANIC void scheduler_process_next(UNUSED const char *event_name,
         void *data, size_t data_size)
 {
     state.processes[current_process].data = data;
-    eventually_event_trigger("HAL scheduler process next", &state, sizeof(SchedulerState));
+    eventually_event_trigger("HAL scheduler process next", &state, 0);
 }
