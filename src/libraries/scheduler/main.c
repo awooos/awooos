@@ -64,7 +64,7 @@ MAY_PANIC void scheduler_process_stop(const char *event_name, void *data,
     size_t pid = process_reference->id;
     Process *proc = &state.processes[pid];
 
-    if (eventually_event_trigger("HAL scheduler destroy process", &state, sizeof(state))) {
+    if (eventually_event_trigger("HAL scheduler process stop", &state, sizeof(state))) {
         memset(proc, 0, sizeof(Process));
     } else {
         // TODO: implement format().
