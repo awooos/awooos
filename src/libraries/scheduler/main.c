@@ -79,5 +79,5 @@ MAY_PANIC void scheduler_process_next(const char *event_name, void *data,
         size_t data_size)
 {
     state.processes[current_process].data = data;
-    eventually_event_trigger("HAL scheduler next", &state, sizeof(SchedulerState));
+    eventually_event_trigger("HAL scheduler process next", &state, sizeof(SchedulerState));
 }
