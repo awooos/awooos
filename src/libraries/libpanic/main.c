@@ -3,6 +3,7 @@
 #include <stdint.h>
 #include <stdbool.h>
 #include <awoostr.h>
+#include <awoo/hal.h>
 #include <awoo.h>
 
 // stack_dump() is an assembly stub (in libpanic-i386/main.asm), which calls

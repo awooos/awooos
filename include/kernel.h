@@ -7,16 +7,12 @@
 
 void hal_init();
 
-void hal_enable_interrupts();
-void hal_disable_interrupts();
-
-void hal_events_init();
+void tests_register_events();
+void greeter_register_events();
 
 void hal_shutdown();
 void hal_hard_shutdown();
 void hal_test_shutdown(bool success);
-
-char *hal_compiler_information();
 
 void kprint(const char *string);
 
