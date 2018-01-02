@@ -1,6 +1,7 @@
 #ifndef KERNEL_H
 #define KERNEL_H
 
+#include <stdlib.h>
 #include <stddef.h>
 #include <stdbool.h>
 #include <awoo/modifiers.h>
@@ -17,10 +18,7 @@ void hal_shutdown();
 void hal_hard_shutdown();
 void hal_test_shutdown(bool success);
 
-//void kprint(const char *string);
-//#define kprint(STRING) eventually_event_trigger_immediate("kernel print", (char*)STRING, strlen(STRING));
-extern void hal_print(const char *string);
-#define kprint(STRING) hal_print(STRING)
+void kprint(const char *string);
 
 noreturn _panic(const char *message, const char *function,
                 const char* filename, size_t line, bool automated);

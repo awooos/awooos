@@ -13,5 +13,5 @@ void hal_print(const char *string)
 void hal_print_callback(UNUSED const char *name, void *string,
         UNUSED size_t length)
 {
-    hal_print((const char*)string);
+    hal_print((char*)string);
 }
