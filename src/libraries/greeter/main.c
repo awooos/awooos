@@ -1,5 +1,4 @@
 #include <awoo/modifiers.h>
-#include <awoo/hal.h>
 #include <awoo.h>
 #include <kernel.h>
 #include <eventually.h>

@@ -1,7 +1,9 @@
 #include <eventually.h>
 #include <scheduler.h>
-#include <awoo/hal.h>
 #include <kernel.h>
+#include "shutdown.h"
+#include "interrupts.h"
+#include "hal_scheduler.h"
 #include "hal_init.h"
 #include "text.h"
 #include "metadata.h"

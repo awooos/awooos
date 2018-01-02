@@ -1,6 +1,7 @@
-// Prints '?!?!?!' to the screen.
+#include <awoo/modifiers.h>
 
-int main(int argc, char **argv)
+// Prints '?!?!?!' to the screen.
+int main(UNUSED int argc, UNUSED char **argv)
 {
     char *video = (char*)0xB8000;
 

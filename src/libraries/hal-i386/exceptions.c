@@ -1,11 +1,8 @@
 #include <kernel.h>
-#include <awoostr.h>
 #include "idt.h"
 #include "exceptions.h"
 #include "ports.h"
 #include <eventually.h>
-#include <string.h>
-#include <stdlib.h>
 
 static const char *exceptions[32] = {
     "0 #DE Divide Error",
@@ -17,13 +14,13 @@ static const char *exceptions[32] = {
     "6 #UD Invalid Opcode (Undefined Opcode)",
     "7 #NM Device Not Available (No Math Coprocessor)",
     "8 #DF Double Fault",
-    "9   Coprocessor Segment Overrun (reserved)",
+    "9  Coprocessor Segment Overrun (reserved)",
     "10 #TS Invalid TSS",
     "11 #NP Segment Not Present",
     "12 #SS Stack-Segment Fault",
     "13 #GP General Protection",
     "14 #PF Page Fault",
-    "15 - (Intel reserved. Do not use.)",
+    "15 - Intel reserved. Do not use.",
     "16 #MF x87 FPU Floating-Point Error (Math Fault)",
     "17 #AC Alignment Check",
     "18 #MC Machine Check",
@@ -73,17 +70,17 @@ void hal_exception_handler(Registers *r)
         eventually_event_trigger(irq_names[r->int_no - 32], r, sizeof(Registers));
     }
 
-    // Interrupts 32+ are IRQs, so we need to send EOIs.
+    // Interrupts 32+ are IRQs, so we need to send EOIs to the interrupt
+    // controllers.
     if (r->int_no > 31) {
-        /* We need to send an EOI to the
-         *  interrupt controllers too */
-
-        // If it's involved, send an EOI to the "slave" controller.
-        // (It's involved for IRQs 9 and up.
+        // If it's involved, send an EOI to the secondary controller.
+        // (It's involved for IRQs 9 and up.)
         if (r->int_no > (31 + 8)) {
             hal_outb(0xA0, 0x20);
         }
 
+        // Send an EOI to the primary controller.
+        // (Involved in all IRQs.)
         hal_outb(0x20, 0x20);
     }
 }

@@ -1,7 +1,7 @@
 #include <eventually.h>
 #include <kernel.h>
 
-void kernel_main()
+noreturn kernel_main()
 {
     greeter_register_events();
     tests_register_events();
