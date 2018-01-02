@@ -2,7 +2,6 @@
 #include "basic_display.h"
 #include "basic_uart.h"
 #include "ports.h"
-#include "events.h"
 #include "exceptions.h"
 #include "gdt.h"
 #include "idt.h"
@@ -53,8 +52,6 @@ void hal_init()
     hal_basic_uart_init();
 
     if (!hal_initialized) {
-        hal_events_init();
-
         hal_gdt_init();
         hal_idt_init();
 
@@ -62,14 +59,8 @@ void hal_init()
         dmm_init(hal_dmm_start_address(), hal_end_memory());
         memory_manager_init(&kmalloc, &kfree);
 
-        eventually_event_trigger("HAL interrupts enable", NULL, 0);
+        eventually_event_trigger_immediate("HAL interrupts enable", NULL, 0);
     }
 
     hal_initialized = true;
-}
-
-void kprint(const char *string)
-{
-    hal_basic_display_print(string);
-    hal_basic_uart_print(string);
 }

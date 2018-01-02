@@ -5,6 +5,7 @@
 #include <awoostr.h>
 #include <awoo/hal.h>
 #include <awoo.h>
+#include <eventually.h>
 
 // stack_dump() is an assembly stub (in libpanic-i386/main.asm), which calls
 // panic_stack_dump_hex() with the argument being the stack pointer (esp).
@@ -70,7 +71,7 @@ noreturn _panic(const char *message, const char *function,
     }
 
     if (automated) {
-        hal_hard_shutdown();
+        eventually_event_trigger_immediate("HAL shutdown hard", NULL, 0);
     }
 
 

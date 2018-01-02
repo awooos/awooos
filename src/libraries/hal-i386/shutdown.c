@@ -1,6 +1,7 @@
 #include "ports.h"
 #include <stdbool.h>
 #include <awoo/hal.h>
+#include <awoo/modifiers.h>
 #include <kernel.h>
 
 void hal_shutdown()
@@ -9,7 +10,7 @@ void hal_shutdown()
     kprint("TODO: Implement an ACPI-based hal_shutdown().");
 }
 
-void hal_hard_shutdown()
+void hal_shutdown_hard()
 {
     kprint("\r\n");
     kprint("Doing a hard shutdown.\r\n");
@@ -29,21 +30,21 @@ void hal_hard_shutdown()
     hal_outb(0x60, 0xFE); // Keyboard RESET.
 }
 
-// Used to shut down after test failures.
-void hal_test_fail_shutdown()
-{
-    // Try qemu-specific shutdown that returns a nonzero exit code.
-    hal_outb(0xf4, 0x00);
-    // Then fall through to a typical hard shutdown, if that didn't work.
-    hal_hard_shutdown();
-}
-
+// Used to shut down after test runs, for tests builds.
 void hal_test_shutdown(bool success)
 {
-    if (success) {
-        hal_hard_shutdown();
-    } else {
-        hal_test_fail_shutdown();
+    if (!success) {
+        // If a test failed, try qemu-specific shutdown that returns a nonzero
+        // exit code.
+        hal_outb(0xf4, 0x00);
     }
+
+    hal_shutdown_hard();
 }
 
+// Callbacks.
+void hal_shutdown_hard_callback(UNUSED const char *name, UNUSED void *data,
+        UNUSED size_t length)
+{
+    hal_shutdown_hard();
+}

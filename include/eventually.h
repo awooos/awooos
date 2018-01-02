@@ -18,5 +18,7 @@ typedef struct eventually_event_group {
 
 bool eventually_event_watch(const char *event_name, EvEventHandler *handler);
 bool eventually_event_trigger(const char *event_name, void *data, size_t data_size);
+bool eventually_event_trigger_immediate(const char *event_name, void *data,
+        size_t data_size);
 
 #endif

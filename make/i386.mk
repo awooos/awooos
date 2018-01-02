@@ -6,8 +6,6 @@ override LDFLAGS += -melf_i386
 override ASFLAGS += -felf32
 
 # i386-specific external libraries.
-override CFLAGS += -I src/libraries/dux-mm-i386/include
-
-KERNEL_EXE_LIBRARIES_APPEND := -l :dux-mm-i386.a
+override CFLAGS += -I src/libraries/memory_manager-i386/include
 
 QEMU ?= qemu-system-i386
