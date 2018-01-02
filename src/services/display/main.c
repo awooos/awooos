@@ -1,6 +1,6 @@
 // Prints '?!?!?!' to the screen.
 
-int main(int argc, char **argv)
+int main(UNUSED int argc, UNUSED char **argv)
 {
     char *video = (char*)0xB8000;
 
