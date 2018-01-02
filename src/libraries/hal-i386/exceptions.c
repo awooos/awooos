@@ -79,7 +79,7 @@ void hal_exception_handler(Registers *r)
          *  interrupt controllers too */
 
         // If it's involved, send an EOI to the "slave" controller.
-        // (It's involved for IRQs 9 and up.
+        // (It's involved for IRQs 9 and up.)
         if (r->int_no > (31 + 8)) {
             hal_outb(0xA0, 0x20);
         }
