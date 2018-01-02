@@ -1,6 +1,7 @@
 #include <stdlib.h>
-#include <scheduler.h>
 #include <awoo/modifiers.h>
+#include <scheduler.h>
+#include "hal_scheduler.h"
 #include "exceptions.h"
 
 #define SCHEDULER_MAX_TICKS_PER_TURN 20
