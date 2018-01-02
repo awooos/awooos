@@ -73,17 +73,17 @@ void hal_exception_handler(Registers *r)
         eventually_event_trigger(irq_names[r->int_no - 32], r, sizeof(Registers));
     }
 
-    // Interrupts 32+ are IRQs, so we need to send EOIs.
+    // Interrupts 32+ are IRQs, so we need to send EOIs to the interrupt
+    // controllers.
     if (r->int_no > 31) {
-        /* We need to send an EOI to the
-         *  interrupt controllers too */
-
-        // If it's involved, send an EOI to the "slave" controller.
+        // If it's involved, send an EOI to the secondary controller.
         // (It's involved for IRQs 9 and up.)
         if (r->int_no > (31 + 8)) {
             hal_outb(0xA0, 0x20);
         }
 
+        // Send an EOI to the primary controller.
+        // (Involved in all IRQs.)
         hal_outb(0x20, 0x20);
     }
 }
