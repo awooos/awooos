@@ -4,9 +4,6 @@
 #include <awoo/modifiers.h>
 #include <stddef.h>
 
-// Needed by greeter.
-char *hal_compiler_information();
-
 // Used for event handlers.
 
 void hal_shutdown_hard(UNUSED const char *name, UNUSED void *data,
