@@ -1,11 +1,8 @@
 #include <kernel.h>
-#include <awoostr.h>
 #include "idt.h"
 #include "exceptions.h"
 #include "ports.h"
 #include <eventually.h>
-#include <string.h>
-#include <stdlib.h>
 
 static const char *exceptions[32] = {
     "0 #DE Divide Error",
