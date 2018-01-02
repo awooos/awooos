@@ -10,7 +10,6 @@ void hal_register_events();
 void tests_register_events();
 void greeter_register_events();
 
-void hal_hard_shutdown();
 void hal_test_shutdown(bool success);
 
 #define kprint(STRING) eventually_event_trigger_immediate("kernel print", (char*)STRING, 0);

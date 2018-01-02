@@ -9,6 +9,15 @@
         kprint("Done!\n");                              \
     };
 
+void tests_shutdown(bool test_succeeded)
+{
+    if (test_succeeded) {
+        eventually_event_trigger_immediate("HAL shutdown hard", NULL, 0);
+    } else {
+        eventually_event_trigger_immediate("HAL shutdown test fail", NULL, 0);
+    }
+}
+
 void run_tests()
 {
     bool test_status;
@@ -24,7 +33,7 @@ void run_tests()
         // Not a test build.
         break;
     case 1:
-        hal_test_shutdown(test_status);
+        tests_shutdown(test_status);
         break;
     case 2:
         run_panic_test();

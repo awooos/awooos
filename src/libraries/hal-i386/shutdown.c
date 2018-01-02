@@ -10,7 +10,10 @@ void hal_shutdown()
     kprint("TODO: Implement an ACPI-based hal_shutdown().");
 }
 
-void hal_shutdown_hard()
+// Hard shutdown: Disable interrupts then do a keyboard RESET, instead of using
+// ACPI.
+void hal_shutdown_hard(UNUSED const char *name, UNUSED void *data,
+        UNUSED size_t length)
 {
     kprint("\r\n");
     kprint("Doing a hard shutdown.\r\n");
@@ -30,21 +33,11 @@ void hal_shutdown_hard()
     hal_outb(0x60, 0xFE); // Keyboard RESET.
 }
 
-// Used to shut down after test runs, for tests builds.
-void hal_test_shutdown(bool success)
-{
-    if (!success) {
-        // If a test failed, try qemu-specific shutdown that returns a nonzero
-        // exit code.
-        hal_outb(0xf4, 0x00);
-    }
-
-    hal_shutdown_hard();
-}
-
-// Callbacks.
-void hal_shutdown_hard_callback(UNUSED const char *name, UNUSED void *data,
+void hal_shutdown_test_fail(UNUSED const char *name, UNUSED void *data,
         UNUSED size_t length)
 {
-    hal_shutdown_hard();
+    // If a test failed, try qemu-specific shutdown that returns a nonzero
+    // exit code, then fall back to an ormal hard shutdown.
+    hal_outb(0xf4, 0x00);
+    hal_shutdown_hard(name, data, length);
 }
