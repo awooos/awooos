@@ -13,7 +13,7 @@ void greeter_register_events();
 void hal_hard_shutdown();
 void hal_test_shutdown(bool success);
 
-void kprint(const char *string);
+#define kprint(STRING) eventually_event_trigger_immediate("kernel print", (char*)STRING, 0);
 
 noreturn _panic(const char *message, const char *function,
                 const char* filename, size_t line, bool automated);
