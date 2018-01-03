@@ -3,15 +3,20 @@
 
 #include <stddef.h>
 
+void dmm_init();
+
 void dmm_add_memory_region(void *start, size_t length);
+
 void *dmm_malloc(size_t size);
 void dmm_free(void *ptr);
+void *dmm_calloc(size_t nmemb, size_t size);
+void *dmm_realloc(void *ptr, size_t size);
 
-// If the DMM_INTRUSIVE macro is defined, alias malloc() and free()
-// to the dmm ones.
 #ifdef DMM_INTRUSIVE
-#define malloc dmm_malloc
-#define free dmm_free
+#define malloc(size) dmm_malloc(size)
+#define free(ptr) dmm_free(ptr)
+#define calloc(nmemb, size) dmm_calloc(nmemb, size)
+#define realloc(ptr, size) dmm_realloc(ptr, size)
 #endif
 
 #endif
