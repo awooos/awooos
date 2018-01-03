@@ -10,15 +10,20 @@ void dmm_add_memory_region(void *start, size_t length)
     // TODO
 }
 
-DMM_MallocHeader *_malloc_header_for(void *ptr)
+DMM_MallocHeader *_dmm_malloc_header_for(void *ptr)
 {
     return ((DMM_MallocHeader*)ptr) - 1;
+}
+
+void *dmm_low_level_malloc(size_t real_size)
+{
+    // TODO.
 }
 
 void *dmm_malloc(size_t size)
 {
     size_t real_size = size + sizeof(DMM_MallocHeader);
-    DMM_MallocHeader *result = (DMM_MallocHeader*)dmm_malloc(real_size);
+    DMM_MallocHeader *result = (DMM_MallocHeader*)dmm_low_level_malloc(real_size);
 
     if (result == NULL) {
         return NULL;

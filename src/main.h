@@ -21,7 +21,6 @@ typedef struct dmm_memory_manager_functions_s {
     DMM_FreeFn *free;
 } DMM_MemoryManagerFunctions;
 
-void dmm_allocator_init(DMM_MallocFn *mallocfn, DMM_FreeFn *freefn);
-DMM_MallocHeader *_malloc_header_for(void *ptr);
+DMM_MallocHeader *_dmm_malloc_header_for(void *ptr);
 
 #endif
