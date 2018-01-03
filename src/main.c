@@ -36,7 +36,7 @@ void *dmm_malloc(size_t size)
         return NULL;
     }
 
-    // NOTE: dmm_malloc() zeros memory, which isn't what most allocators do.
+    // NOTE: dmm_malloc() zeroes memory, which isn't what most allocators do.
     // Not sure if that violates the C standard or not, but *shrug*.
     memset(result, 0, real_size);
 
@@ -58,7 +58,7 @@ void dmm_free(void *ptr)
 
 void *dmm_calloc(size_t nmemb, size_t size)
 {
-    // ASSUMPTION: dmm_malloc() zeros allocated memory.
+    // ASSUMPTION: dmm_malloc() zeroes allocated memory.
     return dmm_malloc(nmemb * size);
 }
 
