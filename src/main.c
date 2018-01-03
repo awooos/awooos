@@ -1,3 +1,5 @@
+// REQUIREMENTS: Requires size_t (stddef.h); and memset() and memcpy() (string.h).
+
 #include <dmm.h>
 #include <stddef.h>
 #include <string.h>
@@ -16,6 +18,11 @@ DMM_MallocHeader *_dmm_malloc_header_for(void *ptr)
 }
 
 void *dmm_low_level_malloc(size_t real_size)
+{
+    // TODO.
+}
+
+void dmm_low_level_free(void *ptr)
 {
     // TODO.
 }
@@ -46,7 +53,7 @@ void dmm_free(void *ptr)
 
     header->used = 0;
 
-    dmm_free(header);
+    dmm_low_level_free(header);
 }
 
 void *dmm_calloc(size_t nmemb, size_t size)
