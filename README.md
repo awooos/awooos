@@ -32,4 +32,4 @@ void kernel_main()
 
 ## License
 
-The code is available as open source under the terms of the [MIT License](https://opensource.org/license/MIT).
+The code is available as open source under the terms of the [MIT License](https://opensource.org/licenses/MIT).
