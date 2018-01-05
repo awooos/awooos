@@ -27,7 +27,7 @@ void *memmove_tmp(void *dest, const char *src, size_t n, void *tmp)
 
 /*void *memmove(void *dest, const char *src, size_t n)
 {
-    void *tmp = malloc(n);
+    void *tmp = ali_malloc(n);
 
     return memmove_tmp(dest, src, n, tmp);
 }*/
