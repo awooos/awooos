@@ -2,7 +2,7 @@
 #include <stddef.h>
 #include <ali/str.h>
 
-typedef void FlailPrintFn(const char*);
+typedef int FlailPrintFn(const char*);
 
 // flail_stack_dump() is an assembly stub (in platform-i386/main.asm), which
 // call flail_stack_dump_hex() with the argument being the stack pointer (esp).
