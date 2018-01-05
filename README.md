@@ -17,7 +17,7 @@ A library for implementing kernel panics.
 // Operating system information to include in the panic message.
 const char *info_str = "Some Operating System v1.0";
 
-int puts(const char *puts)
+int puts(const char *s)
 {
   // Implement me!
   return 0; // It "worked."
