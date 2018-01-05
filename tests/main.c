@@ -16,5 +16,5 @@
 // information. (As opposed to the usual endless loop.)
 void test_flail_intentional_panic()
 {
-    _flail_panic("This kernel panic is intentional.", __FUNCTION__, __FILE__, __LINE__, true);
+    _flail_panic("This kernel panic is intentional.", __FUNCTION__, __FILE__, __LINE__, 1);
 }

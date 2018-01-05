@@ -1,6 +1,5 @@
 #include <flail.h>
 #include <stddef.h>
-#include <stdbool.h>
 #include <ali/str.h>
 #include <eventually.h>
 
@@ -8,7 +7,7 @@
 // panic_stack_dump_hex() with the argument being the stack pointer (esp).
 extern void stack_dump();
 
-static bool in_panic = false;
+static unsigned int in_panic = 0;
 
 char *info_str = NULL;
 
@@ -37,7 +36,7 @@ void panic_stack_dump_hex(size_t *_stack)
 }
 
 noreturn _flail_panic(const char *message, const char *function,
-                    const char* filename, size_t line, bool automated)
+                    const char* filename, size_t line, size_t automated)
 {
     eventually_event_trigger_immediate("HAL interrupts disable", NULL, 0);
 
@@ -45,8 +44,8 @@ noreturn _flail_panic(const char *message, const char *function,
      * If we're recursively panicking, we don't want to run this block of code,
      * because this is probably what's causing the recursive panic!
      */
-    if (!in_panic) {
-        in_panic = true;
+    if (in_panic == 0) {
+        in_panic = 1;
 
         eventually_event_trigger_immediate("HAL init", NULL, 0);
 
@@ -74,7 +73,7 @@ noreturn _flail_panic(const char *message, const char *function,
         kprint(")\r\n");
     }
 
-    if (automated) {
+    if (automated != 0) {
         eventually_event_trigger_immediate("HAL shutdown hard", NULL, 0);
     }
 
