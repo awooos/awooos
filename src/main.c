@@ -1,7 +1,6 @@
 #include <flail.h>
 #include <stddef.h>
 #include <ali/str.h>
-#include <eventually.h>
 
 // stack_dump() is an assembly stub (in libpanic-i386/main.asm), which calls
 // panic_stack_dump_hex() with the argument being the stack pointer (esp).
@@ -16,7 +15,7 @@ void flail_init(char *info_str_)
     info_str = info_str_;
 }
 
-void panic_stack_dump_hex(size_t *_stack)
+void flail_stack_dump_hex(size_t *_stack)
 {
     size_t *stack = _stack;
 
@@ -35,19 +34,15 @@ void panic_stack_dump_hex(size_t *_stack)
     }
 }
 
-noreturn _flail_panic(const char *message, const char *function,
+void _flail_panic(const char *message, const char *function,
                     const char* filename, size_t line, size_t automated)
 {
-    eventually_event_trigger_immediate("HAL interrupts disable", NULL, 0);
-
     /*
      * If we're recursively panicking, we don't want to run this block of code,
      * because this is probably what's causing the recursive panic!
      */
     if (in_panic == 0) {
         in_panic = 1;
-
-        eventually_event_trigger_immediate("HAL init", NULL, 0);
 
         kprint("!!! Kernel panic !!!\r\n\r\n");
         kprint(info_str);
@@ -58,7 +53,7 @@ noreturn _flail_panic(const char *message, const char *function,
 
         kprint("Stack dump:\r\n\r\n");
 
-        stack_dump();
+        flail_stack_dump();
 
         kprint("\r\n\r\n");
 
@@ -73,12 +68,7 @@ noreturn _flail_panic(const char *message, const char *function,
         kprint(")\r\n");
     }
 
-    if (automated != 0) {
-        eventually_event_trigger_immediate("HAL shutdown hard", NULL, 0);
-    }
-
-
-    while (true) {
-        __asm__ volatile ("cli\r\nhlt");
+    if (automated == 0) {
+        flail_wait_forever();
     }
 }

@@ -1,11 +1,17 @@
 ; asmsyntax=nasm
 
-extern panic_stack_dump_hex
-global stack_dump
+extern flail_stack_dump_hex
+global flail_stack_dump
+global flail_wait_forever
 
-stack_dump:
-	push ebp
-	mov ebp, esp
-	call panic_stack_dump_hex
-	pop ebp
-	ret
+flail_stack_dump:
+    push ebp
+    mov ebp, esp
+    call flail_stack_dump_hex
+    pop ebp
+    ret
+
+flail_wait_forever:
+    cli
+    hlt
+    jmp flail_wait_forever
