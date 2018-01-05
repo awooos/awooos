@@ -11,7 +11,7 @@ A library for implementing kernel panics.
 
 ## Usage
 
-```
+```c
 #include <flail.h> /* Note: flail.h uses stddef.h. */
 
 // Operating system information to include in the panic message.
