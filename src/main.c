@@ -1,8 +1,7 @@
 #include <flail.h>
 #include <stddef.h>
 #include <stdbool.h>
-#include <awoostr.h>
-#include <awoo.h>
+#include <ali/str.h>
 #include <eventually.h>
 
 // stack_dump() is an assembly stub (in libpanic-i386/main.asm), which calls
@@ -10,6 +9,13 @@
 extern void stack_dump();
 
 static bool in_panic = false;
+
+char *info_str = NULL;
+
+void flail_init(char *info_str_)
+{
+    info_str = info_str_;
+}
 
 void panic_stack_dump_hex(size_t *_stack)
 {
@@ -30,7 +36,7 @@ void panic_stack_dump_hex(size_t *_stack)
     }
 }
 
-noreturn _panic(const char *message, const char *function,
+noreturn _flail_panic(const char *message, const char *function,
                     const char* filename, size_t line, bool automated)
 {
     eventually_event_trigger_immediate("HAL interrupts disable", NULL, 0);
@@ -45,7 +51,7 @@ noreturn _panic(const char *message, const char *function,
         eventually_event_trigger_immediate("HAL init", NULL, 0);
 
         kprint("!!! Kernel panic !!!\r\n\r\n");
-        kprint(AWOO_INFO);
+        kprint(info_str);
         kprint("\r\n\r\n");
 
         kprint(message);

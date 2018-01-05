@@ -1,4 +1,3 @@
-#include <ktest.h>
 #include <flail.h>
 
 // Trigger an intentional kernel panic.
@@ -11,11 +10,11 @@
 // This isn't the most robust test, but it's good enough to ensure that
 // panic() is behaving at least close to how it's expected to.
 //
-// NOTE: We use _panic() instead of the usual panic(), so we can pass
+// NOTE: We use _flail_panic() instead of the usual flail_panic(), so we can pass
 // "true", which indicates that it's an automated panic and the system
 // should do a hard shutdown immediately after printing the panic
 // information. (As opposed to the usual endless loop.)
 void test_flail_intentional_panic()
 {
-    _panic("This kernel panic is intentional.", __FUNCTION__, __FILE__, __LINE__, true);
+    _flail_panic("This kernel panic is intentional.", __FUNCTION__, __FILE__, __LINE__, true);
 }
