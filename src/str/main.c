@@ -1,4 +1,4 @@
-#include "../ali_main.h"
+#include <ali.h>
 #include <string.h>
 #include <stdint.h>
 #include <stdbool.h>

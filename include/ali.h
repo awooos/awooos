@@ -17,4 +17,9 @@ typedef struct ali_memory_manager_functions_s {
 void ali_init(AliMallocFn *mallocfn, AliFreeFn *freefn,
         AliReallocFn *reallocfn);
 
+void *ali_malloc(size_t size);
+void ali_free(void *ptr);
+void *ali_calloc(size_t nmemb, size_t size);
+void *ali_realloc(void *ptr, size_t size);
+
 #endif
