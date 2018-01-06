@@ -35,8 +35,10 @@ void flail_stack_dump_hex(size_t *_stack)
 }
 
 void _flail_panic(const char *message, const char *function,
-                    const char* filename, const char *line, size_t automated)
+                    const char* filename, size_t line, size_t automated)
 {
+    char buffer[UINT64_CHARS_WITH_NULL];
+
     /*
      * If we're recursively panicking, we don't want to run this block of code,
      * because this is probably what's causing the recursive panic!
@@ -62,7 +64,7 @@ void _flail_panic(const char *message, const char *function,
         flail_print("\r\n ");
         flail_print(filename);
         flail_print(":");
-        flail_print(line);
+        flail_print(flail_uint_to_str(buffer, line, 10));
         flail_print(" (");
         flail_print(function);
         flail_print(")\r\n");
