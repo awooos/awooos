@@ -3,12 +3,11 @@
 static AliMemoryManagerFunctions mmfns;
 
 void ali_init(AliMallocFn *mallocfn, AliFreeFn *freefn,
-        AliReallocFn *reallocfn, AliCallocFn *callocfn)
+        AliReallocFn *reallocfn)
 {
     mmfns.malloc = mallocfn;
     mmfns.free = freefn;
     mmfns.realloc = reallocfn;
-    mmfns.calloc = callocfn;
 }
 
 void *ali_malloc(size_t size)
@@ -23,7 +22,12 @@ void ali_free(void *ptr)
 
 void *ali_calloc(size_t nmemb, size_t size)
 {
-    return mmfns.calloc(nmemb, size);
+    size_t total_size = nmemb * size;
+    void *buffer = mmfns.malloc(total_size);
+
+    memset(buffer, 0, total_size);
+
+    return buffer;
 }
 
 void *ali_realloc(void *ptr, size_t size)
