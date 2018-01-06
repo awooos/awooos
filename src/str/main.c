@@ -1,3 +1,4 @@
+#include "../ali_main.h"
 #include <string.h>
 #include <stdint.h>
 #include <stdbool.h>
@@ -75,7 +76,7 @@ char *uint64_to_str_radix(uint64_t n, size_t radix)
 
     size_t decimal_places = decimal_places_in(n, radix);
 
-    result = (char*)malloc(decimal_places);
+    result = (char*)ali_malloc(decimal_places);
     memset(result, 0, decimal_places);
 
     for (size_t idx = 0; idx < decimal_places; idx++) {

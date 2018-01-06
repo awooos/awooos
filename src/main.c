@@ -16,7 +16,7 @@ void *ali_malloc(size_t size)
     return mmfns.malloc(size);
 }
 
-void alifree(void *ptr)
+void ali_free(void *ptr)
 {
     mmfns.free(ptr);
 }
