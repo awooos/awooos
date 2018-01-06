@@ -1,5 +1,5 @@
-#ifndef KERNEL_H
-#define KERNEL_H
+#ifndef FLAIL_H
+#define FLAIL_H
 
 #include <stddef.h>
 
