@@ -37,7 +37,7 @@ void flail_stack_dump_hex(size_t *_stack)
 }
 
 void _flail_panic(const char *message, const char *function,
-                    const char* filename, char *line, size_t automated)
+                    const char* filename, const char *line, size_t automated)
 {
     /*
      * If we're recursively panicking, we don't want to run this block of code,
