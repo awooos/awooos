@@ -1,4 +1,5 @@
 #include <ali.h>
+#include <string.h>
 
 static AliMemoryManagerFunctions mmfns;
 
