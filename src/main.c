@@ -1,8 +1,6 @@
 #include <flail.h>
 #include <stddef.h>
-// TODO: move from str()+puts() to printf().
-#include <ali/str.h>
-//#include <stdio.h>
+#include "uint_to_str.h"
 
 typedef int FlailPrintFn(const char*);
 
@@ -13,6 +11,7 @@ static unsigned int in_panic = 0;
 char *info_str = NULL;
 FlailPrintFn *flail_print = NULL;
 
+
 void flail_init(char *info_str_, FlailPrintFn *flail_print_)
 {
     info_str = info_str_;
@@ -22,14 +21,15 @@ void flail_init(char *info_str_, FlailPrintFn *flail_print_)
 void flail_stack_dump_hex(size_t *_stack)
 {
     size_t *stack = _stack;
+    char buffer[UINT64_CHARS_WITH_NULL];
 
     for (size_t original_stack = (size_t)stack;
             (size_t)stack < ((original_stack + 0x1000) & (size_t)(~(0x1000 - 1)));
             stack++) {
         flail_print("0x");
-        flail_print(n_to_str_radix((size_t)stack, 16));
+        flail_print(flail_uint_to_str(buffer, (size_t)stack, 16));
         flail_print(": 0x");
-        flail_print(n_to_str_radix(*stack, 16));
+        flail_print(flail_uint_to_str(buffer, *stack, 16));
         flail_print("\n");
 
         if (*stack == 0x0) {
