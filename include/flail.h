@@ -6,6 +6,8 @@
 void _flail_panic(const char *message, const char *function,
                 const char* filename, const char *line, size_t automated);
 
-#define flail_panic(message) _flail_panic(message, __FUNCTION__, __FILE__, #__LINE__, 0)
+#define FLAIL_STR(x) #x
+
+#define flail_panic(message) _flail_panic(message, __FUNCTION__, __FILE__, FLAIL_STR(__LINE__), 0)
 
 #endif
