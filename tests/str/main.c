@@ -1,6 +1,6 @@
 #include <ktest.h>
 #include <stdint.h>
-#include <awoostr.h>
+#include <ali/str.h>
 #include <awoo/tests.h>
 
 size_t test_awoostr_assertions()
