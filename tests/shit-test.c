@@ -1,4 +1,4 @@
-#include "src/uint_to_str.h"
+#include "../src/uint_to_str.h"
 #include <stdio.h>
 
 int main()
