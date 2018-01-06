@@ -3,8 +3,6 @@
 #include "main.h"
 #include "uint_to_str.h"
 
-typedef int FlailPrintFn(const char*);
-
 static unsigned int in_panic = 0;
 char *info_str = NULL;
 FlailPrintFn *flail_print = NULL;

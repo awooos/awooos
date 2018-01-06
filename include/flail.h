@@ -3,6 +3,8 @@
 
 #include <stddef.h>
 
+typedef int FlailPrintFn(const char*);
+
 void flail_init(char *info_str_, FlailPrintFn *flail_print_);
 
 void _flail_panic(const char *message, const char *function,
