@@ -5,7 +5,9 @@ BUILD_TYPE ?= debug
 ISO_DIR  ?= iso/
 ISO_FILE ?= ${ISO_DIR}/${NAME}${NAME_SUFFIX}-${TARGET}-${BUILD_TYPE}.iso
 
-override CFLAGS += -std=c11 -pedantic-errors -gdwarf-2 -nostdinc -ffreestanding -fno-stack-protector -fno-builtin -fdiagnostics-show-option -Wall -Wextra -Wpedantic -Wunused -Wformat=2 -Winit-self -Wmissing-include-dirs -Wstrict-overflow=4 -Wfloat-equal -Wwrite-strings -Wconversion -Wundef -Wtrigraphs -Wunused-parameter -Wunknown-pragmas -Wcast-align -Wswitch-enum -Waggregate-return -Wmissing-noreturn -Wmissing-format-attribute -Wpacked -Wredundant-decls -Wunreachable-code -Winline -Winvalid-pch -Wdisabled-optimization -Wsystem-headers -Wbad-function-cast -Wunused-function -Werror=implicit-function-declaration -Iinclude
+override C_INCLUDES += -I include -I src/libraries/dmm-${TARGET}/include -I src/libraries/ali/include -I src/libraries/flail/include
+
+override CFLAGS += -std=c11 -pedantic-errors -gdwarf-2 -nostdinc -ffreestanding -fno-stack-protector -fno-builtin -fdiagnostics-show-option -Wall -Wextra -Wpedantic -Wunused -Wformat=2 -Winit-self -Wmissing-include-dirs -Wstrict-overflow=4 -Wfloat-equal -Wwrite-strings -Wconversion -Wundef -Wtrigraphs -Wunused-parameter -Wunknown-pragmas -Wcast-align -Wswitch-enum -Waggregate-return -Wmissing-noreturn -Wmissing-format-attribute -Wpacked -Wredundant-decls -Wunreachable-code -Winline -Winvalid-pch -Wdisabled-optimization -Wsystem-headers -Wbad-function-cast -Wunused-function -Werror=implicit-function-declaration ${C_INCLUDES} -DDMM_INTRUSIVE
 
 override LDFLAGS += -nostdlib -g
 
@@ -39,7 +41,7 @@ endif
 # Have src/kernel.exe use the target-specific linker script.
 KERNEL_EXE_LDFLAGS := -T src/link-${TARGET}.ld
 # Have src/kernel.exe link to the various libraries necessary.
-KERNEL_EXE_LIBRARIES += -l :bootstrap-${TARGET}.a -l :tests.a -l :ktest.a -l :eventually.a -l :hal-${TARGET}.a -l :dmm-${TARGET}.a -l :libpanic.a -l :libpanic-${TARGET}.a -l :scheduler.a -l :libc.a -l :awoostr.a -l :greeter.a
+KERNEL_EXE_LIBRARIES += -l :bootstrap-${TARGET}.a -l :tests.a -l :ktest.a -l :eventually.a -l :flail.a -l :hal-${TARGET}.a -l :dmm-${TARGET}.a -l :flail.a -l :scheduler.a -l :ali.a -l :greeter.a
 
 
 KERNEL_EXE_LIBRARIES += ${KERNEL_EXE_LIBRARIES_APPEND}
@@ -90,10 +92,11 @@ make/.mk:
 	${RANLIB} $@
 
 # Any directory directly under src/libraries/ is treated as a library.
-libraries: generic_libraries target_libraries
+libraries: $(shell find src/libraries -mindepth 1 -type d -exec printf "{}.a " \;)
+#libraries: generic_libraries target_libraries
 
-generic_libraries: $(shell find src/libraries -mindepth 1 -type d -not -name "*-*" -exec printf "{}.a " \;)
-target_libraries: $(shell find src/libraries -mindepth 1 -type d -wholename "src/libraries/*-${TARGET}" -exec printf "{}.a " \;)
+#generic_libraries: $(shell find src/libraries -mindepth 1 -type d -not -name "*-*" -exec printf "{}.a " \;)
+#target_libraries: $(shell find src/libraries -mindepth 1 -type d -wholename "src/libraries/*-${TARGET}" -exec printf "{}.a " \;)
 
 # ASSUMPTION: Any module with a hyphen in the name are platform-specific.
 #
@@ -122,7 +125,7 @@ test-general: test--1
 test-panic: test--2
 
 test-lint:
-	clang-check $(shell find -name '*.c') -- -I include -I src/libraries/memory_manager-${TARGET}/include
+	clang-check $(shell find -name '*.c') -- ${C_INCLUDES}
 lint: test-lint
 
 test: test-general test-panic

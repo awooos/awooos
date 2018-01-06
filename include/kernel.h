@@ -4,17 +4,15 @@
 #include <stddef.h>
 #include <stdbool.h>
 #include <eventually.h>
+#include <flail.h>
 #include <awoo/modifiers.h>
 
 void hal_register_events();
 void tests_register_events();
 void greeter_register_events();
 
-#define kprint(STRING) eventually_event_trigger_immediate("kernel print", (char*)STRING, 0)
+int kprint(const char *string);
 
-noreturn _panic(const char *message, const char *function,
-                const char* filename, size_t line, bool automated);
-
-#define panic(message) _panic(message, __FUNCTION__, __FILE__, __LINE__, false)
+#define panic(message) flail_panic(message)
 
 #endif

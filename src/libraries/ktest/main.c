@@ -1,7 +1,7 @@
 #include <ktest.h>
 #include <stddef.h>
 #include <kernel.h>
-#include <awoostr.h>
+#include <ali/str.h>
 #include <string.h>
 #include <stdlib.h>
 
