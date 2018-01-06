@@ -4,11 +4,11 @@
 #include "uint_to_str.h"
 
 static unsigned int in_panic = 0;
-char *info_str = NULL;
+static const char *info_str = NULL;
 FlailPrintFn *flail_print = NULL;
 
 
-void flail_init(char *info_str_, FlailPrintFn *flail_print_)
+void flail_init(const char *info_str_, FlailPrintFn *flail_print_)
 {
     info_str = info_str_;
     flail_print = flail_print_;
