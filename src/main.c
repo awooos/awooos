@@ -1,12 +1,10 @@
 #include <flail.h>
 #include <stddef.h>
+#include "main.h"
 #include "uint_to_str.h"
 
 typedef int FlailPrintFn(const char*);
 
-// flail_stack_dump() is an assembly stub (in platform-i386/main.asm), which
-// call flail_stack_dump_hex() with the argument being the stack pointer (esp).
-extern void flail_stack_dump();
 static unsigned int in_panic = 0;
 char *info_str = NULL;
 FlailPrintFn *flail_print = NULL;
