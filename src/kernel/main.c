@@ -1,5 +1,6 @@
 #include <eventually.h>
 #include <kernel.h>
+#include <awoo/modifiers.h>
 
 noreturn kernel_main()
 {
