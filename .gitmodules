@@ -1,3 +1,9 @@
-[submodule "src/libraries/dux-mm-i386"]
-	path = src/libraries/memory_manager-i386
-	url = https://github.com/duckinator/dux-mm.git
+[submodule "src/libraries/dmm-i386"]
+	path = src/libraries/dmm-i386
+	url = https://github.com/awooos/dmm.git
+[submodule "src/libraries/flail"]
+	path = src/libraries/flail
+	url = https://github.com/awooos/flail.git
+[submodule "src/libraries/ali"]
+	path = src/libraries/ali
+	url = https://github.com/awooos/ali.git

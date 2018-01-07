@@ -8,6 +8,6 @@ void add_hal_tests();
 void add_libc_tests();
 
 
-void run_panic_test();
+void test_flail_intentional_panic();
 
 #endif /* end of include guard: KERNEL_TESTS_H */

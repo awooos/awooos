@@ -5,6 +5,7 @@
 
 #define __awoo__
 
-#define AWOO_INFO "awooOS "AWOO_TARGET_PRETTY" "AWOO_VERSION
+#define __AWOO_INFO__ "awooOS "AWOO_TARGET_PRETTY" "AWOO_VERSION
+static const char *AWOO_INFO = __AWOO_INFO__;
 
 #endif

@@ -36,7 +36,8 @@ void run_tests()
         tests_shutdown(test_status);
         break;
     case 2:
-        run_panic_test();
+        test_flail_intentional_panic();
+        tests_shutdown(true);
         break;
     default:
         panic("Encountered unknown test section!");

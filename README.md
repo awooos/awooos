@@ -31,7 +31,7 @@ https://github.com/duckinator/awooos.
 
 ## License
 
-The code is available as open source under the terms of the [Mozilla Public License 2.0](https://opensource.org/licenses/MPL-2.0).
+The code is available as open source under the terms of the [MIT License](https://opensource.org/licenses/MIT).
 
 ## Code of Conduct
 
