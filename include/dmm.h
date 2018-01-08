@@ -3,6 +3,7 @@
 
 #include <stddef.h>
 
+void add_dmm_tests();
 void dmm_init();
 
 void dmm_add_memory_region(void *start, size_t length);
