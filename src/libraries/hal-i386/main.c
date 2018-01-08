@@ -12,7 +12,7 @@
 #include "exceptions.h"
 #include "gdt.h"
 #include "idt.h"
-#include "tiny_multiboot.h"
+#include "multiboot.h"
 
 static uint32_t magic;
 static void *arg;
@@ -20,17 +20,6 @@ static void *arg;
 extern size_t kernel_end;
 
 static bool hal_initialized = false;
-
-size_t hal_dmm_start_address()
-{
-    return kernel_end + 1;
-}
-
-size_t hal_end_memory()
-{
-    return ((MultibootInfo*)arg)->mem_upper * 1024;
-}
-
 
 uint32_t hal_get_magic()
 {
@@ -43,14 +32,6 @@ void hal_store_magic(uint32_t magic_, void *arg_)
     arg   = arg_;
 }
 
-// FIXME: Remove this once dmm includes calloc() and realloc().
-void *fake_realloc(void *ptr, size_t size)
-{
-    panic("realloc() isn't implemented!");
-    return NULL;
-}
-
-
 void hal_init()
 {
     hal_basic_display_init();
@@ -62,9 +43,20 @@ void hal_init()
 
         hal_exceptions_init();
 
-        // FIXME: Update the following two calls when dmm rewrite is finished.
-        dmm_init(hal_dmm_start_address(), hal_end_memory());
-        ali_init(&kmalloc, &kfree, &fake_realloc);
+        // Initialize DMM with our available memory regions (as told by multiboot)
+        MultibootInfo *multiboot_info = ((MultibootInfo*)arg);
+        size_t mmap_addr = multiboot_info->mmap_addr;
+        while (mmap_addr < (multiboot_info->mmap_addr + multiboot_info->mmap_length)) {
+            MultibootMemoryMapEntry *mmap_entry = (MultibootMemoryMapEntry*)mmap_addr;
+
+            if (mmap_entry->type == MULTIBOOT_MEMORY_MAP_AVAILABLE) {
+                dmm_add_memory_region(mmap_entry->addr, mmap_entry->length);
+            }
+
+            mmap_addr = mmap_addr + mmap_entry->size;
+        }
+
+        ali_init(&dmm_malloc, &dmm_free, &dmm_realloc);
 
         flail_init(AWOO_INFO, &kprint);
 
