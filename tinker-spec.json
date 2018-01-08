@@ -1,7 +1,7 @@
 {
-  "name": "ali",
-  "provides": ["libc"],
-  "requires": ["memory-management"],
-  "sourceDir": "src",
-  "includeDir": "include"
+  "name":       "ali",
+  "provides":   ["libc"],
+  "requires":   ["memory-management"],
+  "source":     "src",
+  "headers":    "include"
 }
