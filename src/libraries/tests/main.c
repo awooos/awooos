@@ -2,6 +2,7 @@
 #include <awoo/tests.h>
 #include <ktest.h>
 #include <eventually.h>
+#include <dmm.h>
 
 #define ADD_TESTS(TEST_CATEGORY) { \
         kprint("Adding " #TEST_CATEGORY " tests... ");  \
@@ -25,6 +26,7 @@ void run_tests()
     ADD_TESTS(hal);
     ADD_TESTS(libc);
     ADD_TESTS(awoostr);
+    ADD_TESTS(dmm);
 
     test_status = test_run_all();
 
