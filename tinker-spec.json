@@ -1,6 +1,6 @@
 {
   "name": "ali",
-  "description": "libc",
+  "component": "libc",
   "sourceDir": "src",
   "includeDir": "include"
 }
