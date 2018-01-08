@@ -1,9 +1,9 @@
-# dux-mm
+# dmm
 
-a memory management library pulled from
-[dux](https://github.com/duckinator/dux).
+A memory management library made for
+[awooOS](https://github.com/awooos/awooos).
 
 # License
 
 The code is available as open source under the [MIT
-License](https://github.com/duckinator/dux-mm/raw/master/LICENSE.txt).
+License](https://github.com/awoos/dmm/raw/master/LICENSE.txt).
