@@ -43,8 +43,39 @@ void hal_init()
 
         hal_exceptions_init();
 
-        // Initialize DMM with our available memory regions (as told by multiboot)
+        flail_init(AWOO_INFO, &kprint);
+
+        // Get the Multiboot info struct
         MultibootInfo *multiboot_info = ((MultibootInfo*)arg);
+
+        // If bits 4 and 5 are set, Multiboot did something bad!
+        // Bit 4 is set if a.out header is passed, bit 5 is set if ELF header
+        // is passed - these should not be able to be set at the same time.
+        // If they are, this is usually an indication of an error in the
+        // bootloader.
+        if (((multiboot_info->flags & (1 << 4)) != 0)
+            && ((multiboot_info->flags & (1 << 5)) != 0)) {
+
+            panic("multiboot passed flags with bits 4 and 5 set");
+        }
+
+        // We don't want a.out stuff as we're compiled to ELF
+        if ((multiboot_info->flags & (1 << 4)) != 0) {
+            panic("multiboot passed a.out header when we're expecting ELF");
+        }
+
+        // If we don't have ELF section header info, it'll be impossible to do
+        // parsing of stabs later on
+        if ((multiboot_info->flags & (1 << 5)) == 0) {
+            panic("multiboot didn't pass ELF section header info");
+        }
+
+        // We expect a memory map to initialize DMM
+        if ((multiboot_info->flags & (1 << 6)) == 0) {
+            panic("multiboot didn't pass a memory map");
+        }
+
+        // Initialize DMM with our available memory regions (as told by multiboot)
         size_t mmap_addr = multiboot_info->mmap_addr;
         while (mmap_addr < (multiboot_info->mmap_addr + multiboot_info->mmap_length)) {
             MultibootMemoryMapEntry *mmap_entry = (MultibootMemoryMapEntry*)mmap_addr;
@@ -58,8 +89,6 @@ void hal_init()
 
         ali_init(&dmm_malloc, &dmm_free, &dmm_realloc);
 
-        flail_init(AWOO_INFO, &kprint);
-
         eventually_event_trigger_immediate("HAL interrupts enable", NULL, 0);
     }
 
@@ -71,4 +100,3 @@ int kprint(const char *string) {
 
     return 0;
 }
-
