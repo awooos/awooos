@@ -10,7 +10,6 @@ void dmm_add_memory_region(void *start, size_t length);
 
 void *dmm_malloc(size_t size);
 void dmm_free(void *ptr);
-void *dmm_calloc(size_t nmemb, size_t size);
 void *dmm_realloc(void *ptr, size_t size);
 
 #ifdef DMM_INTRUSIVE

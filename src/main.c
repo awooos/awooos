@@ -99,12 +99,6 @@ void dmm_free(void *ptr)
     // marked as free.
 }
 
-void *dmm_calloc(size_t nmemb, size_t size)
-{
-    // ASSUMPTION: dmm_malloc() zeroes allocated memory.
-    return dmm_malloc(nmemb * size);
-}
-
 // TODO: dmm_realloc() should attempt to resize existing chunk rather
 // than just allocating a new one and memcpy()ing.
 void *dmm_realloc(void *ptr, size_t size)
