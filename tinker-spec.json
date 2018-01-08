@@ -1,0 +1,6 @@
+{
+  "name": "flail",
+  "description": "kernel panics",
+  "sourceDir": "src",
+  "includeDir": "include"
+}
