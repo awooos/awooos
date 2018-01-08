@@ -1,7 +1,7 @@
 {
-  "name": "flail",
-  "description": "kernel-panics",
-  "dependencies": ["libc"],
-  "sourceDir": "src",
+  "name":       "flail",
+  "provides":   ["kernel-panics"],
+  "requires":   ["libc"],
+  "sourceDir":  "src",
   "includeDir": "include"
 }
