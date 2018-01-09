@@ -34,10 +34,10 @@ void *memmove_tmp(void *dest, const char *src, size_t n, void *tmp)
 
 void *memset(void *s, int c, size_t n)
 {
-    int *cs = (int*)s;
+    unsigned char *buf = (unsigned char*)s;
 
     for (size_t i = 0; i < n; i++) {
-        cs[i] = c;
+        buf[i] = (unsigned char)c;
     }
 
     return s;
