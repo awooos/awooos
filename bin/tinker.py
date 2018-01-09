@@ -3,7 +3,7 @@
 import re
 import json
 import sys
-import subprocess.check_call as check_call
+from subprocess import check_call
 from contextlib import contextmanager
 
 @contextmanager
@@ -105,7 +105,7 @@ def fetch_dependency(dependency):
     return dependency
 
 def generate_kernel(dependencies):
-    dependencies = map(fetch_dependency, dependency)
+    dependencies = map(fetch_dependency, dependencies)
     component_names = map(lambda x: x["name"], dependencies)
 
     source = kernel_source(component_names)
