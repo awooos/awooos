@@ -1,21 +1,25 @@
 [
   {
-    "source": "src/libraries/hal",
+    "name": "hal",
+    "origin": "src/libraries/hal",
     "initializeArgs": [],
     "run": false
   },
   {
-    "source": "https://github.com/awooos/dmm.git#master",
+    "name": "dmm",
+    "origin": "https://github.com/awooos/dmm.git#master",
     "initializeArgs": [],
     "run": false
   },
   {
-    "source": "https://github.com/awooos/ali.git#master",
+    "name": "ali",
+    "origin": "https://github.com/awooos/ali.git#master",
     "initializeArgs": ["&dmm_malloc", "&dmm_free", "&dmm_realloc"],
     "run": false
   },
   {
-    "source": "https://github.com/awooos/flail.git#master",
+    "name": "flail",
+    "origin": "https://github.com/awooos/flail.git#master",
     "initializeArgs": ["\"tinker-generated kernel\"", "&kprint"],
     "run": false
   }
