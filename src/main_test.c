@@ -61,7 +61,7 @@ size_t test_dmm_free_sets_header()
 
 void add_dmm_tests()
 {
-    TEST(dmm_add_region);
+    //TEST(dmm_add_region);
     TEST(dmm_malloc);
     TEST(dmm_free_sets_header);
 }

@@ -5,7 +5,7 @@
 #include <string.h>
 #include "main.h"
 
-DMM_MallocHeader *first;
+DMM_MallocHeader *first = DMM_UNASSIGNED_REGION;
 
 void dmm_add_memory_region(void *start, size_t length)
 {
@@ -13,15 +13,15 @@ void dmm_add_memory_region(void *start, size_t length)
     header->size = length - sizeof(DMM_MallocHeader);
     header->used = 0;
     header->data = (void*)(header + 1);
-    header->next = NULL;
+    header->next = DMM_UNASSIGNED_REGION;
 
-    if (first == NULL) {
+    if (first == DMM_UNASSIGNED_REGION) {
         first = header;
     } else {
         DMM_MallocHeader *last = first;
 
         while (1) {
-            if (last->next == NULL) {
+            if (last->next == DMM_UNASSIGNED_REGION) {
                 last->next = header;
                 break;
             }
@@ -34,17 +34,17 @@ void dmm_add_memory_region(void *start, size_t length)
 DMM_MallocHeader *dmm_get_first_free_chunk(size_t size)
 {
     DMM_MallocHeader *chunk = first;
-    if (chunk == NULL) {
+    if (chunk == DMM_UNASSIGNED_REGION) {
         return NULL;
     }
 
     while (1) {
-        if (chunk->size >= size && chunk->used == 0) {
+        if ((chunk->size >= size) && (chunk->used == 0)) {
             return chunk;
         }
 
         chunk = chunk->next;
-        if (chunk == NULL) {
+        if (chunk == DMM_UNASSIGNED_REGION) {
             return NULL;
         }
     }
@@ -73,7 +73,7 @@ void *dmm_malloc(size_t size)
     // Create a new header after the data, if the remaining data size is
     // large enough to fit the header.
     if (next_size > 0) {
-        void *next = ((void*)(result + 1) + size);
+        void *next = (void *)((size_t)(result) + sizeof(DMM_MallocHeader) + size);
         DMM_MallocHeader *next_header = (DMM_MallocHeader*)next;
         memset(next_header, 0, sizeof(DMM_MallocHeader));
 
