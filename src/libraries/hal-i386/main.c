@@ -17,9 +17,20 @@
 static uint32_t magic;
 static void *arg;
 
+extern size_t kernel_start;
 extern size_t kernel_end;
 
 static bool hal_initialized = false;
+
+size_t hal_get_kernel_start()
+{
+    return (size_t)&kernel_start;
+}
+
+size_t hal_get_kernel_end()
+{
+    return (size_t)(&kernel_end) + 1;
+}
 
 uint32_t hal_get_magic()
 {
@@ -77,14 +88,27 @@ void hal_init()
 
         // Initialize DMM with our available memory regions (as told by multiboot)
         size_t mmap_addr = multiboot_info->mmap_addr;
-        while (mmap_addr < (multiboot_info->mmap_addr + multiboot_info->mmap_length)) {
-            MultibootMemoryMapEntry *mmap_entry = (MultibootMemoryMapEntry*)mmap_addr;
+        size_t mmap_count = ((size_t)multiboot_info->mmap_length) / sizeof(MultibootMemoryMapEntry);
+
+        for (size_t i = 0; i < mmap_count; i++) {
+            MultibootMemoryMapEntry *mmap_entry = ((MultibootMemoryMapEntry*)mmap_addr) + i;
 
             if (mmap_entry->type == MULTIBOOT_MEMORY_MAP_AVAILABLE) {
-                dmm_add_memory_region(mmap_entry->addr, mmap_entry->length);
+                // If we get an entry starting at 0x0, make it instead start at
+                // 0x1 and decrease it's length by 1 byte.
+                if ((size_t)mmap_entry->addr == 0) {
+                    dmm_add_memory_region((void*)0x1, mmap_entry->length - 1);
+                }
+                else if ((size_t)mmap_entry->addr == hal_get_kernel_start()) {
+                    if (((size_t)mmap_entry->addr + mmap_entry->length) >= hal_get_kernel_end()) {
+                        size_t len = mmap_entry->length - (hal_get_kernel_end() - hal_get_kernel_start());
+                        dmm_add_memory_region((void*)hal_get_kernel_end(), len);
+                    }
+                }
+                else {
+                    dmm_add_memory_region((void*)mmap_entry->addr, mmap_entry->length);
+                }
             }
-
-            mmap_addr = mmap_addr + mmap_entry->size;
         }
 
         ali_init(&dmm_malloc, &dmm_free, &dmm_realloc);
