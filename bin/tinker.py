@@ -1,10 +1,11 @@
 #!/usr/bin/env python3
 
-import re
-import json
-import sys
-from subprocess import check_call
 from contextlib import contextmanager
+import json
+import os
+import re
+from subprocess import check_call
+import sys
 
 @contextmanager
 def chdir(newdir):
@@ -54,7 +55,10 @@ def tinker_dir(folder = ""):
 # ASSUMPTION: A directory with an @ symbol in it won't break things.
 # ASSUMPTION: A directory with an @ symbol at the end won't break things.
 # ASSUMPTION: Nobody cares if they have a directory ending with @ in ./tinker/.
-def tinker_repo_dir(component_name, branch = ""):
+def tinker_repo_dir(dependency):
+    component_name = dependency["name"]
+    repo, branch = dependency["origin"].split("#")
+
     return tinker_dir("{}@{}".format(component_name, branch))
 
 def ensure_tinker_root_exists():
@@ -80,16 +84,16 @@ def git_clone(dependency):
         check_call(["git", "clone", *branch_args, "--", repo, destination])
 
 def git_pull(dependency):
-    with chdir(tinker_dir_for(dependency)):
+    with chdir(tinker_repo_dir(dependency)):
         check_call(["git", "pull"])
 
 def clone_or_pull(dependency):
     ensure_tinker_root_exists()
 
-    if not os.isdir(tinker_repo_dir(dependency)):
-        git_clone(dependency)
-    else:
+    if os.path.isdir(tinker_repo_dir(dependency)):
         git_pull(dependency)
+    else:
+        git_clone(dependency)
 
 # ASSUMPTIONS: Dependencies are either git repos or local files.
 def fetch_dependency(dependency):
@@ -125,7 +129,7 @@ output_file = sys.argv[2]
 with open(config_file, "r") as f:
     config = json.load(f)
 
-kernel = generate_kernel(config)
+kernel = generate_kernel(dependencies)
 
 with open(output_file, "w") as f:
     f.write(kernel["source"])
