@@ -16,6 +16,8 @@ typedef struct dmm_malloc_header_s {
     struct dmm_malloc_header_s *next;
 } DMM_MallocHeader;
 
+#define DMM_UNASSIGNED_REGION NULL
+
 typedef struct dmm_memory_manager_functions_s {
     DMM_MallocFn *malloc;
     DMM_FreeFn *free;
