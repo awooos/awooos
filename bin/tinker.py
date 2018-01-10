@@ -127,7 +127,7 @@ config_file = sys.argv[1]
 output_file = sys.argv[2]
 
 with open(config_file, "r") as f:
-    config = json.load(f)
+    dependencies = json.load(f)
 
 kernel = generate_kernel(dependencies)
 
