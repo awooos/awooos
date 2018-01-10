@@ -1,0 +1,7 @@
+{
+  "name":       "dmm",
+  "provides":   ["memory-management"],
+  "requires":   [],
+  "sourceDir":  "src",
+  "includeDir": "include"
+}
