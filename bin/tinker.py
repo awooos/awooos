@@ -77,7 +77,7 @@ def git_clone(dependency):
         branch_args = ["--branch", branch]
     else:
         repo = origin
-        branch_args = [""]
+        branch_args = []
 
     destination = tinker_repo_dir(dependency)
     with chdir(tinker_dir()):
