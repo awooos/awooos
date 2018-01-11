@@ -39,13 +39,13 @@ def kernel_source(components = []):
     runners = map(runner_source, components)
     runners = filter(lambda x: x != None, runners)
 
-    kernel_source = "" + \
-        "\n".join(headers) + "\n\n" + \
-        "void tinker_kernel_main()\n" + \
-        "{\n" + \
-        "\n".join(initializers) + "\n" + \
-        "\n".join(runners) + "\n" + \
-        "}"
+    kernel_source = ""
+    kernel_source += "\n".join(headers) + "\n\n"
+    kernel_source += "void tinker_kernel_main()\n"
+    kernel_source += "{\n"
+    kernel_source += "\n".join(initializers) + "\n"
+    kernel_source += "\n".join(runners) + "\n"
+    kernel_source += "}"
 
     return kernel_source
 
@@ -55,9 +55,9 @@ def tinker_dir(folder = ""):
 # ASSUMPTION: A directory with an @ symbol in it won't break things.
 # ASSUMPTION: A directory with an @ symbol at the end won't break things.
 # ASSUMPTION: Nobody cares if they have a directory ending with @ in ./tinker/.
-def tinker_repo_dir(dependency):
-    component_name = dependency["name"]
-    repo, branch = dependency["origin"].split("#")
+def tinker_repo_dir(component):
+    component_name = component["name"]
+    repo, branch = component["origin"].split("#")
 
     return tinker_dir("{}@{}".format(component_name, branch))
 
@@ -102,7 +102,7 @@ def fetch_dependency(dependency):
     if origin[0] == "/" or origin[0] == ".":
         root = origin
     else:
-        root = clone_or_pull(origin)
+        root = clone_or_pull(dependency)
 
     dependency["root"] = root
 
