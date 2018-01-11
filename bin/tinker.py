@@ -33,7 +33,7 @@ def runner_source(repo):
     else:
         return "    {}_run();".format(name)
 
-def kernel_source(components = []):
+def kernel_source(components):
     headers = map(header_source, components)
     initializers = map(initializer_source, components)
     runners = map(runner_source, components)
@@ -118,8 +118,8 @@ def fetch_dependency(dependency):
     return dependency
 
 def generate_kernel(dependencies):
-    dependencies = map(fetch_dependency, dependencies)
-    component_names = map(lambda x: x["name"], dependencies)
+    dependencies = list(map(fetch_dependency, dependencies))
+    component_names = list(map(lambda x: x["name"], dependencies))
 
     source = kernel_source(dependencies)
 
