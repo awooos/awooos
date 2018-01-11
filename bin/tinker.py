@@ -49,6 +49,15 @@ def kernel_source(components = []):
 
     return kernel_source
 
+def try_split(string, separator, minimum_size, default=None):
+    parts = string.split(separator)
+    diff = minimum_size - len(parts)
+
+    if diff > 0:
+        parts += [default] * diff
+
+    return parts
+
 def tinker_dir(folder = ""):
     return os.path.normpath(os.path.join(os.getcwd(), "tinker", folder))
 
@@ -57,7 +66,7 @@ def tinker_dir(folder = ""):
 # ASSUMPTION: Nobody cares if they have a directory ending with @ in ./tinker/.
 def tinker_repo_dir(component):
     component_name = component["name"]
-    repo, branch = component["origin"].split("#")
+    repo, branch = try_split(component["origin"], "#", 2, default="")
 
     return tinker_dir("{}@{}".format(component_name, branch))
 
@@ -72,11 +81,11 @@ def ensure_tinker_root_exists():
 def git_clone(dependency):
     origin = dependency["origin"]
 
-    if "#" in origin:
-        repo, branch = origin.split("#")
+    repo, branch = try_split(origin, "#", 2)
+
+    if branch:
         branch_args = ["--branch", branch]
     else:
-        repo = origin
         branch_args = []
 
     destination = tinker_repo_dir(dependency)
