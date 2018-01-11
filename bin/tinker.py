@@ -121,7 +121,7 @@ def generate_kernel(dependencies):
     dependencies = map(fetch_dependency, dependencies)
     component_names = map(lambda x: x["name"], dependencies)
 
-    source = kernel_source(component_names)
+    source = kernel_source(dependencies)
 
     return {
             "source": source,

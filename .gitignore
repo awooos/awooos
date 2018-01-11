@@ -1,2 +1,4 @@
 *.pyc
 tinker.json
+tinker/
+/kernel.c
