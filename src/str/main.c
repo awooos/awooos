@@ -76,8 +76,12 @@ char *uint64_to_str_radix(uint64_t n, size_t radix)
 
     size_t decimal_places = decimal_places_in(n, radix);
 
-    result = (char*)ali_malloc(decimal_places);
-    memset(result, 0, decimal_places);
+    // Separate memory size declaration as we need to allocate enough memory
+    // to store the NULL byte at the end of the string
+    size_t memory_size = decimal_places + 1;
+
+    result = (char*)ali_malloc(memory_size);
+    memset(result, 0, memory_size);
 
     for (size_t idx = 0; idx < decimal_places; idx++) {
         value = (uint8_t)uint64_mod(tmp, radix);
