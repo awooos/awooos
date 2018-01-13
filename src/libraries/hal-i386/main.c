@@ -55,6 +55,7 @@ void hal_init()
         hal_exceptions_init();
 
         flail_init(AWOO_INFO, &kprint);
+        dmm_init(&_flail_panic);
 
         // Get the Multiboot info struct
         MultibootInfo *multiboot_info = ((MultibootInfo*)arg);
