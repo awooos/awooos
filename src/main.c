@@ -5,11 +5,18 @@
 #include <string.h>
 #include "main.h"
 
+DMM_PanicFn *_dmm_panic = NULL;
 DMM_MallocHeader *first = DMM_UNASSIGNED_REGION;
+
+void dmm_init(DMM_PanicFn *panic_fn)
+{
+    _dmm_panic = panic_fn;
+}
 
 void dmm_add_memory_region(void *start, size_t length)
 {
     DMM_MallocHeader *header = (DMM_MallocHeader*)start;
+    header->magic = DMM_HEADER_MAGIC;
     header->size = length - sizeof(DMM_MallocHeader);
     header->used = 0;
     header->data = (void*)(header + 1);
@@ -21,6 +28,10 @@ void dmm_add_memory_region(void *start, size_t length)
         DMM_MallocHeader *last = first;
 
         while (1) {
+            if (last->magic != DMM_HEADER_MAGIC) {
+                dmm_panic("memory region header had invalid magic");
+            }
+
             if (last->next == DMM_UNASSIGNED_REGION) {
                 last->next = header;
                 break;
@@ -39,6 +50,10 @@ DMM_MallocHeader *dmm_get_first_free_chunk(size_t size)
     }
 
     while (1) {
+        if (chunk->magic != DMM_HEADER_MAGIC) {
+            dmm_panic("memory region header had invalid magic");
+        }
+
         if ((chunk->size >= size) && (chunk->used == 0)) {
             return chunk;
         }
@@ -59,6 +74,10 @@ void *dmm_malloc(size_t size)
         return NULL;
     }
 
+    if (result->magic != DMM_HEADER_MAGIC) {
+        dmm_panic("memory region header had invalid magic");
+    }
+
     // Calculate the size of the memory chunk after the allocated region.
     size_t next_size = result->size - (size + sizeof(DMM_MallocHeader));
 
@@ -73,10 +92,11 @@ void *dmm_malloc(size_t size)
     // Create a new header after the data, if the remaining data size is
     // large enough to fit the header.
     if (next_size > 0) {
-        void *next = (void *)((size_t)(result) + sizeof(DMM_MallocHeader) + size);
+        void *next = (void *)((size_t)(result + 1) + size);
         DMM_MallocHeader *next_header = (DMM_MallocHeader*)next;
-        memset(next_header, 0, sizeof(DMM_MallocHeader));
+        memset(next, 0, sizeof(DMM_MallocHeader));
 
+        next_header->magic = DMM_HEADER_MAGIC;
         next_header->size = next_size;
         next_header->used = 0;
         next_header->data = (void*)(next_header + 1);
@@ -92,6 +112,9 @@ void *dmm_malloc(size_t size)
 void dmm_free(void *ptr)
 {
     DMM_MallocHeader *header = (DMM_MallocHeader*)(ptr) - 1;
+    if (header->magic != DMM_HEADER_MAGIC) {
+        dmm_panic("memory region header had invalid magic");
+    }
 
     header->used = 0;
 
@@ -112,6 +135,10 @@ void *dmm_realloc(void *ptr, size_t size)
     }
 
     header = (DMM_MallocHeader*)(ptr) - 1;
+    if (header->magic != DMM_HEADER_MAGIC) {
+        dmm_panic("memory region header had invalid magic");
+    }
+
     // ASSUMPTION: dmm_malloc() zeroes allocated memory.
     new_ptr = dmm_malloc(size);
     min_size = (size < header->size) ? size : header->size;
