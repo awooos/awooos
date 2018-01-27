@@ -10,41 +10,42 @@
         kprint("Done!\n");                              \
     };
 
-void tests_shutdown(bool test_succeeded)
+void tests_shutdown_success() {
+    eventually_event_trigger_immediate("HAL shutdown hard", NULL, 0);
+}
+
+void tests_shutdown_failure()
 {
-    if (test_succeeded) {
-        eventually_event_trigger_immediate("HAL shutdown hard", NULL, 0);
-    } else {
-        eventually_event_trigger_immediate("HAL shutdown test fail", NULL, 0);
-    }
+    eventually_event_trigger_immediate("HAL shutdown test fail", NULL, 0);
 }
 
 void run_tests()
 {
-    bool test_status;
+    bool all_tests_passed;
 
     ADD_TESTS(hal);
     ADD_TESTS(libc);
     ADD_TESTS(awoostr);
     ADD_TESTS(dmm);
 
-    test_status = test_run_all();
+    all_tests_passed = test_run_all();
 
-    switch (AWOO_TEST_SECTION) {
-    case 0:
-        // Not a test build.
-        break;
-    case 1:
-        tests_shutdown(test_status);
-        break;
-    case 2:
-        test_flail_intentional_panic();
-        tests_shutdown(true);
-        break;
-    default:
-        panic("Encountered unknown test section!");
-        break;
+    // If it's not a test build, this is all we run.
+    if (AWOO_BUILD_TYPE_NUMBER != AWOO_TEST_BUILD) {
+        return;
     }
+
+    // If a test failed, just shut down.
+    if (!all_tests_passed) {
+        tests_shutdown_failure();
+    }
+
+    // This doesn't catch all failures, but it'll catch unintentional
+    // infinite loops by causing the CI build to time out.
+    test_flail_intentional_panic();
+
+    // If we get this far, we assume all of the tests passed.
+    tests_shutdown_success();
 }
 
 void tests_register_events()
