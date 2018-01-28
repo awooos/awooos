@@ -51,7 +51,6 @@ size_t _decimal_places_in_uint(uint64_t n, size_t radix)
     return decimal_places;
 }
 
-extern void kprint(const char*);
 char uint8_to_char(uint8_t value)
 {
     if (value < 10) { // 0-9
@@ -94,12 +93,6 @@ char *uint64_to_str_radix(uint64_t n, size_t radix)
     return strrev(result);
 }
 
-// Converts an unsigned integer to a string, in base 10.
-char *uint64_to_str(uint64_t n)
-{
-    return uint64_to_str_radix(n, 10);
-}
-
 // Converts an integer to a string, in the base specified by +radix+.
 char *int64_to_str_radix(int64_t n, size_t radix)
 {
@@ -111,11 +104,3 @@ char *int64_to_str_radix(int64_t n, size_t radix)
 
     return uint64_to_str_radix((uint64_t)n, radix);
 }
-
-// Converts an integer to a string, in base 10.
-char *int64_to_str(int64_t n)
-{
-    return int64_to_str_radix(n, 10);
-}
-
-
