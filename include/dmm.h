@@ -1,5 +1,5 @@
-#ifndef DMM_H
-#define DMM_H
+#ifndef DMM__DMM_H
+#define DMM__DMM_H
 
 #include <stddef.h>
 
@@ -12,17 +12,11 @@ extern DMM_PanicFn *_dmm_panic;
 void dmm_init(DMM_PanicFn *panic_fn);
 
 void dmm_add_memory_region(void *start, size_t length);
-
 void *dmm_malloc(size_t size);
 void dmm_free(void *ptr);
 void *dmm_realloc(void *ptr, size_t size);
 
-#ifdef DMM_INTRUSIVE
-#define malloc(size) dmm_malloc(size)
-#define free(ptr) dmm_free(ptr)
-#define realloc(ptr, size) dmm_realloc(ptr, size)
-#endif
-
+// Tests
 void add_dmm_tests();
 
 #endif

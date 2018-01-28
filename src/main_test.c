@@ -2,6 +2,7 @@
 #include <stddef.h>
 #include <dmm.h>
 #include "main.h"
+#include "main_test.h"
 
 size_t test_dmm_malloc()
 {
@@ -35,10 +36,4 @@ size_t test_dmm_free_sets_header()
     TEST_ASSERT(header->used == 0);
 
     TEST_ASSERTIONS_RETURN();
-}
-
-void add_dmm_tests()
-{
-    TEST(dmm_malloc);
-    TEST(dmm_free_sets_header);
 }
