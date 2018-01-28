@@ -3,7 +3,7 @@
 #include <ali/str.h>
 #include <awoo/tests.h>
 
-size_t test_awoostr_assertions()
+size_t test_ali_str_assertions()
 {
     TEST_HAS_ASSERTIONS();
 
@@ -42,7 +42,7 @@ size_t test_awoostr_assertions()
     TEST_ASSERTIONS_RETURN();
 }
 
-void add_awoostr_tests()
+void add_ali_str_tests()
 {
-    TEST(awoostr_assertions);
+    TEST(ali_str_assertions);
 }

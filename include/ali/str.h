@@ -1,5 +1,5 @@
-#ifndef AWOOSTR_H
-#define AWOOSTR_H
+#ifndef ALI__ALI_STR_H
+#define ALI__ALI_STR_H
 
 #include <stddef.h>
 #include <stdint.h>
