@@ -1,6 +1,19 @@
 #include <ktest.h>
 #include <awoo/tests.h>
-#include <ali/signedness.h>
+#include <ali/number.h>
+
+size_t test_ali_is_number()
+{
+    __attribute__((unused)) void *not_a_number;
+
+    TEST_HAS_ASSERTIONS();
+
+    TEST_ASSERT(is_number(1) == 1);
+    TEST_ASSERT(is_number(not_a_number) == 0);
+    TEST_ASSERT(is_number(test_ali_is_number) == 0);
+
+    TEST_ASSERTIONS_RETURN();
+}
 
 size_t test_ali_signedness_assertions()
 {
@@ -67,5 +80,6 @@ size_t test_ali_signedness_assertions()
 
 void add_ali_signedness_tests()
 {
+    TEST(ali_is_number);
     TEST(ali_signedness_assertions);
 }

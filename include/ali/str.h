@@ -3,6 +3,7 @@
 
 #include <stddef.h>
 #include <stdint.h>
+#include <ali/numbers.h>
 
 size_t _decimal_places_in_uint(uint64_t n, size_t radix);
 
@@ -14,26 +15,13 @@ char *uint64_to_str(uint64_t n);
 char *int64_to_str_radix(int64_t n, size_t radix);
 char *int64_to_str(int64_t n);
 
-#define str(x) _Generic((x),    uint8_t:  uint64_to_str((uint64_t)(x)), \
-                                uint16_t: uint64_to_str((uint64_t)(x)), \
-                                uint32_t: uint64_to_str((uint64_t)(x)), \
-                                uint64_t: uint64_to_str((uint64_t)(x)), \
-                                unsigned long: uint64_to_str((uint64_t)(x)), /* ??? */ \
-                                int8_t:   int64_to_str((int64_t)(x)),  \
-                                int16_t:  int64_to_str((int64_t)(x)),  \
-                                int32_t:  int64_to_str((int64_t)(x)),  \
-                                int64_t:  int64_to_str((int64_t)(x)),  \
-                                signed long: int64_to_str((int64_t)(x))) /* ??? */
+#define uint_to_str_radix(n, radix) uint64_to_str_radix((uint64)(n), radix)
+#define  int_to_str_radix(n, radix)  int64_to_str_radix((uint64)(n), radix)
 
-#define n_to_str_radix(n, radix) _Generic((n),  uint8_t:  uint64_to_str_radix, \
-                                                uint16_t: uint64_to_str_radix, \
-                                                uint32_t: uint64_to_str_radix, \
-                                                uint64_t: uint64_to_str_radix, \
-                                                unsigned long: uint64_to_str_radix, \
-                                                int8_t:   int64_to_str_radix,  \
-                                                int16_t:  int64_to_str_radix,  \
-                                                int32_t:  int64_to_str_radix,  \
-                                                int64_t:  int64_to_str_radix,  \
-                                                signed long: int64_to_str_radix)(n, radix)
+#define uint_to_str(n) uint_to_str_radix((n), 10)
+#define  int_to_str(n)  int_to_str_radix((n), 10)
+
+#define n_to_str_radix(n, radix) (is_signed(n) ? int_to_str(n) : uint_to_str(n))
+#define n_to_str(n) n_to_str_radix(n, 10)
 
 #endif

@@ -33,11 +33,11 @@ size_t test_awoostr_assertions()
     TEST_ASSERT(strcmp(n_to_str_radix(430, 16), "1ae") == 0);
     TEST_ASSERT(strcmp(n_to_str_radix(430, 26), "ge") == 0);
 
-    TEST_ASSERT(strcmp(str(0), "0") == 0);
-    TEST_ASSERT(strcmp(str(1), "1") == 0);
-    TEST_ASSERT(strcmp(str(2), "2") == 0);
-    TEST_ASSERT(strcmp(str(123), "123") == 0);
-    TEST_ASSERT(strcmp(str(9001), "9001") == 0);
+    TEST_ASSERT(strcmp(n_to_str(0), "0") == 0);
+    TEST_ASSERT(strcmp(n_to_str(1), "1") == 0);
+    TEST_ASSERT(strcmp(n_to_str(2), "2") == 0);
+    TEST_ASSERT(strcmp(n_to_str(123), "123") == 0);
+    TEST_ASSERT(strcmp(n_to_str(9001), "9001") == 0);
 
     TEST_ASSERTIONS_RETURN();
 }
