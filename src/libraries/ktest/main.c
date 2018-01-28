@@ -1,7 +1,7 @@
 #include <ktest.h>
 #include <stddef.h>
 #include <kernel.h>
-#include <ali/str.h>
+#include <ali/number.h>
 #include <string.h>
 #include <stdlib.h>
 
@@ -72,7 +72,7 @@ void test_print_results(size_t status,
         kprint("\n");
 
         // X) <test name>
-        kprint(str(total + 1));
+        kprint(n_to_str(total + 1));
         kprint(") ");
 
         kprint(test_status_messages[status]);
@@ -91,7 +91,7 @@ void test_print_results(size_t status,
         kprint("In ");
         kprint(file);
         kprint(":");
-        kprint(str(line));
+        kprint(n_to_str(line));
         kprint("\n");
     }
 }
@@ -116,19 +116,19 @@ bool test_run_all()
     kprint("\n\n");
 
     kprint("Total tests: ");
-    kprint(str(total));
+    kprint(n_to_str(total));
     kprint("\n");
 
     kprint("     Passed: ");
-    kprint(str(passed));
+    kprint(n_to_str(passed));
     kprint("\n");
 
     kprint("     Failed: ");
-    kprint(str(failed));
+    kprint(n_to_str(failed));
     kprint("\n");
 
     kprint("    Skipped: ");
-    kprint(str(skipped));
+    kprint(n_to_str(skipped));
     kprint("\n\n");
     /*printf("Total tests: %i\n", ran);
       printf("     Passed: %i\n", passed);
