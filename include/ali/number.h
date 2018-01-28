@@ -38,7 +38,7 @@
 // * [unhappy compiler noises] for everything else.
 #define is_unsigned(n) ((is_signed(n) == 1) ? 0 : 1)
 
-size_t _decimal_places_in_uint(uint64_t n, size_t radix);
+size_t decimal_places_in_uint64(uint64_t n, size_t radix);
 
 uint64_t uint64_div(uint64_t a, uint64_t b);
 uint64_t uint64_mod(uint64_t a, uint64_t b);

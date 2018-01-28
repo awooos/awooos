@@ -7,11 +7,11 @@ size_t test_ali_n_to_str_assertions()
 {
     TEST_HAS_ASSERTIONS();
 
-    TEST_ASSERT(_decimal_places_in_uint(0, 10) == 1);
-    TEST_ASSERT(_decimal_places_in_uint(10, 10) == 2);
-    TEST_ASSERT(_decimal_places_in_uint(11, 10) == 2);
-    TEST_ASSERT(_decimal_places_in_uint(20, 10) == 2);
-    TEST_ASSERT(_decimal_places_in_uint(21, 10) == 2);
+    TEST_ASSERT(decimal_places_in_uint64(0, 10) == 1);
+    TEST_ASSERT(decimal_places_in_uint64(10, 10) == 2);
+    TEST_ASSERT(decimal_places_in_uint64(11, 10) == 2);
+    TEST_ASSERT(decimal_places_in_uint64(20, 10) == 2);
+    TEST_ASSERT(decimal_places_in_uint64(21, 10) == 2);
 
     TEST_ASSERT(uint64_div(10, 2) == 5);
     TEST_ASSERT(uint64_div(12, 4) == 3);
