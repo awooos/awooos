@@ -1,9 +1,8 @@
 /*
 #include <ktest.h>
 #include <stdint.h>
-#include <ali/str.h>
-#include <awoo/tests.h>
 #include <stdlib.h>
+#include <awoo/tests.h>
 */
 
 void add_libc_tests()
