@@ -84,15 +84,11 @@ bool eventually_event_trigger_immediate(const char *event_name, void *data,
     void *tmp_data;
 
     // If no group is found, return false.
-    if (group == NULL) {
-        return false;
-    }
-
     // If there's no registered event handlers, return false.
-    if (group->number_of_handlers == 0) {
+    if (group == NULL || group->number_of_handlers == 0) {
         return false;
     }
-
+    
     for (size_t i = 0; i < group->number_of_handlers; i++) {
         if (data != NULL && data_size != 0) {
             // If data and size is provided, then copy it.
