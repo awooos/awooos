@@ -67,7 +67,7 @@ void hal_exception_handler(Registers *r)
     if(r->int_no < 32){
         panic((char*)exceptions[r->int_no]);
     } else {
-        eventually_event_trigger(irq_names[r->int_no - 32], r, sizeof(Registers));
+        event_trigger(irq_names[r->int_no - 32], r, sizeof(Registers));
     }
 
     // Interrupts 32+ are IRQs, so we need to send EOIs to the interrupt

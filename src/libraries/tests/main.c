@@ -11,12 +11,12 @@
     };
 
 void tests_shutdown_success() {
-    eventually_event_trigger_immediate("HAL shutdown hard", NULL, 0);
+    event_trigger("HAL shutdown hard", NULL, 0);
 }
 
 void tests_shutdown_failure()
 {
-    eventually_event_trigger_immediate("HAL shutdown test fail", NULL, 0);
+    event_trigger("HAL shutdown test fail", NULL, 0);
 }
 
 void run_tests()
@@ -50,5 +50,5 @@ void run_tests()
 
 void tests_register_events()
 {
-    eventually_event_watch("tests run", run_tests);
+    event_watch("tests run", run_tests);
 }
