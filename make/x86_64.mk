@@ -20,5 +20,3 @@ override CFLAGS += -mcmodel=large -mno-red-zone -mno-mmx -mno-sse -mno-sse2
 override CFLAGS  += -m64
 override LDFLAGS += -melf_x86_64
 override ASFLAGS += -felf64
-
-QEMU ?= qemu-system-x86_64

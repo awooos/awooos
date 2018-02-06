@@ -28,6 +28,8 @@ AWOO_MAKE_CONFIG ?= config.mk
 include ${AWOO_MAKE_CONFIG}
 include make/${TARGET}.mk
 
+QEMU    ?= qemu-system-${TARGET}
+
 ifeq (${BUILD_TYPE},test)
 # 1. Don't reboot on exit.
 # 2. Add isa-debug-exit device, to allow to have qemu exit with a non-zero exit status.
