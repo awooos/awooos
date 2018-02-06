@@ -8,12 +8,12 @@ void greeter_display_greeting(UNUSED const char *event_name, UNUSED void *data,
 {
     kprint(AWOO_INFO);
 
-    eventually_event_trigger_immediate("HAL metadata print", NULL, 0);
+    event_trigger("HAL metadata print", NULL, 0);
 
     kprint("\r\n\r\n");
 }
 
 void greeter_register_events()
 {
-    eventually_event_watch("greeter display", greeter_display_greeting);
+    event_watch("greeter display", greeter_display_greeting);
 }

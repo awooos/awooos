@@ -16,9 +16,8 @@ typedef struct eventually_event_group {
     EvEventHandler *handlers[EVENTUALLY_MAX_HANDLERS_PER_GROUP];
 } EvEventGroup;
 
-bool eventually_event_watch(const char *event_name, EvEventHandler *handler);
-bool eventually_event_trigger(const char *event_name, void *data, size_t data_size);
-bool eventually_event_trigger_immediate(const char *event_name, void *data,
-        size_t data_size);
+bool event_watch(const char *event_name, EvEventHandler *handler);
+bool event_trigger(const char *event_name, void *data, size_t data_size);
+bool event_trigger_async(const char *event_name, void *data, size_t data_size);
 
 #endif

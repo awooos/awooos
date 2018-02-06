@@ -7,7 +7,7 @@
 #include "metadata.h"
 
 #define REGISTER_HANDLER(name, callback) \
-    eventually_event_watch(name, &callback)
+    event_watch(name, &callback)
 
 void hal_register_events()
 {

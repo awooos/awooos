@@ -114,14 +114,14 @@ void hal_init()
 
         ali_init(&dmm_malloc, &dmm_free, &dmm_realloc);
 
-        eventually_event_trigger_immediate("HAL interrupts enable", NULL, 0);
+        event_trigger("HAL interrupts enable", NULL, 0);
     }
 
     hal_initialized = true;
 }
 
 int kprint(const char *string) {
-    eventually_event_trigger_immediate("kernel print", (char*)string, 0);
+    event_trigger("kernel print", (char*)string, 0);
 
     return 0;
 }
