@@ -1,7 +1,7 @@
 #!/bin/bash
 
 if [ -z "${WHALEDO_UID}" ]; then
-  WHALEDO_UID=$(id -u)
+  WHALEDO_UID=$UID
 fi
 
 docker run -v "$(pwd):/tmp/work" -w /tmp/work --env-file env.whaledo -u $WHALEDO_UID whaledo/os-development-x86 make "$@"
