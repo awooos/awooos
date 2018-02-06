@@ -1,7 +1,7 @@
-#!/usr/bin/env python
+#!/bin/bash
 
-import sys
-import whaledo
+if [ -z "${WHALEDO_UID}" ]; then
+  WHALEDO_UID=$UID
+fi
 
-exit_code = whaledo.run("os-development-x86", ["make"] + sys.argv[1:])
-exit(exit_code)
+docker run -v "$(pwd):/tmp/work" -w /tmp/work --env-file env.whaledo -u $WHALEDO_UID whaledo/os-development-x86 make "$@"
