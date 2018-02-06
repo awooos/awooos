@@ -8,35 +8,35 @@
 #include "header.h"
 #include "instance.h"
 
-DMM_MallocHeader *global_instance = DMM_UNASSIGNED_REGION;
+DMM_MallocHeader *dmm_global_instance = DMM_UNASSIGNED_REGION;
 
 void dmm_add_memory_region(void *start, size_t length)
 {
-    void *result = dmm_instance_add_memory_region(global_instance, start, length);
+    void *result = dmm_instance_add_memory_region(dmm_global_instance, start, length);
 
-    if (global_instance == DMM_UNASSIGNED_REGION || global_instance == NULL) {
+    if (dmm_global_instance == DMM_UNASSIGNED_REGION || dmm_global_instance == NULL) {
         if (result != DMM_UNASSIGNED_REGION && result != NULL) {
-            global_instance = result;
+            dmm_global_instance = result;
         }
     }
 }
 
 DMM_MallocHeader *dmm_get_first_free_chunk(size_t size)
 {
-    return dmm_instance_get_first_free_chunk(global_instance, size);
+    return dmm_instance_get_first_free_chunk(dmm_global_instance, size);
 }
 
 void *dmm_malloc(size_t size)
 {
-    return dmm_instance_malloc(global_instance, size);
+    return dmm_instance_malloc(dmm_global_instance, size);
 }
 
 void dmm_free(void *ptr)
 {
-    dmm_instance_free(global_instance, ptr);
+    dmm_instance_free(dmm_global_instance, ptr);
 }
 
 void *dmm_realloc(void *ptr, size_t size)
 {
-    return dmm_instance_realloc(global_instance, ptr, size);
+    return dmm_instance_realloc(dmm_global_instance, ptr, size);
 }

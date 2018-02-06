@@ -9,6 +9,7 @@ void add_dmm_tests()
     // Global instance tests
     TEST(dmm_malloc);
     TEST(dmm_free_sets_header);
+    TEST(dmm_allocate_the_universe);
 
     // Local instance tests
     TEST(dmm_instance_add_region);
