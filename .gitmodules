@@ -1,5 +1,5 @@
 [submodule "src/libraries/dmm-i386"]
-	path = src/libraries/dmm-i386
+	path = src/libraries/dmm
 	url = https://github.com/awooos/dmm.git
 [submodule "src/libraries/flail"]
 	path = src/libraries/flail
