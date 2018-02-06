@@ -41,7 +41,7 @@ endif
 # Have src/kernel.exe use the target-specific linker script.
 KERNEL_EXE_LDFLAGS := -T src/link-${TARGET}.ld
 # Have src/kernel.exe link to the various libraries necessary.
-KERNEL_EXE_LIBRARIES += -l :bootstrap-${TARGET}.a -l :tests.a -l :ktest.a -l :eventually.a -l :flail.a -l :hal-${TARGET}.a -l :dmm.a -l :flail.a -l :ali.a -l :greeter.a
+KERNEL_EXE_LIBRARIES += -l :tests.a -l :ktest.a -l :eventually.a -l :flail.a -l :hal-${TARGET}.a -l :dmm.a -l :flail.a -l :ali.a -l :greeter.a
 
 
 KERNEL_EXE_LIBRARIES += ${KERNEL_EXE_LIBRARIES_APPEND}
@@ -93,22 +93,6 @@ make/.mk:
 
 # Any directory directly under src/libraries/ is treated as a library.
 libraries: $(shell find src/libraries -mindepth 1 -type d -exec printf "{}.a " \;)
-#libraries: generic_libraries target_libraries
-
-#generic_libraries: $(shell find src/libraries -mindepth 1 -type d -not -name "*-*" -exec printf "{}.a " \;)
-#target_libraries: $(shell find src/libraries -mindepth 1 -type d -wholename "src/libraries/*-${TARGET}" -exec printf "{}.a " \;)
-
-# ASSUMPTION: Any module with a hyphen in the name are platform-specific.
-#
-# For each directory in src/modules/ that does not include a hyphen, it
-# includes that module. So, e.g., src/modules/libc becomes
-# src/modules/libc.a.
-#
-# For each directory that matches src/modules/*-${TARGET}, it includes
-# that module.
-# (Using the same src/modules/X -> src/modules/X.a rule as above.)
-#modules: $(shell find src/modules -mindepth 1 -type d -not -name "*-*" -exec printf {}.exe\  \;) $(shell find src/modules -mindepth 1 -type d -wholename "src/modules/*-${TARGET}" -exec printf {}.a\  \;)
-
 
 iso: src/kernel.exe libraries
 	mkdir -p ${ISO_DIR}
