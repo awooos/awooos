@@ -5,7 +5,5 @@ cd $DIR/../..
 
 # Hard-code UID to 1000 so Jenkins is happy.
 export WHALEDO_UID=1000
-export BUILD_TYPE=nightly
-export NAME_SUFFIX="-$(date +'%Y-%m-%d')"
 
-./bin/make iso
+./bin/make BUILD_TYPE=nightly NAME_SUFFIX="-$(date +'%Y-%m-%d')" iso
