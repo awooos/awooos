@@ -7,6 +7,8 @@
 #include <stdint.h>
 #include "header.h"
 
+extern DMM_MallocHeader *dmm_global_instance;
+
 typedef void *(DMM_MallocFn)(size_t size);
 typedef void (DMM_FreeFn)(void *ptr);
 typedef void *(DMM_ReallocFn)(void *ptr, size_t size);
