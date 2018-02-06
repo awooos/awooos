@@ -14,12 +14,11 @@ Notable features:
 
 ## Development Dependencies
 
+* Bash
 * Docker
-* Python, with pip
 
 # Development
 
-    $ pip install whaledo # Required for ./bin/make.
     $ ./bin/make clean test
 
 This'll run the test suite in Docker and print the results.
