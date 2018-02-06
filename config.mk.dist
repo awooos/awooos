@@ -1,4 +1,5 @@
-TARGET  := i386
+# Use ?= for TARGET, so it can be overridden on the command line.
+TARGET  ?= i386
 
 CC      := clang
 AS      := nasm
@@ -6,10 +7,7 @@ AR      := ar
 RANLIB  := ranlib
 LD      := ld
 
-QEMU    := qemu-system-i386
 BOCHS   := bochs
 
 # NOTE: xorriso, mkisofs, _and_ genisoimage may all have different defaults.
 MKISOFS := xorriso -as mkisofs
-
-# DOCKERHUB_TRIGGER_TOKEN := INSERT TOKEN HERE
