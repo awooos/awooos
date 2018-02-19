@@ -118,7 +118,7 @@ size_t test_ali_signedness_assertions()
     TEST_ASSERTIONS_RETURN();
 }
 
-void add_ali_str_tests()
+void add_ali_number_tests()
 {
     TEST(ali_n_to_str_assertions);
     TEST(ali_is_number);
