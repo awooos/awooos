@@ -1,11 +1,7 @@
-/*
-#include <ktest.h>
-#include <stdint.h>
-#include <stdlib.h>
-#include <awoo/tests.h>
-*/
+#include "main_test.h"
 
-void add_libc_tests()
+void add_ali_tests()
 {
-    // TODO: Tests. (All of the tests originally here were moved to dmm.)
+    add_ali_str_tests();
+    add_ali_number_tests();
 }
