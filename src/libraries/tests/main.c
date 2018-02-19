@@ -24,8 +24,7 @@ void run_tests()
     bool all_tests_passed;
 
     ADD_TESTS(hal);
-    ADD_TESTS(libc);
-    ADD_TESTS(ali_str);
+    ADD_TESTS(ali);
     ADD_TESTS(dmm);
 
     all_tests_passed = test_run_all();
