@@ -1,7 +1,7 @@
 #include <awoo/build_info.h>
 #include <awoo/tests.h>
 #include <ktest.h>
-#include <eventually.h>
+#include <ali/event.h>
 #include <dmm.h>
 
 #define ADD_TESTS(TEST_CATEGORY) { \

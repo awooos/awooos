@@ -1,7 +1,7 @@
 #include <awoo.h>
 #include <ali.h>
 #include <dmm.h>
-#include <eventually.h>
+#include <ali/event.h>
 #include <flail.h>
 #include <kernel.h>
 #include <stddef.h>
