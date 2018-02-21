@@ -8,9 +8,6 @@
 // Mark a function as deprecated.
 #define DEPRECATED __attribute__((deprecated))
 
-// Specify a function should never return.
-#define noreturn __attribute__((noreturn)) void
-
 /* ==== Function pseudo modifiers. ==== */
 // These indicate intent without changing functionality.
 #define MAY_PANIC

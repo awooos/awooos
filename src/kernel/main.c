@@ -1,8 +1,9 @@
+#include <stdnoreturn.h>
 #include <ali/event.h>
 #include <kernel.h>
 #include <awoo/modifiers.h>
 
-noreturn kernel_main()
+noreturn void kernel_main()
 {
     greeter_register_events();
     tests_register_events();
