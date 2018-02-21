@@ -5,7 +5,7 @@
 
 // ASSUMPTION: No more than 50 events, and no more than 50 handlers per event.
 
-static AliEventGroup event_groups[EVENTUALLY_MAX_EVENT_GROUPS + 1] = {
+static AliEventGroup event_groups[ALI_EVENT_MAX_EVENT_GROUPS + 1] = {
     0, 0, 0, 0, 0, /*  5 */ 0, 0, 0, 0, 0, /* 10 */
     0, 0, 0, 0, 0, /* 15 */ 0, 0, 0, 0, 0, /* 20 */
     0, 0, 0, 0, 0, /* 25 */ 0, 0, 0, 0, 0, /* 30 */
@@ -16,12 +16,12 @@ static AliEventGroup event_groups[EVENTUALLY_MAX_EVENT_GROUPS + 1] = {
 
 static size_t number_of_events = 0;
 
-AliEventGroup *_eventually_create_group(const char *event_name)
+AliEventGroup *_ali_event_create_group(const char *event_name)
 {
     AliEventGroup *group;
 
     // Too many events. :(
-    if (number_of_events > EVENTUALLY_MAX_EVENT_GROUPS) {
+    if (number_of_events > ALI_EVENT_MAX_EVENT_GROUPS) {
         return NULL;
     }
 
@@ -35,7 +35,7 @@ AliEventGroup *_eventually_create_group(const char *event_name)
     return group;
 }
 
-AliEventGroup *_ali_eventually_find_or_create_group(const char *event_name)
+AliEventGroup *_ali_event_find_or_create_group(const char *event_name)
 {
     AliEventGroup *group;
 
@@ -61,7 +61,7 @@ bool event_watch(const char *event_name, AliEventHandler *handler)
     }
 
     // If there's too many handlers, return false.
-    if (group->number_of_handlers > EVENTUALLY_MAX_HANDLERS_PER_GROUP) {
+    if (group->number_of_handlers > ALI_EVENT_MAX_HANDLERS_PER_GROUP) {
         return false;
     }
 
