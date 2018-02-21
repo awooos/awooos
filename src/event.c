@@ -1,7 +1,7 @@
 #include <stdbool.h>
 #include <stdlib.h>
 #include <string.h>
-#include <ali/events.h>
+#include <ali/event.h>
 
 // ASSUMPTION: No more than 50 events, and no more than 50 handlers per event.
 
