@@ -1,7 +1,7 @@
 #include <awoo/modifiers.h>
 #include <awoo.h>
 #include <kernel.h>
-#include <eventually.h>
+#include <ali/event.h>
 
 void greeter_display_greeting(UNUSED const char *event_name, UNUSED void *data,
         UNUSED size_t data_size)
