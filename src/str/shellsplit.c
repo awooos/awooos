@@ -1,4 +1,4 @@
-#include <stdint.h>
+#include <stddef.h>
 #include <stdlib.h>
 #include <string.h>
 
@@ -7,23 +7,23 @@
 char **shellsplit(char *input)
 {
     char *str = input;
-    int len = strlen(str); 
-    char *buffer = malloc(len);
+    size_t len = strlen(str); 
+    char *buffer = ali_malloc(len);
 
     // Storage for pieces
-    int piece_idx = 0;
-    int piece_length = 0;
-    char **pieces = malloc(sizeof(char *) * ALI_SPLIT_MAX_PIECES);
-    for (int i = 0; i < ALI_SPLIT_MAX_PIECES; i++) {
+    size_t piece_idx = 0;
+    size_t piece_length = 0;
+    char **pieces = ali_malloc(sizeof(char *) * ALI_SPLIT_MAX_PIECES);
+    for (size_t i = 0; i < ALI_SPLIT_MAX_PIECES; i++) {
         pieces[i] = NULL;
     }
 
     // Flags
-    int in_doublequote = 0;
-    int in_singlequote = 0;
-    int in_escape = 0;
+    size_t in_doublequote = 0;
+    size_t in_singlequote = 0;
+    size_t in_escape = 0;
 
-    for (int i = 0; i < len; i++) {
+    for (size_t i = 0; i < len; i++) {
         char c = *str;
         buffer[piece_length] = c;
 
@@ -70,7 +70,7 @@ char **shellsplit(char *input)
 
                 buffer[piece_length] = 0;
                 pieces[piece_idx] = buffer;
-                buffer = malloc((len - i) + 1);
+                buffer = ali_malloc((len - i) + 1);
                 piece_length = 0;
                 piece_idx++;
                 str++;
