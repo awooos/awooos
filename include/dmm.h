@@ -4,10 +4,10 @@
 #include <stddef.h>
 
 typedef void (DMM_PanicFn)(const char *message, const char *function,
-		const char *filename, size_t line, size_t automated);
+        const char *filename, size_t line);
 
 extern DMM_PanicFn *_dmm_panic;
-#define dmm_panic(message) _dmm_panic(message, __FUNCTION__, __FILE__, __LINE__, 0)
+#define dmm_panic(message) _dmm_panic(message, __FUNCTION__, __FILE__, __LINE__)
 
 void dmm_init(DMM_PanicFn *panic_fn);
 
