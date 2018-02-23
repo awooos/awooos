@@ -35,7 +35,14 @@ void flail_stack_dump_hex(size_t *_stack)
 }
 
 void _flail_panic(const char *message, const char *function,
-                    const char* filename, size_t line, size_t automated)
+        const char *filename, size_t line)
+{
+    _flail_print_panic(message, function, filename, line);
+    flail_wait_forever();
+}
+
+void _flail_print_panic(const char *message, const char *function,
+        const char *filename, size_t line)
 {
     char buffer[UINT64_CHARS_WITH_NULL];
 
@@ -68,9 +75,5 @@ void _flail_panic(const char *message, const char *function,
         flail_print(" (");
         flail_print(function);
         flail_print(")\r\n");
-    }
-
-    if (automated == 0) {
-        flail_wait_forever();
     }
 }
