@@ -127,23 +127,30 @@ void *dmm_instance_realloc(void *instance, void *ptr, size_t size)
     size_t min_size;
 
     if (ptr == NULL) {
-        return dmm_malloc(size);
+        return dmm_instance_malloc(instance, size);
     }
 
+    // Check for memory clobbering.
     header = (DMM_MallocHeader*)(ptr) - 1;
     if (header->magic != DMM_HEADER_MAGIC) {
         dmm_panic("memory region header had invalid magic");
     }
 
-    // ASSUMPTION: dmm_malloc() zeroes allocated memory.
-    new_ptr = dmm_malloc(size);
-    min_size = (size < header->size) ? size : header->size;
-
+    // Allocate new memory chunk.
+    new_ptr = dmm_instance_malloc(instance, size);
     if (new_ptr == NULL) {
         return NULL;
     }
 
+    // Zero new memory chunk, to prevent data leakage.
+    memset(new_ptr, 0, size);
+
+    // Copy data to new memory address.
+    min_size = (size < header->size) ? size : header->size;
     memcpy(new_ptr, ptr, min_size);
+
+    // Release the original allocation.
+    free(ptr);
 
     return new_ptr;
 }
