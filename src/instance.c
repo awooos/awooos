@@ -150,7 +150,7 @@ void *dmm_instance_realloc(void *instance, void *ptr, size_t size)
     memcpy(new_ptr, ptr, min_size);
 
     // Release the original allocation.
-    free(ptr);
+    dmm_instance_free(instance, ptr);
 
     return new_ptr;
 }
