@@ -15,22 +15,14 @@ void *memcpy(void *dest, const void *src, size_t n)
     return dest;
 }
 
-// NOTE: memmove_tmp() is nonstandard!
-void *memmove_tmp(void *dest, const char *src, size_t n, void *tmp)
+void *memmove(void *dest, const void *src, size_t n)
 {
-    memcpy(tmp, src, n);
-    memcpy(dest, tmp, n);
+    uint8_t tmp[n];
+    memcpy(&tmp, src, n);
+    memcpy(dest, &tmp, n);
 
-    return tmp;
+    return dest;
 }
-
-
-/*void *memmove(void *dest, const char *src, size_t n)
-{
-    void *tmp = ali_malloc(n);
-
-    return memmove_tmp(dest, src, n, tmp);
-}*/
 
 void *memset(void *s, int c, size_t n)
 {
