@@ -49,6 +49,20 @@ def kernel_source(components):
 
     return kernel_source
 
+def makefile_include_source(component):
+    return "-I {}/include".format(component["name"])
+
+def makefile_source(components):
+    with open("data/Makefile.tinker.template", "r") as f:
+        template = f.read()
+
+    data = {
+            "os_name": "????",
+            "includes": " ".join(map(makefile_include_source, components)),
+            }
+
+    return template.format(data)
+
 def try_split(string, separator, minimum_size, default=None):
     parts = string.split(separator)
     diff = minimum_size - len(parts)
@@ -117,31 +131,22 @@ def fetch_dependency(dependency):
 
     return dependency
 
-def generate_kernel(dependencies):
-    dependencies = list(map(fetch_dependency, dependencies))
-    component_names = list(map(lambda x: x["name"], dependencies))
-
-    source = kernel_source(dependencies)
-
-    return {
-            "source": source,
-            "dependencies": dependencies,
-            }
-
-if len(sys.argv) != 3 or sys.argv[1] == "--help" or sys.argv[1] == "-h":
-    print("Usage: tinker.py tinker.json output_file.c".format(sys.argv[0]))
+if len(sys.argv) != 4 or sys.argv[1] == "--help" or sys.argv[1] == "-h":
+    print("Usage: tinker.py tinker.json output_file.c Makefile.tinker".format(sys.argv[0]))
     sys.exit(1)
 
 config_file = sys.argv[1]
 output_file = sys.argv[2]
+makefile_file = sys.argv[3]
 
 with open(config_file, "r") as f:
-    dependencies = json.load(f)
+    raw_dependencies = json.load(f)
 
-kernel = generate_kernel(dependencies)
+dependencies = list(map(fetch_dependency, raw_dependencies))
+component_names = list(map(lambda x: x["name"], dependencies))
 
 with open(output_file, "w") as f:
-    f.write(kernel["source"])
+    f.write(kernel_source(dependencies))
 
 print("Generated kernel with:")
 for dep in kernel["dependencies"]:
@@ -152,5 +157,7 @@ print("")
 
 print("Output file: {}".format(output_file))
 
+with open(makefile_file, "w") as f:
+    f.write(makefile_source(dependencies))
 
-
+print("Makefile:    {}".format(makefile_file))
