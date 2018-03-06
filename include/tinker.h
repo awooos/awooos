@@ -15,7 +15,7 @@ typedef struct TestCase_s {
     size_t (*func) ();
 } TestCase;
 
-void tinker_init(TinkerPrintFN *_printfn);
+void tinker_init(TinkerPrintFn *_printfn);
 void _tinker_add_test(const char *n, size_t (*fn)());
 bool tinker_run_tests();
 void _tinker_print_results(size_t status,
