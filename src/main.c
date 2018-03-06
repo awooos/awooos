@@ -1,4 +1,4 @@
-#include <ktest.h>
+#include <tinker.h>
 #include <stddef.h>
 #include <kernel.h>
 #include <ali/number.h>
@@ -44,12 +44,12 @@ static const char *test_status_messages[4] = {
     "Assertion failed",
 };
 
-void test_init(KTest_PrintFN *_printfn)
+void tinker_init(TinkerPrintFN *_printfn)
 {
-    ktest_print = _printfn;
+    tinker_print = _printfn;
 }
 
-void test_add(const char *name, size_t (*function_ptr)())
+void _tinker_add_test(const char *name, size_t (*function_ptr)())
 {
     size_t idx = last_test_index;
 
@@ -59,7 +59,7 @@ void test_add(const char *name, size_t (*function_ptr)())
     last_test_index += 1;
 }
 
-void test_print_results(size_t status,
+void _tinker_print_results(size_t status,
         const char *message, const char *file, size_t line)
 {
     if(status == TEST_SUCCESS) {
@@ -72,40 +72,40 @@ void test_print_results(size_t status,
 
 
     if(status == TEST_SUCCESS) {
-        ktest_print(".");
+        tinker_print(".");
     } else {
-        ktest_print("\n");
+        tinker_print("\n");
 
         // X) <test name>
-        ktest_print(n_to_str(total + 1));
-        ktest_print(") ");
+        tinker_print(n_to_str(total + 1));
+        tinker_print(") ");
 
-        ktest_print(test_status_messages[status]);
-        ktest_print(": ");
+        tinker_print(test_status_messages[status]);
+        tinker_print(": ");
 
-        ktest_print(test_cases[ran].name);
-        ktest_print("\n");
-        ktest_print("        ");
+        tinker_print(test_cases[ran].name);
+        tinker_print("\n");
+        tinker_print("        ");
 
-        ktest_print(message);
-        ktest_print("\n");
+        tinker_print(message);
+        tinker_print("\n");
 
         // Padding to line up with prior lines.
-        ktest_print("   ");
+        tinker_print("   ");
 
-        ktest_print("In ");
-        ktest_print(file);
-        ktest_print(":");
-        ktest_print(n_to_str(line));
-        ktest_print("\n");
+        tinker_print("In ");
+        tinker_print(file);
+        tinker_print(":");
+        tinker_print(n_to_str(line));
+        tinker_print("\n");
     }
 }
 
-bool test_run_all()
+bool tinker_run_tests()
 {
     size_t passed_assertions;
 
-    ktest_print("\nRunning tests:\n\n");
+    tinker_print("\nRunning tests:\n\n");
 
     total = 0;
 
@@ -118,30 +118,29 @@ bool test_run_all()
         total += passed_assertions;
     }
 
-    ktest_print("\n\n");
+    tinker_print("\n\n");
 
-    ktest_print("Total tests: ");
-    ktest_print(n_to_str(total));
-    ktest_print("\n");
+    tinker_print("Total tests: ");
+    tinker_print(n_to_str(total));
+    tinker_print("\n");
 
-    ktest_print("     Passed: ");
-    ktest_print(n_to_str(passed));
-    ktest_print("\n");
+    tinker_print("     Passed: ");
+    tinker_print(n_to_str(passed));
+    tinker_print("\n");
 
-    ktest_print("     Failed: ");
-    ktest_print(n_to_str(failed));
-    ktest_print("\n");
+    tinker_print("     Failed: ");
+    tinker_print(n_to_str(failed));
+    tinker_print("\n");
 
-    ktest_print("    Skipped: ");
-    ktest_print(n_to_str(skipped));
-    ktest_print("\n\n");
+    tinker_print("    Skipped: ");
+    tinker_print(n_to_str(skipped));
+    tinker_print("\n\n");
     /*printf("Total tests: %i\n", ran);
       printf("     Passed: %i\n", passed);
       printf("     Failed: %i\n", failed);
       printf("    Skipped: %i\n\n", skipped);*/
 
     if (failed > 0) {
-        ktest_print("Encountered failing tests; not booting.\n");
         return false;
     }
 
