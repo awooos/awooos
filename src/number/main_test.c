@@ -1,4 +1,4 @@
-#include <ktest.h>
+#include <tinker.h>
 #include <stdint.h>
 #include <ali/number.h>
 #include <awoo/tests.h>
