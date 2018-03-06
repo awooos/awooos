@@ -3,6 +3,9 @@
 
 #include <awoo/modifiers.h>
 
+void hal_shutdown(UNUSED const char *name, UNUSED void *data,
+        UNUSED size_t length);
+
 void hal_shutdown_hard(UNUSED const char *name, UNUSED void *data,
         UNUSED size_t length);
 

@@ -1,16 +1,11 @@
+#include "interrupts.h"
+#include "ports.h"
+#include <ali/event.h>
 #include <awoo/modifiers.h>
 #include <kernel.h>
-#include "ports.h"
-#include "interrupts.h"
 
-void hal_shutdown()
-{
-    kprint("\r\n");
-    kprint("TODO: Implement an ACPI-based hal_shutdown().");
-}
-
-// Hard shutdown: Disable interrupts then do a keyboard RESET, instead of using
-// ACPI.
+// Hard shutdown: Disable interrupts then do a keyboard RESET, instead
+// of using ACPI.
 void hal_shutdown_hard(UNUSED const char *name, UNUSED void *data,
         UNUSED size_t length)
 {
@@ -32,11 +27,20 @@ void hal_shutdown_hard(UNUSED const char *name, UNUSED void *data,
     hal_outb(0x60, 0xFE); // Keyboard RESET.
 }
 
+// Normal shutdown.
+// TODO: Implement an ACPI-based hal_shutdown().
+void hal_shutdown()
+{
+    event_trigger("HAL shutdown hard", NULL, 0);
+}
+
+// QEMU-specific shutdown which, if ran in qemu, will return a nonzero
+// exit code.
+//
+// If ran outside of QEMU, it falls back to a hard shutdown.
 void hal_shutdown_test_fail(UNUSED const char *name, UNUSED void *data,
         UNUSED size_t length)
 {
-    // If a test failed, try qemu-specific shutdown that returns a nonzero
-    // exit code, then fall back to an ormal hard shutdown.
     hal_outb(0xf4, 0x00);
     hal_shutdown_hard(name, data, length);
 }
