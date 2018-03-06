@@ -44,7 +44,7 @@ static const char *test_status_messages[4] = {
     "Assertion failed",
 };
 
-void tinker_init(TinkerPrintFN *_printfn)
+void tinker_init(TinkerPrintFn *_printfn)
 {
     tinker_print = _printfn;
 }
