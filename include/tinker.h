@@ -8,7 +8,7 @@
 #include <stdlib.h>
 
 typedef int (TinkerPrintFn)(const char *string);
-static const TinkerPrintFn *tinker_print = NULL;
+static TinkerPrintFn *tinker_print = NULL;
 
 typedef struct TestCase_s {
     char name[1024];
