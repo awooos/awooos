@@ -120,8 +120,8 @@ size_t test_ali_signedness_assertions()
 
 void add_ali_number_tests()
 {
-    TEST(ali_n_to_str_assertions);
-    TEST(ali_is_number);
-    TEST(ali_signedness_assertions);
+    tinker_add_test(ali_n_to_str_assertions);
+    tinker_add_test(ali_is_number);
+    tinker_add_test(ali_signedness_assertions);
 
 }

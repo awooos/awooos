@@ -6,6 +6,6 @@
 
 void add_ali_str_tests()
 {
-    TEST(ali_str_shellsplit);
-    TEST(ali_str_charsplit);
+    tinker_add_test(ali_str_shellsplit);
+    tinker_add_test(ali_str_charsplit);
 }
