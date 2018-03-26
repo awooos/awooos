@@ -1,4 +1,4 @@
-#include <ktest.h>
+#include <tinker.h>
 #include <stdint.h>
 #include <awoo/tests.h>
 
@@ -17,5 +17,5 @@ size_t test_hal_assertions()
 
 void add_hal_tests()
 {
-    TEST(hal_assertions);
+    tinker_add_test(hal_assertions);
 }

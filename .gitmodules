@@ -7,3 +7,6 @@
 [submodule "src/libraries/ali"]
 	path = src/libraries/ali
 	url = https://github.com/awooos/ali.git
+[submodule "src/libraries/tinker"]
+	path = src/libraries/tinker
+	url = https://github.com/awooos/tinker.git

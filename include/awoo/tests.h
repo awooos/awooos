@@ -4,9 +4,8 @@
 //void add_kernel_tests();
 void add_ali_tests();
 void add_hal_tests();
-//void add_ktest_tests(); // Let's get meta!
+//void add_tinker_tests();
 void add_libc_tests();
-
 
 void test_flail_intentional_panic();
 
