@@ -8,7 +8,7 @@
 #include <stdlib.h>
 
 typedef int (TinkerPrintFn)(const char *string);
-static TinkerPrintFn *tinker_print = NULL;
+static TinkerPrintFn *_tinker_print = NULL;
 
 typedef struct TestCase_s {
     char name[1024];
@@ -20,6 +20,8 @@ void _tinker_add_test(const char *n, size_t (*fn)());
 bool tinker_run_tests();
 void _tinker_print_results(size_t status,
         const char *message, const char *file, size_t line);
+
+int tinker_print(const char *string);
 
 #define tinker_add_test(NAME) _tinker_add_test(#NAME, test_##NAME)
 
