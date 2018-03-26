@@ -122,6 +122,10 @@ bochs: iso
 vbox: iso
 	VirtualBox --startvm ${NAME} --debug-statistics --debug-command-line --start-running
 
+# Generate a nightly build.
+nightly:
+	$(MAKE) BUILD_TYPE=nightly NAME_SUFFIX="-$(shell date +'%Y-%m-%d')" iso
+
 # Fetch all submodules.
 fetch-submodules:
 	git submodule update --recursive
