@@ -122,6 +122,14 @@ bochs: iso
 vbox: iso
 	VirtualBox --startvm ${NAME} --debug-statistics --debug-command-line --start-running
 
+# Fetch all submodules.
+fetch-submodules:
+	git submodule update --recursive
+
+# Update to the latest available versions of all submodules.
+update-submodules:
+	git submodule update --recursive --remote
+
 clean:
 	@rm -rf ./isofs
 	@find ./src -name '*.o'   -delete
@@ -131,7 +139,7 @@ clean:
 	@find ./src -name '*.d'   -delete
 	@find ./iso -name '*.iso' -delete
 
-.PHONY: all iso libraries modules clean test qemu qemu-monitor clean dockerhub-release
+.PHONY: all iso libraries modules clean test qemu qemu-monitor clean fetch-submodules update-submodules
 
 # Don't auto-delete .o files.
 .SECONDARY: ${OBJFILES}
