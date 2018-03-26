@@ -29,7 +29,8 @@ void hal_shutdown_hard(UNUSED const char *name, UNUSED void *data,
 
 // Normal shutdown.
 // TODO: Implement an ACPI-based hal_shutdown().
-void hal_shutdown()
+void hal_shutdown(UNUSED const char *name, UNUSED void *data,
+        UNUSED size_t length)
 {
     event_trigger("HAL shutdown hard", NULL, 0);
 }

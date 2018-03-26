@@ -22,6 +22,7 @@ void hal_register_events()
     REGISTER_HANDLER("HAL interrupts disable",  hal_disable_interrupts);
 
     REGISTER_HANDLER("HAL shutdown",            hal_shutdown);
+    REGISTER_HANDLER("HAL shutdown hard",       hal_shutdown_hard);
     REGISTER_HANDLER("HAL shutdown test fail",  hal_shutdown_test_fail);
 
     //REGISTER_HANDLER("IRQ 0 timer",             scheduler_process_next);
