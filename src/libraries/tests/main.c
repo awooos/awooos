@@ -1,8 +1,8 @@
 #include <ali/event.h>
 #include <awoo/build_info.h>
-#include <awoo/tests.h>
 #include <dmm.h>
-#include <stdnoreturn.h>
+#include <flail.h>
+#include <hal.h>
 #include <tinker.h>
 
 #define ADD_TESTS(TEST_CATEGORY) { \
@@ -11,7 +11,7 @@
         kprint("Done!\n");                              \
     };
 
-noreturn void test_shutdown(bool all_tests_passed)
+void test_shutdown(bool all_tests_passed)
 {
     // If a test failed, do a test-fail shutdown.
     if (!all_tests_passed) {
