@@ -1,8 +1,8 @@
 #include "interrupts.h"
 #include "ports.h"
 #include <ali/event.h>
-#include <awoo/modifiers.h>
-#include <kernel.h>
+#include <ali/modifiers.h>
+#include <hal.h>
 
 // Hard shutdown: Disable interrupts then do a keyboard RESET, instead
 // of using ACPI.

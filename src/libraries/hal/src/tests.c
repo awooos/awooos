@@ -1,6 +1,5 @@
 #include <tinker.h>
 #include <stdint.h>
-#include <awoo/tests.h>
 
 #define MULTIBOOT_MAGIC 0x2BADB002
 

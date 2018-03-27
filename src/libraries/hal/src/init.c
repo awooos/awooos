@@ -3,7 +3,8 @@
 #include <dmm.h>
 #include <ali/event.h>
 #include <flail.h>
-#include <kernel.h>
+#include <hal.h>
+#include "magic.h"
 #include <stddef.h>
 #include <stdbool.h>
 #include "basic_display.h"
@@ -14,13 +15,12 @@
 #include "idt.h"
 #include "multiboot.h"
 
-static uint32_t magic;
-static void *arg;
+static bool hal_initialized = false;
+
+Hal_PanicFn *_hal_panic = NULL;
 
 extern size_t kernel_start;
 extern size_t kernel_end;
-
-static bool hal_initialized = false;
 
 size_t hal_get_kernel_start()
 {
@@ -30,17 +30,6 @@ size_t hal_get_kernel_start()
 size_t hal_get_kernel_end()
 {
     return (size_t)(&kernel_end) + 1;
-}
-
-uint32_t hal_get_magic()
-{
-    return magic;
-}
-
-void hal_store_magic(uint32_t magic_, void *arg_)
-{
-    magic = magic_;
-    arg   = arg_;
 }
 
 void hal_init()
@@ -56,9 +45,10 @@ void hal_init()
 
         flail_init(AWOO_INFO, &kprint);
         dmm_init(&_flail_panic);
+        _hal_panic = _flail_panic;
 
         // Get the Multiboot info struct
-        MultibootInfo *multiboot_info = ((MultibootInfo*)arg);
+        MultibootInfo *multiboot_info = ((MultibootInfo*)hal_get_arg());
 
         // If bits 4 and 5 are set, Multiboot did something bad!
         // Bit 4 is set if a.out header is passed, bit 5 is set if ELF header
@@ -68,23 +58,23 @@ void hal_init()
         if (((multiboot_info->flags & (1 << 4)) != 0)
             && ((multiboot_info->flags & (1 << 5)) != 0)) {
 
-            panic("multiboot passed flags with bits 4 and 5 set");
+            hal_panic("multiboot passed flags with bits 4 and 5 set");
         }
 
         // We don't want a.out stuff as we're compiled to ELF
         if ((multiboot_info->flags & (1 << 4)) != 0) {
-            panic("multiboot passed a.out header when we're expecting ELF");
+            hal_panic("multiboot passed a.out header when we're expecting ELF");
         }
 
         // If we don't have ELF section header info, it'll be impossible to do
         // parsing of stabs later on
         if ((multiboot_info->flags & (1 << 5)) == 0) {
-            panic("multiboot didn't pass ELF section header info");
+            hal_panic("multiboot didn't pass ELF section header info");
         }
 
         // We expect a memory map to initialize DMM
         if ((multiboot_info->flags & (1 << 6)) == 0) {
-            panic("multiboot didn't pass a memory map");
+            hal_panic("multiboot didn't pass a memory map");
         }
 
         // Initialize DMM with our available memory regions (as told by multiboot)
@@ -118,10 +108,4 @@ void hal_init()
     }
 
     hal_initialized = true;
-}
-
-int kprint(const char *string) {
-    event_trigger("kernel print", (char*)string, 0);
-
-    return 0;
 }

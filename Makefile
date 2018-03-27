@@ -5,7 +5,7 @@ BUILD_TYPE ?= debug
 ISO_DIR  ?= iso/
 ISO_FILE ?= ${ISO_DIR}/${NAME}${NAME_SUFFIX}-${TARGET}-${BUILD_TYPE}.iso
 
-override C_INCLUDES += -I include -I src/libraries/dmm/include -I src/libraries/ali/include -I src/libraries/flail/include -I src/libraries/tinker/include
+override C_INCLUDES += -I include -I src/libraries/dmm/include -I src/libraries/ali/include -I src/libraries/flail/include -I src/libraries/tinker/include -I src/libraries/hal/include -I src/libraries/greeter/include -I src/libraries/tests/include
 
 override CFLAGS += -std=c11 -pedantic-errors -gdwarf-2 -nostdinc -ffreestanding -fno-stack-protector -fno-builtin -fdiagnostics-show-option -Wall -Wextra -Wpedantic -Wunused -Wformat=2 -Winit-self -Wmissing-include-dirs -Wstrict-overflow=4 -Wfloat-equal -Wwrite-strings -Wconversion -Wundef -Wtrigraphs -Wunused-parameter -Wunknown-pragmas -Wcast-align -Wswitch-enum -Waggregate-return -Wmissing-noreturn -Wmissing-format-attribute -Wpacked -Wredundant-decls -Wunreachable-code -Winline -Winvalid-pch -Wdisabled-optimization -Wsystem-headers -Wbad-function-cast -Wunused-function -Werror=implicit-function-declaration ${C_INCLUDES}
 
@@ -42,7 +42,7 @@ endif
 # Have src/kernel.exe use the target-specific linker script.
 KERNEL_EXE_LDFLAGS := -T src/link-${TARGET}.ld
 # Have src/kernel.exe link to the various libraries necessary.
-KERNEL_EXE_LIBRARIES += -l :tests.a -l :tinker.a -l :flail.a -l :hal-${TARGET}.a -l :dmm.a -l :flail.a -l :ali.a -l :greeter.a
+KERNEL_EXE_LIBRARIES += -l :tests.a -l :tinker.a -l :flail.a -l :hal.a -l :dmm.a -l :flail.a -l :ali.a -l :greeter.a
 
 # == Begin gross bullshit for only matching things for the current platform. ==
 
@@ -60,7 +60,7 @@ INCLUDE_CURRENT_TARGET_DIRECTORIES := '(' -wholename 'src/*/*-${TARGET}/*' ')'
 SRCFILES := $(shell find 'src' ${SOURCE_SUFFIXES} '(' ${EXCLUDE_ALL_TARGET_DIRECTORIES} -o ${INCLUDE_CURRENT_TARGET_DIRECTORIES} ')')
 OBJFILES := $(patsubst %.asm, %.o, $(patsubst %.c, %.o, ${SRCFILES}))
 
-BUILDINFO := $(shell ./bin/generate_build_info.sh ${BUILD_TYPE} ${TARGET} ${TEST_SECTION} > ./include/awoo/build_info.h)
+BUILDINFO := $(shell mkdir -p include/awoo && ./bin/generate_build_info.sh ${BUILD_TYPE} ${TARGET} ${TEST_SECTION} > ./include/awoo/build_info.h)
 
 all: src/kernel.exe
 

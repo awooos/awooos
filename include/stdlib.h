@@ -1,7 +1,6 @@
 #ifndef STDLIB_H
 #define STDLIB_H
 
-#include <stddef.h>
 #include <ali.h>
 
 #define malloc(size) ali_malloc(size)
