@@ -21,9 +21,8 @@ override ASFLAGS +=
 # Given that and config.mk needing to be loaded after ${TARGET}.mk,
 # (to allow config.mk to override defaults), we include it _before_
 # ${TARGET}.mk, so it's loaded afterwards.
-# 
+#
 # I hate Make so much.
-include make/despair.mk
 AWOO_MAKE_CONFIG ?= config.mk
 include ${AWOO_MAKE_CONFIG}
 include make/${TARGET}.mk
@@ -44,9 +43,6 @@ endif
 KERNEL_EXE_LDFLAGS := -T src/link-${TARGET}.ld
 # Have src/kernel.exe link to the various libraries necessary.
 KERNEL_EXE_LIBRARIES += -l :tests.a -l :tinker.a -l :flail.a -l :hal-${TARGET}.a -l :dmm.a -l :flail.a -l :ali.a -l :greeter.a
-
-
-KERNEL_EXE_LIBRARIES += ${KERNEL_EXE_LIBRARIES_APPEND}
 
 # == Begin gross bullshit for only matching things for the current platform. ==
 
@@ -83,11 +79,8 @@ make/.mk:
 %.o: %.asm
 	${AS} ${ASFLAGS} -o $@ $<
 
-%.exe: libraries ${OBJFILES}
-	@# The various ${$(call ...)} things expand in such a way that if
-	@# this rule matches src/kernel.exe, it adds the following:
-	@#   ${KERNEL_EXE_LDFLAGS} ${KERNEL_EXE_TARGETS}
-	${LD} -o $@ -L src/modules -L src/libraries ${LDFLAGS} ${$(call rule_var,$@,LDFLAGS)} ${$(call rule_var,$@,TARGETS)} $(filter $*/%,$^) ${$(call rule_var,$@,LIBRARIES)}
+src/kernel.exe: libraries ${OBJFILES}
+	${LD} -o $@ -L src/modules -L src/libraries ${LDFLAGS} ${KERNEL_EXE_LDFLAGS} src/kernel/0-start-${TARGET}.o src/kernel/main.o ${KERNEL_EXE_LIBRARIES}
 
 %.a: ${OBJFILES}
 	${AR} rc $@ $(filter $*/%,$^)
