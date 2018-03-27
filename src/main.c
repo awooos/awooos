@@ -1,6 +1,5 @@
 #include <tinker.h>
 #include <stddef.h>
-#include <kernel.h>
 #include <ali/number.h>
 #include <string.h>
 #include <stdlib.h>
