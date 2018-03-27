@@ -13,6 +13,7 @@
 /* ==== Function pseudo modifiers. ==== */
 // These indicate intent without changing functionality.
 #define MAY_PANIC
+#define NEEDS_IMPROVEMENT
 #define NONSTANDARD
 #define PARTIAL_IMPLEMENTATION
 #define UNTESTED
