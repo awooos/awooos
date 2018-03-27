@@ -1,8 +1,9 @@
-#include <stdnoreturn.h>
 #include <ali/event.h>
+#include <greeter.h>
 #include <hal.h>
-#include <kernel.h>
+#include <stdnoreturn.h>
 #include <tinker.h>
+#include <tests.h>
 
 noreturn void kernel_main()
 {
