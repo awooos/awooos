@@ -1,7 +1,6 @@
 #include <tinker.h>
 #include <stdint.h>
 #include <ali/number.h>
-#include <awoo/tests.h>
 
 size_t test_ali_n_to_str_assertions()
 {
@@ -123,5 +122,4 @@ void add_ali_number_tests()
     tinker_add_test(ali_n_to_str_assertions);
     tinker_add_test(ali_is_number);
     tinker_add_test(ali_signedness_assertions);
-
 }
