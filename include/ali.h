@@ -22,6 +22,7 @@ void ali_free(void *ptr);
 void *ali_calloc(size_t nmemb, size_t size);
 void *ali_realloc(void *ptr, size_t size);
 
-#include "src/main_test.h"
+// Tests.
+void add_ali_tests();
 
 #endif
