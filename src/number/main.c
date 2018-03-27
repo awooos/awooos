@@ -1,11 +1,12 @@
 #include <ali.h>
+#include <ali/modifiers.h>
 #include <string.h>
 #include <stdint.h>
 #include <stdbool.h>
 #include <stdlib.h>
 
 // YOLO
-uint64_t uint64_div(uint64_t a, uint64_t b)
+NEEDS_IMPROVEMENT uint64_t uint64_div(uint64_t a, uint64_t b)
 {
     uint64_t tmp = 0;
 
@@ -22,7 +23,7 @@ uint64_t uint64_div(uint64_t a, uint64_t b)
 }
 
 // YOLO × 2
-uint64_t uint64_mod(uint64_t a, uint64_t b)
+NEEDS_IMPROVEMENT uint64_t uint64_mod(uint64_t a, uint64_t b)
 {
     while (a >= b) {
         a -= b;
