@@ -15,4 +15,7 @@ void _flail_print_panic(const char *message, const char *function,
 
 #define flail_panic(message) _flail_panic(message, __FUNCTION__, __FILE__, __LINE__)
 
+// Tests.
+void test_flail_intentional_panic();
+
 #endif
