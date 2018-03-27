@@ -1,8 +1,8 @@
 #include <stdnoreturn.h>
 #include <ali/event.h>
+#include <ali/modifiers.h>
 #include <kernel.h>
 #include <tinker.h>
-#include <awoo/modifiers.h>
 
 noreturn void kernel_main()
 {
