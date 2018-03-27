@@ -1,5 +1,6 @@
 #include <stdnoreturn.h>
 #include <ali/event.h>
+#include <hal.h>
 #include <kernel.h>
 #include <tinker.h>
 

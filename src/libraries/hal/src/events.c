@@ -1,5 +1,4 @@
 #include <ali/event.h>
-#include <kernel.h>
 #include "shutdown.h"
 #include "interrupts.h"
 #include "hal_init.h"

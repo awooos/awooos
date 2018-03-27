@@ -1,4 +1,4 @@
-#include <kernel.h>
+#include <hal.h>
 #include "idt.h"
 #include "exceptions.h"
 #include "ports.h"
@@ -65,7 +65,7 @@ static const char *irq_names[16] = {
 void hal_exception_handler(Registers *r)
 {
     if(r->int_no < 32){
-        panic((char*)exceptions[r->int_no]);
+        hal_panic((char*)exceptions[r->int_no]);
     } else {
         event_trigger(irq_names[r->int_no - 32], r, sizeof(Registers));
     }
