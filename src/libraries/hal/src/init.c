@@ -5,6 +5,7 @@
 #include <flail.h>
 #include <hal.h>
 #include "magic.h"
+#include "panic.h"
 #include <stddef.h>
 #include <stdbool.h>
 #include "basic_display.h"
@@ -16,8 +17,6 @@
 #include "multiboot.h"
 
 static bool hal_initialized = false;
-
-Hal_PanicFn *_hal_panic = NULL;
 
 extern size_t kernel_start;
 extern size_t kernel_end;
@@ -45,7 +44,7 @@ void hal_init()
 
         flail_init(AWOO_INFO, &kprint);
         dmm_init(&_flail_panic);
-        _hal_panic = _flail_panic;
+        hal_init_panic(&_flail_panic);
 
         // Get the Multiboot info struct
         MultibootInfo *multiboot_info = ((MultibootInfo*)hal_get_arg());
