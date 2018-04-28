@@ -1,7 +1,7 @@
 #ifndef ALI__TEXT_H
 #define ALI__TEXT_H
 
-void print(const char *string);
-void println(const char *string);
+int print(const char *string);
+int println(const char *string);
 
 #endif
