@@ -62,6 +62,9 @@ OBJFILES := $(patsubst %.asm, %.o, $(patsubst %.c, %.o, ${SRCFILES}))
 
 BUILDINFO := $(shell mkdir -p include/awoo && ./bin/generate_build_info.sh ${BUILD_TYPE} ${TARGET} ${TEST_SECTION} > ./include/awoo/build_info.h)
 
+# Any directory directly under src/libraries/ is treated as a library.
+LIBRARIES := $(shell find src/libraries -mindepth 1 -type d -exec printf "{}.a " \;)
+
 all: src/kernel.exe
 
 # Make sure config.mk exists. This shouldn't be automated, so print an error.
@@ -79,17 +82,15 @@ make/.mk:
 %.o: %.asm
 	${AS} ${ASFLAGS} -o $@ $<
 
-src/kernel.exe: libraries ${OBJFILES}
+src/kernel.exe: ${LIBRARIES} ${OBJFILES}
 	${LD} -o $@ -L src/modules -L src/libraries ${LDFLAGS} ${KERNEL_EXE_LDFLAGS} src/kernel/start-${TARGET}.o src/kernel/main.o ${KERNEL_EXE_LIBRARIES}
 
 %.a: ${OBJFILES}
 	${AR} rc $@ $(filter $*/%,$^)
 	${RANLIB} $@
 
-# Any directory directly under src/libraries/ is treated as a library.
-libraries: $(shell find src/libraries -mindepth 1 -type d -exec printf "{}.a " \;)
-
-iso: src/kernel.exe libraries
+iso: ${ISO_FILE}
+${ISO_FILE}: src/kernel.exe ${LIBRARIES}
 	mkdir -p ${ISO_DIR}
 	cp -r assets/isofs/ ./
 	mkdir -p isofs/system isofs/libraries
@@ -136,7 +137,7 @@ clean:
 	@find ./src -name '*.d'   -delete
 	@find ./iso -name '*.iso' -delete
 
-.PHONY: all iso libraries modules clean test qemu qemu-monitor clean fetch-submodules update-submodules
+.PHONY: all iso clean test qemu qemu-monitor clean fetch-submodules update-submodules
 
 # Don't auto-delete .o files.
 .SECONDARY: ${OBJFILES}
