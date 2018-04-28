@@ -1,5 +1,6 @@
 #include <ali.h>
 #include <ali/event.h>
+#include <string.h>
 
 int print(const char *string)
 {
