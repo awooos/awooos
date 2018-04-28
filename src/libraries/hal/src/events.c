@@ -16,10 +16,6 @@ void hal_register_events()
 
     REGISTER_HANDLER("HAL metadata print", hal_metadata_print);
 
-
-    REGISTER_HANDLER("HAL interrupts enable",   hal_enable_interrupts);
-    REGISTER_HANDLER("HAL interrupts disable",  hal_disable_interrupts);
-
     REGISTER_HANDLER("HAL shutdown",            hal_shutdown);
     REGISTER_HANDLER("HAL shutdown hard",       hal_shutdown_hard);
     REGISTER_HANDLER("HAL shutdown test fail",  hal_shutdown_test_fail);

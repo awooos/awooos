@@ -4,6 +4,7 @@
 #include <ali/event.h>
 #include <flail.h>
 #include <hal.h>
+#include "interrupts.h"
 #include "magic.h"
 #include "panic.h"
 #include <stddef.h>
@@ -105,7 +106,7 @@ void hal_init()
     }
 
     ali_init(&dmm_malloc, &dmm_free, &dmm_realloc);
-    event_trigger("HAL interrupts enable", NULL, 0);
+    hal_enable_interrupts();
 
     hal_initialized = true;
 }
