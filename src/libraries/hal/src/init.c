@@ -17,9 +17,9 @@
 #include "idt.h"
 #include "multiboot.h"
 
-#define MBOOT_FLAG_A_OUT (1 << 4)
-#define MBOOT_FLAG_ELF   (1 << 5)
-#define MBOOT_FLAG_MMAP  (1 << 6)
+#define MBOOT_FLAG_A_OUT 4
+#define MBOOT_FLAG_ELF   5
+#define MBOOT_FLAG_MMAP  6
 
 static bool hal_initialized = false;
 
@@ -29,10 +29,7 @@ extern size_t kernel_end;
 static size_t hal_kernel_start = (size_t)&kernel_start;
 static size_t hal_kernel_end   = (size_t)(&kernel_end) + 1;
 
-bool hal_multiboot_flag(MultibootInfo *mbinfo, int bit)
-{
-    return ((mbinfo->flags & (1 << bit)) != 0);
-}
+#define multiboot_flag(bit) (mbinfo->flags & (1 << bit))
 
 void hal_add_mmap_entry(MultibootMemoryMapEntry *mmap_entry)
 {
@@ -84,24 +81,23 @@ void hal_init()
 
     // Multiboot a.out and ELF flags should never be set simultaneously.
     // These should never be set at the same time.
-    if (hal_multiboot_flag(mbinfo, MBOOT_FLAG_A_OUT)
-            && hal_multiboot_flag(mbinfo, MBOOT_FLAG_ELF)) {
-
+    if ( (multiboot_flag(MBOOT_FLAG_A_OUT) != 0)
+            && (multiboot_flag(MBOOT_FLAG_ELF) != 0) ) {
         hal_panic("invalid multiboot header: can't have both a.out and ELF.");
     }
 
     // We need ELF, not a.out.
-    if (hal_multiboot_flag(mbinfo, MBOOT_FLAG_A_OUT)) {
+    if (multiboot_flag(MBOOT_FLAG_A_OUT) != 0) {
         hal_panic("invalid multiboot header: expected ELF section, got a.out.");
     }
 
     // We need ELF section header information to parse STAB information.
-    if (!hal_multiboot_flag(mbinfo, MBOOT_FLAG_ELF)) {
+    if (multiboot_flag(MBOOT_FLAG_ELF) == 0) {
         hal_panic("invalid multiboot header: no ELF section provided.");
     }
 
     // We expect a memory map to initialize DMM.
-    if (!hal_multiboot_flag(mbinfo, MBOOT_FLAG_MMAP)) {
+    if (multiboot_flag(MBOOT_FLAG_MMAP) == 0) {
         hal_panic("invalid multiboot header: no memory map provided.");
     }
 
