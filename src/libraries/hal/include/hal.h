@@ -6,7 +6,6 @@ void hal_register_events();
 
 int kprint(const char *string);
 
-// Tests.
 void add_hal_tests();
 
 #endif
