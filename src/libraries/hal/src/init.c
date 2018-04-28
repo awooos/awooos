@@ -87,17 +87,23 @@ void hal_init()
                 // If we get an entry starting at 0x0, make it instead start at
                 // 0x1 and decrease it's length by 1 byte.
                 if ((size_t)mmap_entry->addr == 0) {
-                    dmm_add_memory_region((void*)0x1, mmap_entry->length - 1);
+                    mmap_entry->addr += 1;
+                    mmap_entry->length -= 1;
                 }
-                else if ((size_t)mmap_entry->addr == hal_get_kernel_start()) {
-                    if (((size_t)mmap_entry->addr + mmap_entry->length) >= hal_get_kernel_end()) {
-                        size_t len = mmap_entry->length - (hal_get_kernel_end() - hal_get_kernel_start());
-                        dmm_add_memory_region((void*)hal_get_kernel_end(), len);
-                    }
+
+                // If we get an entry that contains the kernel, just skip
+                // it for the sake of simplicity.
+                //
+                // An alternative approach would be to split it into two
+                // entries -- e.g.,
+                //     <start of actual entry> through <kernel start -1>
+                //     <kernel end + 1> through <end of actual entry>
+                if (((size_t)mmap_entry->addr >= hal_get_kernel_start()) &&
+                        ((size_t)mmap_entry->addr <= hal_get_kernel_end())) {
+                    continue;
                 }
-                else {
-                    dmm_add_memory_region((void*)mmap_entry->addr, mmap_entry->length);
-                }
+
+                dmm_add_memory_region((void*)mmap_entry->addr, mmap_entry->length);
             }
         }
 
