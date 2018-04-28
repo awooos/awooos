@@ -29,7 +29,33 @@ extern size_t kernel_end;
 static size_t hal_kernel_start = (size_t)&kernel_start;
 static size_t hal_kernel_end   = (size_t)(&kernel_end) + 1;
 
-#define multiboot_flag_set(bit) ((mbinfo->flags & (1 << bit)) != 0)
+void validate_multiboot_info(MultibootInfo *multiboot_info)
+{
+#define multiboot_flag_set(bit) ((multiboot_info->flags & (1 << bit)) != 0)
+
+    // Multiboot a.out and ELF flags should never be set simultaneously.
+    // These should never be set at the same time.
+    if (multiboot_flag_set(MBOOT_FLAG_A_OUT)
+            && multiboot_flag_set(MBOOT_FLAG_ELF)) {
+        hal_panic("invalid multiboot header: can't have both a.out and ELF.");
+    }
+
+    // We need ELF, not a.out.
+    if (multiboot_flag_set(MBOOT_FLAG_A_OUT)) {
+        hal_panic("invalid multiboot header: expected ELF section, got a.out.");
+    }
+
+    // We need ELF section header information to parse STAB information.
+    if (!multiboot_flag_set(MBOOT_FLAG_ELF)) {
+        hal_panic("invalid multiboot header: no ELF section provided.");
+    }
+
+    // We expect a memory map to initialize DMM.
+    if (!multiboot_flag_set(MBOOT_FLAG_MMAP)) {
+        hal_panic("invalid multiboot header: no memory map provided.");
+    }
+#undef multiboot_flag_set
+}
 
 void hal_add_mmap_entry(MultibootMemoryMapEntry *mmap_entry)
 {
@@ -77,33 +103,13 @@ void hal_init()
     hal_init_panic(&_flail_panic);
 
     // Get the Multiboot info struct.
-    MultibootInfo *mbinfo = ((MultibootInfo*)hal_get_arg());
+    MultibootInfo *multiboot_info = ((MultibootInfo*)hal_get_arg());
 
-    // Multiboot a.out and ELF flags should never be set simultaneously.
-    // These should never be set at the same time.
-    if (multiboot_flag_set(MBOOT_FLAG_A_OUT)
-            && multiboot_flag_set(MBOOT_FLAG_ELF)) {
-        hal_panic("invalid multiboot header: can't have both a.out and ELF.");
-    }
-
-    // We need ELF, not a.out.
-    if (multiboot_flag_set(MBOOT_FLAG_A_OUT)) {
-        hal_panic("invalid multiboot header: expected ELF section, got a.out.");
-    }
-
-    // We need ELF section header information to parse STAB information.
-    if (!multiboot_flag_set(MBOOT_FLAG_ELF)) {
-        hal_panic("invalid multiboot header: no ELF section provided.");
-    }
-
-    // We expect a memory map to initialize DMM.
-    if (!multiboot_flag_set(MBOOT_FLAG_MMAP)) {
-        hal_panic("invalid multiboot header: no memory map provided.");
-    }
+    validate_multiboot_info(multiboot_info);
 
     // Initialize DMM with available memory regions (as told by multiboot).
-    size_t mmap_addr = mbinfo->mmap_addr;
-    size_t mmap_count = ((size_t)mbinfo->mmap_length) / sizeof(MultibootMemoryMapEntry);
+    size_t mmap_addr = multiboot_info->mmap_addr;
+    size_t mmap_count = ((size_t)multiboot_info->mmap_length) / sizeof(MultibootMemoryMapEntry);
     MultibootMemoryMapEntry *mmap_entries = (MultibootMemoryMapEntry*)mmap_addr;
 
     for (size_t i = 0; i < mmap_count; i++) {
