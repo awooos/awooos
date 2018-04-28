@@ -75,7 +75,7 @@ void hal_exception_handler(Registers *r)
     // controllers.
     if (r->int_no > 31) {
         // If it's involved, send an EOI to the secondary controller.
-        // (It's involved for IRQs 9 and up.)
+        // (Involved for IRQs 9 and up.)
         if (r->int_no > (31 + 8)) {
             hal_outb(0xA0, 0x20);
         }
@@ -88,7 +88,7 @@ void hal_exception_handler(Registers *r)
 
 void hal_irq_remap()
 {
-    // Starts the initialization sequence.
+    // Start the initialization sequence.
     hal_outb(PIC1_COMMAND, ICW1_INIT + ICW1_ICW4);
     hal_outb(PIC2_COMMAND, ICW1_INIT + ICW1_ICW4);
 
@@ -166,3 +166,5 @@ void hal_exceptions_init()
     EXCEPTION(46);
     EXCEPTION(47);
 }
+
+#undef EXCEPTION
