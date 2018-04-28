@@ -20,7 +20,7 @@
   {
     "name": "flail",
     "origin": "https://github.com/awooos/flail.git#master",
-    "initializeArgs": ["\"tinker-generated kernel\"", "&kprint"],
+    "initializeArgs": ["\"tinker-generated kernel\"", "&print"],
     "run": false
   }
 ]
