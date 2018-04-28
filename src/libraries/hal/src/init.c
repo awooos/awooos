@@ -74,9 +74,10 @@ void hal_init()
     // Initialize DMM with available memory regions (as told by multiboot).
     size_t mmap_addr = multiboot_info->mmap_addr;
     size_t mmap_count = ((size_t)multiboot_info->mmap_length) / sizeof(MultibootMemoryMapEntry);
+    MultibootMemoryMapEntry *mmap_entries = (MultibootMemoryMapEntry*)mmap_addr;
 
     for (size_t i = 0; i < mmap_count; i++) {
-        MultibootMemoryMapEntry *mmap_entry = ((MultibootMemoryMapEntry*)mmap_addr) + i;
+        MultibootMemoryMapEntry *mmap_entry = mmap_entries + i;
 
         if (mmap_entry->type != MULTIBOOT_MEMORY_MAP_AVAILABLE) {
             continue;
