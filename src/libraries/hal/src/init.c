@@ -77,29 +77,31 @@ void hal_init()
     for (size_t i = 0; i < mmap_count; i++) {
         MultibootMemoryMapEntry *mmap_entry = ((MultibootMemoryMapEntry*)mmap_addr) + i;
 
-        if (mmap_entry->type == MULTIBOOT_MEMORY_MAP_AVAILABLE) {
-            // If we get an entry starting at 0x0, make it instead start at
-            // 0x1 and decrease it's length by 1 byte.
-            if ((size_t)mmap_entry->addr == 0) {
-                mmap_entry->addr += 1;
-                mmap_entry->length -= 1;
-            }
-
-            // If we get an entry that contains the kernel, just skip
-            // it for the sake of simplicity.
-            //
-            // An alternative approach would be to split it into two
-            // entries -- e.g.,
-            //     <start of actual entry> through <kernel start -1>
-            //     <kernel end + 1> through <end of actual entry>
-            if (((size_t)mmap_entry->addr >= hal_kernel_start) &&
-                    ((size_t)mmap_entry->addr <= hal_kernel_end)) {
-                continue;
-            }
-
-            // If we get this far, add the memory region to DMM.
-            dmm_add_memory_region((void*)mmap_entry->addr, mmap_entry->length);
+        if (mmap_entry->type != MULTIBOOT_MEMORY_MAP_AVAILABLE) {
+            continue;
         }
+
+        // If we get an entry starting at 0x0, make it instead start at
+        // 0x1 and decrease it's length by 1 byte.
+        if ((size_t)mmap_entry->addr == 0) {
+            mmap_entry->addr += 1;
+            mmap_entry->length -= 1;
+        }
+
+        // If we get an entry that contains the kernel, just skip
+        // it for the sake of simplicity.
+        //
+        // An alternative approach would be to split it into two
+        // entries -- e.g.,
+        //     <start of actual entry> through <kernel start -1>
+        //     <kernel end + 1> through <end of actual entry>
+        if (((size_t)mmap_entry->addr >= hal_kernel_start) &&
+                ((size_t)mmap_entry->addr <= hal_kernel_end)) {
+            continue;
+        }
+
+        // If we get this far, add the memory region to DMM.
+        dmm_add_memory_region((void*)mmap_entry->addr, mmap_entry->length);
     }
 
     ali_init(&dmm_malloc, &dmm_free, &dmm_realloc);
