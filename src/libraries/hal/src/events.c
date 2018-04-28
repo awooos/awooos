@@ -10,7 +10,7 @@
 
 void hal_register_events()
 {
-    REGISTER_HANDLER("kernel print", hal_print_callback);
+    REGISTER_HANDLER("print string", hal_print_callback);
 
     REGISTER_HANDLER("HAL init", hal_init);
 

@@ -98,7 +98,7 @@ void hal_init()
     hal_idt_init();
     hal_exceptions_init();
 
-    flail_init(AWOO_INFO, &kprint);
+    flail_init(AWOO_INFO, &print);
     dmm_init(&_flail_panic);
     hal_init_panic(&_flail_panic);
 
