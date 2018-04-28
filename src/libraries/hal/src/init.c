@@ -82,22 +82,22 @@ void hal_init()
     if (((multiboot_info->flags & (1 << 4)) != 0)
         && ((multiboot_info->flags & (1 << 5)) != 0)) {
 
-        hal_panic("multiboot passed flags with bits 4 and 5 set");
+        hal_panic("invalid multiboot header: can't have both a.out and ELF.");
     }
 
     // We need ELF, not a.out.
     if ((multiboot_info->flags & (1 << 4)) != 0) {
-        hal_panic("multiboot passed a.out header when we're expecting ELF");
+        hal_panic("invalid multiboot header: expected ELF section, got a.out.");
     }
 
     // We need ELF section header information to parse STAB information.
     if ((multiboot_info->flags & (1 << 5)) == 0) {
-        hal_panic("multiboot didn't pass ELF section header info");
+        hal_panic("invalid multiboot header: no ELF section provided.");
     }
 
     // We expect a memory map to initialize DMM.
     if ((multiboot_info->flags & (1 << 6)) == 0) {
-        hal_panic("multiboot didn't pass a memory map");
+        hal_panic("invalid multiboot header: no memory map provided.");
     }
 
     // Initialize DMM with available memory regions (as told by multiboot).
