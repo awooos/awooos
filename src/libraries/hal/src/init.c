@@ -79,16 +79,11 @@ void hal_init()
     dmm_init(&_flail_panic);
     hal_init_panic(&_flail_panic);
 
-    // Get the Multiboot info struct
+    // Get the Multiboot info struct.
     MultibootInfo *mbinfo = ((MultibootInfo*)hal_get_arg());
 
-    // In the multiboot flags, bit 4 and 5 indicate the format:
-    // - bit 4 means a.out
-    // - bit 5 means ELF
-    //
+    // Multiboot a.out and ELF flags should never be set simultaneously.
     // These should never be set at the same time.
-    // If both are set, there's likely a bug in the bootloader.
-
     if (hal_multiboot_flag(mbinfo, MBOOT_FLAG_A_OUT)
             && hal_multiboot_flag(mbinfo, MBOOT_FLAG_ELF)) {
 
