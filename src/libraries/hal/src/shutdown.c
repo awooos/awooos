@@ -1,6 +1,5 @@
 #include "interrupts.h"
 #include "ports.h"
-#include <ali/event.h>
 #include <ali/modifiers.h>
 #include <hal.h>
 
@@ -32,7 +31,7 @@ void hal_shutdown_hard(UNUSED const char *name, UNUSED void *data,
 void hal_shutdown(UNUSED const char *name, UNUSED void *data,
         UNUSED size_t length)
 {
-    event_trigger("HAL shutdown hard", NULL, 0);
+    hal_shutdown_hard(NULL, NULL, 0);
 }
 
 // QEMU-specific shutdown which, if ran in qemu, will return a nonzero
