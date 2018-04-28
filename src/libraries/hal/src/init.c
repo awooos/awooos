@@ -93,8 +93,8 @@ void hal_init()
         //
         // An alternative approach would be to split it into two
         // entries -- e.g.,
-        //     <start of actual entry> through <kernel start -1>
-        //     <kernel end + 1> through <end of actual entry>
+        //     <start of actual entry> through (hal_kernel_start - 1)
+        //     (hal_kernel_end + 1) through <end of actual entry>
         if (((size_t)mmap_entry->addr >= hal_kernel_start) &&
                 ((size_t)mmap_entry->addr <= hal_kernel_end)) {
             continue;
