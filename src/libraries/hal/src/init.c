@@ -55,14 +55,14 @@ void hal_init()
         hal_panic("multiboot passed flags with bits 4 and 5 set");
     }
 
-    // We need ELF section header information to parse STAB information.
-    if ((multiboot_info->flags & (1 << 5)) == 0) {
-        hal_panic("multiboot didn't pass ELF section header info");
-    }
-
     // We need ELF, not a.out.
     if ((multiboot_info->flags & (1 << 4)) != 0) {
         hal_panic("multiboot passed a.out header when we're expecting ELF");
+    }
+
+    // We need ELF section header information to parse STAB information.
+    if ((multiboot_info->flags & (1 << 5)) == 0) {
+        hal_panic("multiboot didn't pass ELF section header info");
     }
 
     // We expect a memory map to initialize DMM.
