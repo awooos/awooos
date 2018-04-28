@@ -21,15 +21,8 @@ static bool hal_initialized = false;
 extern size_t kernel_start;
 extern size_t kernel_end;
 
-size_t hal_get_kernel_start()
-{
-    return (size_t)&kernel_start;
-}
-
-size_t hal_get_kernel_end()
-{
-    return (size_t)(&kernel_end) + 1;
-}
+static size_t hal_kernel_start = (size_t)&kernel_start;
+static size_t hal_kernel_end   = (size_t)(&kernel_end) + 1;
 
 void hal_init()
 {
@@ -99,8 +92,8 @@ void hal_init()
             // entries -- e.g.,
             //     <start of actual entry> through <kernel start -1>
             //     <kernel end + 1> through <end of actual entry>
-            if (((size_t)mmap_entry->addr >= hal_get_kernel_start()) &&
-                    ((size_t)mmap_entry->addr <= hal_get_kernel_end())) {
+            if (((size_t)mmap_entry->addr >= hal_kernel_start) &&
+                    ((size_t)mmap_entry->addr <= hal_kernel_end)) {
                 continue;
             }
 
