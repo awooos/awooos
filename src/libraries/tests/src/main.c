@@ -1,4 +1,5 @@
 #include <ali/event.h>
+#include <ali/text.h>
 #include <awoo/build_info.h>
 #include <dmm.h>
 #include <flail.h>
@@ -6,16 +7,16 @@
 #include <tinker.h>
 
 #define ADD_TESTS(TEST_CATEGORY) { \
-        kprint("Adding " #TEST_CATEGORY " tests... ");  \
+        print("Adding " #TEST_CATEGORY " tests... ");  \
         add_##TEST_CATEGORY##_tests();                  \
-        kprint("Done!\n");                              \
+        print("Done!\n");                              \
     };
 
 void test_shutdown(bool all_tests_passed)
 {
     // If a test failed, do a test-fail shutdown.
     if (!all_tests_passed) {
-        kprint("Encountered failing tests; not booting.\n");
+        print("Encountered failing tests; not booting.\n");
         event_trigger("HAL shutdown test fail", NULL, 0);
     }
 
