@@ -92,7 +92,7 @@ bool event_trigger(const char *event_name, void *data, size_t data_size)
             data_size = 0;
         }
 
-        group->handlers[i](event_name, tmp_data);
+        group->handlers[i](tmp_data);
     }
 
     return true;
