@@ -6,10 +6,10 @@
 
 /*
  * Test suite for the AwooOS kernel.
- * 
+ *
  * How to add a test:
  *    Assume for this example your test is named "cow"
- * 
+ *
  *    size_t TestCow()
  *    {
  *       TEST_RETURN(status, message);
@@ -42,11 +42,6 @@ static const char *test_status_messages[4] = {
     "Skipped",
     "Assertion failed",
 };
-
-void tinker_init(TinkerPrintFn *_printfn)
-{
-    _tinker_print = _printfn;
-}
 
 int tinker_print(const char *string)
 {
@@ -105,9 +100,11 @@ void _tinker_print_results(size_t status,
     }
 }
 
-bool tinker_run_tests()
+bool tinker_run_tests(TinkerPrintFn *printfn_)
 {
     size_t passed_assertions;
+
+    printfn = printfn_;
 
     tinker_print("\nRunning tests:\n\n");
 
@@ -139,10 +136,6 @@ bool tinker_run_tests()
     tinker_print("    Skipped: ");
     tinker_print(n_to_str(skipped));
     tinker_print("\n\n");
-    /*printf("Total tests: %i\n", ran);
-      printf("     Passed: %i\n", passed);
-      printf("     Failed: %i\n", failed);
-      printf("    Skipped: %i\n\n", skipped);*/
 
     if (failed > 0) {
         return false;
