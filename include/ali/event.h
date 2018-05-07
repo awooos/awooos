@@ -5,7 +5,7 @@
 #include <stddef.h>
 #include <stdbool.h>
 
-typedef void AliEventHandler(const char *name, void *data, size_t data_size);
+typedef void AliEventHandler(const char *name, void *data);
 
 #define ALI_EVENT_MAX_EVENT_GROUPS 50
 #define ALI_EVENT_MAX_HANDLERS_PER_GROUP 50
