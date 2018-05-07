@@ -67,23 +67,21 @@ void hal_exception_handler(Registers *r)
 {
     if(r->int_no < 32){
         hal_panic((char*)exceptions[r->int_no]);
-    } else {
-        event_trigger(irq_names[r->int_no - 32], r, sizeof(Registers));
+        return;
     }
 
-    // Interrupts 32+ are IRQs, so we need to send EOIs to the interrupt
-    // controllers.
-    if (r->int_no > 31) {
-        // If it's involved, send an EOI to the secondary controller.
-        // (Involved for IRQs 9 and up.)
-        if (r->int_no > (31 + 8)) {
-            hal_outb(0xA0, 0x20);
-        }
+    event_trigger(irq_names[r->int_no - 32], r, sizeof(Registers));
 
-        // Send an EOI to the primary controller.
-        // (Involved in all IRQs.)
-        hal_outb(0x20, 0x20);
+    // If we get here, we have an IRQ (interrupts 32 and higher), so
+    // we need to send EOIs to the interrupt controllers.
+
+    // For IRQs 9 and up, send an EOI to the secondary controller.
+    if (r->int_no > (31 + 8)) {
+        hal_outb(0xA0, 0x20);
     }
+
+    // Send an EOI to the primary controller.
+    hal_outb(0x20, 0x20);
 }
 
 void hal_irq_remap()

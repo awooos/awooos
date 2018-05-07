@@ -3,8 +3,7 @@
 #include <ali/text.h>
 #include <awoo.h>
 
-void greeter_display_greeting(UNUSED const char *event_name, UNUSED void *data,
-        UNUSED size_t data_size)
+void greeter_display_greeting(UNUSED void *data)
 {
     print(AWOO_INFO);
 
