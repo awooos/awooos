@@ -104,7 +104,7 @@ bool tinker_run_tests(TinkerPrintFn *printfn_)
 {
     size_t passed_assertions;
 
-    printfn = printfn_;
+    _tinker_print = printfn_;
 
     tinker_print("\nRunning tests:\n\n");
 
