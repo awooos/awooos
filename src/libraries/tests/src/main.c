@@ -32,7 +32,7 @@ void run_tests()
     ADD_TESTS(ali);
     ADD_TESTS(dmm);
 
-    all_tests_passed = tinker_run_tests();
+    all_tests_passed = tinker_run_tests(&print);
 
     // Handle things we _only_ do in test builds.
     if (AWOO_BUILD_TYPE_NUMBER == AWOO_TEST_BUILD) {
