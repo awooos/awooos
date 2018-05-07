@@ -4,7 +4,7 @@ awooOS is an experimental operating system, bringing together old ideas and
 new technology.
 
 It is designed around a microkernel, with as much moved into libraries
-and services as possible. The kernel proper is less than 50 lines of code.
+as possible. The kernel proper is less than 50 lines of code.
 
 Notable features:
 

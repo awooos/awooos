@@ -1,6 +1,4 @@
-/* NOTE: This display driver does NOT implement scrolling.
- *       It's meant to be replaced ASAP during the boot process by a service.
- */
+// NOTE: This display driver does NOT implement scrolling, currently.
 
 #include "basic_display.h"
 #include "ports.h"
