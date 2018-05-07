@@ -10,8 +10,7 @@ void hal_print(const char *string)
     hal_basic_uart_print(string);
 }
 
-void hal_print_callback(UNUSED const char *name, void *string,
-        UNUSED size_t length)
+void hal_print_callback(UNUSED const char *name, void *string)
 {
     hal_print((char*)string);
 }

@@ -10,8 +10,7 @@ char *hal_metadata_compiler_information()
     return &kernel_comment_start;
 }
 
-void hal_metadata_print(UNUSED const char *event_name, UNUSED void *data,
-        UNUSED size_t data_size)
+void hal_metadata_print(UNUSED const char *event_name, UNUSED void *data)
 {
     print("\r\nCompiled with ");
     print(hal_metadata_compiler_information());
