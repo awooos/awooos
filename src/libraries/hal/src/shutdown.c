@@ -29,7 +29,7 @@ void hal_shutdown_hard()
 
 // Normal shutdown.
 // TODO: Implement an ACPI-based hal_shutdown().
-void hal_shutdown(UNUSED const char *name, UNUSED void *data)
+void hal_shutdown(UNUSED void *data)
 {
     hal_shutdown_hard();
 }
@@ -38,7 +38,7 @@ void hal_shutdown(UNUSED const char *name, UNUSED void *data)
 // exit code.
 //
 // If ran outside of QEMU, it falls back to a hard shutdown.
-void hal_shutdown_test_fail(UNUSED const char *name, UNUSED void *data)
+void hal_shutdown_test_fail(UNUSED void *data)
 {
     hal_outb(0xf4, 0x00);
     hal_shutdown_hard();

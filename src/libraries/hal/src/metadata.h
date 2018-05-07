@@ -1,8 +1,8 @@
 #ifndef HAL_METADATA_H
 #define HAL_METADATA_H
 
-#include <stddef.h>
+#include <ali/modifiers.h>
 
-void hal_metadata_print(UNUSED const char *event_name, UNUSED void *data);
+void hal_metadata_print(UNUSED void *data);
 
 #endif

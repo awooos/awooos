@@ -3,7 +3,7 @@
 
 #include <ali/modifiers.h>
 
-void hal_shutdown(UNUSED const char *name, UNUSED void *data);
-void hal_shutdown_test_fail(UNUSED const char *name, UNUSED void *data);
+void hal_shutdown(UNUSED void *data);
+void hal_shutdown_test_fail(UNUSED void *data);
 
 #endif
