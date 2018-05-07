@@ -1,10 +1,5 @@
 default 0
 timeout 3
 
-title AwooOS (kernel only)
-kernel /system/kernel.exe
-
 title AwooOS
 kernel /system/kernel.exe
-module /modules/uart.exe
-module /modules/service_manager.exe
