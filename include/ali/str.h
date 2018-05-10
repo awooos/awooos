@@ -1,6 +1,8 @@
 #ifndef ALI__ALI_STR_H
 #define ALI__ALI_STR_H
 
+#include <stddef.h>
+
 typedef struct ShellSplitResult_s {
     char **pieces;
     size_t num_pieces;
