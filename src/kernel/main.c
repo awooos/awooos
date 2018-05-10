@@ -1,6 +1,7 @@
 #include <ali/event.h>
 #include <greeter.h>
 #include <hal.h>
+#include <shell.h>
 #include <stdnoreturn.h>
 #include <tests.h>
 
@@ -13,6 +14,8 @@ noreturn void kernel_main()
     event_trigger("HAL init", NULL, 0);
     event_trigger("greeter display", NULL, 0);
     event_trigger("tests run", NULL, 0);
+
+    shell_init();
 
     while(1){
         // Do nothing forever.
