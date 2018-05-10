@@ -1,5 +1,5 @@
 #include <ali/event.h>
-#include "keyboard.h"
+#include "hal_keyboard.h"
 #include "keysym_us.h"
 #include "ports.h"
 #include <stdlib.h>
@@ -15,22 +15,22 @@
 static bool keyboard_initialized = false;
 static KeyboardEvent *state = NULL;
 
-void keyboard_init()
+void hal_keyboard_init()
 {
     state = malloc(sizeof(KeyboardEvent));
     memset(state, 0, sizeof(KeyboardEvent));
     keyboard_initialized = true;
 }
 
-char keyboard_resolve_scancode(char keysym[128], uint32_t scancode)
+char hal_keyboard_resolve_scancode(char keysym[128], uint32_t scancode)
 {
     return keysym[scancode & 0x7F];
 }
 
-void keyboard_callback(void *data)
+void hal_keyboard_callback(void *data)
 {
     if (!keyboard_initialized) {
-        keyboard_init();
+        hal_keyboard_init();
     }
 
     uint32_t scancode = hal_inb(0x60);
@@ -56,9 +56,9 @@ void keyboard_callback(void *data)
     }
 
     if (event->ShiftL || event->ShiftR) {
-        event->c = keyboard_resolve_scancode(keysym_us_shift, scancode);
+        event->c = hal_keyboard_resolve_scancode(keysym_us_shift, scancode);
     } else {
-        event->c = keyboard_resolve_scancode(keysym_us, scancode);
+        event->c = hal_keyboard_resolve_scancode(keysym_us, scancode);
     }
 
     event_trigger("keyboard event", event, 0);

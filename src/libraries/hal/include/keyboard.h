@@ -1,5 +1,5 @@
-#ifndef HAL__KEYBOARD_H
-#define HAL__KEYBOARD_H
+#ifndef KEYBOARD_H
+#define KEYBOARD_H
 
 #include <stdbool.h>
 
@@ -19,7 +19,5 @@ typedef struct KeyboardEvent_s {
     bool F[25];
     char c;
 } KeyboardEvent;
-
-void keyboard_callback(void *data);
 
 #endif
