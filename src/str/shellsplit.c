@@ -97,7 +97,7 @@ ShellSplitResult *shellsplit(char *input)
     pieces[piece_idx] = buffer;
 
     result->pieces = pieces;
-    result->num_pieces = piece_idx;
+    result->num_pieces = piece_idx + 1;
 
     return result;
 }
