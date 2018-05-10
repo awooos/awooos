@@ -6,7 +6,7 @@
 
 char **shellsplit(char *input)
 {
-    ShellSplitResults *results = malloc(sizeof(ShellSplitResults));
+    ShellSplitResult *results = malloc(sizeof(ShellSplitResults));
     char *str = input;
     size_t len = strlen(str); 
     char *buffer = ali_malloc(len);

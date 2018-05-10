@@ -7,6 +7,6 @@ typedef struct ShellSplitResult_s {
 } ShellSplitResult;
 
 char **shellsplit(char *str);
-ShellSplitResults *charsplit(char *str, char token);
+ShellSplitResult *charsplit(char *str, char token);
 
 #endif
