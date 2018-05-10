@@ -4,9 +4,9 @@
 
 #include "split.h"
 
-char **shellsplit(char *input)
+ShellSplitResult *shellsplit(char *input)
 {
-    ShellSplitResult *results = malloc(sizeof(ShellSplitResults));
+    ShellSplitResult *results = malloc(sizeof(ShellSplitResult));
     char *str = input;
     size_t len = strlen(str); 
     char *buffer = ali_malloc(len);
