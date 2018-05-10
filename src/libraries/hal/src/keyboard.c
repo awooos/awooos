@@ -40,11 +40,11 @@ void hal_keyboard_callback(void *data)
 
     event->Esc      = ACTIVE(Esc,   0x01);
     event->CtrlL    = ACTIVE(CtrlL, 0x1D);
-    event->CtrlR    = false; //ACTIVE(CtrlR, );
+    event->CtrlR    = false; //ACTIVE(CtrlR, ); // TODO: Add CtrlR support.
     event->AltL     = ACTIVE(AltL,  0x38);
-    event->AltR     = false; //ACTIVE(AltR, );
-    event->GuiL     = false; //ACTIVE(GuiL, );
-    event->GuiR     = false; //ACTIVE(GuiR, );
+    event->AltR     = false; //ACTIVE(AltR, );  // TODO: Add AltR support.
+    event->GuiL     = false; //ACTIVE(GuiL, );  // TODO: Add GuiL support.
+    event->GuiR     = false; //ACTIVE(GuiR, );  // TODO: Add GuiR support.
     event->ShiftL   = ACTIVE(ShiftL,    0x2A);
     event->ShiftR   = ACTIVE(ShiftR,    0x36);
     event->NumLock  = ACTIVE(NumLock,   0x45);
