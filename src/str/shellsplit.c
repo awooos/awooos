@@ -6,10 +6,12 @@
 
 ShellSplitResult *shellsplit(char *input)
 {
-    ShellSplitResult *results = malloc(sizeof(ShellSplitResult));
+    ShellSplitResult *result = malloc(sizeof(ShellSplitResult));
     char *str = input;
     size_t len = strlen(str); 
     char *buffer = ali_malloc(len);
+
+    memset(result, 0, sizeof(ShellSplitResult));
 
     // Storage for pieces
     size_t piece_idx = 0;
@@ -93,8 +95,8 @@ ShellSplitResult *shellsplit(char *input)
     buffer[piece_length] = 0;
     pieces[piece_idx] = buffer;
 
-    results->pieces = pieces;
-    results->num_pieces = piece_idx;
+    result->pieces = pieces;
+    result->num_pieces = piece_idx;
 
-    return results;
+    return result;
 }
