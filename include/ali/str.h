@@ -6,7 +6,7 @@ typedef struct ShellSplitResult_s {
     size_t num_pieces;
 } ShellSplitResult;
 
-char **shellsplit(char *str);
-ShellSplitResult *charsplit(char *str, char token);
+ShellSplitResult *shellsplit(char *str);
+char **charsplit(char *str, char token);
 
 #endif
