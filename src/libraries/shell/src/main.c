@@ -45,11 +45,6 @@ void shell_keyboard_callback(void *data)
     static size_t idx = 0;
     static char *buffer = (char*)&buf;
 
-/*    if (buffer == NULL) {
-        buffer = malloc(SHELL_BUFFER_SIZE + 1);
-        memset(buffer, 0, SHELL_BUFFER_SIZE + 1);
-    }*/
-
     KeyboardEvent *event = (KeyboardEvent*)data;
 
     if (event->c == '\0') {
