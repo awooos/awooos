@@ -50,30 +50,32 @@ void _flail_print_panic(const char *message, const char *function,
      * If we're recursively panicking, we don't want to run this block of code,
      * because this is probably what's causing the recursive panic!
      */
-    if (in_panic == 0) {
-        in_panic = 1;
-
-        flail_print("!!! Kernel panic !!!\r\n\r\n");
-        flail_print(info_str);
-        flail_print("\r\n\r\n");
-
-        flail_print(message);
-        flail_print("\r\n\r\n");
-
-        flail_print("Stack dump:\r\n\r\n");
-
-        flail_stack_dump();
-
-        flail_print("\r\n\r\n");
-
-        flail_print("Kernel panic: ");
-        flail_print(message);
-        flail_print("\r\n ");
-        flail_print(filename);
-        flail_print(":");
-        flail_print(flail_uint_to_str(buffer, line, 10));
-        flail_print(" (");
-        flail_print(function);
-        flail_print(")\r\n");
+    if (in_panic == 1) {
+        return;
     }
+
+    in_panic = 1;
+
+    flail_print("!!! Kernel panic !!!\r\n\r\n");
+    flail_print(info_str);
+    flail_print("\r\n\r\n");
+
+    flail_print(message);
+    flail_print("\r\n\r\n");
+
+    flail_print("Stack dump:\r\n\r\n");
+
+    flail_stack_dump();
+
+    flail_print("\r\n\r\n");
+
+    flail_print("Kernel panic: ");
+    flail_print(message);
+    flail_print("\r\n ");
+    flail_print(filename);
+    flail_print(":");
+    flail_print(flail_uint_to_str(buffer, line, 10));
+    flail_print(" (");
+    flail_print(function);
+    flail_print(")\r\n");
 }
