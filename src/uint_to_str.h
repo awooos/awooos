@@ -3,12 +3,10 @@
 
 #include <stddef.h>
 
-// MAGIC NUMBER: max digits in uint64_t.
-#define UINT64_DIGITS 20
-// MAGIC NUMBER: number of digits in a uitn64_t, plus one to include a null byte.
-#define UINT64_CHARS_WITH_NULL (UINT64_DIGITS + 1)
+// MAGIC NUMBER: max digits in uint64_t + 1 for a NULL byte.
+#define UINT64_BUFSIZE 21
 
-char *flail_uint_to_str(char buffer[UINT64_CHARS_WITH_NULL],
-        size_t n, size_t radix);
+char *flail_uint_to_str(char buffer[UINT64_BUFSIZE],
+        size_t n, size_t radix)
 
 #endif

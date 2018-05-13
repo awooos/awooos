@@ -17,7 +17,7 @@ void flail_init(const char *info_str_, FlailPrintFn *flail_print_)
 void flail_stack_dump_hex(size_t *_stack)
 {
     size_t *stack = _stack;
-    char buffer[UINT64_CHARS_WITH_NULL];
+    char buffer[UINT64_BUFSIZE];
 
     for (size_t original_stack = (size_t)stack;
             (size_t)stack < ((original_stack + 0x1000) & (size_t)(~(0x1000 - 1)));
