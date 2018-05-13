@@ -11,8 +11,6 @@
 #define MAKE(x)  (scancode == x)
 #define BREAK(x) (scancode == (x + 0x80))
 
-#define SCANCODE(x) (MAKE(x) || BREAK(x))
-
 #define ACTIVE(key, scancode) (MAKE(scancode) || (state.key && (!BREAK(scancode))))
 
 static bool keyboard_initialized = false;
