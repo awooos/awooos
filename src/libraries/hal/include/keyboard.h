@@ -18,6 +18,7 @@ typedef struct KeyboardEvent_s {
          ScrollLock;
     bool F[25];
     char c;
+    bool make;
 } KeyboardEvent;
 
 #endif

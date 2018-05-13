@@ -1,10 +1,12 @@
 #ifndef KEYSYM_US_H
 #define KEYSYM_US_H
 
+#define KEY_BACKSPACE '\x08'
+
 char keysym_us[128] =
 {
   0, 27, '1', '2', '3', '4', '5', '6', '7', '8',    /* 9 */
-  '9', '0', '-', '=', '\x08'                        /* Backspace */,
+  '9', '0', '-', '=', KEY_BACKSPACE,
   '\t',                                             /* Tab */
   'q', 'w', 'e', 'r',                               /* 19 */
   't', 'y', 'u', 'i', 'o', 'p', '[', ']', '\n',     /* Enter key */
@@ -45,7 +47,7 @@ char keysym_us[128] =
 char keysym_us_shift[128] =
 {
   0, 27, '!', '@', '#', '$', '%', '^', '&', '*',    /* 9 */
-  '(', ')', '_', '+', '\x08',                       /* Backspace */
+  '(', ')', '_', '+', KEY_BACKSPACE,
   '\t',                                             /* Tab */
   'Q', 'W', 'E', 'R',                               /* 19 */
   'T', 'Y', 'U', 'I', 'O', 'P', '{', '}', '\n',     /* Enter key */
