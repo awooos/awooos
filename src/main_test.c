@@ -1,4 +1,5 @@
 #include <flail.h>
+#include "main.h"
 
 // Trigger an intentional kernel panic.
 // If there's something wrong, e.g. a recursive panic, it'll likely
