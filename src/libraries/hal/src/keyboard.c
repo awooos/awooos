@@ -13,15 +13,14 @@
 
 #define SCANCODE(x) (MAKE(x) || BREAK(x))
 
-#define ACTIVE(key, scancode) (MAKE(scancode) || (state->key && (!BREAK(scancode))))
+#define ACTIVE(key, scancode) (MAKE(scancode) || (state.key && (!BREAK(scancode))))
 
 static bool keyboard_initialized = false;
-static KeyboardEvent *state = NULL;
+static KeyboardEvent state;
 
 void hal_keyboard_init()
 {
-    state = malloc(sizeof(KeyboardEvent));
-    memset(state, 0, sizeof(KeyboardEvent));
+    memset(&state, 0, sizeof(KeyboardEvent));
     keyboard_initialized = true;
 }
 
@@ -55,7 +54,7 @@ void hal_keyboard_callback(void *data)
     event.ScrollLock = ACTIVE(ScrollLock, 0x46);
 
     if (event.CapsLock) {
-        state->CapsLock = !(state->CapsLock);
+        state.CapsLock = !(state.CapsLock);
     }
 
     if (event.ShiftL || event.ShiftR) {
