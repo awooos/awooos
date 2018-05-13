@@ -2,7 +2,10 @@
 #include <ali/str.h>
 #include <ali/text.h>
 #include <keyboard.h>
+#include <stdlib.h>
 #include <string.h>
+
+#include <ali/number.h>
 
 // A 1KB buffer for command input should be enough.
 // If it's not, please rethink some life choices.
@@ -19,8 +22,8 @@ void shell_print_prompt()
 void shell_run(char *buffer)
 {
     ShellSplitResult *result = shellsplit(buffer);
-    if (COMMAND("echo")) {
-        for (size_t i = 0; i < result->num_pieces; i++) {
+/*    if (COMMAND("echo")) {
+        for (size_t i = 0; i < result->num_pieces - 1; i++) {
             print(result->pieces[i]);
             if (i < (result->num_pieces - 1)) {
                 print(" ");
@@ -29,32 +32,71 @@ void shell_run(char *buffer)
             }
         }
     } else {
-        print("Error: Unkown command: ");
+        print("\nError: Unknown command: ");
         println(result->pieces[0]);
-    }
+    }*/
 }
 
 void shell_keyboard_callback(void *data)
 {
     // Shell buffer + 1 for trailing NULL byte.
-    static char buffer[SHELL_BUFFER_SIZE + 1] = {0,};
+    static char buf[SHELL_BUFFER_SIZE + 1] = {0,};
     static size_t idx = 0;
+    static char *buffer = (char*)&buf;
+
+/*    if (buffer == NULL) {
+        buffer = malloc(SHELL_BUFFER_SIZE + 1);
+        memset(buffer, 0, SHELL_BUFFER_SIZE + 1);
+    }*/
 
     KeyboardEvent *event = (KeyboardEvent*)data;
 
-    if (event->c != '\0') {
-        print(event->c);
+    if (event->c == '\0') {
+        // Not a printable character.
+        return;
+    }
+
+    if ((event->c == '\n') && (idx == 0)) {
+        // No command to run.
+        print("\n");
+        shell_print_prompt();
+        return;
     }
 
     if (event->c == '\n') {
-        shell_run((char*)&buffer);
-        memset(buffer, 0, SHELL_BUFFER_SIZE + 1);
+        // Try runing a command.
+        shell_run(buffer);
+        memset(buffer, 0, SHELL_BUFFER_SIZE);
         idx = 0;
-    } else if (idx >= SHELL_BUFFER_SIZE) {
+        return;
+    }
+
+    if (idx >= SHELL_BUFFER_SIZE) {
+        // Command too long for buffer.
         // TODO: Show some sort of indication that there is a problem.
+        return;
+    }
+
+    // TODO: Don't hard-code the value for backspace.
+    if (event->c == '\x08') {
+        // Delete the last character.
+        buffer[idx] = 0;
+        idx--;
+        if (idx < 0) {
+            idx = 0;
+        }
+
+        // HACK: Oh my god this is a horrible way to clear the line.
+        print("\r");
+        for (int i = 0; i < 79; i++) { print(" "); }
+        print("\r");
+        shell_print_prompt();
+        print(buffer);
     } else {
+        // Store the character.
         buffer[idx] = event->c;
         idx++;
+        print(buffer + idx - 1);
     }
 }
 
