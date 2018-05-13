@@ -87,9 +87,8 @@ void shell_keyboard_callback(void *data)
     if (event->c == '\x08') {
         // Delete the last character.
         buffer[idx] = 0;
-        idx--;
-        if (idx < 0) {
-            idx = 0;
+        if (idx > 0) {
+            idx--;
         }
 
         // HACK: Oh my god this is a horrible way to clear the line.
