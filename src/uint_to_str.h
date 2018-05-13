@@ -7,6 +7,6 @@
 #define UINT64_BUFSIZE 21
 
 char *flail_uint_to_str(char buffer[UINT64_BUFSIZE],
-        size_t n, size_t radix)
+        size_t n, size_t radix);
 
 #endif
