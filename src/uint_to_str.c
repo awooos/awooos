@@ -14,7 +14,7 @@ char *flail_uint_to_str(char buffer[UINT64_BUFSIZE],
 
     // Loop through the digits and add them in reverse order,
     // starting at the end of the string and working back.
-    for (size_t idx = UINT64_BUFSIZE - 1; idx > 1; idx--) {
+    for (size_t idx = UINT64_BUFSIZE - 1; idx > 0; idx--) {
         buffer[idx - 1] = "0123456789abcdef"[n % radix];
         n /= radix;
     }
