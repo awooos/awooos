@@ -5,6 +5,9 @@
 #include <stdlib.h>
 #include <string.h>
 
+#define IS_BREAK(x) (scancode & 0x80)
+#define IS_MAKE(x)  (!IS_BREAK(x))
+
 #define MAKE(x)  (scancode == x)
 #define BREAK(x) (scancode == (x + 0x80))
 
@@ -60,6 +63,8 @@ void hal_keyboard_callback(void *data)
     } else {
         event->c = hal_keyboard_resolve_scancode(keysym_us, scancode);
     }
+
+    event->make = IS_MAKE(event->c);
 
     event_trigger("keyboard event", event, 0);
     free(event);

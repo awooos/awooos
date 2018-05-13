@@ -22,19 +22,20 @@ void shell_print_prompt()
 void shell_run(char *buffer)
 {
     ShellSplitResult *result = shellsplit(buffer);
-/*    if (COMMAND("echo")) {
-        for (size_t i = 0; i < result->num_pieces - 1; i++) {
+    print("\n");
+    if (COMMAND("echo")) {
+        for (size_t i = 1; i < result->num_pieces; i++) {
             print(result->pieces[i]);
-            if (i < (result->num_pieces - 1)) {
+            if (i < result->num_pieces) {
                 print(" ");
             } else {
                 print("\n");
             }
         }
     } else {
-        print("\nError: Unknown command: ");
+        print("Error: Unknown command: ");
         println(result->pieces[0]);
-    }*/
+    }
 }
 
 void shell_keyboard_callback(void *data)
@@ -68,6 +69,11 @@ void shell_keyboard_callback(void *data)
         shell_run(buffer);
         memset(buffer, 0, SHELL_BUFFER_SIZE);
         idx = 0;
+        return;
+    }
+
+    if (!event->make) {
+        // We don't need to care about break events.
         return;
     }
 
