@@ -7,4 +7,7 @@ extern void flail_stack_dump();
 
 void flail_wait_forever();
 
+void _flail_print_panic(const char *message, const char *function,
+        const char *filename, size_t line)
+
 #endif
