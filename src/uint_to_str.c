@@ -9,7 +9,6 @@
 char *flail_uint_to_str(char buffer[UINT64_CHARS_WITH_NULL],
         size_t n, size_t radix)
 {
-    unsigned char value;
     size_t tmp = n;
 
     // Set the entire buffer to NULL bytes.
