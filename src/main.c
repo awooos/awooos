@@ -44,12 +44,9 @@ void _flail_panic(const char *message, const char *function,
 void _flail_print_panic(const char *message, const char *function,
         const char *filename, size_t line)
 {
-    char buffer[UINT64_CHARS_WITH_NULL];
+    char buffer[UINT64_BUFSIZE];
 
-    /*
-     * If we're recursively panicking, we don't want to run this block of code,
-     * because this is probably what's causing the recursive panic!
-     */
+    // Prevent recursive kernel panics.
     if (in_panic == 1) {
         return;
     }
