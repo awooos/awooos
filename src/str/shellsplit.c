@@ -93,7 +93,7 @@ ShellSplitResult *shellsplit(char *input)
         piece_length++;
     }
 
-    buffer[piece_length - 1] = 0;
+    buffer[piece_length] = 0;
     pieces[piece_idx] = buffer;
 
     result->pieces = pieces;
