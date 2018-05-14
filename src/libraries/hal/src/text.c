@@ -1,5 +1,3 @@
-#include <ali/modifiers.h>
-#include <stddef.h>
 #include "text.h"
 #include "basic_display.h"
 #include "basic_uart.h"
