@@ -2,8 +2,9 @@
 #define DMM__DMM_INSTANCE_H
 
 #include <stddef.h>
+#include <stdint.h>
 
-void *dmm_instance_add_memory_region(void *instance, void *start, size_t length);
+void *dmm_instance_add_memory_region(void *instance, void *start, uint64_t length);
 
 void *_dmm_instance_malloc(void *instance, size_t size, const char function[],
         const char filename[], size_t line);

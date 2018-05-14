@@ -34,7 +34,7 @@ void dmm_call_location(DMM_CallLocation *call_location,
     call_location->line = line;
 }
 
-void *dmm_instance_add_memory_region(void *instance, void *start, size_t length)
+void *dmm_instance_add_memory_region(void *instance, void *start, uint64_t length)
 {
     DMM_MallocHeader *header = (DMM_MallocHeader*)start;
     header->magic = DMM_HEADER_MAGIC;

@@ -2,6 +2,7 @@
 #define DMM__DMM_H
 
 #include <stddef.h>
+#include <stdint.h>
 
 typedef void (DMM_PanicFn)(const char *message, const char *function,
         const char *filename, size_t line);
@@ -11,7 +12,7 @@ extern DMM_PanicFn *_dmm_panic;
 
 void dmm_init(DMM_PanicFn *panic_fn);
 
-void dmm_add_memory_region(void *start, size_t length);
+void dmm_add_memory_region(void *start, uint64_t length);
 
 void *_dmm_malloc(size_t size, const char function[], const char filename[],
         size_t line);

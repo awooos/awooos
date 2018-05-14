@@ -3,6 +3,7 @@
 #include <dmm.h>
 #include <dmm_instance.h>
 #include <stddef.h>
+#include <stdint.h>
 #include <string.h>
 #include "main.h"
 #include "header.h"
@@ -10,7 +11,7 @@
 
 DMM_MallocHeader *dmm_global_instance = DMM_UNASSIGNED_REGION;
 
-void dmm_add_memory_region(void *start, size_t length)
+void dmm_add_memory_region(void *start, uint64_t length)
 {
     void *result = dmm_instance_add_memory_region(dmm_global_instance, start, length);
 
