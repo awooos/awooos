@@ -137,6 +137,11 @@ void *_dmm_instance_malloc(void *instance, size_t size, const char function[],
 void _dmm_instance_free(void *instance, void *ptr, const char function[],
         const char filename[], size_t line)
 {
+    // +function+, +filename+, and +line+ aren't used.
+    (void)function;
+    (void)filename;
+    (void)line;
+
     DMM_MallocHeader *header = (DMM_MallocHeader*)(ptr) - 1;
     if (header->magic != DMM_HEADER_MAGIC) {
         dmm_panic("memory region header had invalid magic");
