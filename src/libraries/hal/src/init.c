@@ -117,7 +117,7 @@ void hal_init()
         hal_add_mmap_entry(mmap_entries + i);
     }
 
-    ali_init(&dmm_malloc, &dmm_free, &dmm_realloc);
+    ali_init(&_dmm_malloc, &_dmm_free, &_dmm_realloc);
 
     event_trigger("greeter display", hal_metadata());
 
