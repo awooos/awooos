@@ -1,4 +1,6 @@
-// REQUIREMENTS: size_t (stddef.h); memset() + memcpy() (string.h).
+// REQUIREMENTS:
+// - stddef.h: size_t
+// - string.h: memset(), memcpy(), strlen().
 
 #include <dmm.h>
 #include <dmm_instance.h>
