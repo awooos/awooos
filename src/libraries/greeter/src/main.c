@@ -7,7 +7,7 @@ void greeter_display_greeting(UNUSED void *data)
 {
     print(AWOO_INFO);
 
-    event_trigger("HAL metadata print", NULL, 0);
+    event_trigger("HAL metadata print", NULL);
 
     print("\r\n\r\n");
 }

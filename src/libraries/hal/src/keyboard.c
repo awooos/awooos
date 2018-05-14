@@ -64,5 +64,5 @@ void hal_keyboard_callback(UNUSED void *data)
 
     event.make = IS_MAKE(event.c);
 
-    event_trigger("keyboard event", &event, 0);
+    event_trigger("keyboard event", &event);
 }

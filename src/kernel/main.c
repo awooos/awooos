@@ -11,9 +11,9 @@ noreturn void kernel_main()
     tests_register_events();
     hal_register_events();
 
-    event_trigger("HAL init", NULL, 0);
-    event_trigger("greeter display", NULL, 0);
-    event_trigger("tests run", NULL, 0);
+    event_trigger("HAL init", NULL);
+    event_trigger("greeter display", NULL);
+    event_trigger("tests run", NULL);
 
     shell_init();
 
