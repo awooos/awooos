@@ -43,7 +43,7 @@ static const char *test_status_messages[4] = {
     "Assertion failed",
 };
 
-int tinker_print(const char *string)
+char *tinker_print(const char *string)
 {
     return _tinker_print(string);
 }

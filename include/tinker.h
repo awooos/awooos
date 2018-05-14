@@ -6,7 +6,7 @@
 #include <string.h>
 #include <stdlib.h>
 
-typedef int (TinkerPrintFn)(const char *string);
+typedef char *(TinkerPrintFn)(const char *string);
 static TinkerPrintFn *_tinker_print = NULL;
 
 typedef struct TestCase_s {
@@ -19,7 +19,7 @@ bool tinker_run_tests(TinkerPrintFn *printfn_);
 void _tinker_print_results(size_t status,
         const char *message, const char *file, size_t line);
 
-int tinker_print(const char *string);
+char *tinker_print(const char *string);
 
 #define tinker_add_test(NAME) _tinker_add_test(#NAME, test_##NAME)
 
