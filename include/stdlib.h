@@ -1,11 +1,11 @@
-#ifndef STDLIB_H
-#define STDLIB_H
+#ifndef ALI__STDLIB_H
+#define ALI__STDLIB_H
 
-#include <stddef.h>
+#include <ali.h>
 
-void *malloc(size_t size);
-void free(void *ptr);
-void *calloc(size_t nmemb, size_t size);
-void *realloc(void *ptr, size_t size);
+#define malloc(size) ali_malloc(size, __FUNCTION__, __FILE__, __LINE__)
+#define free(ptr) ali_free(ptr, __FUNCTION__, __FILE__, __LINE__)
+#define calloc(nmemb, size) ali_calloc(nmemb, size, __FUNCTION__, __FILE__, __LINE__)
+#define realloc(ptr, size) ali_realloc(ptr, size, __FUNCTION__, __FILE__, __LINE__)
 
 #endif

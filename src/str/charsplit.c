@@ -8,12 +8,12 @@ char **charsplit(char *input, char token)
 {
     char *str = input;
     size_t len = strlen(str);
-    char *buffer = ali_malloc(len);
+    char *buffer = malloc(len);
 
     // Storage for pieces
     size_t piece_idx = 0;
     size_t piece_length = 0;
-    char **pieces = ali_malloc(sizeof(char *) * ALI_SPLIT_MAX_PIECES);
+    char **pieces = malloc(sizeof(char *) * ALI_SPLIT_MAX_PIECES);
     for (size_t i = 0; i < ALI_SPLIT_MAX_PIECES; i++) {
         pieces[i] = NULL;
     }
@@ -25,7 +25,7 @@ char **charsplit(char *input, char token)
         if (c == token) {
             buffer[piece_length] = 0;
             pieces[piece_idx] = buffer;
-            buffer = ali_malloc((len - i) + 1);
+            buffer = malloc((len - i) + 1);
             piece_length = 0;
             piece_idx++;
             str++;

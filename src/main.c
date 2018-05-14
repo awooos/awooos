@@ -27,7 +27,7 @@ void *ali_calloc(size_t nmemb, size_t size, const char function[],
         const char filename[], size_t line)
 {
     size_t total_size = nmemb * size;
-    void *buffer = mmfns.malloc(total_size);
+    void *buffer = mmfns.malloc(total_size, function, filename, line);
 
     memset(buffer, 0, total_size);
 
