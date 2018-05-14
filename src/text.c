@@ -18,7 +18,7 @@ char *println(const char *string){
     new_string[length + 1] = '\0';
 
     print(new_string);
-    free(new_string);
+    ali_free(new_string);
 
     return string;
 }
