@@ -4,7 +4,7 @@
 IdtPointer idtd;
 IdtEntry idt[256] = {{0,0,0,0,0}};
 
-void hal_idt_load(void)
+void hal_idt_load()
 {
     __asm__ __volatile__ ("lidt %0" : : "m" (idtd));
 }

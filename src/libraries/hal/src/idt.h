@@ -23,7 +23,7 @@ typedef struct idt_entry_s {
 #define IDT_TRAP16 0x7
 #define IDT_TRAP32 0xf
 
-void hal_idt_init(void);
+void hal_idt_init();
 void hal_idt_register_exception(size_t n, uint32_t offset);
 
 #endif
