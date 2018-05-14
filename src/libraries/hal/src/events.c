@@ -1,4 +1,6 @@
 #include <ali/event.h>
+#include "basic_display.h"
+#include "basic_uart.h"
 #include "hal_init.h"
 #include "hal_keyboard.h"
 #include "interrupts.h"
@@ -18,5 +20,7 @@ void hal_register_events()
     REGISTER_HANDLER("HAL shutdown test fail",  hal_shutdown_test_fail);
     REGISTER_HANDLER("HAL interrupts enable",   hal_interrupts_enable);
     REGISTER_HANDLER("HAL interrupts disable",  hal_interrupts_disable);
+    REGISTER_HANDLER("HAL basic I/O init",      hal_basic_display_init);
+    REGISTER_HANDLER("HAL basic I/O init",      hal_basic_uart_init);
     REGISTER_HANDLER("IRQ 1 keyboard",          hal_keyboard_callback);
 }
