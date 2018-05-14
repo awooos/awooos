@@ -55,4 +55,12 @@ char *int64_to_str_radix(int64_t n, size_t radix);
 #define n_to_str_radix(n, radix) (is_signed(n) ? int_to_str_radix(n, radix) : uint_to_str_radix(n, radix))
 #define n_to_str(n) n_to_str_radix(n, 10)
 
+// Helper functions for printing numbers!
+#include <ali/text.h>
+
+#define print_number(n) free(print(n_to_str(n)))
+#define print_number_radix(n, radix) free(println(n_to_str_radix(n, radix)))
+#define println_number(n) free(println(n_to_str(n)))
+#define println_number_radix(n, radix) free(println(n_to_str_radix(n, radix)))
+
 #endif
