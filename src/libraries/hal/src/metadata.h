@@ -6,13 +6,11 @@
 
 extern char kernel_comment_start;
 
-static const char *metadata[] = {
+static const char *hal_metadata[] = {
     __AWOO_INFO__ "\r\n",
     "Compiled with: ",
     &kernel_comment_start,
     NULL
 };
-
-const char **hal_metadata();
 
 #endif

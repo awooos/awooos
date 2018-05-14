@@ -33,7 +33,7 @@ void hal_init(void *data)
 
     ali_init(&_dmm_malloc, &_dmm_free, &_dmm_realloc);
 
-    event_trigger("greeter display", hal_metadata());
+    event_trigger("greeter display", hal_metadata);
     event_trigger("HAL interrupts enable", NULL);
 
     hal_initialized = true;
