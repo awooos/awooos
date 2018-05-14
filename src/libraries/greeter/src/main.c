@@ -3,11 +3,13 @@
 #include <ali/text.h>
 #include <awoo.h>
 
-void greeter_display_greeting(UNUSED void *data)
+void greeter_display_greeting(void *data)
 {
-    print(AWOO_INFO);
+    char **metadata = (char**)data;
 
-    event_trigger("HAL metadata print", NULL);
+    for (size_t idx = 0; metadata[idx] != NULL; idx++) {
+        print(metadata[idx]);
+    }
 
     print("\r\n\r\n");
 }

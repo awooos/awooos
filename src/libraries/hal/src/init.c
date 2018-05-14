@@ -15,6 +15,7 @@
 #include "exceptions.h"
 #include "gdt.h"
 #include "idt.h"
+#include "metadata.h"
 #include "multiboot.h"
 
 #define MBOOT_FLAG_A_OUT 4
@@ -117,6 +118,9 @@ void hal_init()
     }
 
     ali_init(&dmm_malloc, &dmm_free, &dmm_realloc);
+
+    event_trigger("greeter display", hal_metadata());
+
     hal_enable_interrupts();
 
     hal_initialized = true;

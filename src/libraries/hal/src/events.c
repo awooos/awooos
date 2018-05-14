@@ -14,7 +14,6 @@ void hal_register_events()
 {
     REGISTER_HANDLER("print string",            hal_print_callback);
     REGISTER_HANDLER("HAL init",                hal_init);
-    REGISTER_HANDLER("HAL metadata print",      hal_metadata_print);
     REGISTER_HANDLER("HAL shutdown",            hal_shutdown);
     REGISTER_HANDLER("HAL shutdown test fail",  hal_shutdown_test_fail);
     REGISTER_HANDLER("IRQ 1 keyboard",          hal_keyboard_callback);
