@@ -5,9 +5,11 @@
 #include <stdint.h>
 #include <stddef.h>
 
-typedef void *(AliMallocFn)(size_t size);
+typedef void *(AliMallocFn)(size_t size, const char function[],
+        const char filename[], size_t line);
 typedef void (AliFreeFn)(void *ptr);
-typedef void *(AliReallocFn)(void *ptr, size_t size);
+typedef void *(AliReallocFn)(void *ptr, size_t size, const char function[],
+        const char filename[], size_t line);
 
 typedef struct ali_memory_manager_functions_s {
     AliMallocFn *malloc;
