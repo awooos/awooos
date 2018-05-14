@@ -1,0 +1,9 @@
+library_root = true
+name = "ali"
+libtype = "C"
+
+ignore_source_regex = [
+  "(^|_)test.c$"
+]
+
+object_remove_globs = []
