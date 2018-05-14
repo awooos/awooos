@@ -7,7 +7,8 @@
 
 typedef void *(AliMallocFn)(size_t size, const char function[],
         const char filename[], size_t line);
-typedef void (AliFreeFn)(void *ptr);
+typedef void (AliFreeFn)(void *ptr, const char function[],
+        const char filename[], size_t line);
 typedef void *(AliReallocFn)(void *ptr, size_t size, const char function[],
         const char filename[], size_t line);
 
