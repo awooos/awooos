@@ -9,7 +9,6 @@
 #include <stdbool.h>
 #include "basic_display.h"
 #include "basic_uart.h"
-#include "ports.h"
 #include "exceptions.h"
 #include "gdt.h"
 #include "idt.h"
