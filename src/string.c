@@ -52,6 +52,11 @@ char *strncpy(char *dest, const char *src, size_t n)
 // char *strcat(char *dest, const char *src);
 // char *strncat(char *dest, const char *src, size_t n);
 
+int memcmp(const void *s1, const void *s2, size_t n)
+{
+    return strncmp((const char*)s1, (const char*)s2, n);
+}
+
 int strcmp(const char *s1, const char *s2)
 {
     size_t s1_len = strlen(s1),
