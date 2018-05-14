@@ -3,16 +3,11 @@
 #include <string.h>
 #include <ali/event.h>
 
-// ASSUMPTION: No more than 50 events, and no more than 50 handlers per event.
+// ASSUMPTION: Maximum ALI_EVENT_MAX_EVENT_GROUPS event groups.
+// ASSUMPTION: Maximum ALI_EVENT_MAX_HANDLERS_PER_GROUP handlers per event.
 
-static AliEventGroup event_groups[ALI_EVENT_MAX_EVENT_GROUPS + 1] = {
-    0, 0, 0, 0, 0, /*  5 */ 0, 0, 0, 0, 0, /* 10 */
-    0, 0, 0, 0, 0, /* 15 */ 0, 0, 0, 0, 0, /* 20 */
-    0, 0, 0, 0, 0, /* 25 */ 0, 0, 0, 0, 0, /* 30 */
-    0, 0, 0, 0, 0, /* 35 */ 0, 0, 0, 0, 0, /* 40 */
-    0, 0, 0, 0, 0, /* 45 */ 0, 0, 0, 0, 0, /* 50 */
-    NULL,
-};
+// A collection of event groups, initialized to null bytes.
+static AliEventGroup event_groups[ALI_EVENT_MAX_EVENT_GROUPS] = {{0,0,{0}}};
 
 static size_t number_of_events = 0;
 
