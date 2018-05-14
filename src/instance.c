@@ -11,8 +11,6 @@
 void dmm_call_location(DMM_CallLocation *call_location,
         const char function[], const char filename[], size_t line)
 {
-    char *reversed_filename = NULL;
-
     memcpy((void*)(call_location->function), function, sizeof(call_location->function));
 
     if (strlen(filename) > sizeof(call_location->filename)) {
