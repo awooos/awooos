@@ -63,7 +63,7 @@ char *uint64_to_str_radix(uint64_t n, size_t radix)
     // to store the NULL byte at the end of the string.
     size_t memory_size = decimal_places + 1;
 
-    result = (char*)ali_malloc(memory_size);
+    result = (char*)malloc(memory_size);
     memset(result, 0, memory_size);
 
     for (size_t idx = 0; idx < decimal_places; idx++) {
@@ -92,7 +92,7 @@ char *int64_to_str_radix(int64_t n, size_t radix)
 
     if (is_negative) {
         size_t length = strlen(result);
-        char *tmp = ali_malloc(length + 1 /* negative sign */ + 1 /* NULL */);
+        char *tmp = malloc(length + 1 /* negative sign */ + 1 /* NULL */);
 
         tmp[0] = '-';
         strncpy((tmp + 1), result, length);

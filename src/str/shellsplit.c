@@ -7,17 +7,17 @@
 
 ShellSplitResult *shellsplit(char *input)
 {
-    ShellSplitResult *result = ali_malloc(sizeof(ShellSplitResult));
+    ShellSplitResult *result = malloc(sizeof(ShellSplitResult));
     char *str = input;
     size_t len = strlen(str); 
-    char *buffer = ali_malloc(len + 1);
+    char *buffer = malloc(len + 1);
 
     memset(result, 0, sizeof(ShellSplitResult));
 
     // Storage for pieces
     size_t piece_idx = 0;
     size_t piece_length = 0;
-    char **pieces = ali_malloc(sizeof(char *) * ALI_SPLIT_MAX_PIECES);
+    char **pieces = malloc(sizeof(char *) * ALI_SPLIT_MAX_PIECES);
     for (size_t i = 0; i < ALI_SPLIT_MAX_PIECES; i++) {
         pieces[i] = NULL;
     }
@@ -74,7 +74,7 @@ ShellSplitResult *shellsplit(char *input)
 
                 buffer[piece_length] = 0;
                 pieces[piece_idx] = buffer;
-                buffer = ali_malloc((len - i) + 1);
+                buffer = malloc((len - i) + 1);
                 piece_length = 0;
                 piece_idx++;
                 str++;
