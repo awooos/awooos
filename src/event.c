@@ -69,7 +69,6 @@ bool event_watch(const char *event_name, AliEventHandler *handler)
 bool event_trigger(const char *event_name, void *data)
 {
     AliEventGroup *group = _ali_event_find_or_create_group(event_name);
-    void *tmp_data;
 
     // If no group is found, return false.
     if (group == NULL) {
