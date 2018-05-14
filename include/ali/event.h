@@ -17,6 +17,6 @@ typedef struct ali_event_group {
 } AliEventGroup;
 
 bool event_watch(const char *event_name, AliEventHandler *handler);
-bool event_trigger(const char *event_name, void *data, size_t data_size);
+bool event_trigger(const char *event_name, void *data);
 
 #endif

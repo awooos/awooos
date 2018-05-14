@@ -4,7 +4,7 @@
 
 int print(const char *string)
 {
-    event_trigger("print string", (char*)string, 0);
+    event_trigger("print string", (char*)string);
 
     return 0;
 }

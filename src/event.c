@@ -66,7 +66,7 @@ bool event_watch(const char *event_name, AliEventHandler *handler)
     return true;
 }
 
-bool event_trigger(const char *event_name, void *data, size_t data_size)
+bool event_trigger(const char *event_name, void *data)
 {
     AliEventGroup *group = _ali_event_find_or_create_group(event_name);
     void *tmp_data;
@@ -77,17 +77,7 @@ bool event_trigger(const char *event_name, void *data, size_t data_size)
     }
 
     for (size_t i = 0; i < group->number_of_handlers; i++) {
-        if (data != NULL && data_size != 0) {
-            // If data and size is provided, then copy it.
-            tmp_data = malloc(data_size);
-            memcpy(tmp_data, data, data_size);
-        } else {
-            // Otherwise, pass the originals.
-            tmp_data = data;
-            data_size = 0;
-        }
-
-        group->handlers[i](tmp_data);
+        group->handlers[i](data);
     }
 
     return true;
