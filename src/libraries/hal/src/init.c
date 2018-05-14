@@ -2,6 +2,7 @@
 #include <ali.h>
 #include <dmm.h>
 #include <ali/event.h>
+#include <ali/modifiers.h>
 #include <flail.h>
 #include <hal.h>
 #include "panic.h"
@@ -15,7 +16,7 @@
 
 static bool hal_initialized = false;
 
-void hal_init()
+void hal_init(UNUSED void *data)
 {
     if (hal_initialized) {
         return;
