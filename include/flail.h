@@ -3,7 +3,7 @@
 
 #include <stddef.h>
 
-typedef int FlailPrintFn(const char*);
+typedef char *FlailPrintFn(const char*);
 
 void flail_init(const char *info_str_, FlailPrintFn *flail_print_);
 
