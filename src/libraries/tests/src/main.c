@@ -17,11 +17,11 @@ void test_shutdown(bool all_tests_passed)
     // If a test failed, do a test-fail shutdown.
     if (!all_tests_passed) {
         print("Encountered failing tests; not booting.\n");
-        event_trigger("HAL shutdown test fail", NULL, 0);
+        event_trigger("HAL shutdown test fail", NULL);
     }
 
     // If we get this far, we assume all of the tests passed.
-    event_trigger("HAL shutdown", NULL, 0);
+    event_trigger("HAL shutdown", NULL);
 }
 
 void run_tests()

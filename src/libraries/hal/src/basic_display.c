@@ -1,5 +1,6 @@
 // NOTE: This display driver does NOT implement scrolling, currently.
 
+#include <ali/modifiers.h>
 #include "basic_display.h"
 #include "ports.h"
 #include <stdint.h>
@@ -87,7 +88,7 @@ void hal_basic_display_clear()
     hal_basic_display_move_cursor(row, col);
 }
 
-void hal_basic_display_init()
+void hal_basic_display_init(UNUSED void *data)
 {
     hal_basic_display_clear();
 }

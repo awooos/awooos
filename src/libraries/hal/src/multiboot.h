@@ -35,4 +35,6 @@ typedef struct multiboot_memory_map_s
     uint32_t type;
 } MultibootMemoryMapEntry;
 
+void hal_multiboot_init();
+
 #endif

@@ -1,5 +1,6 @@
 /* NOTE: THIS UART IMPLEMENTATION IS WRITE-ONLY, TO PRINT DEBUG INFORMATION. */
 
+#include <ali/modifiers.h>
 #include "basic_uart.h"
 #include "ports.h"
 #include <stdint.h>
@@ -10,7 +11,7 @@ static uint16_t PORT = 0x3F8;
 static uint16_t LINE_CONTROL_REGISTER;
 
 // Initialize the serial port.
-void hal_basic_uart_init()
+void hal_basic_uart_init(UNUSED void *data)
 {
     LINE_CONTROL_REGISTER = PORT + 5;
 

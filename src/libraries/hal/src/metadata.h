@@ -1,8 +1,16 @@
 #ifndef HAL_METADATA_H
 #define HAL_METADATA_H
 
-#include <ali/modifiers.h>
+#include <awoo.h>
+#include <stddef.h>
 
-void hal_metadata_print(UNUSED void *data);
+extern char kernel_comment_start;
+
+static const char *hal_metadata[] = {
+    __AWOO_INFO__ "\r\n",
+    "Compiled with: ",
+    &kernel_comment_start,
+    NULL
+};
 
 #endif

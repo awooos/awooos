@@ -70,7 +70,7 @@ void hal_exception_handler(Registers *r)
         return;
     }
 
-    event_trigger(irq_names[r->int_no - 32], r, sizeof(Registers));
+    event_trigger(irq_names[r->int_no - 32], r);
 
     // If we get here, we have an IRQ (interrupts 32 and higher), so
     // we need to send EOIs to the interrupt controllers.

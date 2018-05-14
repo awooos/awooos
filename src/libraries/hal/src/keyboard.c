@@ -1,4 +1,5 @@
 #include <ali/event.h>
+#include <ali/modifiers.h>
 #include "hal_keyboard.h"
 #include "keysym_us.h"
 #include "ports.h"
@@ -27,7 +28,7 @@ char hal_keyboard_resolve_scancode(char keysym[128], uint32_t scancode)
     return keysym[scancode & 0x7F];
 }
 
-void hal_keyboard_callback(void *data)
+void hal_keyboard_callback(UNUSED void *data)
 {
     if (!keyboard_initialized) {
         hal_keyboard_init();
@@ -63,5 +64,5 @@ void hal_keyboard_callback(void *data)
 
     event.make = IS_MAKE(event.c);
 
-    event_trigger("keyboard event", &event, 0);
+    event_trigger("keyboard event", &event);
 }

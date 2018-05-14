@@ -1,33 +1,33 @@
-#include "interrupts.h"
 #include "ports.h"
+#include <ali/event.h>
 #include <ali/modifiers.h>
 #include <ali/text.h>
-#include <hal.h>
 #include <stddef.h>
 
-// Hard shutdown: Disable interrupts then do a keyboard RESET, instead
-// of using ACPI.
-void hal_shutdown_hard()
+void wait_for_keyboard_controller()
 {
-    print("\r\n");
-    print("Doing a hard shutdown.\r\n");
-
-    hal_disable_interrupts();
-
-    while ((hal_inb(0x64) & 2) != 0) {
-        // Wait until condition is true before continuing.
+    while((hal_inb(0x64) & 2) != 0) {
+        // Do nothing until the keyboard controller can accept commands.
     }
-
-    hal_outb(0x64, 0xD1);
-
-    while ((hal_inb(0x64) & 2) != 0) {
-        // Wait until condition is true before continuing.
-    }
-
-    hal_outb(0x60, 0xFE); // Keyboard RESET.
 }
 
-// Normal shutdown.
+// Hard shutdown: Disable interrupts then do a keyboard RESET.
+void hal_shutdown_hard()
+{
+    print("\r\nDoing a hard shutdown.\r\n");
+
+    event_trigger("HAL interrupts disable", NULL);
+
+    wait_for_keyboard_controller();
+    // Tell the keyboard controller we want to write something..
+    hal_outb(0x64, 0xD1);
+    // Wait until the keyboard controller isn't busy.
+    wait_for_keyboard_controller();
+    // Send a RESET command to the keyboard controller.
+    hal_outb(0x60, 0xFE);
+}
+
+// Clean shutdown.
 // TODO: Implement an ACPI-based hal_shutdown().
 void hal_shutdown(UNUSED void *data)
 {
