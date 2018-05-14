@@ -29,9 +29,8 @@ void hal_init(void *data)
     hal_exceptions_init();
 
     flail_init(kernel_info, &print);
-    dmm_init(&_flail_panic);
+    event_trigger("register panic function", &_flail_panic);
 
-    hal_panic_init(&_flail_panic);
     hal_multiboot_init();
 
     ali_init(&_dmm_malloc, &_dmm_free, &_dmm_realloc);
