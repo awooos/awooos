@@ -7,7 +7,7 @@ char *print(const char *string)
 {
     event_trigger("print string", (char*)string);
 
-    return string;
+    return (char*)string;
 }
 
 char *println(const char *string){
@@ -20,5 +20,5 @@ char *println(const char *string){
     print(new_string);
     ali_free(new_string);
 
-    return string;
+    return (char*)string;
 }
