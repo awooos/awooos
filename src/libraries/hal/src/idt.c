@@ -1,9 +1,8 @@
 #include <stdint.h>
-#include <string.h>
 #include "idt.h"
 
 IdtPointer idtd;
-IdtEntry idt[256];
+IdtEntry idt[256] = {{0,0,0,0,0}};
 
 void hal_idt_load(void)
 {
@@ -14,8 +13,6 @@ void hal_idt_init()
 {
     idtd.offset = (uint32_t)idt;
     idtd.size = sizeof(IdtEntry) * 256 - 1;
-
-    memset(idt, 0, idtd.size);
 
     hal_idt_load();
 }
