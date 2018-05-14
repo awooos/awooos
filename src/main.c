@@ -37,5 +37,5 @@ void *ali_calloc(size_t nmemb, size_t size, const char function[],
 void *ali_realloc(void *ptr, size_t size, const char function[],
         const char filename[], size_t line)
 {
-    return mmfns.malloc(size, function, filename, line);
+    return mmfns.realloc(ptr, size, function, filename, line);
 }
