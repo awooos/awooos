@@ -26,17 +26,22 @@ DMM_MallocHeader *dmm_get_first_free_chunk(size_t size)
     return dmm_instance_get_first_free_chunk(dmm_global_instance, size);
 }
 
-void *dmm_malloc(size_t size)
+void *_dmm_malloc(size_t size, const char function[], const char filename[],
+        size_t line)
 {
-    return dmm_instance_malloc(dmm_global_instance, size);
+    return _dmm_instance_malloc(dmm_global_instance, size, function,
+            filename, line);
 }
 
-void dmm_free(void *ptr)
+void _dmm_free(void *ptr, const char function[], const char filename[],
+        size_t line)
 {
-    dmm_instance_free(dmm_global_instance, ptr);
+    _dmm_instance_free(dmm_global_instance, ptr, function, filename, line);
 }
 
-void *dmm_realloc(void *ptr, size_t size)
+void *_dmm_realloc(void *ptr, size_t size, const char function[],
+        const char filename[], size_t line)
 {
-    return dmm_instance_realloc(dmm_global_instance, ptr, size);
+    return _dmm_instance_realloc(dmm_global_instance, ptr, size, function,
+            filename, line);
 }

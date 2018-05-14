@@ -1,4 +1,4 @@
-// REQUIREMENTS: Requires size_t (stddef.h); and memset() and memcpy() (string.h).
+// REQUIREMENTS: size_t (stddef.h); memset() + memcpy() (string.h).
 
 #include <dmm.h>
 #include <dmm_instance.h>
@@ -7,6 +7,32 @@
 #include "main.h"
 #include "header.h"
 #include "instance.h"
+
+void dmm_call_location(DMM_CallLocation *call_location,
+        const char function[], const char filename[], size_t line)
+{
+    char *reversed_filename = NULL;
+
+    memcpy((void*)(call_location->function), function, sizeof(call_location->function));
+
+    if (strlen(filename) > sizeof(call_location->filename)) {
+        // The filename is too long to fit, so write the end of it only.
+        for (size_t i = 0; i > sizeof(call_location->filename); i++) {
+            call_location->filename[i] = filename[strlen(filename) - i - 1];
+        }
+
+        // Overwrite the first 3 bytes with "...".
+        memcpy((void*)(call_location->filename), "...", 3);
+    } else {
+        // It fits, so just copy it in.
+        memcpy((void*)(call_location->filename), filename, sizeof(call_location->filename));
+    }
+
+    // Terminate with a null byte.
+    call_location->filename[sizeof(call_location->filename) - 1] = '\0';
+
+    call_location->line = line;
+}
 
 void *dmm_instance_add_memory_region(void *instance, void *start, size_t length)
 {
@@ -62,7 +88,8 @@ DMM_MallocHeader *dmm_instance_get_first_free_chunk(void *instance, size_t size)
     return NULL;
 }
 
-void *dmm_instance_malloc(void *instance, size_t size)
+void *_dmm_instance_malloc(void *instance, size_t size, const char function[],
+        const char filename[], size_t line)
 {
     DMM_MallocHeader *result = dmm_instance_get_first_free_chunk(instance, size);
     if (result == NULL) {
@@ -79,6 +106,8 @@ void *dmm_instance_malloc(void *instance, size_t size)
     // Set the header to contain this region's exact size, and set it as used.
     result->used = 1;
     result->size = size;
+
+    dmm_call_location(&(result->call_location), function, filename, line);
 
     // NOTE: dmm_malloc() zeroes memory, which isn't what most allocators do.
     // Not sure if that violates the C standard or not, but *shrug*.
@@ -104,9 +133,10 @@ void *dmm_instance_malloc(void *instance, size_t size)
     return result->data;
 }
 
-void dmm_instance_free(void *instance, void *ptr)
+// FIXME: _dmm_instance_free() doesn't/can't check if +ptr+ belongs to +instnace+.
+void _dmm_instance_free(void *instance, void *ptr, const char function[],
+        const char filename[], size_t line)
 {
-    (void)instance; // TODO: does this require an instance?
     DMM_MallocHeader *header = (DMM_MallocHeader*)(ptr) - 1;
     if (header->magic != DMM_HEADER_MAGIC) {
         dmm_panic("memory region header had invalid magic");
@@ -114,20 +144,20 @@ void dmm_instance_free(void *instance, void *ptr)
 
     header->used = 0;
 
-    // TODO: merge this chunk into the previous/next chunks if they are also
-    // marked as free.
+    // TODO: merge this chunk with adjacent chunks if they're both marked
+    //       as free and belong to this instance.
 }
 
-// TODO: dmm_realloc() should attempt to resize existing chunk rather
-// than just allocating a new one and memcpy()ing.
-void *dmm_instance_realloc(void *instance, void *ptr, size_t size)
+// TODO: Have _dmm_instance_realloc() resize a chunk if possible.
+void *_dmm_instance_realloc(void *instance, void *ptr, size_t size, const char *function,
+        const char *filename, size_t line)
 {
     DMM_MallocHeader *header;
     void *new_ptr;
     size_t min_size;
 
     if (ptr == NULL) {
-        return dmm_instance_malloc(instance, size);
+        return _dmm_instance_malloc(instance, size, function, filename, line);
     }
 
     // Check for memory clobbering.
@@ -137,7 +167,7 @@ void *dmm_instance_realloc(void *instance, void *ptr, size_t size)
     }
 
     // Allocate new memory chunk.
-    new_ptr = dmm_instance_malloc(instance, size);
+    new_ptr = _dmm_instance_malloc(instance, size, function, filename, line);
     if (new_ptr == NULL) {
         return NULL;
     }
@@ -150,7 +180,7 @@ void *dmm_instance_realloc(void *instance, void *ptr, size_t size)
     memcpy(new_ptr, ptr, min_size);
 
     // Release the original allocation.
-    dmm_instance_free(instance, ptr);
+    _dmm_instance_free(instance, ptr, function, filename, line);
 
     return new_ptr;
 }
