@@ -7,8 +7,6 @@
 #include "panic.h"
 #include <stddef.h>
 #include <stdbool.h>
-#include "basic_display.h"
-#include "basic_uart.h"
 #include "exceptions.h"
 #include "gdt.h"
 #include "idt.h"
