@@ -22,8 +22,6 @@ AliEventGroup *_ali_event_create_group(const char *event_name)
 
     group = &(event_groups[number_of_events]);
 
-    memset(group, 0, sizeof(AliEventGroup));
-
     group->name = event_name;
     number_of_events++;
 
