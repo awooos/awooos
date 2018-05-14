@@ -1,4 +1,3 @@
-#include <awoo.h>
 #include <ali.h>
 #include <dmm.h>
 #include <ali/event.h>
@@ -16,8 +15,10 @@
 
 static bool hal_initialized = false;
 
-void hal_init(UNUSED void *data)
+void hal_init(void *data)
 {
+    const char *kernel_info = (char*)data;
+
     if (hal_initialized) {
         return;
     }
@@ -27,7 +28,7 @@ void hal_init(UNUSED void *data)
     hal_idt_init();
     hal_exceptions_init();
 
-    flail_init(AWOO_INFO, &print);
+    flail_init(kernel_info, &print);
     dmm_init(&_flail_panic);
 
     hal_panic_init(&_flail_panic);

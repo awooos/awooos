@@ -1,3 +1,4 @@
+#include <awoo.h>
 #include <ali/event.h>
 #include <greeter.h>
 #include <hal.h>
@@ -11,7 +12,7 @@ noreturn void kernel_main()
     tests_register_events();
     hal_register_events();
 
-    event_trigger("HAL init", NULL);
+    event_trigger("HAL init", (void*)AWOO_INFO);
     event_trigger("tests run", NULL);
 
     shell_init();
