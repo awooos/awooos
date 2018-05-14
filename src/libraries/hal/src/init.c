@@ -1,17 +1,15 @@
 #include <ali.h>
-#include <dmm.h>
 #include <ali/event.h>
-#include <ali/modifiers.h>
-#include <flail.h>
-#include <hal.h>
-#include "panic.h"
-#include <stddef.h>
-#include <stdbool.h>
+#include <dmm.h>
 #include "exceptions.h"
+#include <flail.h>
 #include "gdt.h"
+#include <hal.h>
 #include "idt.h"
 #include "metadata.h"
 #include "multiboot.h"
+#include <stddef.h>
+#include <stdbool.h>
 
 static bool hal_initialized = false;
 
@@ -29,7 +27,7 @@ void hal_init(void *data)
     hal_exceptions_init();
 
     flail_init(kernel_info, &print);
-    event_trigger("register panic function", &_flail_panic);
+    event_trigger("register panic function", (void*)&_flail_panic);
 
     hal_multiboot_init();
 

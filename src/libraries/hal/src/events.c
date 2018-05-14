@@ -9,11 +9,11 @@
 #include "metadata.h"
 #include "panic.h"
 #include "shutdown.h"
-#include "text.h"
 
 void hal_register_events()
 {
-    event_watch("print string",            &hal_print_callback);
+    event_watch("print string",            (void (*)(void*))&hal_basic_display_print);
+    event_watch("print string",            (void (*)(void*))&hal_basic_uart_print);
     event_watch("HAL init",                &hal_init);
     event_watch("HAL shutdown",            &hal_shutdown);
     event_watch("HAL shutdown test fail",  &hal_shutdown_test_fail);
