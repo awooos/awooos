@@ -1,6 +1,5 @@
 #include <ali/event.h>
 #include <ali/text.h>
-#include <awoo/build_info.h>
 #include <dmm.h>
 #include <flail.h>
 #include <hal.h>
@@ -24,9 +23,10 @@ void test_shutdown(bool all_tests_passed)
     event_trigger("HAL shutdown", NULL);
 }
 
-void run_tests()
+void run_tests(void *data)
 {
     bool all_tests_passed;
+    bool test_build = *((bool*)data);
 
     ADD_TESTS(hal);
     ADD_TESTS(ali);
@@ -35,7 +35,7 @@ void run_tests()
     all_tests_passed = tinker_run_tests(&print);
 
     // Handle things we _only_ do in test builds.
-    if (AWOO_BUILD_TYPE_NUMBER == AWOO_TEST_BUILD) {
+    if (test_build) {
         // This doesn't catch all failures, but it'll catch
         // unintentional infinite loops by causing the CI
         // build to time out.

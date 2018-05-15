@@ -8,12 +8,14 @@
 
 noreturn void kernel_main()
 {
+    bool test_build = (AWOO_BUILD_TYPE_NUMBER == AWOO_TEST_BUILD);
+
     greeter_register_events();
     tests_register_events();
     hal_register_events();
 
     event_trigger("HAL init", (void*)AWOO_INFO);
-    event_trigger("tests run", NULL);
+    event_trigger("tests run", &test_build);
 
     shell_init();
 
