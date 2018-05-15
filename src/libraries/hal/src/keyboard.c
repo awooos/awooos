@@ -4,7 +4,8 @@
 #include "keysym_us.h"
 #include "ports.h"
 #include <stdlib.h>
-#include <string.h>
+
+#define EMPTY_KEYBOARD_EVENT {0,0,0,0,0,0,0,0,0,0,0,0,{0,},0,0}
 
 #define IS_BREAK(x) (scancode & 0x80)
 #define IS_MAKE(x)  (!IS_BREAK(x))
@@ -14,14 +15,7 @@
 
 #define ACTIVE(key, scancode) (MAKE(scancode) || (state.key && (!BREAK(scancode))))
 
-static bool keyboard_initialized = false;
-static KeyboardEvent state;
-
-void hal_keyboard_init()
-{
-    memset(&state, 0, sizeof(KeyboardEvent));
-    keyboard_initialized = true;
-}
+static KeyboardEvent state = EMPTY_KEYBOARD_EVENT;
 
 char hal_keyboard_resolve_scancode(char keysym[128], uint32_t scancode)
 {
@@ -30,14 +24,9 @@ char hal_keyboard_resolve_scancode(char keysym[128], uint32_t scancode)
 
 void hal_keyboard_callback(UNUSED void *data)
 {
-    if (!keyboard_initialized) {
-        hal_keyboard_init();
-    }
-
     uint32_t scancode = hal_inb(0x60);
 
-    KeyboardEvent event;
-    memset(&event, 0, sizeof(KeyboardEvent));
+    KeyboardEvent event = EMPTY_KEYBOARD_EVENT;
 
     event.make       = IS_MAKE(scancode);
     event.Esc        = ACTIVE(Esc,   0x01);
