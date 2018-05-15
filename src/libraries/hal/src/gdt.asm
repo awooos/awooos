@@ -28,9 +28,7 @@ section .text
         ; Load the TSS. Some docs are in the Intel manuals and
         ; http://wiki.osdev.org/Task_State_Segment
 
-        ; First I'm going to fill in the fields of the GDT descriptor for
-        ; the TSS. This is mostly a bunch of bitshifts to align everything
-        ; correctly
+        ; Fill in the fields of the GDT discriptor for the TSS.
 
         ; eax will be the beginning of the TSS
         ; ebx will be the size of the TSS
@@ -78,41 +76,25 @@ section .text
         add esi, 7
         mov byte [ds:esi], cl
 
-        ; Ok, now that the GDT is in place, I need to fill in the stack
-        ; data to the actual TSS.
+        ; Now that the GDT is in place, fill in the stack data in the TSS.
 
-        ; Load ESP0. For the time being, this will be the top of the stack.
-        ; Before attempting to use this TSS for task switching, please please
-        ; please load ESP0 with the current value of ESP0 or expect
-        ; crashes (that I will laugh at since you don't read my docs).
-        ; This is almost identical to gdt_load_esp0_into_tss. I am just
-        ; inlining it for speed.
+        ; Load ESP0.
+        ; This can't be used for task switching, in its current state.
         mov esi, stack_top
         mov esi, 4
         mov dword [ds:esi], eax
 
-        ; Load SS0
+        ; Load SS0.
         mov ax, 0x10
         mov esi, 8
         mov word [ds:esi], ax
 
         ; This falls through to hal_tss_flush.
 
-    ; Finally, we can load the valid TSS into the task register. The
-    ; TSS is at offset 28 in the GDT.
-    hal_tss_flush:
+        ; Load the now-valid TSS into the task register.
+        ; The TSS is at offset 28 in the GDT.
         mov ax, 0x28
         ltr ax
-        ; Finished
-        ret
-
-    ; A function to load a value into ESP0 in the TSS.
-    hal_gdt_load_esp0_into_tss:
-        ; First argument will contain the value to load in esp0
-        mov eax, [esp + 4]
-        mov eax, stack_top
-        mov esi, 4
-        mov dword [ds:esi], eax
         ret
 
 section .data
