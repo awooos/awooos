@@ -141,44 +141,8 @@ section .data
         dd _gdt_begin
 
     _tss_begin:
-        ; See http://wiki.osdev.org/Task_State_Segment. For the most part,
-        ; everything documented is the register name, and everything not
-        ; documented is reserved.
-        dw 0x0 ;LINK
-        dw 0x0
-        dd 0x0 ;ESP0
-        dw 0x0 ;SS0
-        dw 0x0
-        dd 0x0 ;ESP1
-        dw 0x0 ;SS1
-        dw 0x0
-        dd 0x0 ;ESP2
-        dw 0x0 ;SS2
-        dw 0x0
-        dd 0x0 ;CR3
-        dd 0x0 ;EIP
-        dd 0x0 ;EFLAGS
-        dd 0x0 ;EAX
-        dd 0x0 ;ECX
-        dd 0x0 ;EDX
-        dd 0x0 ;EBX
-        dd 0x0 ;ESP
-        dd 0x0 ;EBP
-        dd 0x0 ;ESI
-        dd 0x0 ;EDI
-        dw 0x0 ;ES
-        dw 0x0
-        dw 0x0 ;CS
-        dw 0x0
-        dw 0x0 ;SS
-        dw 0x0
-        dw 0x0 ;DS
-        dw 0x0
-        dw 0x0 ;FS
-        dw 0x0
-        dw 0x0 ;GS
-        dw 0x0
-        dw 0x0 ;LDTR
-        dw 0x0
-        dw 104 ;IOPB offset (the sizeof the TSS)
+        ; The entire TSS is set to 0 by default.
+        times 36 dw 0x0
+    ._tss_data_end:
+        dw ._tss_data_end - _tss_begin
     _tss_end:
