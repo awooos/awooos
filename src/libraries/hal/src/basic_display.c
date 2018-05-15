@@ -4,6 +4,7 @@
 #include "basic_display.h"
 #include "ports.h"
 #include <stdint.h>
+#include <string.h>
 
 const uint16_t *VIDEO_RAM = (const uint16_t*)0xB8000;
 
@@ -31,6 +32,17 @@ void hal_basic_display_move_cursor(uint16_t row_, uint16_t col_)
     hal_outb(VGA_DATA_REGISTER, (uint8_t)position); // Actually set it.
 }
 
+void hal_basic_display_scroll()
+{
+    for (uint16_t i = 0; i < (VIDEO_HEIGHT - 1); i++) {
+        memcpy((void*)(VIDEO_RAM + (i * VIDEO_WIDTH)),
+               (void*)(VIDEO_RAM + ((i + 1) * VIDEO_WIDTH)),
+               VIDEO_WIDTH * 2);
+    }
+    memset((void*)(VIDEO_RAM + ((VIDEO_HEIGHT - 1) * VIDEO_WIDTH)),
+            0, VIDEO_WIDTH * 2);
+}
+
 // Print a string to the display.
 void hal_basic_display_print(const char *string)
 {
@@ -55,7 +67,8 @@ void hal_basic_display_print(const char *string)
                 row += 1;
             }
             if (row >= VIDEO_HEIGHT) {
-                row = 0; // No scrolling; see comment at the top of the file.
+                hal_basic_display_scroll();
+                row = VIDEO_HEIGHT - 1;
             }
 
             text_index = ((row * VIDEO_WIDTH) + col) * 2;
