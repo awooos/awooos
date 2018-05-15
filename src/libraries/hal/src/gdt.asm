@@ -1,5 +1,7 @@
 ; asmsyntax=nasm
 
+; This GDT does not support multitasking.
+
 ; Borrowed with love from a prior operating system development excursion.
 ; https://github.com/duckinator/dux/blob/main/src/lib/hal/gdt.asm
 
@@ -70,8 +72,6 @@ section .text
         ; Now that the GDT is in place, fill in the stack data in the TSS.
 
         ; Load ESP0.
-        ; This can't be used for task switching, in its current state.
-        mov esi, stack_top
         mov esi, 4
         mov dword [ds:esi], eax
 
@@ -79,8 +79,6 @@ section .text
         mov ax, 0x10
         mov esi, 8
         mov word [ds:esi], ax
-
-        ; This falls through to hal_tss_flush.
 
         ; Load the now-valid TSS into the task register.
         ; The TSS is at offset 28 in the GDT.
