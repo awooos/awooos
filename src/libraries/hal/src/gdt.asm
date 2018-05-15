@@ -12,9 +12,9 @@ extern stack_top
 
 section .text
     hal_gdt_init:
-        ; Load the GDT and reload cs to 0x8 with a far jump (to the next line)
-        ; the code there reloads ds, es, fs, gs, and ss with 0x10
-        ; See the comments in the GDT for what 0x8 and 0x10 do
+        ; Load the GDT and reload cs to 0x8 with a far jump to the next line.
+        ; The code there reloads ds, es, fs, gs, and ss with 0x10.
+        ; See the comments in the GDT for what 0x8 and 0x10 do.
         lgdt [_gdt_desc]
         jmp 0x8:.reload
     .reload:
@@ -30,11 +30,8 @@ section .text
 
         ; Fill in the fields of the GDT discriptor for the TSS.
 
-        ; eax will be the beginning of the TSS
-        ; ebx will be the size of the TSS
-        mov eax, _tss_begin
-        mov ebx, _tss_end
-        sub ebx, _tss_begin
+        mov eax, _tss_begin              ; Beginning of the TSS.
+        mov ebx, [_tss_end - _tss_begin] ; Size of the TSS.
 
         ; The first 16 bits of the limit (size of TSS).
         mov ecx, ebx
