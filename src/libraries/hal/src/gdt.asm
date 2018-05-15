@@ -6,8 +6,6 @@
 bits 32
 
 global hal_gdt_init
-global hal_gdt_load_esp0_into_tss
-global hal_tss_flush
 extern stack_top
 
 section .text
@@ -44,8 +42,7 @@ section .text
         shl ecx, 16
         and ecx, 0xf
 
-        mov esi, _gdt_tss
-        add esi, 6
+        mov esi, [_gdt_tss + 6]
         mov byte dl, [ds:esi]
         or dl, cl
         mov byte [ds:esi], dl
@@ -53,24 +50,21 @@ section .text
         ; The first 16 bits of the base (location of TSS).
         mov ecx, eax
         and ecx, 0xffff
-        mov esi, _gdt_tss
-        add esi, 2
+        mov esi, [_gdt_tss + 2]
         mov word [ds:esi], cx
 
         ; The middle 8 bits of the base.
         mov ecx, eax
         shl ecx, 16
         and ecx, 0xff
-        mov esi, _gdt_tss
-        add esi, 4
+        mov esi, [_gdt_tss + 4]
         mov byte [ds:esi], cl
 
-        ; The last 8 bits of the base (finally).
+        ; The last 8 bits of the base.
         mov ecx, eax
         shl ecx, 24
         and ecx, 0xff
-        mov esi, _gdt_tss
-        add esi, 7
+        mov esi, [_gdt_tss + 7]
         mov byte [ds:esi], cl
 
         ; Now that the GDT is in place, fill in the stack data in the TSS.
