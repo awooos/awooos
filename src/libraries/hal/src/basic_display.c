@@ -8,8 +8,10 @@
 
 const uint16_t *VIDEO_RAM = (const uint16_t*)0xB8000;
 
-static uint16_t VIDEO_WIDTH  = 80; /* characters. */
-static uint16_t VIDEO_HEIGHT = 25; /* rows. */
+#define VIDEO_WIDTH  80 /* characters. */
+#define VIDEO_HEIGHT 25 /* rows. */
+
+#define DISPLAY_BUFFER_SIZE (sizeof(char) * VIDEO_HEIGHT * VIDEO_WIDTH)
 
 // http://www.jamesmolloy.co.uk/tutorial_html/3.-The%20Screen.html
 static uint16_t VGA_CTRL_REGISTER = 0x3D4;
@@ -22,9 +24,11 @@ static uint8_t row = 0;
 static uint8_t col = 0;
 
 // Move the cursor to a different position, and update row/column accordingly.
-void hal_basic_display_move_cursor(uint16_t row_, uint16_t col_)
+void hal_basic_display_move_cursor(uint8_t row_, uint8_t col_)
 {
     uint16_t position = (row_ * VIDEO_WIDTH) + col_;
+    row = row_;
+    col = col_;
 
     hal_outb(VGA_CTRL_REGISTER, 14);                // Tell it we're setting high cursor byte.
     hal_outb(VGA_DATA_REGISTER, (position >> 8));   // Actually set it.
@@ -85,20 +89,11 @@ void hal_basic_display_print(const char *string)
 
 void hal_basic_display_clear()
 {
-    // NOTE: uint16_t will always work, because VIDEO_HEIGHT and VIDEO_WIDTH
-    //       are constant with the VGA display mode we're using here.
-    uint16_t buf_size = sizeof(char) * VIDEO_HEIGHT * VIDEO_WIDTH;
-    char spaces[buf_size + 1];
-    spaces[buf_size - 1] = 0;
-
-    for (uint16_t i = 0; i <= buf_size; i++) {
-        spaces[i] = ' ';
-    }
+    static char spaces[DISPLAY_BUFFER_SIZE + 1] = {' ',};
+    spaces[DISPLAY_BUFFER_SIZE] = 0;
 
     hal_basic_display_print(spaces);
-    row = 0;
-    col = 0;
-    hal_basic_display_move_cursor(row, col);
+    hal_basic_display_move_cursor(0, 0);
 }
 
 void hal_basic_display_init(UNUSED void *data)
