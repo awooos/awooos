@@ -1,7 +1,5 @@
 #include <ali/event.h>
-#include <ali/modifiers.h>
 #include <ali/text.h>
-#include <awoo.h>
 
 void greeter_display_greeting(void *data)
 {
