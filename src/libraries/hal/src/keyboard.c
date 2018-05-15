@@ -39,30 +39,48 @@ void hal_keyboard_callback(UNUSED void *data)
     KeyboardEvent event;
     memset(&event, 0, sizeof(KeyboardEvent));
 
-    event.Esc      = ACTIVE(Esc,   0x01);
-    event.CtrlL    = ACTIVE(CtrlL, 0x1D);
-    event.CtrlR    = false; //ACTIVE(CtrlR, ); // TODO: Add CtrlR support.
-    event.AltL     = ACTIVE(AltL,  0x38);
-    event.AltR     = false; //ACTIVE(AltR, );  // TODO: Add AltR support.
-    event.GuiL     = false; //ACTIVE(GuiL, );  // TODO: Add GuiL support.
-    event.GuiR     = false; //ACTIVE(GuiR, );  // TODO: Add GuiR support.
-    event.ShiftL   = ACTIVE(ShiftL,    0x2A);
-    event.ShiftR   = ACTIVE(ShiftR,    0x36);
-    event.NumLock  = ACTIVE(NumLock,   0x45);
-    event.CapsLock = ACTIVE(CapsLock,  0x3A);
+    event.make       = IS_MAKE(scancode);
+    event.Esc        = ACTIVE(Esc,   0x01);
+    event.CtrlL      = ACTIVE(CtrlL, 0x1D);
+    event.CtrlR      = false; //ACTIVE(CtrlR, ); // TODO: Add CtrlR support.
+    event.AltL       = ACTIVE(AltL,  0x38);
+    event.AltR       = false; //ACTIVE(AltR, );  // TODO: Add AltR support.
+    event.GuiL       = false; //ACTIVE(GuiL, );  // TODO: Add GuiL support.
+    event.GuiR       = false; //ACTIVE(GuiR, );  // TODO: Add GuiR support.
+    event.ShiftL     = ACTIVE(ShiftL,    0x2A);
+    event.ShiftR     = ACTIVE(ShiftR,    0x36);
+    event.NumLock    = ACTIVE(NumLock,   0x45);
+    event.CapsLock   = ACTIVE(CapsLock,  0x3A);
     event.ScrollLock = ACTIVE(ScrollLock, 0x46);
 
-    if (event.CapsLock) {
+    state.Esc      = event.Esc;
+    state.CtrlL    = event.CtrlL;
+    state.CtrlR    = event.CtrlR;
+    state.AltL     = event.AltL;
+    state.AltR     = event.AltR;
+    state.GuiL     = event.GuiL;
+    state.GuiR     = event.GuiR;
+    state.ShiftL   = event.ShiftL;
+    state.ShiftR   = event.ShiftR;
+
+    if (event.NumLock && !event.make) {
+        state.NumLock = !(state.NumLock);
+    }
+
+    if (event.CapsLock && !event.make) {
         state.CapsLock = !(state.CapsLock);
     }
 
-    if (event.ShiftL || event.ShiftR) {
+    if (event.ScrollLock && !event.make) {
+        state.ScrollLock = !(state.ScrollLock);
+    }
+
+    if (((event.ShiftL || event.ShiftR) && !state.CapsLock)
+            || (!(event.ShiftL || event.ShiftR) && state.CapsLock)){
         event.c = hal_keyboard_resolve_scancode(keysym_us_shift, scancode);
     } else {
         event.c = hal_keyboard_resolve_scancode(keysym_us, scancode);
     }
-
-    event.make = IS_MAKE(event.c);
 
     event_trigger("keyboard event", &event);
 }
