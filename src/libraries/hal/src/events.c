@@ -10,7 +10,6 @@
 #include "idt.h"
 #include "interrupts.h"
 #include "keyboard.h"
-#include "metadata.h"
 #include "multiboot.h"
 #include "panic.h"
 #include "shutdown.h"
