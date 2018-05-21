@@ -1,6 +1,5 @@
 // NOTE: This display driver does NOT implement scrolling, currently.
 
-#include <ali/modifiers.h>
 #include "basic_display.h"
 #include "ports.h"
 #include <stdint.h>
