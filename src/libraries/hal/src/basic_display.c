@@ -3,9 +3,8 @@
 #include "basic_display.h"
 #include "ports.h"
 #include <stdint.h>
-#include <string.h>
 
-const uint16_t *VIDEO_RAM = (const uint16_t*)0xB8000;
+static uint16_t *VIDEO_RAM = (uint16_t*)0xB8000;
 
 #define VIDEO_WIDTH  80 /* characters. */
 #define VIDEO_HEIGHT 25 /* rows. */
@@ -38,11 +37,13 @@ void hal_basic_display_move_cursor(uint8_t row_, uint8_t col_)
 void hal_basic_display_clear()
 {
     // We to avoid inlining a freaking 4KB string of spaces,
-    // we initialize it to null bytes and use memset() to correct it.
+    // we initialize it to null bytes and set it to spaces afterwards.
     static char spaces[DISPLAY_BUFFER_SIZE + 1] = {0,};
-    // Only run memset() if it's not been ran before.
+    // Only set everything to spaces if it's required.
     if (spaces[0] == 0) {
-        memset(&spaces, ' ', DISPLAY_BUFFER_SIZE);
+        for (uint32_t i = 0; i < DISPLAY_BUFFER_SIZE; i++) {
+            spaces[i] = ' ';
+        }
     }
 
     // Move the cursor to the top-left of the screen.
@@ -56,12 +57,16 @@ void hal_basic_display_clear()
 void hal_basic_display_scroll()
 {
     for (uint16_t i = 0; i < (VIDEO_HEIGHT - 1); i++) {
-        memcpy((void*)(VIDEO_RAM + (i * VIDEO_WIDTH)),
-               (void*)(VIDEO_RAM + ((i + 1) * VIDEO_WIDTH)),
-               VIDEO_WIDTH * 2);
+        for (uint16_t _col = 0; _col < VIDEO_WIDTH; _col++) {
+            VIDEO_RAM[(i * VIDEO_WIDTH) + _col] = VIDEO_RAM[(i + 1) * VIDEO_WIDTH + _col];
+        }
     }
-    memset((void*)(VIDEO_RAM + ((VIDEO_HEIGHT - 1) * VIDEO_WIDTH)),
-            0, VIDEO_WIDTH * 2);
+
+    hal_basic_display_move_cursor(VIDEO_HEIGHT - 1, 0);
+    for (uint16_t i = 0; i < VIDEO_WIDTH; i++) {
+        hal_basic_display_print(" ");
+    }
+    hal_basic_display_move_cursor(VIDEO_HEIGHT - 1, 0);
 }
 
 // Print a string to the display.
