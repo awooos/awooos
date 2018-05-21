@@ -1,17 +1,15 @@
 // NOTE: This display driver does NOT implement scrolling, currently.
 
-#include <ali/modifiers.h>
 #include "basic_display.h"
 #include "ports.h"
 #include <stdint.h>
-#include <string.h>
 
-const uint16_t *VIDEO_RAM = (const uint16_t*)0xB8000;
+static uint16_t *VIDEO_RAM = (uint16_t*)0xB8000;
 
 #define VIDEO_WIDTH  80 /* characters. */
 #define VIDEO_HEIGHT 25 /* rows. */
 
-#define DISPLAY_BUFFER_SIZE (sizeof(char) * VIDEO_HEIGHT * VIDEO_WIDTH)
+#define DISPLAY_BUFFER_SIZE (VIDEO_HEIGHT * VIDEO_WIDTH)
 
 // http://www.jamesmolloy.co.uk/tutorial_html/3.-The%20Screen.html
 static uint16_t VGA_CTRL_REGISTER = 0x3D4;
@@ -36,15 +34,39 @@ void hal_basic_display_move_cursor(uint8_t row_, uint8_t col_)
     hal_outb(VGA_DATA_REGISTER, (uint8_t)position); // Actually set it.
 }
 
+void hal_basic_display_clear()
+{
+    // We to avoid inlining a freaking 4KB string of spaces,
+    // we initialize it to null bytes and set it to spaces afterwards.
+    static char spaces[DISPLAY_BUFFER_SIZE + 1] = {0,};
+    // Only set everything to spaces if it's required.
+    if (spaces[0] == 0) {
+        for (uint32_t i = 0; i < DISPLAY_BUFFER_SIZE; i++) {
+            spaces[i] = ' ';
+        }
+    }
+
+    // Move the cursor to the top-left of the screen.
+    hal_basic_display_move_cursor(0, 0);
+    // Print a whole screen worth of spaces.
+    hal_basic_display_print(spaces);
+    // Move the cursor back to the top-left of the screen.
+    hal_basic_display_move_cursor(0, 0);
+}
+
 void hal_basic_display_scroll()
 {
     for (uint16_t i = 0; i < (VIDEO_HEIGHT - 1); i++) {
-        memcpy((void*)(VIDEO_RAM + (i * VIDEO_WIDTH)),
-               (void*)(VIDEO_RAM + ((i + 1) * VIDEO_WIDTH)),
-               VIDEO_WIDTH * 2);
+        for (uint16_t _col = 0; _col < VIDEO_WIDTH; _col++) {
+            VIDEO_RAM[(i * VIDEO_WIDTH) + _col] = VIDEO_RAM[(i + 1) * VIDEO_WIDTH + _col];
+        }
     }
-    memset((void*)(VIDEO_RAM + ((VIDEO_HEIGHT - 1) * VIDEO_WIDTH)),
-            0, VIDEO_WIDTH * 2);
+
+    hal_basic_display_move_cursor(VIDEO_HEIGHT - 1, 0);
+    for (uint16_t i = 0; i < VIDEO_WIDTH; i++) {
+        hal_basic_display_print(" ");
+    }
+    hal_basic_display_move_cursor(VIDEO_HEIGHT - 1, 0);
 }
 
 // Print a string to the display.
@@ -57,6 +79,7 @@ void hal_basic_display_print(const char *string)
 
     if (video == 0) {
         video = (char*)VIDEO_RAM;
+        hal_basic_display_clear();
     }
 
     for (; 0 != *string; string++) {
@@ -104,27 +127,4 @@ void hal_basic_display_print(const char *string)
 
     // Update the displayed cursor position.
     hal_basic_display_move_cursor(row, col);
-}
-
-void hal_basic_display_clear()
-{
-    // We to avoid inlining a freaking 4KB string of spaces,
-    // we initialize it to null bytes and use memset() to correct it.
-    static char spaces[DISPLAY_BUFFER_SIZE + 1] = {0,};
-    // Only run memset() if it's not been ran before.
-    if (spaces[0] == 0) {
-        memset(&spaces, ' ', DISPLAY_BUFFER_SIZE);
-    }
-
-    // Move the cursor to the top-left of the screen.
-    hal_basic_display_move_cursor(0, 0);
-    // Print a whole screen worth of spaces.
-    hal_basic_display_print(spaces);
-    // Move the cursor back to the top-left of the screen.
-    hal_basic_display_move_cursor(0, 0);
-}
-
-void hal_basic_display_init(UNUSED void *data)
-{
-    hal_basic_display_clear();
 }
