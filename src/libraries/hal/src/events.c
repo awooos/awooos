@@ -17,7 +17,6 @@
 void hal_register_events()
 {
     event_watch("HAL init",                &hal_basic_display_init);
-    event_watch("HAL init",                &hal_basic_uart_init);
     event_watch("HAL init",                &hal_gdt_init);
     event_watch("HAL init",                &hal_idt_init);
     event_watch("HAL init",                &hal_exceptions_init);
