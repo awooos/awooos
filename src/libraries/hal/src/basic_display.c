@@ -9,7 +9,7 @@ static uint16_t *VIDEO_RAM = (uint16_t*)0xB8000;
 #define VIDEO_WIDTH  80 /* characters. */
 #define VIDEO_HEIGHT 25 /* rows. */
 
-#define DISPLAY_BUFFER_SIZE (sizeof(char) * VIDEO_HEIGHT * VIDEO_WIDTH)
+#define DISPLAY_BUFFER_SIZE (VIDEO_HEIGHT * VIDEO_WIDTH)
 
 // http://www.jamesmolloy.co.uk/tutorial_html/3.-The%20Screen.html
 static uint16_t VGA_CTRL_REGISTER = 0x3D4;
