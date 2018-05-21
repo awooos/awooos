@@ -60,39 +60,67 @@ void hal_basic_display_print(const char *string)
     }
 
     for (; 0 != *string; string++) {
+        // Carriage returns.
         if (*string == '\r') {
+            // Set the column to zero.
             col = 0;
-        } else if (*string == '\n') {
+            continue;
+        }
+
+        // Newlines.
+        if (*string == '\n') {
+            // Set the column to zero (implicit carriage return),
+            // and increment the row.
             col = 0;
             row += 1;
-        } else {
-            if (col >= VIDEO_WIDTH) {
-                col = 0;
-                row += 1;
-            }
-            if (row >= VIDEO_HEIGHT) {
-                hal_basic_display_scroll();
-                row = VIDEO_HEIGHT - 1;
-            }
-
-            text_index = ((row * VIDEO_WIDTH) + col) * 2;
-            color_index = text_index + 1;
-            video[text_index] = *string;
-            video[color_index] = BACKGROUND_COLOR;
-
-            col++;
+            continue;
         }
+
+        // If we're past the right side of the screen,
+        // wrap to the next line.
+        if (col >= VIDEO_WIDTH) {
+            col = 0;
+            row += 1;
+        }
+
+        // If we're past the bottom of the screen,
+        // scroll the screen up one line, then print.
+        if (row >= VIDEO_HEIGHT) {
+            hal_basic_display_scroll();
+            row = VIDEO_HEIGHT - 1;
+        }
+
+        // Index for the character to print.
+        text_index = ((row * VIDEO_WIDTH) + col) * 2;
+        // Index for the color information.
+        color_index = text_index + 1;
+        // Write the character the screen.
+        video[text_index] = *string;
+        // Set the background color.
+        video[color_index] = BACKGROUND_COLOR;
+
+        col++;
     }
 
+    // Update the displayed cursor position.
     hal_basic_display_move_cursor(row, col);
 }
 
 void hal_basic_display_clear()
 {
-    static char spaces[DISPLAY_BUFFER_SIZE + 1] = {' ',};
-    spaces[DISPLAY_BUFFER_SIZE] = 0;
+    // We to avoid inlining a freaking 4KB string of spaces,
+    // we initialize it to null bytes and use memset() to correct it.
+    static char spaces[DISPLAY_BUFFER_SIZE + 1] = {0,};
+    // Only run memset() if it's not been ran before.
+    if (spaces[0] == 0) {
+        memset(&spaces, ' ', DISPLAY_BUFFER_SIZE);
+    }
 
+    // Move the cursor to the top-left of the screen.
+    hal_basic_display_move_cursor(0, 0);
+    // Print a whole screen worth of spaces.
     hal_basic_display_print(spaces);
+    // Move the cursor back to the top-left of the screen.
     hal_basic_display_move_cursor(0, 0);
 }
 
