@@ -36,6 +36,24 @@ void hal_basic_display_move_cursor(uint8_t row_, uint8_t col_)
     hal_outb(VGA_DATA_REGISTER, (uint8_t)position); // Actually set it.
 }
 
+void hal_basic_display_clear()
+{
+    // We to avoid inlining a freaking 4KB string of spaces,
+    // we initialize it to null bytes and use memset() to correct it.
+    static char spaces[DISPLAY_BUFFER_SIZE + 1] = {0,};
+    // Only run memset() if it's not been ran before.
+    if (spaces[0] == 0) {
+        memset(&spaces, ' ', DISPLAY_BUFFER_SIZE);
+    }
+
+    // Move the cursor to the top-left of the screen.
+    hal_basic_display_move_cursor(0, 0);
+    // Print a whole screen worth of spaces.
+    hal_basic_display_print(spaces);
+    // Move the cursor back to the top-left of the screen.
+    hal_basic_display_move_cursor(0, 0);
+}
+
 void hal_basic_display_scroll()
 {
     for (uint16_t i = 0; i < (VIDEO_HEIGHT - 1); i++) {
@@ -57,6 +75,7 @@ void hal_basic_display_print(const char *string)
 
     if (video == 0) {
         video = (char*)VIDEO_RAM;
+        hal_basic_display_clear();
     }
 
     for (; 0 != *string; string++) {
@@ -104,27 +123,4 @@ void hal_basic_display_print(const char *string)
 
     // Update the displayed cursor position.
     hal_basic_display_move_cursor(row, col);
-}
-
-void hal_basic_display_clear()
-{
-    // We to avoid inlining a freaking 4KB string of spaces,
-    // we initialize it to null bytes and use memset() to correct it.
-    static char spaces[DISPLAY_BUFFER_SIZE + 1] = {0,};
-    // Only run memset() if it's not been ran before.
-    if (spaces[0] == 0) {
-        memset(&spaces, ' ', DISPLAY_BUFFER_SIZE);
-    }
-
-    // Move the cursor to the top-left of the screen.
-    hal_basic_display_move_cursor(0, 0);
-    // Print a whole screen worth of spaces.
-    hal_basic_display_print(spaces);
-    // Move the cursor back to the top-left of the screen.
-    hal_basic_display_move_cursor(0, 0);
-}
-
-void hal_basic_display_init(UNUSED void *data)
-{
-    hal_basic_display_clear();
 }
