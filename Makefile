@@ -42,7 +42,7 @@ endif
 # Have src/kernel.exe use the target-specific linker script.
 KERNEL_EXE_LDFLAGS := -T src/link-${TARGET}.ld
 # Have src/kernel.exe link to the various libraries necessary.
-KERNEL_EXE_LIBRARIES += -l :tests.a -l :tinker.a -l :flail.a -l :hal.a -l :dmm.a -l :flail.a -l :ali.a -l :greeter.a -l :shell.a
+KERNEL_EXE_LIBRARIES += -l :tests.a -l :tinker.a -l :flail.a -l :hal.a -l :dmm.a -l :flail.a -l :ali.a -l :greeter.a -l :shell.a -l :ali.a
 
 # == Begin gross bullshit for only matching things for the current platform. ==
 

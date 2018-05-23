@@ -100,6 +100,7 @@ void shell_keyboard_callback(void *data)
     }
 }
 
+__attribute__((constructor))
 void shell_register_events()
 {
     event_watch("keyboard event", shell_keyboard_callback);
@@ -107,8 +108,6 @@ void shell_register_events()
 
 void shell_init()
 {
-    shell_register_events();
-
     println("AwooOS Interactive Shell.");
     shell_print_prompt();
 }
