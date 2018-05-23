@@ -1,6 +1,5 @@
 #include <awoo.h>
 #include <ali/event.h>
-#include <shell.h>
 #include <stdnoreturn.h>
 
 typedef void (constructor)();
@@ -19,8 +18,7 @@ noreturn void kernel_main()
 
     event_trigger("HAL init", (void*)AWOO_INFO);
     event_trigger("tests run", &test_build);
-
-    shell_init();
+    event_trigger("shell init", NULL);
 
     while(1){
         // Do nothing forever.
