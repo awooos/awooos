@@ -1,10 +1,7 @@
 #include <awoo.h>
 #include <ali/event.h>
-#include <greeter.h>
-#include <hal.h>
 #include <shell.h>
 #include <stdnoreturn.h>
-#include <tests.h>
 
 typedef void (constructor)();
 
