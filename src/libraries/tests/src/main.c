@@ -51,6 +51,7 @@ void run_tests(void *data)
     }
 }
 
+__attribute__((constructor))
 void tests_register_events()
 {
     event_watch("tests run", run_tests);

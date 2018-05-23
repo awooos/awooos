@@ -79,5 +79,16 @@ SECTIONS {
 		*(.debug_loc)
 		kernel_debug_loc_end = .;
 	}
+
+	.data ALIGN(0x1000) : {
+		__CTOR_LIST__ = .;
+		*(.ctors)
+		LONG(0)
+		__CTOR_END__ = .;
+		__DTOR_LIST__ = .;
+		*(.dtors)
+		LONG(0)
+		__DTOR_END__ = .;
+	}
 }
 

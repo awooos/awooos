@@ -14,6 +14,7 @@
 #include "panic.h"
 #include "shutdown.h"
 
+__attribute__((constructor))
 void hal_register_events()
 {
     event_watch("HAL init",                &hal_gdt_init);
