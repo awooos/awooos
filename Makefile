@@ -44,13 +44,16 @@ KERNEL_EXE_LDFLAGS := -T src/link-${TARGET}.ld
 # Have src/kernel.exe link to the various libraries necessary.
 KERNEL_EXE_LIBRARIES += -l :tests.a -l :tinker.a -l :flail.a -l :hal.a -l :dmm.a -l :ali.a -l :greeter.a -l :shell.a
 
-SRCFILES := $(shell find 'src' '(' -name '*.c' -o -name '*.asm' ')' -a '(' -wholename 'src/*/*/src/*' -o -wholename 'src/*/*/platform-${TARGET}/*' -o -wholename 'src/kernel/*' ')')
+SRCFILES := $(wildcard src/*/*/src/*.c src/*/*/src/*.asm) \
+			$(wildcard src/*/*/src/*/*.c src/*/*/src/*/*.asm) \
+			$(wildcard src/*/*/platform-${TARGET}/*.c src/*/*/platform-${TARGET}/*.asm) \
+			$(wildcard src/kernel/*.c src/kernel/*.asm)
 OBJFILES := $(patsubst %.asm, %.o, $(patsubst %.c, %.o, ${SRCFILES}))
 
 BUILDINFO := $(shell mkdir -p include/awoo && ./bin/generate_build_info.sh ${BUILD_TYPE} ${TARGET} ${TEST_SECTION} > ./include/awoo/build_info.h)
 
 # Any directory directly under src/libraries/ is treated as a library.
-LIBRARIES := $(shell find src/libraries -regex 'src/libraries/[^/]\+' -type d -exec printf "{}.a " \;)
+LIBRARIES := $(patsubst %/,%.a,$(filter %/,$(wildcard src/libraries/*/)))
 
 all: src/kernel.exe
 
