@@ -39,9 +39,6 @@ ifeq (${BUILD_TYPE},test)
 override QEMU_FLAGS += -no-reboot -device isa-debug-exit,iobase=0xf4,iosize=0x04
 endif
 
-# Have src/kernel.exe use the target-specific linker script.
-KERNEL_EXE_LDFLAGS := -T src/link-${TARGET}.ld
-# Have src/kernel.exe link to the various libraries necessary.
 KERNEL_EXE_LIBRARIES += -l :tests.a -l :tinker.a -l :flail.a -l :hal.a -l :dmm.a -l :ali.a -l :greeter.a -l :shell.a
 
 ALL_FILES := $(wildcard            \
@@ -76,7 +73,7 @@ make/.mk:
 	${AS} ${ASFLAGS} -o $@ $<
 
 src/kernel.exe: src/libraries/ali/src ${LIBRARIES}
-	${LD} -o $@ -L src/libraries ${LDFLAGS} ${KERNEL_EXE_LDFLAGS} src/kernel/start-${TARGET}.o src/kernel/main.o ${KERNEL_EXE_LIBRARIES}
+	${LD} -o $@ -L src/libraries ${LDFLAGS} -T src/link-${TARGET}.ld src/kernel/start-${TARGET}.o src/kernel/main.o ${KERNEL_EXE_LIBRARIES}
 
 %.a: ${OBJFILES}
 	${AR} rcs $@ $(filter $*/%,$^)
