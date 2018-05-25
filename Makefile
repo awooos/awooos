@@ -83,7 +83,7 @@ src/kernel.exe: ${LIBRARIES} ${OBJFILES}
 	${RANLIB} $@
 
 iso: ${ISO_FILE}
-${ISO_FILE}: src/kernel.exe ${LIBRARIES}
+${ISO_FILE}: src/kernel.exe
 	cp -r assets/isofs/ ./
 	cp src/kernel.exe isofs/
 	${MKISOFS} -boot-info-table -R -b boot/grub/stage2_eltorito -no-emul-boot -boot-load-size 4 -input-charset utf-8 -o ${ISO_FILE} isofs
