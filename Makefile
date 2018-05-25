@@ -111,6 +111,8 @@ src/libraries/%/src:
 	@echo "Fetching submodules."
 	git submodule update --quiet --recursive --init
 
+fetch-submodules: src/libraries/ali/src
+
 # Update to the latest available versions of all submodules.
 update-submodules:
 	git submodule update --recursive --remote --init
