@@ -5,7 +5,7 @@
 
 #define __awoo__
 
-#define AWOO_VERSION AWOO_SCM_REV"-"AWOO_PRETTY_BUILD_TYPE
+#define AWOO_VERSION AWOO_SCM_REV"-"AWOO_BUILD_TYPE
 
 #define __AWOO_INFO__ "awooOS "AWOO_TARGET_PRETTY" "AWOO_VERSION
 static const char *AWOO_INFO = __AWOO_INFO__;
