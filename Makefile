@@ -107,7 +107,7 @@ nightly:
 	$(MAKE) BUILD_TYPE=nightly NAME_SUFFIX="-$(shell date +'%Y-%m-%d')" iso
 
 # Fetch all submodules.
-src/libraries/%/src: .gitmodules
+src/libraries/%/src:
 	@echo "Fetching submodules."
 	git submodule update --quiet --recursive --init
 
