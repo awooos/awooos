@@ -50,7 +50,7 @@ ALL_FILES := $(wildcard            \
 SRCFILES := $(filter %.c,${ALL_FILES}) $(filter %.asm,${ALL_FILES})
 OBJFILES := $(patsubst %.asm, %.o, $(patsubst %.c, %.o, ${SRCFILES}))
 
-BUILDINFO := $(shell mkdir -p include/awoo && ./bin/generate_build_info.sh ${BUILD_TYPE} ${TARGET} ${TEST_SECTION} > ./include/awoo/build_info.h)
+BUILDINFO := $(shell mkdir -p include/awoo && ./bin/generate_build_info.sh ${BUILD_TYPE} ${TARGET} > ./include/awoo/build_info.h)
 
 # Any directory directly under src/libraries/ is treated as a library.
 LIBRARIES := $(patsubst %/,%.a,$(filter %/,$(wildcard src/libraries/*/)))
