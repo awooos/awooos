@@ -120,9 +120,7 @@ update-submodules:
 
 clean:
 	@rm -rf ./isofs ./iso/*.iso
-	@find ./src -name '*.o'   -delete
-	@find ./src -name '*.a'   -delete
-	@find ./src -name '*.exe' -delete
+	@find ./src '(' -name '*.o' -o -name '*.a' -o -name '*.exe' ')' -delete
 
 .PHONY: all iso clean test qemu qemu-monitor clean fetch-submodules update-submodules
 
