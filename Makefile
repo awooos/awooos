@@ -95,7 +95,7 @@ test: lint
 	$(MAKE) BUILD_TYPE=test qemu
 
 lint:
-	clang-check $(shell find -name '*.c') -- ${C_INCLUDES}
+	clang-check $(filter %.c,${SRCFILES}) -- ${C_INCLUDES}
 
 qemu: iso
 	${QEMU} ${QEMU_FLAGS} -vga std -serial stdio -cdrom ${ISO_FILE}
