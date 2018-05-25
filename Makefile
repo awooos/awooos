@@ -44,26 +44,13 @@ KERNEL_EXE_LDFLAGS := -T src/link-${TARGET}.ld
 # Have src/kernel.exe link to the various libraries necessary.
 KERNEL_EXE_LIBRARIES += -l :tests.a -l :tinker.a -l :flail.a -l :hal.a -l :dmm.a -l :ali.a -l :greeter.a -l :shell.a
 
-# == Begin gross bullshit for only matching things for the current platform. ==
-
-# We're searching for .c and .asm files.
-SOURCE_SUFFIXES := '(' -name '*.c' -o -name '*.asm' ')'
-
-# Ignore things that are target-specific.
-EXCLUDE_ALL_TARGET_DIRECTORIES := '(' '!' -wholename 'src/*/*-*/*' ')'
-
-# src/libraries/bootstrap-${TARGET}, src/libraries/hal-${TARGET}, etc.
-INCLUDE_CURRENT_TARGET_DIRECTORIES := '(' -wholename 'src/*/*-${TARGET}/*' ')'
-
-# == End gross bullshit for only matching things for the current platform.   ==
-
-SRCFILES := $(shell find 'src' ${SOURCE_SUFFIXES} '(' ${EXCLUDE_ALL_TARGET_DIRECTORIES} -o ${INCLUDE_CURRENT_TARGET_DIRECTORIES} ')')
+SRCFILES := $(shell find 'src' '(' -name '*.c' -o -name '*.asm' ')' -a '(' -wholename 'src/*/*/src/*' -o -wholename 'src/*/*/platform-${TARGET}/*' -o -wholename 'src/kernel/*' ')')
 OBJFILES := $(patsubst %.asm, %.o, $(patsubst %.c, %.o, ${SRCFILES}))
 
 BUILDINFO := $(shell mkdir -p include/awoo && ./bin/generate_build_info.sh ${BUILD_TYPE} ${TARGET} ${TEST_SECTION} > ./include/awoo/build_info.h)
 
 # Any directory directly under src/libraries/ is treated as a library.
-LIBRARIES := $(shell find src/libraries -mindepth 1 -type d -exec printf "{}.a " \;)
+LIBRARIES := $(shell find src/libraries -regex 'src/libraries/[^/]\+' -type d -exec printf "{}.a " \;)
 
 all: src/kernel.exe
 
