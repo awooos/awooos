@@ -76,7 +76,7 @@ make/.mk:
 	${AS} ${ASFLAGS} -o $@ $<
 
 src/kernel.exe: ${LIBRARIES} ${OBJFILES}
-	${LD} -o $@ -L src/modules -L src/libraries ${LDFLAGS} ${KERNEL_EXE_LDFLAGS} src/kernel/start-${TARGET}.o src/kernel/main.o ${KERNEL_EXE_LIBRARIES}
+	${LD} -o $@ -L src/libraries ${LDFLAGS} ${KERNEL_EXE_LDFLAGS} src/kernel/start-${TARGET}.o src/kernel/main.o ${KERNEL_EXE_LIBRARIES}
 
 %.a: ${OBJFILES}
 	${AR} rc $@ $(filter $*/%,$^)
