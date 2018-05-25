@@ -6,7 +6,7 @@ TARGET=$(echo "$2" | tr [a-z] [A-Z])
 UPPER_CASE_BUILD_TYPE=$(echo "$1" | tr "[a-z]" "[A-Z]")
 LOWER_CASE_BUILD_TYPE=$(echo "$1" | tr "[A-Z]" "[a-z]")
 
-VERSION=$(git describe --tags HEAD --always | cut -c2-)-${LOWER_CASE_BUILD_TYPE}
+VERSION=$(git describe --tags HEAD --always)-${LOWER_CASE_BUILD_TYPE}
 
 echo  "#ifndef AWOO_BUILD_INFO_H"
 echo  "#define AWOO_BUILD_INFO_H"
