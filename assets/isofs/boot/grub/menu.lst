@@ -2,4 +2,4 @@ default 0
 timeout 3
 
 title AwooOS
-kernel /system/kernel.exe
+kernel /kernel.exe

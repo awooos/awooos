@@ -84,11 +84,8 @@ src/kernel.exe: ${LIBRARIES} ${OBJFILES}
 
 iso: ${ISO_FILE}
 ${ISO_FILE}: src/kernel.exe ${LIBRARIES}
-	mkdir -p ${ISO_DIR}
 	cp -r assets/isofs/ ./
-	mkdir -p isofs/system isofs/libraries
-	cp src/*.exe isofs/system
-	cp src/libraries/*.a isofs/libraries
+	cp src/kernel.exe isofs/
 	${MKISOFS} -boot-info-table -R -b boot/grub/stage2_eltorito -no-emul-boot -boot-load-size 4 -input-charset utf-8 -o ${ISO_FILE} isofs
 
 test: lint
