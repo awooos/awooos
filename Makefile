@@ -72,7 +72,7 @@ make/.mk:
 %.o: %.asm
 	${AS} ${ASFLAGS} -o $@ $<
 
-src/kernel.exe: src/libraries/ali/src ${LIBRARIES}
+src/kernel.exe: ${LIBRARIES}
 	${LD} -o $@ -L src/libraries ${LDFLAGS} -T src/link-${TARGET}.ld src/kernel/start-${TARGET}.o src/kernel/main.o ${KERNEL_LDFLAGS}
 
 %.a: ${OBJFILES}
@@ -107,11 +107,8 @@ nightly:
 	$(MAKE) BUILD_TYPE=nightly NAME_SUFFIX="-$(shell date +'%Y-%m-%d')" iso
 
 # Fetch all submodules.
-src/libraries/%/src:
-	@echo "Fetching submodules."
-	git submodule update --quiet --recursive --init
-
-fetch-submodules: src/libraries/ali/src
+fetch-submodules:
+	git submodule update --recursive --init
 
 # Update to the latest available versions of all submodules.
 update-submodules:
