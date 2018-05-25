@@ -119,13 +119,10 @@ update-submodules:
 	git submodule update --recursive --remote --init
 
 clean:
-	@rm -rf ./isofs
+	@rm -rf ./isofs ./iso/*.iso
 	@find ./src -name '*.o'   -delete
 	@find ./src -name '*.a'   -delete
-	@find ./src -name '*.lib' -delete
 	@find ./src -name '*.exe' -delete
-	@find ./src -name '*.d'   -delete
-	@find ./iso -name '*.iso' -delete
 
 .PHONY: all iso clean test qemu qemu-monitor clean fetch-submodules update-submodules
 
