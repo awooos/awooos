@@ -79,8 +79,7 @@ src/kernel.exe: src/libraries/ali/src ${LIBRARIES}
 	${LD} -o $@ -L src/libraries ${LDFLAGS} ${KERNEL_EXE_LDFLAGS} src/kernel/start-${TARGET}.o src/kernel/main.o ${KERNEL_EXE_LIBRARIES}
 
 %.a: ${OBJFILES}
-	${AR} rc $@ $(filter $*/%,$^)
-	${RANLIB} $@
+	${AR} rcs $@ $(filter $*/%,$^)
 
 iso: ${ISO_FILE}
 ${ISO_FILE}: src/kernel.exe
