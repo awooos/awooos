@@ -122,11 +122,11 @@ nightly:
 
 # Fetch all submodules.
 fetch-submodules:
-	git submodule update --recursive
+	git submodule update --recursive --init
 
 # Update to the latest available versions of all submodules.
 update-submodules:
-	git submodule update --recursive --remote
+	git submodule update --recursive --remote --init
 
 clean:
 	@rm -rf ./isofs
