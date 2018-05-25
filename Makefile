@@ -45,10 +45,10 @@ KERNEL_EXE_LDFLAGS := -T src/link-${TARGET}.ld
 KERNEL_EXE_LIBRARIES += -l :tests.a -l :tinker.a -l :flail.a -l :hal.a -l :dmm.a -l :ali.a -l :greeter.a -l :shell.a
 
 ALL_FILES := $(wildcard            \
-				src/*/*/src/*/     \
-				src/*/*/src/*/*/   \
-				src/*/*/platform-${TARGET}/*/    \
-				src/*/*/platform-${TARGET}/*/*/  \
+				src/libraries/*/src/*/     \
+				src/libraries/*/src/*/*/   \
+				src/libraries/*/platform-${TARGET}/*/    \
+				src/libraries/*/platform-${TARGET}/*/*/  \
 				src/kernel/*)
 SRCFILES := $(filter %.c,${ALL_FILES}) $(filter %.asm,${ALL_FILES})
 OBJFILES := $(patsubst %.asm, %.o, $(patsubst %.c, %.o, ${SRCFILES}))
@@ -75,7 +75,7 @@ make/.mk:
 %.o: %.asm
 	${AS} ${ASFLAGS} -o $@ $<
 
-src/kernel.exe: ${LIBRARIES} ${OBJFILES}
+src/kernel.exe: src/libraries/ali/src ${LIBRARIES}
 	${LD} -o $@ -L src/libraries ${LDFLAGS} ${KERNEL_EXE_LDFLAGS} src/kernel/start-${TARGET}.o src/kernel/main.o ${KERNEL_EXE_LIBRARIES}
 
 %.a: ${OBJFILES}
@@ -111,8 +111,9 @@ nightly:
 	$(MAKE) BUILD_TYPE=nightly NAME_SUFFIX="-$(shell date +'%Y-%m-%d')" iso
 
 # Fetch all submodules.
-fetch-submodules:
-	git submodule update --recursive --init
+src/libraries/%/src:
+	@echo "Fetching submodules."
+	git submodule update --quiet --recursive --init
 
 # Update to the latest available versions of all submodules.
 update-submodules:
