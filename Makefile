@@ -39,7 +39,7 @@ ifeq (${BUILD_TYPE},test)
 override QEMU_FLAGS += -no-reboot -device isa-debug-exit,iobase=0xf4,iosize=0x04
 endif
 
-KERNEL_EXE_LIBRARIES += -l :tests.a -l :tinker.a -l :flail.a -l :hal.a -l :dmm.a -l :ali.a -l :greeter.a -l :shell.a
+KERNEL_LDFLAGS := $(patsubst src/libraries/%/,-l :%.a,$(filter %/,$(wildcard src/libraries/*/)))
 
 ALL_FILES := $(wildcard            \
 				src/libraries/*/src/*/     \
@@ -73,7 +73,7 @@ make/.mk:
 	${AS} ${ASFLAGS} -o $@ $<
 
 src/kernel.exe: src/libraries/ali/src ${LIBRARIES}
-	${LD} -o $@ -L src/libraries ${LDFLAGS} -T src/link-${TARGET}.ld src/kernel/start-${TARGET}.o src/kernel/main.o ${KERNEL_EXE_LIBRARIES}
+	${LD} -o $@ -L src/libraries ${LDFLAGS} -T src/link-${TARGET}.ld src/kernel/start-${TARGET}.o src/kernel/main.o ${KERNEL_LDFLAGS}
 
 %.a: ${OBJFILES}
 	${AR} rcs $@ $(filter $*/%,$^)
