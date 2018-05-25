@@ -50,7 +50,7 @@ ALL_FILES := $(wildcard            \
 SRCFILES := $(filter %.c,${ALL_FILES}) $(filter %.asm,${ALL_FILES})
 OBJFILES := $(patsubst %.asm, %.o, $(patsubst %.c, %.o, ${SRCFILES}))
 
-BUILDINFO := $(shell mkdir -p include/awoo && ./bin/generate_build_info.sh ${BUILD_TYPE} ${TARGET} ${TEST_SECTION} > ./include/awoo/build_info.h)
+BUILDINFO := $(shell mkdir -p include/awoo && ./bin/generate_build_info.sh ${BUILD_TYPE} ${TARGET} > ./include/awoo/build_info.h)
 
 # Any directory directly under src/libraries/ is treated as a library.
 LIBRARIES := $(patsubst %/,%.a,$(filter %/,$(wildcard src/libraries/*/)))
@@ -113,6 +113,10 @@ fetch-submodules:
 # Update to the latest available versions of all submodules.
 update-submodules:
 	git submodule update --recursive --remote --init
+
+# List all of the event_trigger() and event_watch() calls.
+list-events:
+	@grep -rEho '(event_trigger|event_watch)\(".*"' src | tr '("' '\t ' | sort
 
 clean:
 	@rm -rf ./isofs ${ISO_DIR}*.iso ${OBJFILES} ${LIBRARIES} src/*.exe

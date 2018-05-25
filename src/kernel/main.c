@@ -8,7 +8,7 @@ extern size_t __CTOR_LIST__;
 
 noreturn void kernel_main()
 {
-    bool test_build = (AWOO_BUILD_TYPE_NUMBER == AWOO_TEST_BUILD);
+    bool test_build = (AWOO_TEST_BUILD == 1);
 
     // Run all of the constructors.
     constructor **ctors = (constructor**)&__CTOR_LIST__;
