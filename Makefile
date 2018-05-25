@@ -114,6 +114,10 @@ fetch-submodules:
 update-submodules:
 	git submodule update --recursive --remote --init
 
+# List all of the event_trigger() and event_watch() calls.
+list-events:
+	@grep -rEho '(event_trigger|event_watch)\(".*"' src | tr '("' '\t ' | sort
+
 clean:
 	@rm -rf ./isofs ${ISO_DIR}*.iso ${OBJFILES} ${LIBRARIES} src/*.exe
 
