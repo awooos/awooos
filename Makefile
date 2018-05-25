@@ -44,10 +44,13 @@ KERNEL_EXE_LDFLAGS := -T src/link-${TARGET}.ld
 # Have src/kernel.exe link to the various libraries necessary.
 KERNEL_EXE_LIBRARIES += -l :tests.a -l :tinker.a -l :flail.a -l :hal.a -l :dmm.a -l :ali.a -l :greeter.a -l :shell.a
 
-SRCFILES := $(wildcard src/*/*/src/*.c src/*/*/src/*.asm) \
-			$(wildcard src/*/*/src/*/*.c src/*/*/src/*/*.asm) \
-			$(wildcard src/*/*/platform-${TARGET}/*.c src/*/*/platform-${TARGET}/*.asm) \
-			$(wildcard src/kernel/*.c src/kernel/*.asm)
+ALL_FILES := $(wildcard            \
+				src/*/*/src/*/     \
+				src/*/*/src/*/*/   \
+				src/*/*/platform-${TARGET}/*/    \
+				src/*/*/platform-${TARGET}/*/*/  \
+				src/kernel/*)
+SRCFILES := $(filter %.c,${ALL_FILES}) $(filter %.asm,${ALL_FILES})
 OBJFILES := $(patsubst %.asm, %.o, $(patsubst %.c, %.o, ${SRCFILES}))
 
 BUILDINFO := $(shell mkdir -p include/awoo && ./bin/generate_build_info.sh ${BUILD_TYPE} ${TARGET} ${TEST_SECTION} > ./include/awoo/build_info.h)
