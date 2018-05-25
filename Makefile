@@ -27,7 +27,7 @@ AWOO_MAKE_CONFIG ?= config.mk
 include ${AWOO_MAKE_CONFIG}
 include make/${TARGET}.mk
 
-QEMU    ?= qemu-system-${TARGET}
+QEMU ?= qemu-system-${TARGET}
 
 ifeq (${BUILD_TYPE},test)
 # 1. Don't reboot on exit.
