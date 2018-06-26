@@ -17,6 +17,11 @@ env:
   global:
     - MAKEFLAGS="-j 2"
 
+# Clear `before_install` steps.
+before_install: []
+# Clear `install` steps.
+install: []
+
 script:
   - ./bin/make test
 
