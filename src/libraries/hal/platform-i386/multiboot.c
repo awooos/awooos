@@ -68,7 +68,10 @@ void multiboot_add_mmap_entry(MultibootMemoryMapEntry *mmap_entry)
     }
 
     // If we get this far, add the memory region to DMM.
-    dmm_add_memory_region((void*)mmap_entry->addr, mmap_entry->length);
+    //
+    // ASSUMPTION: Despite Multiboot using uint64_t for length, assume
+    //             it will always fit in a size_t.
+    dmm_add_memory_region((void*)mmap_entry->addr, (size_t)mmap_entry->length);
 }
 
 void hal_multiboot_init()
