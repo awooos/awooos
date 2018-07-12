@@ -5,6 +5,8 @@ BUILD_TYPE ?= debug
 ISO_DIR  ?= iso/
 ISO_FILE ?= ${ISO_DIR}/${NAME}${NAME_SUFFIX}-${TARGET}-${BUILD_TYPE}.iso
 
+PRETTY_PRINT := @./bin/print-results.sh
+
 override CFLAGS += -std=c11 -pedantic-errors -gdwarf-2 -nostdinc -ffreestanding -fno-stack-protector -fno-builtin -fdiagnostics-show-option -Wall -Wextra -Wpedantic -Wunused -Wformat=2 -Winit-self -Wmissing-include-dirs -Wstrict-overflow=4 -Wfloat-equal -Wwrite-strings -Wconversion -Wundef -Wtrigraphs -Wunused-parameter -Wunknown-pragmas -Wcast-align -Wswitch-enum -Waggregate-return -Wmissing-noreturn -Wmissing-format-attribute -Wpacked -Wredundant-decls -Wunreachable-code -Winline -Winvalid-pch -Wdisabled-optimization -Wsystem-headers -Wbad-function-cast -Wunused-function -Werror=implicit-function-declaration
 
 override LDFLAGS += -nostdlib -g --whole-archive
@@ -66,40 +68,29 @@ config.mk:
 make/.mk:
 	$(error TARGET is undefined. Set it on the command line or in config.mk)
 
-overwrite_last_line := printf "\e[A\r\e[K"
-
 %.o: %.c
-	@echo " CC    $@"
-	@${CC} ${CFLAGS} ${C_INCLUDES} -c $< -o $@
-	@$(overwrite_last_line)
+	${PRETTY_PRINT} CC "$@" ${CC} ${CFLAGS} ${C_INCLUDES} -c $< -o $@
 
 %.o: %.asm
-	@echo " AS    $@"
-	@${AS} ${ASFLAGS} -o $@ $<
-	@$(overwrite_last_line)
+	${PRETTY_PRINT} AS "$@" ${AS} ${ASFLAGS} -o $@ $<
 
 src/kernel.exe: ${LIBRARIES}
-	@echo " LD    $@"
-	@${LD} -o $@ -L src/libraries ${LDFLAGS} -T src/link-${TARGET}.ld src/kernel/start-${TARGET}.o src/kernel/main.o ${KERNEL_LDFLAGS}
+	${PRETTY_PRINT} LD "$@" ${LD} -o $@ -L src/libraries ${LDFLAGS} -T src/link-${TARGET}.ld src/kernel/start-${TARGET}.o src/kernel/main.o ${KERNEL_LDFLAGS}
 
 %.a: ${OBJFILES}
-	@echo " AR    $@"
-	@${AR} rcs $@ $(filter $*/%,$^)
-	@$(overwrite_last_line)
+	${PRETTY_PRINT} AR "$@" ${AR} rcs $@ $(filter $*/%,$^)
 
 iso: ${ISO_FILE}
 ${ISO_FILE}: src/kernel.exe
-	@echo " ISO   $@"
 	@cp -r assets/isofs/ ./
 	@cp src/kernel.exe isofs/
-	@xorriso -report_about HINT -abort_on WARNING -as mkisofs -quiet -boot-info-table -R -b boot/grub/stage2_eltorito -no-emul-boot -boot-load-size 4 -input-charset utf-8 -o ${ISO_FILE} isofs
+	${PRETTY_PRINT} ISO "$@" xorriso -report_about HINT -abort_on WARNING -as mkisofs -quiet -boot-info-table -R -b boot/grub/stage2_eltorito -no-emul-boot -boot-load-size 4 -input-charset utf-8 -o ${ISO_FILE} isofs
 
 test: lint
 	@$(MAKE) BUILD_TYPE=test qemu
 
 lint:
-	@echo " LINT  $@"
-	@clang-check $(filter %.c,${SRCFILES}) -- ${C_INCLUDES}
+	${PRETTY_PRINT} "LINT" "-" clang-check $(filter %.c,${SRCFILES}) -- ${C_INCLUDES}
 
 qemu: iso
 	${QEMU} ${QEMU_FLAGS} -vga std -serial stdio -cdrom ${ISO_FILE}
