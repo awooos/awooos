@@ -66,29 +66,40 @@ config.mk:
 make/.mk:
 	$(error TARGET is undefined. Set it on the command line or in config.mk)
 
+overwrite_last_line := printf "\e[A\r\e[K"
+
 %.o: %.c
-	${CC} ${CFLAGS} ${C_INCLUDES} -c $< -o $@
+	@echo " CC    $@"
+	@${CC} ${CFLAGS} ${C_INCLUDES} -c $< -o $@
+	@$(overwrite_last_line)
 
 %.o: %.asm
-	${AS} ${ASFLAGS} -o $@ $<
+	@echo " AS    $@"
+	@${AS} ${ASFLAGS} -o $@ $<
+	@$(overwrite_last_line)
 
 src/kernel.exe: ${LIBRARIES}
-	${LD} -o $@ -L src/libraries ${LDFLAGS} -T src/link-${TARGET}.ld src/kernel/start-${TARGET}.o src/kernel/main.o ${KERNEL_LDFLAGS}
+	@echo " LD    $@"
+	@${LD} -o $@ -L src/libraries ${LDFLAGS} -T src/link-${TARGET}.ld src/kernel/start-${TARGET}.o src/kernel/main.o ${KERNEL_LDFLAGS}
 
 %.a: ${OBJFILES}
-	${AR} rcs $@ $(filter $*/%,$^)
+	@echo " AR    $@"
+	@${AR} rcs $@ $(filter $*/%,$^)
+	@$(overwrite_last_line)
 
 iso: ${ISO_FILE}
 ${ISO_FILE}: src/kernel.exe
-	cp -r assets/isofs/ ./
-	cp src/kernel.exe isofs/
-	${MKISOFS} -boot-info-table -R -b boot/grub/stage2_eltorito -no-emul-boot -boot-load-size 4 -input-charset utf-8 -o ${ISO_FILE} isofs
+	@echo " ISO   $@"
+	@cp -r assets/isofs/ ./
+	@cp src/kernel.exe isofs/
+	@xorriso -report_about HINT -abort_on WARNING -as mkisofs -quiet -boot-info-table -R -b boot/grub/stage2_eltorito -no-emul-boot -boot-load-size 4 -input-charset utf-8 -o ${ISO_FILE} isofs
 
 test: lint
-	$(MAKE) BUILD_TYPE=test qemu
+	@$(MAKE) BUILD_TYPE=test qemu
 
 lint:
-	clang-check $(filter %.c,${SRCFILES}) -- ${C_INCLUDES}
+	@echo " LINT  $@"
+	@clang-check $(filter %.c,${SRCFILES}) -- ${C_INCLUDES}
 
 qemu: iso
 	${QEMU} ${QEMU_FLAGS} -vga std -serial stdio -cdrom ${ISO_FILE}
