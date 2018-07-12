@@ -10,3 +10,6 @@
 [submodule "src/libraries/tinker"]
 	path = src/libraries/tinker
 	url = https://github.com/awooos/tinker.git
+[submodule "src/libraries/cadel"]
+	path = src/libraries/cadel
+	url = https://github.com/awooos/cadel.git
