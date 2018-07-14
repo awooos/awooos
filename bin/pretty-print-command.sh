@@ -13,14 +13,10 @@ ERR_COLOR="\033[0;31m"
 WARN_COLOR="\033[0;33m"
 NO_COLOR="\033[m"
 
-PADDING_STR="       "
-OK_STRING="[OK]   "
-ERR_STRING="[ERR]  "
-WARN_STRING="[WARN] "
-CC_STRING="CC   "
-AS_STRING="AS   "
-ISO_STRING="ISO  "
-LINT_STRING="LINT "
+PADDING_STR="      "
+OK_STRING="[OK]  "
+ERR_STRING="[ERR] "
+WARN_STRING="[WARN]"
 
 case $TYPE in
 CC)
@@ -38,7 +34,7 @@ LINT)
 esac
 
 function print_message() {
-  printf "%b" "$1${MSG_COLOR}${STR}${OBJ_COLOR}${NAME}${NO_COLOR}"
+  printf "%b" "$1 ${MSG_COLOR}${STR} ${OBJ_COLOR}${NAME}${NO_COLOR}"
 }
 
 function print_message_r() {
