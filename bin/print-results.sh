@@ -14,9 +14,9 @@ WARN_COLOR="\033[0;33m"
 NO_COLOR="\033[m"
 
 PADDING_STR="       "
-OK_STRING="[OK]"
-ERR_STRING="[ERR]"
-WARN_STRING="[WARN]"
+OK_STRING="[OK]   "
+ERR_STRING="[ERR]  "
+WARN_STRING="[WARN] "
 CC_STRING="CC   "
 AS_STRING="AS   "
 ISO_STRING="ISO  "
@@ -37,17 +37,27 @@ LINT)
     STR="LINT";;
 esac
 
-printf "%b" "${PADDING_STR}${MSG_COLOR}${STR}${OBJ_COLOR}${NAME}${NO_COLOR}"
+function print_message() {
+  printf "%b" "$1${MSG_COLOR}${STR}${OBJ_COLOR}${NAME}${NO_COLOR}"
+}
+
+function print_message_r() {
+  printf "%b" "\r"
+  print_message "$1"
+  printf "%b" "\n"
+}
+
+print_message "$PADDING_STR"
 
 ${COMMAND} &> "$NAME.log"
 RESULT=$?
 
 if [ $RESULT -ne 0 ]; then
-    printf "%b" "\r${ERR_COLOR}${ERR_STRING}${NO_COLOR}\n";
+    print_message_r "${ERR_COLOR}${ERR_STRING}"
 elif [ -s "$NAME.log" ] && [ "$TYPE" != "ISO" ]; then
-    printf "%b" "\r${WARN_COLOR}${WARN_STRING}${NO_COLOR}\n";
+    print_message_r "${WARN_COLOR}${WARN_STRING}"
 else
-    printf "%b" "\r${OK_COLOR}${OK_STRING}${NO_COLOR}\n";
+    print_message_r "${OK_COLOR}${OK_STRING}"
 fi
 cat -- "$NAME.log"
 rm -f -- "$NAME.log"
