@@ -1,9 +1,10 @@
 // NOTE: This display driver does NOT implement scrolling, currently.
 
 #include <ali/event.h>
-#include "basic_display.h"
 #include "ports.h"
 #include <stdint.h>
+
+void hal_basic_display_print(const char *string);
 
 static uint16_t *VIDEO_RAM = (uint16_t*)0xB8000;
 

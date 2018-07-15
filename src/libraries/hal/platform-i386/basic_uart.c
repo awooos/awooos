@@ -1,7 +1,6 @@
 /* NOTE: THIS UART IMPLEMENTATION IS WRITE-ONLY, TO PRINT DEBUG INFORMATION. */
 
 #include <ali/event.h>
-#include "basic_uart.h"
 #include "ports.h"
 #include <stdint.h>
 

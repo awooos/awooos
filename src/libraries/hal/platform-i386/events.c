@@ -1,6 +1,4 @@
 #include <ali/event.h>
-#include "basic_display.h"
-#include "basic_uart.h"
 #include "exceptions.h"
 #include "gdt.h"
 #include "hal_keyboard.h"
