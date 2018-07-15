@@ -2,7 +2,6 @@
 #include "exceptions.h"
 #include "gdt.h"
 #include "interrupts.h"
-#include "keyboard.h"
 
 void hal_register_platform_events()
 {
