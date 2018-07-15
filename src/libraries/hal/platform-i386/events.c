@@ -9,7 +9,6 @@
 #include "interrupts.h"
 #include "keyboard.h"
 #include "multiboot.h"
-#include "shutdown.h"
 
 void hal_register_platform_events()
 {
@@ -20,8 +19,6 @@ void hal_register_platform_events()
     event_watch("HAL init",                &hal_init);
     event_watch("HAL init",                &hal_interrupts_enable);
 
-    event_watch("HAL shutdown",            &hal_shutdown);
-    event_watch("HAL shutdown test fail",  &hal_shutdown_test_fail);
     event_watch("HAL interrupts enable",   &hal_interrupts_enable);
     event_watch("HAL interrupts disable",  &hal_interrupts_disable);
     event_watch("IRQ 1 keyboard",          &hal_keyboard_callback);

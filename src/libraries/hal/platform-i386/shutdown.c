@@ -43,3 +43,10 @@ void hal_shutdown_test_fail(UNUSED void *data)
     hal_outb(0xf4, 0x00);
     hal_shutdown_hard();
 }
+
+__attribute__((constructor))
+void hal_shutdown_register_events()
+{
+    event_watch("HAL shutdown",            &hal_shutdown);
+    event_watch("HAL shutdown test fail",  &hal_shutdown_test_fail);
+}
