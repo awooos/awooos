@@ -1,3 +1,4 @@
+#include <ali/event.h>
 #include <dmm.h>
 #include "magic.h"
 #include "multiboot.h"
@@ -89,4 +90,10 @@ void hal_multiboot_init()
     for (size_t i = 0; i < mmap_count; i++) {
         multiboot_add_mmap_entry(mmap_entries + i);
     }
+}
+
+__attribute__((constructor))
+void hal_multiboot_register_events()
+{
+    event_watch("HAL init", &hal_multiboot_init);
 }
