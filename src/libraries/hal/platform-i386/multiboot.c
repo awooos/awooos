@@ -1,7 +1,7 @@
 #include <dmm.h>
 #include "magic.h"
 #include "multiboot.h"
-#include "panic.h"
+#include "../src/panic.h"
 #include <stddef.h>
 
 #define MBOOT_FLAG_A_OUT 4

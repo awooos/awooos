@@ -1,21 +1,18 @@
 #include <ali/event.h>
 #include "basic_display.h"
 #include "basic_uart.h"
-#include <dmm.h>
 #include "exceptions.h"
 #include "gdt.h"
-#include "hal_flail.h"
+#include "../src/hal_flail.h"
 #include "hal_init.h"
 #include "hal_keyboard.h"
 #include "idt.h"
 #include "interrupts.h"
 #include "keyboard.h"
 #include "multiboot.h"
-#include "panic.h"
 #include "shutdown.h"
 
-__attribute__((constructor))
-void hal_register_events()
+void hal_register_platform_events()
 {
     event_watch("HAL init",                &hal_gdt_init);
     event_watch("HAL init",                &hal_idt_init);
@@ -30,9 +27,6 @@ void hal_register_events()
     event_watch("HAL interrupts enable",   &hal_interrupts_enable);
     event_watch("HAL interrupts disable",  &hal_interrupts_disable);
     event_watch("IRQ 1 keyboard",          &hal_keyboard_callback);
-
-    event_watch("register panic function", (void (*)(void*))hal_panic_init);
-    event_watch("register panic function", (void (*)(void*))dmm_init);
 
     event_watch("print string",            (void (*)(void*))&hal_basic_display_print);
     event_watch("print string",            (void (*)(void*))&hal_basic_uart_print);

@@ -1,6 +1,6 @@
 #include "idt.h"
 #include "exceptions.h"
-#include "panic.h"
+#include "../src/panic.h"
 #include "ports.h"
 #include <ali/event.h>
 
