@@ -165,3 +165,9 @@ void hal_exceptions_init()
 }
 
 #undef EXCEPTION
+
+__attribute__((constructor))
+void hal_exceptions_register_events()
+{
+    event_watch("HAL init", &hal_exceptions_init);
+}
