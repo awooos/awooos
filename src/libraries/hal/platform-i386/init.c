@@ -18,3 +18,9 @@ void hal_init(void *data)
     ali_init(&_dmm_malloc, &_dmm_free, &_dmm_realloc);
     event_trigger("greeter display", metadata);
 }
+
+__attribute__((constructor))
+void hal_init_register_events()
+{
+    event_watch("HAL init", &hal_init);
+}
