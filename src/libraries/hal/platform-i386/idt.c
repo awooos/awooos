@@ -12,6 +12,9 @@ void hal_idt_load()
 
 void hal_idt_init()
 {
+    // We need the GDT to be initialized first.
+    event_trigger("HAL gdt init", NULL);
+
     idtd.offset = (uint32_t)idt;
     idtd.size = sizeof(IdtEntry) * 256 - 1;
 

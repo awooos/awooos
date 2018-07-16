@@ -1,7 +1,8 @@
 #include <ali/event.h>
 #include "gdt.h"
 
-void hal_register_platform_events()
+__attribute__((constructor))
+void hal_gdt_register_events()
 {
-    event_watch("HAL init", &hal_gdt_init);
+    event_watch("HAL gdt init", &hal_gdt_init);
 }
