@@ -1,3 +1,4 @@
+#include <ali/event.h>
 #include <stdint.h>
 #include "idt.h"
 
@@ -11,10 +12,19 @@ void hal_idt_load()
 
 void hal_idt_init()
 {
+    // We need the GDT to be initialized first.
+    event_trigger("HAL gdt init", NULL);
+
     idtd.offset = (uint32_t)idt;
     idtd.size = sizeof(IdtEntry) * 256 - 1;
 
     hal_idt_load();
+}
+
+__attribute__((constructor))
+void hal_idt_register_events()
+{
+    event_watch("HAL init", &hal_idt_init);
 }
 
 

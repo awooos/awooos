@@ -1,6 +1,6 @@
 #include <ali/event.h>
 #include <ali/modifiers.h>
-#include "hal_keyboard.h"
+#include <keyboard.h>
 #include "keysym_us.h"
 #include "ports.h"
 #include <stdlib.h>
@@ -72,4 +72,10 @@ void hal_keyboard_callback(UNUSED void *data)
     }
 
     event_trigger("keyboard event", &event);
+}
+
+__attribute__((constructor))
+void hal_keyboard_register_events()
+{
+    event_watch("IRQ 1 keyboard", &hal_keyboard_callback);
 }

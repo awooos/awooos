@@ -1,6 +1,6 @@
 #include "idt.h"
 #include "exceptions.h"
-#include "panic.h"
+#include "../src/panic.h"
 #include "ports.h"
 #include <ali/event.h>
 
@@ -165,3 +165,9 @@ void hal_exceptions_init()
 }
 
 #undef EXCEPTION
+
+__attribute__((constructor))
+void hal_exceptions_register_events()
+{
+    event_watch("HAL init", &hal_exceptions_init);
+}

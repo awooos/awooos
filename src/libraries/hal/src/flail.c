@@ -1,7 +1,6 @@
 #include <ali/event.h>
 #include <ali/text.h>
 #include <flail.h>
-#include "hal_flail.h"
 
 void hal_flail_init(void *data)
 {
@@ -12,3 +11,8 @@ void hal_flail_init(void *data)
     event_trigger("register panic function", (void*)&_flail_panic);
 }
 
+__attribute__((constructor))
+void hal_flail_register_events()
+{
+    event_watch("HAL init", &hal_flail_init);
+}
