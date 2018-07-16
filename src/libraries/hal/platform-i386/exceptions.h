@@ -2,10 +2,10 @@
 #define EXCEPTIONS_H
 
 typedef struct registers_s {
-	unsigned int gs, fs, es, ds;
-	unsigned int edi, esi, ebp, esp, ebx, edx, ecx, eax;
-	unsigned int int_no, err_code;
-	unsigned int eip, cs, eflags, useresp, ss; 
+    unsigned int gs, fs, es, ds;
+    unsigned int edi, esi, ebp, esp, ebx, edx, ecx, eax;
+    unsigned int int_no, err_code;
+    unsigned int eip, cs, eflags, useresp, ss;
 } Registers;
 
 #define PIC1            0x20     /* IO base address for "master" PIC */
@@ -28,7 +28,5 @@ typedef struct registers_s {
 #define ICW4_BUF_SLAVE  0x08     /* Buffered mode/"slave" */
 #define ICW4_BUF_MASTER 0x0C     /* Buffered mode/"master" */
 #define ICW4_SFNM       0x10     /* Special fully nested (not) */
-
-void hal_exceptions_init();
 
 #endif
