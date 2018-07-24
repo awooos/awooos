@@ -9,7 +9,7 @@ PRETTY_PRINT := @./bin/pretty-print-command.sh
 
 override CFLAGS += -std=c11 -pedantic-errors -gdwarf-2 -nostdinc         \
 					-ffreestanding -fno-stack-protector -fno-builtin     \
-					-fdiagnostics-show-option -fdiagnostics-show-category \
+					-fdiagnostics-show-option                            \
 					-Wall -Wextra -Wmost -Wpedantic -Wbad-function-cast  \
 					-Wcomma -Wconditional-uninitialized -Wconversion     \
 					-Wdeprecated -Wdivision-by-zero -Wfloat-equal        \
