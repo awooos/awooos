@@ -11,7 +11,6 @@ override CFLAGS += -std=c11 -pedantic-errors -gdwarf-2 -nostdinc     \
 					-ffreestanding -fno-stack-protector -fno-builtin \
 					-fdiagnostics-show-option          \
 					-Werror -Weverything               \
-					-Wno-error=unused-parameter        \
 					-Wno-cast-qual                     \
 					-Wno-missing-prototypes            \
 					-Wno-vla
