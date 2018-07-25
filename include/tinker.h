@@ -28,11 +28,11 @@ char *tinker_print(const char *string);
 #define TEST_SKIP               2
 #define TEST_ASSERTION_FAILURE  3
 
-#define _TEST_RETURN(STATUS, MESSAGE, PASSED_ASSERTIONS)            \
+#define TEST_RETURN2(STATUS, MESSAGE, PASSED_ASSERTIONS)            \
     _tinker_print_results(STATUS, MESSAGE, __FILE__, __LINE__);    \
     return PASSED_ASSERTIONS
 
-#define TEST_RETURN(STATUS, MESSAGE) _TEST_RETURN(STATUS, MESSAGE, 0)
+#define TEST_RETURN(STATUS, MESSAGE) TEST_RETURN2(STATUS, MESSAGE, 0)
 
 #define TEST_HAS_ASSERTIONS() size_t passed_assertions = 0;
 
@@ -40,10 +40,10 @@ char *tinker_print(const char *string);
     passed_assertions += 1;             \
     tinker_print(".");                  \
 } else {                                \
-    _TEST_RETURN(TEST_ASSERTION_FAILURE,\
+    TEST_RETURN2(TEST_ASSERTION_FAILURE,\
 #CODE, passed_assertions);      \
 }
 
-#define TEST_ASSERTIONS_RETURN()    _TEST_RETURN(TEST_SUCCESS, "All assertions passed.", passed_assertions)
+#define TEST_ASSERTIONS_RETURN()    TEST_RETURN2(TEST_SUCCESS, "All assertions passed.", passed_assertions)
 
 #endif
