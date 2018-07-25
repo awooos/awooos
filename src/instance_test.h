@@ -7,8 +7,8 @@
 #include "main.h"
 #include "instance.h"
 
-size_t test_dmm_instance_add_region();
-size_t test_dmm_instance_malloc();
-size_t test_dmm_instance_free_sets_header();
+size_t test_dmm_instance_add_region(void);
+size_t test_dmm_instance_malloc(void);
+size_t test_dmm_instance_free_sets_header(void);
 
 #endif
