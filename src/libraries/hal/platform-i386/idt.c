@@ -2,8 +2,8 @@
 #include <stdint.h>
 #include "idt.h"
 
-IdtPointer idtd;
-IdtEntry idt[256] = {{0,0,0,0,0}};
+static IdtPointer idtd;
+static IdtEntry idt[256] = {{0,0,0,0,0}};
 
 void hal_idt_load()
 {

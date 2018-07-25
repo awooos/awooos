@@ -15,7 +15,6 @@ override CFLAGS += -std=c11 -pedantic-errors -gdwarf-2 -nostdinc     \
 					-Wno-cast-qual                     \
 					-Wno-strict-prototypes             \
 					-Wno-reserved-id-macro             \
-					-Wno-missing-variable-declarations \
 					-Wno-missing-prototypes            \
 					-Wno-vla
 
