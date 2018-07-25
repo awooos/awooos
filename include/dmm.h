@@ -26,6 +26,6 @@ void *_dmm_realloc(void *ptr, size_t size, const char function[],
 #define dmm_realloc(ptr, size) _dmm_realloc(ptr, size, __FUNCTION__, __FILE__, __LINE__)
 
 // Tests
-void add_dmm_tests();
+void add_dmm_tests(void);
 
 #endif
