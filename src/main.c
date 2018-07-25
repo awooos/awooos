@@ -5,7 +5,7 @@
 
 static unsigned int in_panic = 0;
 static const char *info_str = NULL;
-FlailPrintFn *flail_print = NULL;
+static FlailPrintFn *flail_print = NULL;
 
 
 void flail_init(const char *info_str_, FlailPrintFn *flail_print_)
