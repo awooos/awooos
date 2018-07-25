@@ -19,9 +19,6 @@ override CFLAGS += -std=c11 -pedantic-errors -gdwarf-2 -nostdinc     \
 					-Wno-missing-prototypes            \
 					-Wno-vla
 
-# THESE ONES ARE REALLY SKETCH AND SHOULD BE LOOKED INTO.
-override CFLAGS += -Wno-error=shift-sign-overflow
-
 override LDFLAGS += -nostdlib -g --whole-archive
 
 override ASFLAGS +=
