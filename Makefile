@@ -23,8 +23,6 @@ override CFLAGS += -std=c11 -pedantic-errors -gdwarf-2 -nostdinc     \
 override CFLAGS += -Wno-error=shift-sign-overflow \
 					-Wno-error=used-but-marked-unused
 
-#-fsanitize=safe-stack
-
 override LDFLAGS += -nostdlib -g --whole-archive
 
 override ASFLAGS +=
