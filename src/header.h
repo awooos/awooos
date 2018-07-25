@@ -6,7 +6,7 @@
 
 #define DMM_HEADER_MAGIC 0x99A3E7D6
 #define DMM_UNASSIGNED_REGION NULL
-#define DMM_HEADER_FLAG_TEST (uint32_t)(1 << 31)
+#define DMM_HEADER_FLAG_TEST ((uint32_t)1 << 31)
 
 // ASSUMPTION: Function name is less than 64 bytes long.
 // ASSUMPTION: The last 64 bytes of the file name is Good Enough(TM).
