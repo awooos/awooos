@@ -3,7 +3,7 @@
 
 #define KEY_BACKSPACE '\x08'
 
-char keysym_us[128] =
+static char keysym_us[128] =
 {
   0, 27, '1', '2', '3', '4', '5', '6', '7', '8',    /* 9 */
   '9', '0', '-', '=', KEY_BACKSPACE,
@@ -44,7 +44,7 @@ char keysym_us[128] =
 };
 
 
-char keysym_us_shift[128] =
+static char keysym_us_shift[128] =
 {
   0, 27, '!', '@', '#', '$', '%', '^', '&', '*',    /* 9 */
   '(', ')', '_', '+', KEY_BACKSPACE,

@@ -7,23 +7,10 @@ ISO_FILE ?= ${ISO_DIR}/${NAME}${NAME_SUFFIX}-${TARGET}-${BUILD_TYPE}.iso
 
 PRETTY_PRINT := @./bin/pretty-print-command.sh
 
-override CFLAGS += -std=c11 -pedantic-errors -gdwarf-2 -nostdinc         \
-					-ffreestanding -fno-stack-protector -fno-builtin     \
-					-fdiagnostics-show-option                            \
-					-Wall -Wextra -Wmost -Wpedantic -Wbad-function-cast  \
-					-Wcomma -Wconditional-uninitialized -Wconversion     \
-					-Wdeprecated -Wdivision-by-zero -Wfloat-equal        \
-					-Wformat-nonliteral -Wheader-hygiene                 \
-					-Widiomatic-parentheses -Wimplicit-fallthrough       \
-					-Wloop-analysis -Wmissing-braces -Wmissing-noreturn  \
-					-Wnested-anon-types -Wnewline-eof -Wnon-gcc -Wpacked \
-					-Wpadded -Wshadow-all -Wsometimes-uninitialized      \
-					-Wswitch-enum -Wtautological-overlap-compare -Wundef \
-					-Wunreachable-code-aggressive -Wunused               \
-					-Wused-but-marked-unused -Wvariadic-macros           \
-					-Wsystem-headers -Werror=implicit-function-declaration
-
-#-fsanitize=safe-stack
+override CFLAGS += -std=c11 -pedantic-errors -gdwarf-2 -nostdinc     \
+					-ffreestanding -fno-stack-protector -fno-builtin \
+					-fdiagnostics-show-option -Werror -Weverything   \
+					-Wno-cast-qual -Wno-missing-prototypes -Wno-vla
 
 override LDFLAGS += -nostdlib -g --whole-archive
 

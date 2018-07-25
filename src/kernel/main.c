@@ -2,7 +2,7 @@
 #include <ali/event.h>
 #include <stdnoreturn.h>
 
-typedef void (constructor)();
+typedef void (constructor)(void);
 
 extern size_t __CTOR_LIST__;
 

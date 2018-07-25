@@ -107,7 +107,7 @@ void hal_irq_remap()
     hal_outb(PIC2_DATA, 0x0);
 }
 
-#define EXCEPTION(n) extern void hal_exception_##n(); \
+#define EXCEPTION(n) extern void hal_exception_##n(void); \
     hal_idt_register_exception(n, (size_t)hal_exception_##n);
 
 void hal_exceptions_init()
