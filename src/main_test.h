@@ -3,7 +3,7 @@
 
 #include <ali.h>
 
-void add_ali_str_tests();
-void add_ali_number_tests();
+void add_ali_str_tests(void);
+void add_ali_number_tests(void);
 
 #endif

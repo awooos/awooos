@@ -34,6 +34,6 @@ void *ali_realloc(void *ptr, size_t size, const char function[],
         const char filename[], size_t line);
 
 // Tests.
-void add_ali_tests();
+void add_ali_tests(void);
 
 #endif
