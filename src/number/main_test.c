@@ -43,7 +43,7 @@ size_t test_ali_n_to_str_assertions()
 
 size_t test_ali_is_number()
 {
-    __attribute__((unused)) void *not_a_number;
+    void *not_a_number;
 
     TEST_HAS_ASSERTIONS();
 
