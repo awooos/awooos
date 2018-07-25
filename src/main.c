@@ -29,11 +29,11 @@ static TestCase test_cases[2048];
 
 static size_t last_test_index = 0;
 
-size_t ran = 0;
-size_t total = 0;
-size_t passed = 0;
-size_t failed = 0;
-size_t skipped = 0;
+static size_t ran = 0;
+static size_t total = 0;
+static size_t passed = 0;
+static size_t failed = 0;
+static size_t skipped = 0;
 
 
 static const char *test_status_messages[4] = {
