@@ -6,7 +6,7 @@
 #include "instance.h"
 #include "instance_test.h"
 
-DMM_MallocHeader *test_instance = DMM_UNASSIGNED_REGION;
+static DMM_MallocHeader *test_instance = DMM_UNASSIGNED_REGION;
 
 size_t test_dmm_instance_add_region()
 {
