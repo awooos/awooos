@@ -20,8 +20,7 @@ override CFLAGS += -std=c11 -pedantic-errors -gdwarf-2 -nostdinc     \
 					-Wno-vla
 
 # THESE ONES ARE REALLY SKETCH AND SHOULD BE LOOKED INTO.
-override CFLAGS += -Wno-error=shift-sign-overflow \
-					-Wno-error=used-but-marked-unused
+override CFLAGS += -Wno-error=shift-sign-overflow
 
 override LDFLAGS += -nostdlib -g --whole-archive
 
