@@ -1,3 +1,4 @@
+#include <ali/number.h>
 #include <assert.h>
 
 void __ali_assert_fail(const char *expr, const char *file,
