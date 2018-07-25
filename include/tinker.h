@@ -11,10 +11,10 @@ static TinkerPrintFn *_tinker_print = NULL;
 
 typedef struct TestCase_s {
     char name[1024];
-    size_t (*func) ();
+    size_t (*func) (void);
 } TestCase;
 
-void _tinker_add_test(const char *n, size_t (*fn)());
+void _tinker_add_test(const char *n, size_t (*fn)(void));
 bool tinker_run_tests(TinkerPrintFn *printfn_);
 void _tinker_print_results(size_t status,
         const char *message, const char *file, size_t line);

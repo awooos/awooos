@@ -48,7 +48,7 @@ char *tinker_print(const char *string)
     return _tinker_print(string);
 }
 
-void _tinker_add_test(const char *name, size_t (*function_ptr)())
+void _tinker_add_test(const char *name, size_t (*function_ptr)(void))
 {
     size_t idx = last_test_index;
 
