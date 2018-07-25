@@ -3,7 +3,7 @@
 
 #include <stdint.h>
 
-void *hal_get_arg();
-uint32_t hal_get_magic();
+void *hal_get_arg(void);
+uint32_t hal_get_magic(void);
 
 #endif

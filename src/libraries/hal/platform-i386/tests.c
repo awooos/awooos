@@ -3,7 +3,7 @@
 
 #define MULTIBOOT_MAGIC 0x2BADB002
 
-uint32_t hal_get_magic();
+uint32_t hal_get_magic(void);
 
 size_t test_hal_assertions()
 {
