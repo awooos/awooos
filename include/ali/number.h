@@ -3,6 +3,7 @@
 
 #include <stddef.h>
 #include <stdint.h>
+#include <stdlib.h>
 
 // Returns 1 if it's a number, 0 otherwise.
 #define is_number(x) _Generic((x),  signed char:        1,  \
