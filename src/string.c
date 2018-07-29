@@ -106,10 +106,9 @@ char *strrev(char *str)
 {
     size_t length = strlen(str);
     size_t half_length = length / 2;
-    char tmp;
 
     for (size_t idx = 0; idx < half_length; idx++) {
-        tmp = str[idx];
+        char tmp = str[idx];
         str[idx] = str[length - idx - 1];
         str[length - idx - 1] = tmp;
     }
