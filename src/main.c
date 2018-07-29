@@ -102,8 +102,6 @@ void _tinker_print_results(size_t status,
 
 bool tinker_run_tests(TinkerPrintFn *printfn_)
 {
-    size_t passed_assertions;
-
     _tinker_print = printfn_;
 
     tinker_print("\nRunning tests:\n\n");
@@ -111,7 +109,7 @@ bool tinker_run_tests(TinkerPrintFn *printfn_)
     total = 0;
 
     for(size_t idx = 0; idx < last_test_index; idx++) {
-        passed_assertions = test_cases[idx].func();
+        size_t passed_assertions = test_cases[idx].func();
         ran++;
         total++;
 
