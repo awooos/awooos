@@ -54,7 +54,6 @@ size_t decimal_places_in_uint64(uint64_t n, size_t radix)
 char *uint64_to_str_radix(uint64_t n, size_t radix)
 {
     char *result;
-    uint8_t value;
     uint64_t tmp = n;
 
     size_t decimal_places = decimal_places_in_uint64((uint64_t)(n), radix);
@@ -67,7 +66,7 @@ char *uint64_to_str_radix(uint64_t n, size_t radix)
     memset(result, 0, memory_size);
 
     for (size_t idx = 0; idx < decimal_places; idx++) {
-        value = (uint8_t)uint64_mod(tmp, radix);
+        uint8_t value = (uint8_t)uint64_mod(tmp, radix);
         result[idx] = "0123456789abcdefghijklmnopqrstuvwxyz"[value];
         tmp = uint64_div(tmp, radix);
     }
