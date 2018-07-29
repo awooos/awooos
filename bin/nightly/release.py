@@ -1,7 +1,6 @@
 #!/usr/bin/env python3
 
 import boto3
-from botocore.client import Config
 from glob import glob
 import os
 
