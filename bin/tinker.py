@@ -155,7 +155,7 @@ def main(argv=None):
         f.write(kernel_source(dependencies))
 
     print("Generated kernel with:")
-    for dep in kernel["dependencies"]:
+    for dep in dependencies:
         print(" - {} ({})".format(dep["name"], dep["origin"]))
 
     print("")
