@@ -30,10 +30,8 @@ AliEventGroup *_ali_event_create_group(const char *event_name)
 
 AliEventGroup *_ali_event_find_or_create_group(const char *event_name)
 {
-    AliEventGroup *group;
-
     for (size_t i = 0; i < number_of_events; i++){
-        group = &(event_groups[i]);
+        AliEventGroup *group = &(event_groups[i]);
 
         if (strcmp(event_name, group->name) == 0) {
             return group;
