@@ -27,26 +27,26 @@ def initializer_source(component):
 def runner_source(repo):
     name = repo["name"]
 
-    if repo["run"] == False:
+    if repo["run"] is False:
         return None
-    else:
-        return "    {}_run();".format(name)
+
+    return "    {}_run();".format(name)
 
 def kernel_source(components):
     headers = map(header_source, components)
     initializers = map(initializer_source, components)
     runners = map(runner_source, components)
-    runners = filter(lambda x: x != None, runners)
+    runners = filter(lambda x: x is not None, runners)
 
-    kernel_source = ""
-    kernel_source += "\n".join(headers) + "\n\n"
-    kernel_source += "void tinker_kernel_main()\n"
-    kernel_source += "{\n"
-    kernel_source += "\n".join(initializers) + "\n"
-    kernel_source += "\n".join(runners) + "\n"
-    kernel_source += "}"
+    source = ""
+    source += "\n".join(headers) + "\n\n"
+    source += "void tinker_kernel_main()\n"
+    source += "{\n"
+    source += "\n".join(initializers) + "\n"
+    source += "\n".join(runners) + "\n"
+    source += "}"
 
-    return kernel_source
+    return source
 
 def makefile_include_source(component):
     return "-I {}/include".format(component["name"])
@@ -56,9 +56,9 @@ def makefile_source(components):
         template = f.read()
 
     data = {
-            "os_name": "????",
-            "includes": " ".join(map(makefile_include_source, components)),
-            }
+        "os_name": "????",
+        "includes": " ".join(map(makefile_include_source, components)),
+    }
 
     return template.format(data)
 
@@ -71,7 +71,7 @@ def try_split(string, separator, minimum_size, default=None):
 
     return parts
 
-def tinker_dir(folder = ""):
+def tinker_dir(folder=""):
     return os.path.normpath(os.path.join(os.getcwd(), "tinker", folder))
 
 # ASSUMPTION: A directory with an @ symbol in it won't break things.
@@ -133,33 +133,42 @@ def fetch_dependency(dependency):
 
     return dependency
 
-if len(sys.argv) != 4 or sys.argv[1] == "--help" or sys.argv[1] == "-h":
-    print("Usage: tinker.py tinker.json output_file.c Makefile.tinker")
-    exit(1)
+def main(argv=None):
+    if argv is None:
+        argv = sys.argv
 
-config_file = sys.argv[1]
-output_file = sys.argv[2]
-makefile_file = sys.argv[3]
+    if len(argv) != 4 or argv[1] == "--help" or argv[1] == "-h":
+        print("Usage: tinker.py tinker.json output_file.c Makefile.tinker")
+        return 1
 
-with open(config_file, "r") as f:
-    raw_dependencies = json.load(f)
+    config_file = argv[1]
+    output_file = argv[2]
+    makefile_file = argv[3]
 
-dependencies = list(map(fetch_dependency, raw_dependencies))
-component_names = list(map(lambda x: x["name"], dependencies))
+    with open(config_file, "r") as f:
+        raw_dependencies = json.load(f)
 
-with open(output_file, "w") as f:
-    f.write(kernel_source(dependencies))
+    dependencies = list(map(fetch_dependency, raw_dependencies))
+    component_names = list(map(lambda x: x["name"], dependencies))
 
-print("Generated kernel with:")
-for dep in kernel["dependencies"]:
-    print(" - {} ({})".format(dep["name"], dep["origin"]))
+    with open(output_file, "w") as f:
+        f.write(kernel_source(dependencies))
 
-print("")
-print("")
+    print("Generated kernel with:")
+    for dep in kernel["dependencies"]:
+        print(" - {} ({})".format(dep["name"], dep["origin"]))
 
-print("Output file: {}".format(output_file))
+    print("")
+    print("")
 
-with open(makefile_file, "w") as f:
-    f.write(makefile_source(dependencies))
+    print("Output file: {}".format(output_file))
 
-print("Makefile:    {}".format(makefile_file))
+    with open(makefile_file, "w") as f:
+        f.write(makefile_source(dependencies))
+
+    print("Makefile:    {}".format(makefile_file))
+
+    return 0
+
+if __file__ == "__main__":
+    exit(main())
