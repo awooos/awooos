@@ -149,7 +149,6 @@ def main(argv=None):
         raw_dependencies = json.load(f)
 
     dependencies = list(map(fetch_dependency, raw_dependencies))
-    component_names = list(map(lambda x: x["name"], dependencies))
 
     with open(output_file, "w") as f:
         f.write(kernel_source(dependencies))
