@@ -42,6 +42,7 @@ void hal_basic_uart_print(const char *string)
 {
     if (!initialized) {
         hal_basic_uart_init();
+        initialized = true;
     }
 
     for (; 0 != *string; string++)
