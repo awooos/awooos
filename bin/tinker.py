@@ -3,7 +3,6 @@
 from contextlib import contextmanager
 import json
 import os
-import re
 from subprocess import check_call
 import sys
 
@@ -80,7 +79,7 @@ def tinker_dir(folder = ""):
 # ASSUMPTION: Nobody cares if they have a directory ending with @ in ./tinker/.
 def tinker_repo_dir(component):
     component_name = component["name"]
-    repo, branch = try_split(component["origin"], "#", 2, default="")
+    _, branch = try_split(component["origin"], "#", 2, default="")
 
     return tinker_dir("{}@{}".format(component_name, branch))
 
@@ -112,11 +111,14 @@ def git_pull(dependency):
 
 def clone_or_pull(dependency):
     ensure_tinker_root_exists()
+    repo_dir = tinker_repo_dir(dependency)
 
-    if os.path.isdir(tinker_repo_dir(dependency)):
+    if os.path.isdir(repo_dir):
         git_pull(dependency)
     else:
         git_clone(dependency)
+
+    return repo_dir
 
 # ASSUMPTIONS: Dependencies are either git repos or local files.
 def fetch_dependency(dependency):
@@ -132,8 +134,8 @@ def fetch_dependency(dependency):
     return dependency
 
 if len(sys.argv) != 4 or sys.argv[1] == "--help" or sys.argv[1] == "-h":
-    print("Usage: tinker.py tinker.json output_file.c Makefile.tinker".format(sys.argv[0]))
-    sys.exit(1)
+    print("Usage: tinker.py tinker.json output_file.c Makefile.tinker")
+    exit(1)
 
 config_file = sys.argv[1]
 output_file = sys.argv[2]
