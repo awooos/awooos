@@ -123,6 +123,8 @@ task("vbox", ["iso"],
         ["VirtualBox", "--startvm", NAME, "--debug-statistics",
             "--debug-command-line", "--start-running"])
 
+default("src/kernel.exe")
+build()
 from pprint import pprint
 pprint(recipes)
 
