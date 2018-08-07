@@ -67,9 +67,6 @@ C_INCLUDES = env("C_INCLUDES", [])
 C_INCLUDES += map(lambda x: ["-I", x],
                     fnfilter(ALL_FILES, "src/libraries/*/include/"))
 
-KERNEL_LDFLAGS = map(lambda x: ["-l", ":{}.a".format(Path(x).name)],
-                        fnfilter(ALL_FILES, "src/libraries/*/"))
-
 def is_filetype(suffix):
     return lambda x: x.endswith(suffix)
 
@@ -88,18 +85,22 @@ with open("include/awoo/build_info.h", "w") as f:
 LIBRARIES = list(map(lambda x: Path(x).name + ".a",
                     fnfilter(ALL_FILES, "src/libraries/*/")))
 
+KERNEL_LDFLAGS = list(map(lambda lib: ["-l", ":" + lib], LIBRARIES))
+
+def recipe_expand(command):
+    def cmd(target, match, deps):
+        return [x.format(target=target, match=match, deps=deps)
+                for x in command]
+    return cmd
+
 recipes = {}
 def recipe(target, match, deps, command):
     if isinstance(command, list):
-        command = list(map(
-            lambda x: x.format(target=target, match=match, deps=deps),
-            command
-        ))
-        command = lambda _t, _m, _d: command
+        command = recipe_expand(command)
     recipes[(target, match)] = (command, deps)
 
 def task(target, deps, command):
-    recipes[(target, None)] = (command, deps)
+    recipe(target, None, deps, command)
 
 recipe("%.o", "%.c", [],
         [CC, *CFLAGS, *C_INCLUDES, "-c", "{match}", "-o", "{target}"])
@@ -136,14 +137,15 @@ task("update-submodules", [],
         ["git", "submodule", "update", "--recursive", "--remote", "--init"])
 
 task("qemu", ["iso"],
-    [QEMU, *QEMU_FLAGS, "-vga", "std", "-serial", "stdio", "-cdrom", ISO_FILE])
+        [QEMU, *QEMU_FLAGS, "-vga", "std", "-serial", "stdio",
+            "-cdrom", ISO_FILE])
 
 task("qemu-monitor", ["iso"],
-    [QEMU, *QEMU_FLAGS, "-monitor", "stdio", "-cdrom", ISO_FILE])
+        [QEMU, *QEMU_FLAGS, "-monitor", "stdio", "-cdrom", ISO_FILE])
 
 task("vbox", ["iso"],
         ["VirtualBox", "--startvm", NAME, "--debug-statistics",
-         "--debug-command-line", "--start-running"])
+            "--debug-command-line", "--start-running"])
 
 from pprint import pprint
 pprint(recipes)
