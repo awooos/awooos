@@ -1,6 +1,7 @@
 from fnmatch import filter as fnfilter
 from pathlib import Path
 import os
+import shlex
 import sys
 
 def env(key, default=None):
@@ -25,6 +26,8 @@ def recipe_expand(command):
 recipes = {}
 def recipe(target, match, deps, command):
     deps = set(deps)
+    if isinstance(command, str):
+        command = shlex.split(command)
     if isinstance(command, list):
         command = recipe_expand(command)
     recipes[target] = (match, deps, command)

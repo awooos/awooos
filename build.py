@@ -98,18 +98,18 @@ task("clean", [],
             *LIBRARIES, "src/*.exe"])
 
 task("test", ["lint"],
-        ["./build.py", "BUILD_TYPE=test", "qemu"])
+        "./build.py BUILD_TYPE=test qemu")
 
 task("lint", [],
         ["clang-check", *C_FILES, "--", *C_INCLUDES])
 
 # Fetch all submodules.
 task("fetch-submodules", [],
-        ["git", "submodule", "update", "--recursive", "--init"])
+        "git submodule update --recursive --init")
 
-# Update to the latest available versions of all submodules.
+# Update all submodules to latest versions.
 task("update-submodules", [],
-        ["git", "submodule", "update", "--recursive", "--remote", "--init"])
+        "git submodule update --recursive --remote --init")
 
 task("qemu", ["iso"],
         [QEMU, *QEMU_FLAGS, "-vga", "std", "-serial", "stdio",
@@ -132,14 +132,16 @@ iso: ${ISO_FILE}
 ${ISO_FILE}: src/kernel.exe
 	@cp -r assets/isofs/ ./
 	@cp src/kernel.exe isofs/
-	${PRETTY_PRINT} ISO "$@" xorriso -report_about HINT -abort_on WARNING -as mkisofs -quiet -boot-info-table -R -b boot/grub/stage2_eltorito -no-emul-boot -boot-load-size 4 -input-charset utf-8 -o ${ISO_FILE} isofs
+	xorriso -report_about HINT -abort_on WARNING -as mkisofs -quiet -boot-info-table -R -b boot/grub/stage2_eltorito -no-emul-boot -boot-load-size 4 -input-charset utf-8 -o ${ISO_FILE} isofs
 
 bochs: iso
 	cd iso && ${BOCHS} -q -f bochsrc-${TARGET}.txt
 
 # Generate a nightly build.
-nightly:
-	$(MAKE) BUILD_TYPE=nightly NAME_SUFFIX="-$(shell date +'%Y-%m-%d')" iso
+task("nightly", [],
+        ["./build.py", "BUILD_TYPE=nightly",
+        "NAME_SUFFIX="-$(shell date +'%Y-%m-%d')",
+        "iso"])
 
 # List all of the event_trigger() and event_watch() calls.
 list-events:
