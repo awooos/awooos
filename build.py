@@ -1,12 +1,8 @@
 #!/usr/bin/python3
 
-from fnmatch import filter as fnfilter
 from pathlib import Path
-import os
 from subprocess import check_output
-
-def env(key, default=None):
-    return os.environ.get(key, default)
+from buildlib import *
 
 CC      = "clang"
 AS      = "nasm"
@@ -27,7 +23,7 @@ ISO_DIR     = Path(iso_dir)
 iso_fname   = "{}{}-{}-{}.iso".format(NAME, NAME_SUFFIX, TARGET, BUILD_TYPE)
 ISO_FILE    = str(ISO_DIR / iso_fname)
 
-CFLAGS  =  env("CFLAGS", [])
+CFLAGS  =   env("CFLAGS", [])
 CFLAGS  +=  """
             -std=c11 -pedantic-errors -gdwarf-2 -nostdinc
             -ffreestanding -fno-stack-protector -fno-builtin
@@ -35,10 +31,10 @@ CFLAGS  +=  """
             -Wno-cast-qual -Wno-missing-prototypes -Wno-vla
             """.split()
 
-LDFLAGS = env("LDFLAGS", [])
+LDFLAGS =   env("LDFLAGS", [])
 LDFLAGS +=  "-nostdlib -g --whole-archive".split()
 
-ASFLAGS = env("ASFLAGS", [])
+ASFLAGS =   env("ASFLAGS", [])
 ASFLAGS +=  "".split()
 
 QEMU    = env("QEMU", "qemu-system-{}".format(TARGET))
@@ -67,15 +63,11 @@ C_INCLUDES = env("C_INCLUDES", [])
 C_INCLUDES += map(lambda x: ["-I", x],
                     fnfilter(ALL_FILES, "src/libraries/*/include/"))
 
-def is_filetype(suffix):
-    return lambda x: x.endswith(suffix)
-
-def with_suffix(suffix):
-    return lambda x: str(Path(x).with_suffix(suffix))
-
 SRCFILES = list([*filter(is_filetype(".c"),   ALL_FILES),
                  *filter(is_filetype(".asm"), ALL_FILES)])
 OBJFILES = list(map(with_suffix(".o"), SRCFILES))
+
+C_FILES = fnfilter(SRCFILES, ".c")
 
 build_info = check_output(["bash", "./bin/generate_build_info.sh", BUILD_TYPE, TARGET]).decode()
 with open("include/awoo/build_info.h", "w") as f:
@@ -86,21 +78,6 @@ LIBRARIES = list(map(lambda x: Path(x).name + ".a",
                     fnfilter(ALL_FILES, "src/libraries/*/")))
 
 KERNEL_LDFLAGS = list(map(lambda lib: ["-l", ":" + lib], LIBRARIES))
-
-def recipe_expand(command):
-    def cmd(target, match, deps):
-        return [x.format(target=target, match=match, deps=deps)
-                for x in command]
-    return cmd
-
-recipes = {}
-def recipe(target, match, deps, command):
-    if isinstance(command, list):
-        command = recipe_expand(command)
-    recipes[(target, match)] = (command, deps)
-
-def task(target, deps, command):
-    recipe(target, None, deps, command)
 
 recipe("%.o", "%.c", [],
         [CC, *CFLAGS, *C_INCLUDES, "-c", "{match}", "-o", "{target}"])
@@ -124,7 +101,6 @@ task("clean", [],
 task("test", ["lint"],
         ["./build.py", "BUILD_TYPE=test", "qemu"])
 
-C_FILES = list(map(str, fnfilter(SRCFILES, "*.c")))
 task("lint", [],
         ["clang-check", *C_FILES, "--", *C_INCLUDES])
 
