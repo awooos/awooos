@@ -49,15 +49,14 @@ if BUILD_TYPE == "test":
     # have qemu return a nonzero status code.
     QEMU_FLAGS += "-no-reboot -device isa-debug-exit,iobase=0xf4,iosize=0x04".split()
 
-all_files = list(map(str, Path("src").glob("**")))
-ALL_FILES = list(map(str, [
-    *fnfilter(all_files, "src/libraries/*/src/*/"),
-    *fnfilter(all_files, "src/libraries/*/src/*/*/"),
-    *fnfilter(all_files, "src/libraries/*/platform-{}/*/".format(TARGET)),
-    *fnfilter(all_files, "src/libraries/*/platform-{}/*/*/".format(TARGET)),
+all_files = [str(x) for x in Path("src").glob("**/*")]
+ALL_FILES = [
+    *fnfilter(all_files, "src/libraries/*/src/*"),
+    *fnfilter(all_files, "src/libraries/*/src/*/*"),
+    *fnfilter(all_files, "src/libraries/*/platform-{}/*".format(TARGET)),
+    *fnfilter(all_files, "src/libraries/*/platform-{}/*/*".format(TARGET)),
     *fnfilter(all_files, "src/kernel/*"),
-]))
-
+]
 
 C_INCLUDES = env("C_INCLUDES", [])
 C_INCLUDES += map(lambda x: ["-I", x],
@@ -73,6 +72,7 @@ build_info = check_output(["bash", "./bin/generate_build_info.sh", BUILD_TYPE, T
 with open("include/awoo/build_info.h", "w") as f:
     f.write(build_info)
 
+print(fnfilter(ALL_FILES, "src/libraries/*/"))
 # Any directory directly under src/libraries/ is treated as a library.
 LIBRARIES = list(map(lambda x: Path(x).name + ".a",
                     fnfilter(ALL_FILES, "src/libraries/*/")))

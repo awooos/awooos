@@ -23,6 +23,7 @@ def recipe_expand(command):
 
 recipes = {}
 def recipe(target, match, deps, command):
+    deps = set(deps)
     if isinstance(command, list):
         command = recipe_expand(command)
     recipes[(target, match)] = (command, deps)
