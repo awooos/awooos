@@ -60,22 +60,21 @@ ALL_FILES = [
 
 C_INCLUDES = env("C_INCLUDES", [])
 C_INCLUDES += map(lambda x: ["-I", x],
-                    fnfilter(ALL_FILES, "src/libraries/*/include/"))
+                    fnfilter(ALL_FILES, "src/libraries/*/include"))
 
 SRCFILES = list([*filter(is_filetype(".c"),   ALL_FILES),
                  *filter(is_filetype(".asm"), ALL_FILES)])
 OBJFILES = list(map(with_suffix(".o"), SRCFILES))
 
-C_FILES = fnfilter(SRCFILES, ".c")
+C_FILES = fnfilter(SRCFILES, "*.c")
 
 build_info = check_output(["bash", "./bin/generate_build_info.sh", BUILD_TYPE, TARGET]).decode()
 with open("include/awoo/build_info.h", "w") as f:
     f.write(build_info)
 
-print(fnfilter(ALL_FILES, "src/libraries/*/"))
 # Any directory directly under src/libraries/ is treated as a library.
 LIBRARIES = list(map(lambda x: Path(x).name + ".a",
-                    fnfilter(ALL_FILES, "src/libraries/*/")))
+                    fnfilter(ALL_FILES, "src/libraries/*")))
 
 KERNEL_LDFLAGS = list(map(lambda lib: ["-l", ":" + lib], LIBRARIES))
 
@@ -125,8 +124,6 @@ task("vbox", ["iso"],
 
 default("src/kernel.exe")
 build()
-from pprint import pprint
-pprint(recipes)
 
 """
 all: src/kernel.exe
