@@ -59,8 +59,8 @@ ALL_FILES = [
 ]
 
 C_INCLUDES = env("C_INCLUDES", [])
-C_INCLUDES += map(lambda x: ["-I", x],
-                    fnfilter(ALL_FILES, "src/libraries/*/include"))
+C_INCLUDES += [["-I", x] for x in
+                fnfilter(ALL_FILES, "src/libraries/*/include")]
 
 SRCFILES = list([*filter(is_filetype(".c"),   ALL_FILES),
                  *filter(is_filetype(".asm"), ALL_FILES)])
@@ -73,10 +73,12 @@ with open("include/awoo/build_info.h", "w") as f:
     f.write(build_info)
 
 # Any directory directly under src/libraries/ is treated as a library.
-LIBRARIES = [str(x) + ".a" for x in
-                filter(Path.is_dir, Path("src/libraries").glob("*"))]
+LIBRARY_DIRS = [str(x) for x in
+                    filter(Path.is_dir, Path("src/libraries").glob("*"))]
+LIBRARIES = [x + ".a" for x in LIBRARY_DIRS]
+LIBDIR_GLOBS = [x + "/*.*" for x in LIBRARY_DIRS]
 
-KERNEL_LDFLAGS = list(map(lambda lib: ["-l", ":" + lib], LIBRARIES))
+KERNEL_LDFLAGS = [["-l", ":" + lib] for lib in LIBRARIES]
 
 recipe("%.o", "%.c", [],
         [CC, *CFLAGS, *C_INCLUDES, "-c", "{match}", "-o", "{target}"])
@@ -84,9 +86,9 @@ recipe("%.o", "%.c", [],
 recipe("%.o", "%.asm", [],
         [AS, *ASFLAGS, "-o", "{target}", "{match}"])
 
-recipe("%.a", None, OBJFILES,
-        lambda target, _, deps:
-            [AR, "rcs", target, *fnfilter("*/{}".format(target), deps)])
+for (library, glob) in zip(LIBRARIES, LIBDIR_GLOBS):
+    recipe(library, None, fnfilter(SRCFILES, glob),
+            lambda target, match, deps: [AR, "rcs", target, *deps])
 
 recipe("src/kernel.exe", None, LIBRARIES,
         [LD, "-o", "{target}", "-L", "src/libraries", *LDFLAGS,
