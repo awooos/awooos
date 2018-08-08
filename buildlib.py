@@ -33,7 +33,7 @@ def recipe(target, match, deps, command):
         command = shlex.split(command)
     if isinstance(command, list):
         command = recipe_expand(command)
-    recipes[target] = (match, deps, command)
+    recipes[(target, match)] = (deps, command)
 
 
 def task(target, deps, command):
@@ -44,20 +44,17 @@ def task(target, deps, command):
 # Stuff for executing recipes.
 
 def find_recipe(target):
-    for target_pattern in recipes:
-        recipe = recipes[target_pattern]
-        match, deps, command = recipe
-        pattern_parts = target_pattern.split(".")
+    for (target_pattern, match) in recipes:
+        recipe = recipes[(target_pattern, match)]
+        deps, command = recipe
+        target_parts = target.split(".")
         if target == target_pattern:
-            print("1. {} == {}".format(target, target_pattern))
-            return recipe
-        elif len(pattern_parts) == 2 and pattern_parts[0] == "%" \
-                and pattern_parts[1] == target.split(".")[-1]:
-            print("2. {} ~= {}".format(target, target_pattern))
-            return recipe
-        else:
-            print("{} != {}".format(target, target_pattern))
-
+            return (match, deps, command)
+        elif match and "." in match:
+            match_parts = match.split(".")
+            if match_parts[0] == "%" and match_parts[1] == target_parts[-1]:
+                return (match, deps, command)
+    return None
 
 def run_recipe(target):
     if target is None:
@@ -67,8 +64,6 @@ def run_recipe(target):
         print("No rule for target: {}".format(target), file=sys.stderr)
         exit(1)
     match, deps, command = recipe
-    print("FOUND: {} => {}".format(target, len(deps)))
-    print("")
     [run_recipe(dep) for dep in deps]
 
 
@@ -76,7 +71,6 @@ _default = None
 def default(name):
     global _default
     _default = name
-    print("New default: {}".format(_default))
     return _default
 
 
