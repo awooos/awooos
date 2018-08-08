@@ -48,12 +48,9 @@ def find_recipe(target):
         recipe = recipes[(target_pattern, match)]
         deps, command = recipe
         target_parts = target.split(".")
-        if target == target_pattern:
+        if (target == target_pattern) or match and \
+                (match[0:2] == "%." and match[2:] == target_parts[-1]):
             return (match, deps, command)
-        elif match and "." in match:
-            match_parts = match.split(".")
-            if match_parts[0] == "%" and match_parts[1] == target_parts[-1]:
-                return (match, deps, command)
     return None
 
 def run_recipe(target):
