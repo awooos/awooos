@@ -73,8 +73,8 @@ with open("include/awoo/build_info.h", "w") as f:
     f.write(build_info)
 
 # Any directory directly under src/libraries/ is treated as a library.
-LIBRARIES = list(map(lambda x: Path(x).name + ".a",
-                    fnfilter(ALL_FILES, "src/libraries/*")))
+LIBRARIES = [str(x) + ".a" for x in
+                filter(Path.is_dir, Path("src/libraries").glob("*"))]
 
 KERNEL_LDFLAGS = list(map(lambda lib: ["-l", ":" + lib], LIBRARIES))
 
