@@ -50,20 +50,19 @@ if BUILD_TYPE == "test":
     QEMU_FLAGS += "-no-reboot -device isa-debug-exit,iobase=0xf4,iosize=0x04".split()
 
 all_files = [str(x) for x in Path("src").glob("**/*")]
-ALL_FILES = [
-    *fnfilter(all_files, "src/libraries/*/src/*"),
-    *fnfilter(all_files, "src/libraries/*/src/*/*"),
-    *fnfilter(all_files, "src/libraries/*/platform-{}/*".format(TARGET)),
-    *fnfilter(all_files, "src/libraries/*/platform-{}/*/*".format(TARGET)),
-    *fnfilter(all_files, "src/kernel/*"),
-]
+ALL_FILES = \
+    fnfilter(all_files, "src/libraries/*/src/*")            + \
+    fnfilter(all_files, "src/libraries/*/src/*/*")          + \
+    fnfilter(all_files, "src/libraries/*/platform-{}/*".format(TARGET))   + \
+    fnfilter(all_files, "src/libraries/*/platform-{}/*/*".format(TARGET)) + \
+    fnfilter(all_files, "src/kernel/*")
 
 C_INCLUDES = env("C_INCLUDES", [])
 C_INCLUDES += [["-I", x] for x in
                 fnfilter(ALL_FILES, "src/libraries/*/include")]
 
-SRCFILES = list([*filter(is_filetype(".c"),   ALL_FILES),
-                 *filter(is_filetype(".asm"), ALL_FILES)])
+SRCFILES =  [*filter(is_filetype(".c"),   ALL_FILES),
+             *filter(is_filetype(".asm"), ALL_FILES)]
 OBJFILES = list(map(with_suffix(".o"), SRCFILES))
 
 C_FILES = fnfilter(SRCFILES, "*.c")
