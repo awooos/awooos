@@ -2,7 +2,7 @@ from fnmatch import filter as fnfilter
 from pathlib import Path
 import os
 import shlex
-from subprocess import check_call
+import subprocess
 import sys
 
 def env(key, default=None):
@@ -24,7 +24,11 @@ def run_command(command, *args):
     command = command(*args)
     text = " ".join(map(shlex.quote, command))
     print("> {}".format(text))
-    check_call(command, stdout=sys.stdout)
+    try:
+        subprocess.check_call(command, stdout=sys.stdout)
+    except subprocess.CalledProcessError:
+        print("Error: Failed to run command.", file=sys.stderr)
+        pass
 
 # Recipes
 
