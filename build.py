@@ -74,12 +74,14 @@ with open("include/awoo/build_info.h", "w") as f:
 # Any directory directly under src/libraries/ is treated as a library.
 LIBRARY_DIRS = [str(x) for x in
                     filter(Path.is_dir, Path("src/libraries").glob("*"))]
-LIBRARIES = [x + ".a" for x in LIBRARY_DIRS]
+LIBRARIES = [Path(x).name + ".a" for x in LIBRARY_DIRS]
 LIBDIR_GLOBS = [x + "/*.*" for x in LIBRARY_DIRS]
 
 KERNEL_LDFLAGS = []
 for lib in LIBRARIES:
     KERNEL_LDFLAGS += ["-l", ":" + lib]
+
+setenv(globals())
 
 recipe("%.o", "%.c", [],
         [CC, *CFLAGS, *C_INCLUDES, "-c", "{match}", "-o", "{target}"])
@@ -93,7 +95,7 @@ for (library, glob) in zip(LIBRARIES, LIBDIR_GLOBS):
 
 recipe("src/kernel.exe", None, LIBRARIES,
         [LD, "-o", "{target}", "-L", "src/libraries", *LDFLAGS,
-            "-T", "src/link-{target}.ld", "src/kernel/start-{target}.o",
+            "-T", "src/link-{TARGET}.ld", "src/kernel/start-{TARGET}.o",
             "src/kernel/main.o", *KERNEL_LDFLAGS])
 
 task("clean", [],

@@ -28,9 +28,15 @@ def run_command(command, *args):
 
 # Recipes
 
+_env = {}
+def setenv(env):
+    global _env
+    _env = env
+
 def recipe_expand(command):
     def cmd(target, match, deps):
-        return [x.format(target=target, match=match, deps=deps)
+        global _env
+        return [x.format(target=target, match=match, deps=deps, **_env)
                 for x in command]
     return cmd
 
