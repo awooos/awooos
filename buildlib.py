@@ -2,6 +2,7 @@ from fnmatch import filter as fnfilter
 from pathlib import Path
 import os
 import shlex
+from subprocess import check_output
 import sys
 
 def env(key, default=None):
@@ -17,10 +18,18 @@ def is_filetype(suffix):
 def with_suffix(suffix):
     return lambda x: str(Path(x).with_suffix(suffix))
 
+# ???
+
+def run_command(command, *args):
+    text = " ".join(map(shlex.quote, command(*args)))
+    print("> {}".format(text))
+    check_output(command, stdout=sys.stdout)
+
 # Recipes
 
 def recipe_expand(command):
     def cmd(target, match, deps):
+        print(command)
         return [x.format(target=target, match=match, deps=deps)
                 for x in command]
     return cmd
@@ -61,6 +70,7 @@ def run_recipe(target):
         print("No rule for target: {}".format(target), file=sys.stderr)
         exit(1)
     match, deps, command = recipe
+    run_command(command, *recipe)
     [run_recipe(dep) for dep in deps]
 
 
