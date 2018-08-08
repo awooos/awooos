@@ -80,7 +80,7 @@ def run_recipe(target):
         print("No rule for target: {}".format(target), file=sys.stderr)
         exit(1)
     match, deps, command = recipe
-    run_command(command, *recipe)
+    run_command(command, target, match, deps)
     [run_recipe(dep) for dep in deps]
 
 
