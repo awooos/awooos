@@ -21,7 +21,8 @@ def with_suffix(suffix):
 # ???
 
 def run_command(command, *args):
-    text = " ".join(map(shlex.quote, command(*args)))
+    command = command(*args)
+    text = " ".join(map(shlex.quote, command))
     print("> {}".format(text))
     check_call(command, stdout=sys.stdout)
 
