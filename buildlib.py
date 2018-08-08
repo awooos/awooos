@@ -69,7 +69,7 @@ def find_recipe(target):
         target_parts = target.split(".")
         if (target == target_pattern) or match and \
                 (match[0:2] == "%." and match[2:] == target_parts[-1]):
-            return (match, deps, command)
+            return (target, deps, command)
     return None
 
 def run_recipe(target):
