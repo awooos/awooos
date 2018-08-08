@@ -48,12 +48,14 @@ def find_recipe(target):
         recipe = recipes[(target_pattern, match)]
         deps, command = recipe
         target_parts = target.split(".")
-        if target == target_pattern:
-            return (match, deps, command)
-        elif match and "." in match:
-            match_parts = match.split(".")
-            if match_parts[0] == "%" and match_parts[1] == target_parts[-1]:
-                return (match, deps, command)
+        if target != target_pattern:
+            continue
+        if match is None or not "." in match:
+            continue
+        match_parts = match.split(".")
+        if match_parts[0] != "%" or match_parts[1] != target_parts[-1]:
+            continue
+        return (match, deps, command)
     return None
 
 def run_recipe(target):
