@@ -30,7 +30,6 @@ def run_command(command, *args):
 
 def recipe_expand(command):
     def cmd(target, match, deps):
-        print(command)
         return [x.format(target=target, match=match, deps=deps)
                 for x in command]
     return cmd
