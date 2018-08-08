@@ -2,7 +2,7 @@ from fnmatch import filter as fnfilter
 from pathlib import Path
 import os
 import shlex
-from subprocess import check_output
+from subprocess import check_call
 import sys
 
 def env(key, default=None):
@@ -23,7 +23,7 @@ def with_suffix(suffix):
 def run_command(command, *args):
     text = " ".join(map(shlex.quote, command(*args)))
     print("> {}".format(text))
-    check_output(command, stdout=sys.stdout)
+    check_call(command, stdout=sys.stdout)
 
 # Recipes
 

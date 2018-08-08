@@ -58,8 +58,8 @@ ALL_FILES = \
     fnfilter(all_files, "src/kernel/*")
 
 C_INCLUDES = env("C_INCLUDES", [])
-C_INCLUDES += [["-I", x] for x in
-                fnfilter(ALL_FILES, "src/libraries/*/include")]
+for x in fnfilter(ALL_FILES, "src/libraries/*/include"):
+    C_INCLUDES += ["-I", x]
 
 SRCFILES =  [*filter(is_filetype(".c"),   ALL_FILES),
              *filter(is_filetype(".asm"), ALL_FILES)]
@@ -77,7 +77,9 @@ LIBRARY_DIRS = [str(x) for x in
 LIBRARIES = [x + ".a" for x in LIBRARY_DIRS]
 LIBDIR_GLOBS = [x + "/*.*" for x in LIBRARY_DIRS]
 
-KERNEL_LDFLAGS = [["-l", ":" + lib] for lib in LIBRARIES]
+KERNEL_LDFLAGS = []
+for lib in LIBRARIES:
+    KERNEL_LDFLAGS += ["-l", ":" + lib]
 
 recipe("%.o", "%.c", [],
         [CC, *CFLAGS, *C_INCLUDES, "-c", "{match}", "-o", "{target}"])
