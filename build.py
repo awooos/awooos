@@ -20,7 +20,9 @@ class BuildCommands:
     def __init__(self, config):
         self.config = config
         self.commands = {}
+        self.aliases = {}
         self.add_all(self.config)
+        self._add_aliases(self.config["aliases"])
 
     def add_all(self, config):
         for section_name in config.sections():
@@ -31,6 +33,52 @@ class BuildCommands:
     def add(self, section_name, command):
         self.commands[section_name] = command
 
+    def _add_aliases(self, aliases):
+        for alias, value in aliases.items():
+            self.aliases[alias] = value
+
+    def category_for(self, name):
+        if "." in name:
+            category = name.split(".", 1)[0]
+        else:
+            category = name
+
+        category = "categories:{}".format(category)
+
+        if not category in self.config["project"]["categories"]:
+            return (None, None)
+        return (category, name)
+
+    def category_command_format(self, category_name, name):
+        category = self.config[category_name]
+        command = category["command"]
+        values = {
+            "category": category_name,
+            "name": name,
+            "artifacts.c": ["???.c.o"],
+            "artifacts.asm": ["???.asm.o"],
+        }
+        return [arg.format(**values) for arg in command]
+
+    def category_command(self, name):
+        category, name = self.category_for(name)
+        if category is None:
+            print("error: Unknown category: {}".format(category))
+            exit(1)
+        return self.category_command_format(category, name)
+
+    def __getitem__(self, name):
+        if name in self.aliases:
+            # TODO: Avoid infinite loops if people do silly things.
+            return self.__getitem__(self.aliases[name])
+        elif name in self.commands:
+            return self.commands[name]
+        elif self.category_for(name):
+            return self.category_command(name)
+        else:
+            print("error: No such target: {}".format(name))
+            exit(1)
+
 class Builder:
     def __init__(self, config_file):
         self.config = load_config(config_file)
@@ -40,7 +88,7 @@ class Builder:
         return [self.build(target) for target in targets]
 
     def build(self, target):
-        pass
+        print("[{}]: {}".format(target, self.commands[target]))
 
 def _main(argv = None):
     """
