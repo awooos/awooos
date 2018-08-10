@@ -109,7 +109,8 @@ class Builder:
 
     def build(self, target):
         command = self.commands[target]
-        print("{:<15} {}".format(target + ":", " ".join(command)))
+        print(target)
+        print("$ {}".format(" ".join(command)))
 
 def _main(argv = None):
     """
