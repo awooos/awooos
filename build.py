@@ -82,10 +82,10 @@ class BuildCommands:
         values = fuck({
             "category": category_name,
             "name": name,
-            "artifact": AttrDict(
-                name = name,
-                file = self.artifact_path(name, category),
-            ),
+            "artifact": {
+                "name": name,
+                "file": self.artifact_path(name, category),
+            },
             "artifacts": {
                 "c":    ["ARTIFACTS_C"],
                 "asm":  ["ARTIFACTS_ASM"],
