@@ -8,9 +8,27 @@ from subprocess import check_output
 import sys
 from types import SimpleNamespace as AttrDict
 
-class slist(list):
+class StringyList(list):
     def __str__(self, sep=" "):
         return sep.join(map(shlex.quote, self))
+
+def fuck(obj):
+    if isinstance(obj, dict):
+        return fuck_dict_values(obj)
+    else:
+        return obj
+
+def fuck_dict_values(obj):
+    fuck_value = lambda x: (x[0], fuck2(x[1]))
+    return dict(map(fuck_value, obj.items()))
+
+def fuck2(obj):
+    if isinstance(obj, list):
+        return StringyList(map(fuck2, obj))
+    elif isinstance(obj, dict):
+        return AttrDict(**fuck_dict_values(obj))
+    else:
+        return obj
 
 def load_config(config_file):
     config = ConfigParser(interpolation=ExtendedInterpolation())
@@ -61,23 +79,23 @@ class BuildCommands:
         category = self.config[category_name]
         command = category["command"]
         command = shlex.split(command)
-        values = {
+        values = fuck({
             "category": category_name,
             "name": name,
             "artifact": AttrDict(
                 name = name,
                 file = self.artifact_path(name, category),
             ),
-            "artifacts": AttrDict(
-                c   = slist(["ARTIFACTS_C"]),
-                asm = slist(["ARTIFACTS_ASM"]),
-            ),
-            "category": AttrDict(
-                libraries = AttrDict(
-                    artifacts = slist(["LIBRARY_ARTIFACTS"]),
-                ),
-            ),
-        }
+            "artifacts": {
+                "c":    ["ARTIFACTS_C"],
+                "asm":  ["ARTIFACTS_ASM"],
+            },
+            "category": {
+                "libraries": {
+                    "artifacts": ["LIBRARY_ARTIFACTS"],
+                },
+            },
+        })
         return [arg.format(**values) for arg in command]
 
     def category_command(self, name):
