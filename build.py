@@ -26,12 +26,10 @@ class BuildCommands:
         for section_name in config.sections():
             section = config[section_name]
             if "command" in section:
-                print(section["command"])
-            else:
-                print(dir(section))
+                self.add(section_name, section["command"])
 
-    def add(self, command):
-        pass
+    def add(self, section_name, command):
+        self.commands[section_name] = command
 
 class Builder:
     def __init__(self, config_file):
