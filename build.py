@@ -3,8 +3,14 @@
 from configparser import ConfigParser, ExtendedInterpolation
 import inspect
 from pathlib import Path
+import shlex
 from subprocess import check_output
 import sys
+from types import SimpleNamespace as AttrDict
+
+class slist(list):
+    def __str__(self, sep=" "):
+        return sep.join(map(shlex.quote, self))
 
 def load_config(config_file):
     config = ConfigParser(interpolation=ExtendedInterpolation())
@@ -47,14 +53,30 @@ class BuildCommands:
             return (None, None)
         return ("categories:{}".format(category), name)
 
+    def artifact_path(self, name, category):
+        path = Path("artifacts", name + ".INVALID_SUFFIX")
+        return path.with_suffix(category["suffix"])
+
     def category_command_format(self, category_name, name):
         category = self.config[category_name]
         command = category["command"]
+        command = shlex.split(command)
         values = {
             "category": category_name,
             "name": name,
-            "artifacts.c": ["???.c.o"],
-            "artifacts.asm": ["???.asm.o"],
+            "artifact": AttrDict(
+                name = name,
+                file = self.artifact_path(name, category),
+            ),
+            "artifacts": AttrDict(
+                c   = slist(["ARTIFACTS_C"]),
+                asm = slist(["ARTIFACTS_ASM"]),
+            ),
+            "category": AttrDict(
+                libraries = AttrDict(
+                    artifacts = slist(["LIBRARY_ARTIFACTS"]),
+                ),
+            ),
         }
         return [arg.format(**values) for arg in command]
 
