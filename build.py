@@ -43,11 +43,9 @@ class BuildCommands:
         else:
             category = name
 
-        category = "categories:{}".format(category)
-
         if not category in self.config["project"]["categories"]:
             return (None, None)
-        return (category, name)
+        return ("categories:{}".format(category), name)
 
     def category_command_format(self, category_name, name):
         category = self.config[category_name]
