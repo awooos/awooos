@@ -78,7 +78,7 @@ make/.mk:
 	${PRETTY_PRINT} AS "$@" ${AS} ${ASFLAGS} -o $@ $<
 
 src/kernel.exe: ${LIBRARIES}
-	${PRETTY_PRINT} LD "$@" ${LD} -o $@ -L src/libraries ${LDFLAGS} -T src/link-${TARGET}.ld src/kernel/start-${TARGET}.o src/kernel/main.o ${KERNEL_LDFLAGS}
+	${PRETTY_PRINT} LD "$@" ${LD} -o $@ -L src/libraries ${LDFLAGS} -T src/link-${TARGET}.ld src/executables/kernel/src/start-${TARGET}.o src/executables/kernel/src/main.o ${KERNEL_LDFLAGS}
 
 %.a: ${OBJFILES}
 	${PRETTY_PRINT} AR "$@" ${AR} rcs $@ $(filter $*/%,$^)
