@@ -8,16 +8,33 @@ import sys
 
 def config_parser(config_file):
     parser = ConfigParser(interpolation=ExtendedInterpolation())
-    parser.read_file(config_file)
+    with open(config_file) as f:
+        parser.read_file(f)
     return parser
 
 class BuildCommands:
-    def __init__(self):
+    def __init__(self, config):
+        self.config = config
         self.commands = {}
+        self.add_all(self.config)
+
+    def add_all(self, config):
+        print(config.sections())
+        pass
+
+    def add(self, command):
+        pass
 
 class Builder:
     def __init__(self, config_file):
-        config = config_parser(config_file)
+        self.config = config_parser(config_file)
+        self.commands = BuildCommands(self.config)
+
+    def build_all(self, targets):
+        return [self.build(target) for target in targets]
+
+    def build(self, target):
+        pass
 
 def _main(argv = None):
     """
@@ -29,31 +46,16 @@ def _main(argv = None):
         print(inspect.getdoc(_main))
         return 1
 
-    arg_vars = {}
-    targets  = []
-    for arg in args:
-        if arg[0] == "-":
-            print("error: Unknown flag: {}".format(arg), file=sys.stderr)
-            return 1
-        elif "=" in arg:
-            key, val = arg.split("=", 1)
-            arg_vars[key] = val
-        else:
-            targets.append(arg)
-
+    targets = set(args)
     if len(targets) == 0:
-        targets = ["all"]
-
-    print("Overridden variables:")
-    for key, val in arg_vars.items():
-        print("- {} = {}".format(key, val))
-    print("")
+        targets.update(["all"])
 
     print("Targets:")
     for target in targets:
         print("- {}".format(target))
 
-    # TODO: Actually build things.
+    builder = Builder("build.cfg")
+    builder.build_all(targets)
 
     return 0
 
