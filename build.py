@@ -108,7 +108,7 @@ class Builder:
         return [self.build(target) for target in targets]
 
     def build(self, target):
-        print("[{}]: {}".format(target, self.commands[target]))
+        print("[{:<15}] {}".format(target, self.commands[target]))
 
 def _main(argv = None):
     """
