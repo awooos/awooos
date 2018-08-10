@@ -6,11 +6,15 @@ from pathlib import Path
 from subprocess import check_output
 import sys
 
-def config_parser(config_file):
-    parser = ConfigParser(interpolation=ExtendedInterpolation())
+def load_config(config_file):
+    config = ConfigParser(interpolation=ExtendedInterpolation())
     with open(config_file) as f:
-        parser.read_file(f)
-    return parser
+        config.read_file(f)
+
+    platform = config["DEFAULT"]["build.platform"]
+    config["platform"] = config["platform:" + platform]
+
+    return config
 
 class BuildCommands:
     def __init__(self, config):
@@ -19,15 +23,19 @@ class BuildCommands:
         self.add_all(self.config)
 
     def add_all(self, config):
-        print(config.sections())
-        pass
+        for section_name in config.sections():
+            section = config[section_name]
+            if "command" in section:
+                print(section["command"])
+            else:
+                print(dir(section))
 
     def add(self, command):
         pass
 
 class Builder:
     def __init__(self, config_file):
-        self.config = config_parser(config_file)
+        self.config = load_config(config_file)
         self.commands = BuildCommands(self.config)
 
     def build_all(self, targets):
