@@ -64,12 +64,13 @@ class BuildCommands:
             self.aliases[alias] = value
 
     def deps_for(self, target):
-        print(self[target])
-        return self.requires[self[target]]
+        return self.requires[self.resolve_name(target)]
 
     def category_for(self, name):
         if "." in name:
             category = name.split(".", 1)[0]
+        elif ":" in name:
+            category = name.split(":", 1)[1]
         else:
             category = name
 
@@ -111,13 +112,23 @@ class BuildCommands:
             exit(1)
         return self.category_command_format(category, name)
 
-    def __getitem__(self, name):
+    def resolve_name(self, name):
         if name in self.aliases:
-            # TODO: Avoid infinite loops if people do silly things.
-            print("Alias: {} => {}".format(name, self.aliases[name]))
-            return self.__getitem__(self.aliases[name])
-        elif self.category_for(name):
-            return self.category_command(name)
+            return self.resolve_name(self.aliases[name])
+        elif name in self.commands:
+            return self.commands[name]
+        elif self.category_for(name)[0]:
+            return self.category_for(name)[0]
+        else:
+            return None
+
+    def __getitem__(self, name):
+        resolved_name = self.resolve_name(name)
+
+        if self.category_for(resolved_name):
+            return self.category_command(resolved_name)
+        elif resolved_name in self.commands:
+            return self.commands[resolved_name]
         else:
             print("error: No such target: {}".format(name))
             exit(1)
@@ -136,7 +147,7 @@ class Builder:
     def build(self, target):
         command = self.commands[target]
         self.build_deps(target)
-        print(target)
+        print("> {}".format(target))
         print("$ {}".format(" ".join(command)))
 
 def _main(argv = None):
