@@ -44,7 +44,8 @@ class BuildCommands:
     def __init__(self, config):
         self.config = config
         self.commands = {}
-        self.aliases = {}
+        self.aliases  = {}
+        self.requires = {}
         self.add_all(self.config)
         self._add_aliases(self.config["aliases"])
 
@@ -52,14 +53,19 @@ class BuildCommands:
         for section_name in config.sections():
             section = config[section_name]
             if "command" in section:
-                self.add(section_name, section["command"])
+                self.add(section_name, section)
 
-    def add(self, section_name, command):
-        self.commands[section_name] = command
+    def add(self, section_name, section):
+        self.commands[section_name] = section.get("command", None)
+        self.requires[section_name] = section.get("require", [])
 
     def _add_aliases(self, aliases):
         for alias, value in aliases.items():
             self.aliases[alias] = value
+
+    def deps_for(self, target):
+        print(self[target])
+        return self.requires[self[target]]
 
     def category_for(self, name):
         if "." in name:
@@ -108,9 +114,8 @@ class BuildCommands:
     def __getitem__(self, name):
         if name in self.aliases:
             # TODO: Avoid infinite loops if people do silly things.
+            print("Alias: {} => {}".format(name, self.aliases[name]))
             return self.__getitem__(self.aliases[name])
-        elif name in self.commands:
-            return self.commands[name]
         elif self.category_for(name):
             return self.category_command(name)
         else:
@@ -122,11 +127,15 @@ class Builder:
         self.config = load_config(config_file)
         self.commands = BuildCommands(self.config)
 
+    def build_deps(self, target):
+        deps = self.commands.deps_for(target)
+
     def build_all(self, targets):
         return [self.build(target) for target in targets]
 
     def build(self, target):
         command = self.commands[target]
+        self.build_deps(target)
         print(target)
         print("$ {}".format(" ".join(command)))
 
