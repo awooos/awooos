@@ -14,11 +14,17 @@ class BuildConfig(ConfigParser):
 
         platform = self["DEFAULT"]["build.platform"]
         self["platform"] = self["platform:" + platform]
-        self["aliases"] = self._parse_aliases(self["aliases"])
+        self["aliases"] = self._parse_aliases()
+        print(list(self.items("aliases")))
 
-    def _parse_aliases(self, section):
-        for (k, v) in section.items():
-            print("{} => {}".format(k, v))
+    def _parse_aliases(self):
+        aliases = dict([(k, v) for (k, v) in self.items("aliases")])
+        print(aliases)
+        for (k, v) in aliases.items():
+            while v in aliases.keys() and v != k:
+                aliases[k] = aliases[v]
+                v = k
+        return aliases
 
 class Builder:
     def __init__(self, config_file):
@@ -51,7 +57,7 @@ def _main(argv = None):
         print("- {}".format(target))
 
     builder = Builder("build.cfg")
-    builder.build_all(targets)
+    #builder.build_all(targets)
 
     return 0
 
