@@ -53,8 +53,6 @@ ALL_FILES := $(wildcard            \
 SRCFILES := $(filter %.c,${ALL_FILES}) $(filter %.asm,${ALL_FILES})
 OBJFILES := $(patsubst %.asm, %.o, $(patsubst %.c, %.o, ${SRCFILES}))
 
-BUILDINFO := $(shell mkdir -p include/awoo && ./bin/generate_build_info.sh ${BUILD_TYPE} ${TARGET} > ./include/awoo/build_info.h)
-
 # Any directory directly under src/libraries/ is treated as a library.
 LIBRARIES := $(patsubst %/,%.a,$(filter %/,$(wildcard src/libraries/*/)))
 
@@ -69,7 +67,11 @@ config.mk:
 make/.mk:
 	$(error TARGET is undefined. Set it on the command line or in config.mk)
 
-%.o: %.c
+generated_headers:
+	mkdir -p include/awoo
+	./bin/generate_build_info.sh ${BUILD_TYPE} ${TARGET} > ./include/awoo/build_info.h
+
+%.o: %.c generated_headers
 	${CC} ${CFLAGS} ${C_INCLUDES} -c $< -o $@
 
 %.o: %.asm
@@ -90,7 +92,7 @@ ${ISO_FILE}: src/kernel.exe
 test: lint
 	@$(MAKE) BUILD_TYPE=test qemu
 
-lint:
+lint: generated_headers
 	clang-check $(filter %.c,${SRCFILES}) -- ${C_INCLUDES}
 
 qemu: iso
@@ -124,7 +126,7 @@ list-events:
 clean:
 	@rm -rf ./isofs ${ISO_DIR}*.iso ${OBJFILES} ${LIBRARIES} src/*.exe
 
-.PHONY: all iso clean test qemu qemu-monitor clean fetch-submodules update-submodules
+.PHONY: all iso clean test qemu qemu-monitor clean fetch-submodules update-submodules generated_headers
 
 # Don't auto-delete .o files.
 .SECONDARY: ${OBJFILES}
