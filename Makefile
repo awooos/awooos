@@ -1,31 +1,20 @@
 NAME := awoo
-
 BUILD_TYPE ?= debug
-
-ISO_DIR  ?= iso/
-ISO_FILE ?= ${ISO_DIR}/${NAME}${NAME_SUFFIX}-${TARGET}-${BUILD_TYPE}.iso
 
 override CFLAGS += -std=c11 -pedantic-errors -gdwarf-2 -nostdinc     \
 					-ffreestanding -fno-stack-protector -fno-builtin \
 					-fdiagnostics-show-option -Werror -Weverything   \
 					-Wno-cast-qual -Wno-missing-prototypes -Wno-vla
-
 override LDFLAGS += -nostdlib -g --whole-archive
-
 override ASFLAGS +=
 
-# If config.mk doesn't exist, it triggers the corresponding rule.
-# If ${TARGET} is undefined, this triggers the "make/.mk" rule.
-#
-# Also, the LAST INCLUDED FILE is included first, because... reasons?
-#
-# Given that and config.mk needing to be loaded after ${TARGET}.mk,
-# (to allow config.mk to override defaults), we include it _before_
-# ${TARGET}.mk, so it's loaded afterwards.
-#
-# I hate Make so much.
+C_INCLUDES := -I include $(patsubst %,-I %,$(wildcard src/libraries/*/include))
+
+# NOTE: Includes go in reverse order, so AWOO_MAKE_CONFIG overrides TARGET.mk.
+# Using a variable allows Docker-based builds to specify config.mk.dist.
 AWOO_MAKE_CONFIG ?= config.mk
 include ${AWOO_MAKE_CONFIG}
+# If ${TARGET} is not defined, this matches the make/.mk rule.
 include make/${TARGET}.mk
 
 QEMU ?= qemu-system-${TARGET}
@@ -34,13 +23,10 @@ ifeq (${BUILD_TYPE},test)
 # 1. Don't reboot on exit.
 # 2. Add isa-debug-exit device, to allow to have qemu exit with a non-zero exit status.
 #
-# This combination allows us to do a clean shutdown and have qemu return a
-# zero status code, or do a non-clean shutdown (using isa-debug-exit) and
-# have qemu return a nonzero status code.
+# A normal shutdown results in qemu having a zero exit code, and using
+# isa-debug-exit results in a nonzero status code.
 override QEMU_FLAGS += -no-reboot -device isa-debug-exit,iobase=0xf4,iosize=0x04
 endif
-
-C_INCLUDES := -I include $(patsubst %,-I %,$(wildcard src/libraries/*/include))
 
 KERNEL_LDFLAGS := $(patsubst src/libraries/%/,-l :%.a,$(filter %/,$(wildcard src/libraries/*/)))
 
@@ -55,6 +41,12 @@ OBJFILES := $(patsubst %.asm, %.o, $(patsubst %.c, %.o, ${SRCFILES}))
 
 # Any directory directly under src/libraries/ is treated as a library.
 LIBRARIES := $(patsubst %/,%.a,$(filter %/,$(wildcard src/libraries/*/)))
+
+# ISO_FILE is the final location of the generated ISO.
+ISO_DIR := iso/
+ISO_FILENAME := ${NAME}${NAME_SUFFIX}-${TARGET}-${BUILD_TYPE}.iso
+ISO_FILE := ${ISO_DIR}/${ISO_FILENAME}
+
 
 all: src/kernel.exe
 
