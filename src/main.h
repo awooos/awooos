@@ -1,10 +1,9 @@
 #ifndef DMM_MAIN_H
 #define DMM_MAIN_H
 
-// REQUIREMENTS: Requires size_t (stddef.h), uint32_t (stdint.h).
+// REQUIREMENTS: Requires size_t (stddef.h).
 
 #include <stddef.h>
-#include <stdint.h>
 #include "header.h"
 
 extern DMM_MallocHeader *dmm_global_instance;

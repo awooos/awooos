@@ -1,6 +1,5 @@
 #include <dmm.h>
 #include <stddef.h>
-#include <string.h>
 #include "main.h"
 #include "header.h"
 

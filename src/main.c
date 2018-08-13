@@ -1,10 +1,8 @@
-// REQUIREMENTS: Requires size_t (stddef.h); and memset() and memcpy() (string.h).
+// REQUIREMENTS: Requires size_t (stddef.h).
 
 #include <dmm.h>
 #include <dmm_instance.h>
 #include <stddef.h>
-#include <stdint.h>
-#include <string.h>
 #include "main.h"
 #include "header.h"
 #include "instance.h"
