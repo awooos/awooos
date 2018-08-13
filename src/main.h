@@ -1,7 +1,7 @@
 #ifndef DMM_MAIN_H
 #define DMM_MAIN_H
 
-// REQUIREMENTS: Requires size_t (stddef.h), uint32_t (stdint.h).
+// REQUIREMENTS: Requires size_t (stddef.h).
 
 #include <stddef.h>
 #include "header.h"

@@ -2,11 +2,10 @@
 #define DMM_HEADER_H
 
 #include <stddef.h>
-#include <stdint.h>
 
 #define DMM_HEADER_MAGIC 0x99A3E7D6
 #define DMM_UNASSIGNED_REGION NULL
-#define DMM_HEADER_FLAG_TEST ((uint32_t)1 << 31)
+#define DMM_HEADER_FLAG_TEST ((size_t)1 << 31)
 
 // ASSUMPTION: Function name is less than 64 bytes long.
 // ASSUMPTION: The last 64 bytes of the file name is Good Enough(TM).
@@ -17,10 +16,10 @@ typedef struct dmm_call_location_s {
 } DMM_CallLocation;
 
 typedef struct dmm_malloc_header_s {
-    uint32_t magic;
+    size_t magic;
     size_t size;
     size_t used; // A bit space-inefficient, but means we only require one type.
-    uint32_t flags; // Currently only used for tests
+    size_t flags; // Currently only used for tests
     void *data;
     struct dmm_malloc_header_s *next;
     DMM_CallLocation call_location;

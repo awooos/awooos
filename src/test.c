@@ -1,5 +1,4 @@
 #include <tinker.h>
-#include <stdint.h>
 #include <stddef.h>
 #include "main_test.h"
 #include "instance_test.h"
