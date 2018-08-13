@@ -6,6 +6,59 @@ from pathlib import Path
 import shlex
 from subprocess import check_output
 import sys
+from collections import UserDict
+
+class Graph(UserDict):
+    @property
+    def vertices(self):
+        return list(self.keys())
+
+    @property
+    def edges(self):
+        edges = []
+        for vertex, neighbors in self.data.items():
+            for neighbor in neighbors:
+                if {vertex, neighbor} not in edges:
+                    edges.append({vertex, neighbor})
+        return edges
+
+    def get_vertex(self, vertex):
+        if vertex in self.data:
+            return self.data[vertex]
+        else:
+            return []
+
+    def find_path(self, start, end, path=[]):
+        # We've found the end of our path.
+        if start == end:
+            return path
+        # If we can't find the first edge, the rest definitely doesn't exist.
+        if start not in self.data:
+            return None
+        for node in self.data[start]:
+            if node in path:
+                continue
+            new_path = self.find_path(node, end, path)
+            if new_path:
+                return new_path
+        return None
+
+    def dependencies(self, vertex, existing=[]):
+        # If self.data[vertex] doesn't exist, or is empty, there's no deps.
+        if len(self.get_vertex(vertex)) == 0:
+            return []
+
+        deps = []
+        print(self.data[vertex])
+        for deplist in self.data[vertex]:
+            print("deplist =", deplist)
+            for dep in deplist:
+                print(vertex, dep, self.get_vertex(dep))
+                if vertex in self.get_vertex(dep):
+                    deps += self.get_vertex(dep)
+                print(dep, deplist, existing)
+                print(deps)
+        return deps
 
 class BuildConfig(ConfigParser):
     def __init__(self, config_file):
@@ -63,4 +116,16 @@ def _main(argv = None):
 
 
 if __name__ == "__main__":
-    exit(_main())
+    graph = Graph({
+                'A': ['B', 'C'],
+                'B': ['C', 'D'],
+                'C': ['D'],
+                'D': ['C'],
+                'E': ['F'],
+                'F': ['C']
+    })
+
+    deps = graph.dependencies('D')
+    print(deps)
+    assert(deps == ['A', 'B', 'C'])
+    #exit(_main())
