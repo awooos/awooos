@@ -4,7 +4,6 @@
 // REQUIREMENTS: Requires size_t (stddef.h), uint32_t (stdint.h).
 
 #include <stddef.h>
-#include <stdint.h>
 #include "header.h"
 
 extern DMM_MallocHeader *dmm_global_instance;
