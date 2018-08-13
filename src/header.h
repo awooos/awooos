@@ -8,7 +8,7 @@
 #define DMM_HEADER_FLAG_TEST ((size_t)1 << 31)
 
 // ASSUMPTION: Function name is less than 64 bytes long.
-// ASSUMPTION: The last 64 bytes of the file name is Good Enough(TM).
+// ASSUMPTION: The first 64 bytes of the file name is Good Enough(TM).
 typedef struct dmm_call_location_s {
     char function[64];
     char filename[64];

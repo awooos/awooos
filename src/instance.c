@@ -1,11 +1,10 @@
 // REQUIREMENTS:
 // - stddef.h: size_t
-// - string.h: memset(), memcpy(), strlen().
 
 #include <dmm.h>
 #include <dmm_instance.h>
 #include <stddef.h>
-#include <string.h>
+#include "dmm_string.h"
 #include "main.h"
 #include "header.h"
 #include "instance.h"
@@ -13,23 +12,10 @@
 void dmm_call_location(DMM_CallLocation *call_location,
         const char function[], const char filename[], size_t line)
 {
-    memcpy((void*)(call_location->function), function, sizeof(call_location->function));
-
-    if (strlen(filename) > sizeof(call_location->filename)) {
-        // The filename is too long to fit, so write the end of it only.
-        for (size_t i = 0; i > sizeof(call_location->filename); i++) {
-            call_location->filename[i] = filename[strlen(filename) - i - 1];
-        }
-
-        // Overwrite the first 3 bytes with "...".
-        memcpy((void*)(call_location->filename), "...", 3);
-    } else {
-        // It fits, so just copy it in.
-        memcpy((void*)(call_location->filename), filename, sizeof(call_location->filename));
-    }
-
-    // Terminate with a null byte.
-    call_location->filename[sizeof(call_location->filename) - 1] = '\0';
+    _dmm_strncpy_null(call_location->function, function,
+            sizeof(call_location->function));
+    _dmm_strncpy_null(call_location->filename, filename,
+            sizeof(call_location->filename));
 
     call_location->line = line;
 }
@@ -111,14 +97,14 @@ void *_dmm_instance_malloc(void *instance, size_t size, const char function[],
 
     // NOTE: dmm_malloc() zeroes memory, which isn't what most allocators do.
     // Not sure if that violates the C standard or not, but *shrug*.
-    memset(result->data, 0, size);
+    _dmm_memset(result->data, 0, size);
 
     // Create a new header after the data, if the remaining data size is
     // large enough to fit the header.
     if (next_size > 0) {
         void *next = (void *)((size_t)(result + 1) + size);
         DMM_MallocHeader *next_header = (DMM_MallocHeader*)next;
-        memset(next, 0, sizeof(DMM_MallocHeader));
+        _dmm_memset(next, 0, sizeof(DMM_MallocHeader));
 
         next_header->magic = DMM_HEADER_MAGIC;
         next_header->size = next_size;
@@ -181,11 +167,11 @@ void *_dmm_instance_realloc(void *instance, void *ptr, size_t size, const char *
     }
 
     // Zero new memory chunk, to prevent data leakage.
-    memset(new_ptr, 0, size);
+    _dmm_memset(new_ptr, 0, size);
 
     // Copy data to new memory address.
     min_size = (size < header->size) ? size : header->size;
-    memcpy(new_ptr, ptr, min_size);
+    _dmm_memcpy(new_ptr, ptr, min_size);
 
     // Release the original allocation.
     _dmm_instance_free(instance, ptr, function, filename, line);
