@@ -42,4 +42,3 @@ void _dmm_strncpy_null(char *dest, const char *src, size_t destsize)
     // Terminate with a null byte.
     dest[destsize - 1] = 0;
 }
-
