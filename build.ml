@@ -96,12 +96,11 @@ let ali_files = [
 let build' file ext = match ext with
   | "asm" -> asm $ obj_for file
   | "c"   -> cc  $ obj_for file
-  (*| _ -> []*)
+  | _     -> function _ -> []
 
 let rec build = function
   | []          -> []
-  | [file]      -> [build' file (extname file)]
-  | file::files -> [file] :: (build files)
+  | file::files -> (build' file (extname file)) :: (build files)
 
 (* TODO: Actually get this list. *)
 let library_files = function
