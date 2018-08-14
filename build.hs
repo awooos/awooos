@@ -13,18 +13,18 @@ data Tools = Tools { ar :: String
                    , cc :: String
                    , ld :: String }
 
-data Flags = Flags { ar_flags :: List
-                   , as_flags :: List
-                   , cc_flags :: List
-                   , ld_flags :: List
-                   , qemu_flags :: List }
+data Flags = Flags { ar_flags :: [String]
+                   , as_flags :: [String]
+                   , cc_flags :: [String]
+                   , ld_flags :: [String]
+                   , qemu_flags :: [String] }
 
 data Project = Project { name :: String
                        , scm  :: String
                        , version    :: String
-                       , categories :: List
+                       , categories :: [String]
                        , build_root :: String
-                       , build_types :: List }
+                       , build_types :: [String] }
 
 data Platform = Platform { platform_name  :: String
                          , platform_flags :: Flags
@@ -45,19 +45,21 @@ tools = Tools { ar="ar"
 build = Build { build_platform  = "i386"
               , build_type      = "debug" }
 
-flags = Flags { cc_flags    = ["-std=c11", "-pedantic-errors", "-gdwarf-2",
+flags = Flags { ar_flags    = []
+              , as_flags    = []
+              , cc_flags    = ["-std=c11", "-pedantic-errors", "-gdwarf-2",
                                "-nostdinc", "-ffreestanding",
                                "-fno-stack-protector", "-fno-builtin",
                                "-fdiagnostics-show-option",
                                "-Werror", "-Weverything", "-Wno-cast-qual",
                                "-Wno-missing-prototypes", "-Wno-vla"]
               , ld_flags    = []
-              , as_flags    = []
               , qemu_flags  = [] }
 
-i386_flags = Flags { cc_flags   = ["-m32"]
-                   , ld_flags   = ["-melf_i386"]
+i386_flags = Flags { ar_flags   = []
                    , as_flags   = ["-felf32"]
+                   , cc_flags   = ["-m32"]
+                   , ld_flags   = ["-melf_i386"]
                    , qemu_flags = ["-no-reboot", "-device",
                                   "isa-debug-exit,iobase=0xf4,iosize=0x04"] }
 --tools.qemu = qemu-system-i386
@@ -126,8 +128,8 @@ command =
 
 -}
 
-rule :: String -> String
-rule x = x
+rule :: String -> [String] -> String
+rule x y = x
 
 library    name args = rule ("libraries."   ++ name) args
 executable name args = rule ("executables." ++ name) args
@@ -135,7 +137,7 @@ executable name args = rule ("executables." ++ name) args
 -- Aliases
 all    = kernel
 kernel = executable "kernel"
-iso    = files "iso"
+--iso    = files "iso"
 
 main = do
   print "awoo"
