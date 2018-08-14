@@ -94,13 +94,13 @@ let ali_files = [
 ]
 
 let build' file ext = match ext with
-  | "asm" -> asm $ obj_for file
-  | "c"   -> cc  $ obj_for file
-  | _     -> function _ -> []
+  | "asm" -> asm (obj_for file) []
+  | "c"   -> cc  (obj_for file) []
+  | _     -> []
 
 let rec build = function
   | []          -> []
-  | file::files -> (build' file (extname file)) :: (build files)
+  | file::files -> (build' file (extname file)) @ (build files)
 
 (* TODO: Actually get this list. *)
 let library_files = function
@@ -108,10 +108,8 @@ let library_files = function
   | x     -> []
 let library name =
   let artifacts = library_files name in
-(*  let commands = build artifacts in*)
-  let commands = [["foo"; "bar"]] in
-  let ar_cmd = [["ar"; name] @ artifacts] in
-  commands @ ar_cmd
+  [ build artifacts;
+    ar name artifacts]
 
 let executable_files = function
   | "kernel" -> [ "src/executables/kernel/main.c";
@@ -119,8 +117,8 @@ let executable_files = function
   | x        -> []
 let executable name =
   let artifacts = executable_files name in
-  (*build artifacts @ [["cc"; "-o"; name] @ artifacts]*)
-  [["clang"]]
+  [ build artifacts;
+    cc name artifacts]
 
 (*
 executable name = do
