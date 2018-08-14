@@ -4,6 +4,8 @@ module Main where
 
 import Data.Char
 import Data.List
+import System.IO
+import System.Process
 
 data Build = Build { build_platform :: String
                    , build_type     :: String }
@@ -62,7 +64,6 @@ i386_flags = Flags { ar_flags   = []
                    , ld_flags   = ["-melf_i386"]
                    , qemu_flags = ["-no-reboot", "-device",
                                   "isa-debug-exit,iobase=0xf4,iosize=0x04"] }
---tools.qemu = qemu-system-i386
 
 -- TODO: "qemu" is a tool. it should be identified as such.
 i386 = Platform { platform_name="i386"
@@ -128,11 +129,61 @@ command =
 
 -}
 
-rule :: String -> [String] -> String
-rule x y = x
 
-library    name args = rule ("libraries."   ++ name) args
-executable name args = rule ("executables." ++ name) args
+
+run :: [String] -> IO(String)
+run cmd = do
+    (_, Just hout, _, _) <- createProcess (proc tool args){ std_out = CreatePipe }
+    putStrLn ("$ " ++ cmd_str)
+    output <- hGetContents hout
+    putStrLn output
+    return output
+  where cmd_str = intercalate " " cmd
+        tool    = head cmd
+        args    = tail cmd
+
+
+platform = i386
+artifact_dir = "artifacts/"
+
+cc_include_for lib = "-Isrc/libraries/" ++ lib ++ "/include"
+cc_includes libs = map cc_include_for libs
+
+splitOn :: ([Char] -> Bool) -> [Char] -> [[Char]]
+splitOn _ [] = []
+splitOn f list =
+    first : splitOn f (dropWhile f rest)
+  where
+    (first, rest) = break f list
+
+object_for file =
+    name ++ ".o"
+  where
+    name = head $ splitOn (== ".") file
+
+libs = ["ali", "cadel", "dmm", "flail", "greeter", "hal", "shell", "tests", "tinker"]
+
+build_object file =
+  run $ [cc tools] ++ cc_flags flags ++ (cc_flags $ platform_flags platform) ++ cc_includes libs ++
+          ["-c", file, "-o", object_for file]
+
+dir_objects category name =
+  getDirectoryContents ("src/" ++ category ++ "/" ++ name ++ "/src/")
+
+
+library_objects name = ["a"]
+objects "library" name = do
+  return $ map build_object (library_objects name)
+
+library name = do
+  artifacts <- objects "library" name
+  run ([ar tools, "rcs", artifact_dir ++ name ++ ".a"] ++ artifacts)
+
+executable name = do
+  ali     <- library "ali"
+  dmm     <- library "dmm"
+  greeter <- library "greeter"
+  run ["echo awoo"]
 
 -- Aliases
 all    = kernel
@@ -140,5 +191,5 @@ kernel = executable "kernel"
 --iso    = files "iso"
 
 main = do
-  print "awoo"
+  run "libraries.test" ["echo", "hi"]
 
