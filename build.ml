@@ -2,6 +2,19 @@
 
 let ($) f x = f x
 
+let find dir =
+  let rec walk acc paths =
+    match paths with
+    | []        -> acc
+    | dir::tail ->
+        let contents = Array.to_list (Sys.readdir dir) in
+        let contents = List.rev_map (Filename.concat dir) contents in
+        let dirs, _  = List.partition Sys.is_directory contents in
+        walk (contents @ acc) (dirs @ tail)
+  in
+  walk [] [dir]
+;;
+
 let exe_for file = Filename.remove_extension file ^ ".exe"
 let lib_for file = Filename.remove_extension file ^ ".a"
 let obj_for file = Filename.remove_extension file ^ ".o"
@@ -130,6 +143,7 @@ kernel = executable "kernel"
 *)
 
 let () =
-  let steps = library "ali" in
+  (*let steps = library "ali" in
   let lines = List.map (String.concat " ") steps in
-  print_endline $ String.concat "\n" lines
+  print_endline $ String.concat "\n" lines*)
+  print_endline $ String.concat "\n" (find "src")
