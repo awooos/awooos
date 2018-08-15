@@ -156,15 +156,14 @@ let kernel =
 let all    = kernel
 
 let step_cmd  step = step.cmd
-let step_str  step = String.concat " " (step_cmd step)
+let join_words words = String.concat " " words
 
 let step_map  fn rule = List.map fn (List.flatten rule)
 let steps_for rule = step_map step_cmd rule
-let step_strs rule = step_map step_str rule
 
 let run_step step =
-  print_endline $ "$ " ^ step_str step
-let run rule = step_map run_step rule
+  print_endline $ "$ " ^ join_words step
+let run rule = List.map run_step $ steps_for rule
 
 let () =
   run all;
