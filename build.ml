@@ -155,15 +155,17 @@ let kernel =
 
 let all    = kernel
 
-let print_step  step  = print_endline $ String.concat " " step.cmd
-let print_steps steps = List.map print_step  steps
-let print_obj   objs  = List.map print_steps objs
+let step_cmd  step = step.cmd
+let step_str  step = String.concat " " (step_cmd step)
 
-let step  step  = String.concat " " step.cmd
-let steps steps = List.map (step)  steps
-(*let rule  rule  = List.map (steps) rule*)
-let rule  rule = List.map step (List.flatten rule)
+let step_map  fn rule = List.map fn (List.flatten rule)
+let steps_for rule = step_map step_cmd rule
+let step_strs rule = step_map step_str rule
+
+let run_step step =
+  print_endline $ "$ " ^ step_str step
+let run rule = step_map run_step rule
 
 let () =
-  let stps = List.flatten $ List.map steps all in
-  print_endline $ (String.concat "\n" stps)
+  run all;
+  ()
