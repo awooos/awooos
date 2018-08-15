@@ -54,7 +54,7 @@ let flags = { asm   = [];
                        "-fdiagnostics-show-option";
                        "-Werror"; "-Weverything"; "-Wno-cast-qual";
                        "-Wno-missing-prototypes"; "-Wno-vla"];
-              ld    = [];
+              ld    = ["-nostdlib"; "-g"; "-wholearchive"];
               qemu  = [] }
 
 (* Platform flags *)
@@ -132,24 +132,22 @@ let find_platform_files dir platform_name exts =
       find_by_ext path exts
   else
       []
-let library_files lib =
-  let exts = [".c"; ".asm"] in
-  let libdir = Filename.concat "src/libraries/" lib in
-  find_src_files        libdir "src"         exts @
-  find_platform_files   libdir platform.name exts
+let target_files category name =
+  let exts   = [".c"; ".asm"] in
+  let catdir = Filename.concat "src"  category in
+  let dir    = Filename.concat catdir name in
+  find_src_files        dir "src"         exts @
+  find_platform_files   dir platform.name exts
+
 let library name =
-  let artifacts = library_files name in
+  let artifacts = target_files "libraries" name in
   [ build artifacts;
     [ar name artifacts]]
 
-let executable_files = function
-  | "kernel" -> [ "src/executables/kernel/main.c";
-                  "src/executables/kernel/start-" ^ platform.name ^ ".asm"]
-  | x        -> []
 let executable name =
-  let artifacts = executable_files name in
+  let artifacts = target_files "executables" name in
   [ build artifacts;
-    [cc name artifacts]]
+    [ld name artifacts]]
 
 (* Functions for manipulating, printing, and executing rules/steps. *)
 
