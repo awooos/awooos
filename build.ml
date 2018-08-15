@@ -1,6 +1,12 @@
 #!/usr/bin/env ocaml
+#load "str.cma"
 
 let ($) f x = f x
+
+let ends_with str suffix =
+  suffix = Str.last_chars str (String.length suffix)
+let ends_with_any suffixes str =
+  List.exists (ends_with str) suffixes
 
 let find dir =
   let rec walk acc paths =
@@ -13,7 +19,6 @@ let find dir =
         walk (contents @ acc) (dirs @ tail)
   in
   walk [] [dir]
-;;
 
 let exe_for file = Filename.remove_extension file ^ ".exe"
 let lib_for file = Filename.remove_extension file ^ ".a"
@@ -146,4 +151,6 @@ let () =
   (*let steps = library "ali" in
   let lines = List.map (String.concat " ") steps in
   print_endline $ String.concat "\n" lines*)
-  print_endline $ String.concat "\n" (find "src")
+  let files = find "src" in
+  let files = List.filter (ends_with_any [".c"; ".asm"]) files in
+  print_endline $ String.concat "\n" files
