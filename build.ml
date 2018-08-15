@@ -144,10 +144,10 @@ let library name =
   [ build artifacts;
     [ar name artifacts]]
 
-let executable name =
+let executable name ldflags =
   let artifacts = target_files "executables" name in
   [ build artifacts;
-    [ld name artifacts]]
+    [ld name (artifacts @ ldflags)]]
 
 (* Functions for manipulating, printing, and executing rules/steps. *)
 
@@ -168,6 +168,19 @@ let run ?(dry_run=false) rule =
 (* Aliases *)
 
 let kernel =
+  let ldflags =
+    [ "-L"; "src/libraries";
+      "-T"; "src/link-" ^ platform.name ^ ".ld" ] @
+    [ "-l"; ":ali.a"      ;
+      "-l"; ":cadel.a"    ;
+      "-l"; ":dmm.a"      ;
+      "-l"; ":flail.a"    ;
+      "-l"; ":greeter.a"  ;
+      "-l"; ":hal.a"      ;
+      "-l"; ":shell.a"    ;
+      "-l"; ":tests.a"    ;
+      "-l"; ":tinker.a"   ]
+  in
   library "ali"     @
   library "cadel"   @
   library "dmm"     @
@@ -177,7 +190,7 @@ let kernel =
   library "shell"   @
   library "tests"   @
   library "tinker"  @
-  executable "kernel"
+  executable "kernel" ldflags
 
 let all    = kernel
 
