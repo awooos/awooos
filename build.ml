@@ -20,6 +20,8 @@ let find dir =
   in
   walk [] [dir]
 
+let find_by_ext dir suffixes = List.filter (ends_with_any suffixes) $ find dir
+
 let exe_for file = Filename.remove_extension file ^ ".exe"
 let lib_for file = Filename.remove_extension file ^ ".a"
 let obj_for file = Filename.remove_extension file ^ ".o"
@@ -151,6 +153,5 @@ let () =
   (*let steps = library "ali" in
   let lines = List.map (String.concat " ") steps in
   print_endline $ String.concat "\n" lines*)
-  let files = find "src" in
-  let files = List.filter (ends_with_any [".c"; ".asm"]) files in
+  let files = find_by_ext "src" [".c"; ".asm"] in
   print_endline $ String.concat "\n" files
