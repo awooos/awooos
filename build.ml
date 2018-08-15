@@ -39,6 +39,11 @@ type platform = { name  : string;
                   (* TODO: qemu is a tool. it should be identified as such. *)
                   qemu  : string }
 
+(* Note: the `cmd` type is only here to ease debugging.
+ * Getting errors about "string list list list" vs "string list list" is
+ * less than great, and I found that this helped. *)
+type cmd = { cmd : string list }
+
 (* General tool flags *)
 
 let flags = { asm   = [];
@@ -71,13 +76,13 @@ let i386 = { name  = "i386";
 
 let platform = i386
 let ar  file args =
-  ["ar"]    @ flags.ar  @ platform.flags.ar  @ [file] @ args
+  {cmd=["ar"]    @ flags.ar  @ platform.flags.ar  @ [file] @ args}
 let asm file args =
-  ["nasm"]  @ flags.asm @ platform.flags.asm @ ["-o"; file] @ args
+  {cmd=["nasm"]  @ flags.asm @ platform.flags.asm @ ["-o"; file] @ args}
 let cc  file args =
-  ["clang"] @ flags.cc  @ platform.flags.cc  @ ["-o"; file] @ args
+  {cmd=["clang"] @ flags.cc  @ platform.flags.cc  @ ["-o"; file] @ args}
 let ld  file args =
-  ["ld"]    @ flags.ld  @ platform.flags.ld  @ ["-o"; file] @ args
+  {cmd=["ld"]    @ flags.ld  @ platform.flags.ld  @ ["-o"; file] @ args}
 
 (* TARGETS *)
 
@@ -112,11 +117,11 @@ let ali_files = [
 let build' file ext = match ext with
   | ".asm"  -> asm (obj_for file) []
   | ".c"    -> cc  (obj_for file) []
-  | _       -> []
+  | _       -> {cmd=[]}
 
 let rec build = function
   | []          -> []
-  | file::files -> (build' file (Filename.extension file)) @ (build files)
+  | file::files -> (build' file (Filename.extension file)) :: (build files)
 
 (* TODO: Actually get this list. *)
 let library_files = function
@@ -125,7 +130,7 @@ let library_files = function
 let library name =
   let artifacts = library_files name in
   [ build artifacts;
-    ar name artifacts]
+    [ar name artifacts]]
 
 let executable_files = function
   | "kernel" -> [ "src/executables/kernel/main.c";
@@ -134,7 +139,7 @@ let executable_files = function
 let executable name =
   let artifacts = executable_files name in
   [ build artifacts;
-    cc name artifacts]
+    [cc name artifacts]]
 
 (*
 executable name = do
@@ -144,14 +149,20 @@ executable name = do
   run ["echo awoo"]
 *)
 (* Aliases *)
-(*
-all    = kernel
-kernel = executable "kernel"
-*)
+
+let kernel =
+  executable "kernel"
+
+let all    = kernel
+
+let print_step  step  = print_endline $ String.concat " " step.cmd
+let print_steps steps = List.map print_step  steps
+let print_obj   objs  = List.map print_steps objs
+
+let step  step  = String.concat " " step.cmd
+let steps steps = List.map (step)  steps
+let rule  rule  = List.map (steps) rule
 
 let () =
-  (*let steps = library "ali" in
-  let lines = List.map (String.concat " ") steps in
-  print_endline $ String.concat "\n" lines*)
-  let files = find_by_ext "src" [".c"; ".asm"] in
-  print_endline $ String.concat "\n" files
+  let stps = List.flatten $ List.map steps all in
+  print_endline $ (String.concat "\n" stps)
