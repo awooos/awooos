@@ -141,19 +141,7 @@ let executable name =
   [ build artifacts;
     [cc name artifacts]]
 
-(*
-executable name = do
-  ali     <- library "ali"
-  dmm     <- library "dmm"
-  greeter <- library "greeter"
-  run ["echo awoo"]
-*)
-(* Aliases *)
-
-let kernel =
-  executable "kernel"
-
-let all    = kernel
+(* Functions for manipulating, printing, and executing rules/steps. *)
 
 let steps_for   rule = List.map (fun x -> x.cmd) (List.flatten rule)
 let print_step  step = print_endline $ "$ " ^ String.concat " " step
@@ -168,5 +156,21 @@ let run ?(dry_run=false) rule =
   match dry_run with
   | true    -> fake_run rule
   | false   -> real_run rule
+
+(* Aliases *)
+
+let kernel =
+  library "ali"     @
+  library "cadel"   @
+  library "dmm"     @
+  library "flail"   @
+  library "greeter" @
+  library "hal"     @
+  library "shell"   @
+  library "tests"   @
+  library "tinker"  @
+  executable "kernel"
+
+let all    = kernel
 
 let () = ignore $ run all
