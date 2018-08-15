@@ -124,9 +124,19 @@ let rec build = function
   | file::files -> (build' file (Filename.extension file)) :: (build files)
 
 (* TODO: Actually get this list. *)
-let library_files = function
-  | "ali" -> ["foo.c"; "bar.asm"]
-  | x     -> []
+let find_src_files dir subdir exts =
+  find_by_ext (Filename.concat dir subdir) exts
+let find_platform_files dir platform_name exts =
+  let path = Filename.concat dir platform_name in
+  if Sys.file_exists path && Sys.is_directory path then
+      find_by_ext path exts
+  else
+      []
+let library_files lib =
+  let exts = [".c"; ".asm"] in
+  let libdir = Filename.concat "src/libraries/" lib in
+  find_src_files        libdir "src"         exts @
+  find_platform_files   libdir platform.name exts
 let library name =
   let artifacts = library_files name in
   [ build artifacts;
