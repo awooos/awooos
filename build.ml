@@ -3,31 +3,18 @@
 
 let ($) f x = f x
 
+(* Filename-manipulation functions. *)
+
 let ends_with str suffix =
   suffix = Str.last_chars str (String.length suffix)
 let ends_with_any suffixes str =
   List.exists (ends_with str) suffixes
 
-let find dir =
-  let rec walk acc paths =
-    match paths with
-    | []        -> acc
-    | dir::tail ->
-        let contents = Array.to_list (Sys.readdir dir) in
-        let contents = List.rev_map (Filename.concat dir) contents in
-        let dirs, _  = List.partition Sys.is_directory contents in
-        walk (contents @ acc) (dirs @ tail)
-  in
-  walk [] [dir]
-
-let find_by_ext dir suffixes = List.filter (ends_with_any suffixes) $ find dir
-
 let exe_for file = Filename.remove_extension file ^ ".exe"
 let lib_for file = Filename.remove_extension file ^ ".a"
 let obj_for file = Filename.remove_extension file ^ ".o"
 
-(* let run cmd args = exec cmd args *)
-(* let run cmd args = [] *)
+(* Types *)
 
 type tool_flags = { asm  : string list;
                     ar   : string list;
@@ -43,6 +30,38 @@ type platform = { name  : string;
  * Getting errors about "string list list list" vs "string list list" is
  * less than great, and I found that this helped. *)
 type cmd = { cmd : string list }
+
+(* Functions for finding source files. *)
+
+let find dir =
+  let rec walk acc paths =
+    match paths with
+    | []        -> acc
+    | dir::tail ->
+        let contents = Array.to_list (Sys.readdir dir) in
+        let contents = List.rev_map (Filename.concat dir) contents in
+        let dirs, _  = List.partition Sys.is_directory contents in
+        walk (contents @ acc) (dirs @ tail)
+  in
+  walk [] [dir]
+
+let find_by_ext dir suffixes = List.filter (ends_with_any suffixes) $ find dir
+
+let find_src_files dir subdir exts =
+  find_by_ext (Filename.concat dir subdir) exts
+let find_platform_files dir platform_name exts =
+  let path = Filename.concat dir platform_name in
+  if Sys.file_exists path && Sys.is_directory path then
+      find_by_ext path exts
+  else
+      []
+let target_files category name platform_name =
+  let exts   = [".c"; ".asm"] in
+  let catdir = Filename.concat "src"  category in
+  let dir    = Filename.concat catdir name in
+  find_src_files        dir "src"         exts @
+  find_platform_files   dir platform_name exts
+
 
 (* General tool flags *)
 
@@ -84,35 +103,7 @@ let cc  file args =
 let ld  file args =
   {cmd=["ld"]    @ flags.ld  @ platform.flags.ld  @ ["-o"; file] @ args}
 
-(* TARGETS *)
-
-(* TODO: Get this list automatically. *)
-let libs =
-  ["ali";
-   "cadel";
-   "dmm";
-   "flail";
-   "greeter";
-   "hal";
-   "shell";
-   "tests";
-   "tinker"]
-
-let ali_files = [
-  "src/libraries/ali/src/assert.c";
-  "src/libraries/ali/src/event.c";
-  "src/libraries/ali/src/main.c";
-  "src/libraries/ali/src/main_test.c";
-  "src/libraries/ali/src/number/main.c";
-  "src/libraries/ali/src/number/main_test.c";
-  "src/libraries/ali/src/str/charsplit.c";
-  "src/libraries/ali/src/str/charsplit_test.c";
-  "src/libraries/ali/src/string.c";
-  "src/libraries/ali/src/str/shellsplit.c";
-  "src/libraries/ali/src/str/shellsplit_test.c";
-  "src/libraries/ali/src/str/test.c";
-  "src/libraries/ali/src/text.c"
-]
+(* Functions for creating build steps. *)
 
 let build' file ext = match ext with
   | ".asm"  -> asm (obj_for file) []
@@ -123,29 +114,13 @@ let rec build = function
   | []          -> []
   | file::files -> (build' file (Filename.extension file)) :: (build files)
 
-(* TODO: Actually get this list. *)
-let find_src_files dir subdir exts =
-  find_by_ext (Filename.concat dir subdir) exts
-let find_platform_files dir platform_name exts =
-  let path = Filename.concat dir platform_name in
-  if Sys.file_exists path && Sys.is_directory path then
-      find_by_ext path exts
-  else
-      []
-let target_files category name =
-  let exts   = [".c"; ".asm"] in
-  let catdir = Filename.concat "src"  category in
-  let dir    = Filename.concat catdir name in
-  find_src_files        dir "src"         exts @
-  find_platform_files   dir platform.name exts
-
 let library name =
-  let artifacts = target_files "libraries" name in
+  let artifacts = target_files "libraries" name platform.name in
   [ build artifacts;
     [ar name artifacts]]
 
 let executable name ldflags =
-  let artifacts = target_files "executables" name in
+  let artifacts = target_files "executables" name platform.name in
   [ build artifacts;
     [ld name (artifacts @ ldflags)]]
 
