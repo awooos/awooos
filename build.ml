@@ -4,15 +4,10 @@ ocamlc -o "$0.bin" -pp 'sed "1,3 s/^.*//"' "$0" && "$0.bin"; STATUS=$?
 (* BEGIN ACTUAL OCAML CODE. *)
 
 let ($) f x = f x
-let rec last = function
-  | [x]   -> x
-  | xs::x -> last x
 
-let extname file = last (String.split_on_char '.' file)
-let with_suffix file ext = (List.hd (String.split_on_char '.' file)) ^ ext
-let exe_for file = with_suffix file ".exe"
-let lib_for file = with_suffix file ".a"
-let obj_for file = with_suffix file ".o"
+let exe_for file = Filename.remove_extension file ^ ".exe"
+let lib_for file = Filename.remove_extension file ^ ".a"
+let obj_for file = Filename.remove_extension file ^ ".o"
 
 (* let run cmd args = exec cmd args *)
 (* let run cmd args = [] *)
@@ -24,10 +19,10 @@ type tool_flags = { asm  : string list;
                     qemu : string list }
 type platform = { name  : string;
                   flags : tool_flags;
-                  (* TODO: "qemu" is a tool. it should be identified as such. *)
+                  (* TODO: qemu is a tool. it should be identified as such. *)
                   qemu  : string }
 
-(* ------------- *)
+(* General tool flags *)
 
 let flags = { asm   = [];
               ar    = [];
@@ -40,12 +35,16 @@ let flags = { asm   = [];
               ld    = [];
               qemu  = [] }
 
+(* Platform flags *)
+
 let i386_flags = { ar   = [];
                    asm  = ["-felf32"];
                    cc   = ["-melf_i386"];
                    ld   = [];
                    qemu = ["-no-reboot"; "-device";
                            "isa-debug-exit;iobase=0xf4;iosize=0x04"] }
+
+(* Platforms *)
 
 let i386 = { name  = "i386";
              flags = i386_flags;
@@ -94,13 +93,13 @@ let ali_files = [
 ]
 
 let build' file ext = match ext with
-  | "asm" -> asm (obj_for file) []
-  | "c"   -> cc  (obj_for file) []
-  | _     -> []
+  | ".asm"  -> asm (obj_for file) []
+  | ".c"    -> cc  (obj_for file) []
+  | _       -> []
 
 let rec build = function
   | []          -> []
-  | file::files -> (build' file (extname file)) @ (build files)
+  | file::files -> (build' file (Filename.extension file)) @ (build files)
 
 (* TODO: Actually get this list. *)
 let library_files = function
