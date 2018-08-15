@@ -1,7 +1,4 @@
-#!/bin/bash
-ocamlc -o "$0.bin" -pp 'sed "1,3 s/^.*//"' "$0" && "$0.bin"; STATUS=$?
-[ -f "$0.bin" ] && rm "$0.bin"; exit $STATUS
-(* BEGIN ACTUAL OCAML CODE. *)
+#!/usr/bin/env ocaml
 
 let ($) f x = f x
 
