@@ -161,7 +161,8 @@ let print_obj   objs  = List.map print_steps objs
 
 let step  step  = String.concat " " step.cmd
 let steps steps = List.map (step)  steps
-let rule  rule  = List.map (steps) rule
+(*let rule  rule  = List.map (steps) rule*)
+let rule  rule = List.map step (List.flatten rule)
 
 let () =
   let stps = List.flatten $ List.map steps all in
