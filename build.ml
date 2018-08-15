@@ -155,10 +155,18 @@ let kernel =
 
 let all    = kernel
 
-let steps_for rule = List.map (fun x -> x.cmd) (List.flatten rule)
-let run_step  step = print_endline $ "$ " ^ String.concat " " step
-let run       rule = List.map run_step $ steps_for rule
+let steps_for   rule = List.map (fun x -> x.cmd) (List.flatten rule)
+let print_step  step = print_endline $ "$ " ^ String.concat " " step
+let exec_step   step = ()
+let run_step    step =
+  print_step step;
+  exec_step  step
+let fake_run    rule = List.map print_step  $ steps_for rule
+let real_run    rule = List.map run_step    $ steps_for rule
 
-let () =
-  run all;
-  ()
+let run ?(dry_run=false) rule =
+  match dry_run with
+  | true    -> fake_run rule
+  | false   -> real_run rule
+
+let () = ignore $ run all
