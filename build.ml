@@ -14,9 +14,6 @@ let libraries = [
   "tinker"
 ]
 
-
-let ($) f x = f x
-
 let env, targets, flags =
   let args          = List.tl (Array.to_list Sys.argv) in
   let flags, args   = List.partition (fun s -> String.get s 0 == '-') args in
@@ -68,7 +65,7 @@ let find dir =
   in
   walk [] [dir]
 
-let find_by_ext dir suffixes = List.filter (ends_with_any suffixes) $ find dir
+let find_by_ext dir suffixes = List.filter (ends_with_any suffixes) @@ find dir
 
 let find_src_files dir subdir exts =
   find_by_ext (Filename.concat dir subdir) exts
@@ -156,12 +153,12 @@ let executable name ldflags =
 (* Functions for manipulating, printing, and executing rules/steps. *)
 
 let steps_for   rule = List.map (fun x -> x.cmd) (List.flatten rule)
-let print_step  step = print_endline $ "$ " ^ String.concat " " step
+let print_step  step = print_endline @@ "$ " ^ String.concat " " step
 let run_step    step =
   print_step step;
   exec       step
-let fake_run    rule = List.map print_step  $ steps_for rule
-let real_run    rule = List.map run_step    $ steps_for rule
+let fake_run    rule = List.map print_step  @@ steps_for rule
+let real_run    rule = List.map run_step    @@ steps_for rule
 
 let run ?(dry_run=false) rule =
   match dry_run with
@@ -189,4 +186,4 @@ let kernel =
 
 let all    = kernel
 
-let () = ignore $ run all
+let () = ignore @@ run all
