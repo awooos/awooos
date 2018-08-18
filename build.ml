@@ -20,8 +20,22 @@ let env, targets, flags =
   let vars, targets = List.partition (fun s -> String.contains s '=') args in
   (vars, targets, flags)
 
-let exec (cmd::args) =
-  Unix.execvpe cmd (Array.of_list args) (Array.of_list env)
+
+let check_exit_status =
+  function
+  | Unix.WEXITED 0 -> ()
+  | Unix.WEXITED r -> exit r
+  | Unix.WSIGNALED n -> exit 1
+  | Unix.WSTOPPED n -> exit 1
+let exec (cmd_name::args as cmd) =
+  let cmd'   = Array.of_list cmd    in
+  let env'   = Array.of_list env    in
+  let _, stdin' = Unix.pipe ~cloexec:true () in
+  let pid =
+    Unix.create_process_env cmd_name cmd' env' stdin' Unix.stdout Unix.stderr
+  in
+  let _, status = Unix.waitpid [] pid in
+  check_exit_status status
 
 (* Filename-manipulation functions. *)
 
@@ -93,9 +107,10 @@ let flags = { asm   = [];
                        "-fno-stack-protector"; "-fno-builtin";
                        "-fdiagnostics-show-option";
                        "-Werror"; "-Weverything"; "-Wno-cast-qual";
-                       "-Wno-missing-prototypes"; "-Wno-vla"] @
+                       "-Wno-missing-prototypes"; "-Wno-vla";
+                       "-Iinclude/"] @
                       List.map lib_include_flag libraries;
-              ld    = ["-nostdlib"; "-g"; "-wholearchive"];
+              ld    = ["-nostdlib"; "-g"; "--whole-archive"];
               qemu  = [] }
 
 (* Platform flags *)
@@ -118,7 +133,7 @@ let i386 = { name  = "i386";
 let platform = i386
 let ar  file args =
   print_endline @@ "AR  " ^ file;
-  {cmd=["ar"]    @ flags.ar  @ platform.flags.ar  @ [file] @ args}
+  {cmd=["ar"; "rcs"] @ flags.ar  @ platform.flags.ar  @ [file] @ args}
 let asm file args =
   print_endline @@ "ASM " ^ file;
   {cmd=["nasm"]  @ flags.asm @ platform.flags.asm @ ["-o"; file] @ args}
@@ -142,13 +157,15 @@ let build files = List.map build' files
 
 let library name =
   let artifacts = target_files "libraries" name platform.name in
+  let artifacts' = List.map obj_for artifacts in
   [ build artifacts;
-    [ar name artifacts]]
+    [ar ("src/libraries/" ^ name ^ ".a") artifacts']]
 
 let executable name ldflags =
   let artifacts = target_files "executables" name platform.name in
+  let artifacts' = List.map obj_for artifacts in
   [ build artifacts;
-    [ld name (artifacts @ ldflags)]]
+    [ld name (artifacts' @ ldflags)]]
 
 (* Functions for manipulating, printing, and executing rules/steps. *)
 
