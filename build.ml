@@ -91,7 +91,7 @@ let target_files category name platform_name =
 let lib_include_flag lib = "-Isrc/libraries/" ^ lib ^ "/include"
 let flags = { asm   = [];
               ar    = [];
-              cc    = ["-std=c11"; "-pedantic-errors"; "-gdwarf-2";
+              cc    = ["-std=c11"; "-c"; "-pedantic-errors"; "-gdwarf-2";
                        "-nostdinc"; "-ffreestanding";
                        "-fno-stack-protector"; "-fno-builtin";
                        "-fdiagnostics-show-option";
