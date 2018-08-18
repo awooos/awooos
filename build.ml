@@ -120,24 +120,28 @@ let i386 = { name  = "i386";
 
 let platform = i386
 let ar  file args =
+  print_endline @@ "AR  " ^ file;
   {cmd=["ar"]    @ flags.ar  @ platform.flags.ar  @ [file] @ args}
 let asm file args =
+  print_endline @@ "ASM " ^ file;
   {cmd=["nasm"]  @ flags.asm @ platform.flags.asm @ ["-o"; file] @ args}
 let cc  file args =
+  print_endline @@ "CC  " ^ file;
   {cmd=["clang"] @ flags.cc  @ platform.flags.cc  @ ["-o"; file] @ args}
 let ld  file args =
+  print_endline @@ "LD  " ^ file;
   {cmd=["ld"]    @ flags.ld  @ platform.flags.ld  @ ["-o"; file] @ args}
 
 (* Functions for creating build steps. *)
 
-let build' file ext = match ext with
+let build' file =
+  let ext = Filename.extension file in
+  match ext with
   | ".asm"  -> asm (obj_for file) [file]
   | ".c"    -> cc  (obj_for file) [file]
   | _       -> {cmd=[]}
 
-let rec build = function
-  | []          -> []
-  | file::files -> (build' file (Filename.extension file)) :: (build files)
+let build files = List.map build' files
 
 let library name =
   let artifacts = target_files "libraries" name platform.name in
