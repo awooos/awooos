@@ -2,6 +2,19 @@
 #load "str.cma"
 #load "unix.cma"
 
+let libraries = [
+  "ali";
+  "cadel";
+  "dmm";
+  "flail";
+  "greeter";
+  "hal";
+  "shell";
+  "tests";
+  "tinker"
+]
+
+
 let ($) f x = f x
 
 let env, targets, flags =
@@ -75,6 +88,7 @@ let target_files category name platform_name =
 
 (* General tool flags *)
 
+let lib_include_flag lib = "-Isrc/libraries/" ^ lib ^ "/include"
 let flags = { asm   = [];
               ar    = [];
               cc    = ["-std=c11"; "-pedantic-errors"; "-gdwarf-2";
@@ -82,7 +96,8 @@ let flags = { asm   = [];
                        "-fno-stack-protector"; "-fno-builtin";
                        "-fdiagnostics-show-option";
                        "-Werror"; "-Weverything"; "-Wno-cast-qual";
-                       "-Wno-missing-prototypes"; "-Wno-vla"];
+                       "-Wno-missing-prototypes"; "-Wno-vla"] @
+                      List.map lib_include_flag libraries;
               ld    = ["-nostdlib"; "-g"; "-wholearchive"];
               qemu  = [] }
 
@@ -155,15 +170,7 @@ let kernel =
   let ldflags =
     [ "-L"; "src/libraries";
       "-T"; "src/link-" ^ platform.name ^ ".ld" ] @
-    [ "-l"; ":ali.a"      ;
-      "-l"; ":cadel.a"    ;
-      "-l"; ":dmm.a"      ;
-      "-l"; ":flail.a"    ;
-      "-l"; ":greeter.a"  ;
-      "-l"; ":hal.a"      ;
-      "-l"; ":shell.a"    ;
-      "-l"; ":tests.a"    ;
-      "-l"; ":tinker.a"   ]
+    List.flatten @@ List.map (fun lib -> ["-l"; ":" ^ lib ^ ".a"]) libraries
   in
   library "ali"     @
   library "cadel"   @
