@@ -1,7 +1,17 @@
 #!/usr/bin/env ocaml
 #load "str.cma"
+#load "unix.cma"
 
 let ($) f x = f x
+
+let env, targets, flags =
+  let args          = List.tl (Array.to_list Sys.argv) in
+  let flags, args   = List.partition (fun s -> String.get s 0 == '-') args in
+  let vars, targets = List.partition (fun s -> String.contains s '=') args in
+  (vars, targets, flags)
+
+let exec (cmd::args) =
+  Unix.execvpe cmd (Array.of_list args) (Array.of_list env)
 
 (* Filename-manipulation functions. *)
 
