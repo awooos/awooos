@@ -116,8 +116,8 @@ let ld  file args =
 (* Functions for creating build steps. *)
 
 let build' file ext = match ext with
-  | ".asm"  -> asm (obj_for file) []
-  | ".c"    -> cc  (obj_for file) []
+  | ".asm"  -> asm (obj_for file) [file]
+  | ".c"    -> cc  (obj_for file) [file]
   | _       -> {cmd=[]}
 
 let rec build = function
