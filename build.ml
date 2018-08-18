@@ -90,8 +90,8 @@ let flags = { asm   = [];
 
 let i386_flags = { ar   = [];
                    asm  = ["-felf32"];
-                   cc   = ["-melf_i386"];
-                   ld   = [];
+                   cc   = ["-m32"];
+                   ld   = ["-melf_i386"];
                    qemu = ["-no-reboot"; "-device";
                            "isa-debug-exit;iobase=0xf4;iosize=0x04"] }
 
