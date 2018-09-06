@@ -139,7 +139,7 @@ let asm file args =
 let cc  file args =
   {cmd=["clang"] @ flags.cc  @ platform.flags.cc  @ ["-o"; file] @ args}
 let ld  file args =
-  {cmd=["ld"; "-o"; file] @ flags.ld @platform.flags.ld @ args}
+  {cmd=["ld"; "-o"; file] @ flags.ld @ platform.flags.ld @ args}
 
 (* Functions for creating build steps. *)
 
