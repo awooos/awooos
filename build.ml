@@ -170,7 +170,10 @@ let rec sort_strings lst =
     then [a; b] @ (sort_strings tail)
     else [b; a] @ (sort_strings tail)
 
-let executable name ldflags ldflags_suffix =
+let executable name ldflags libraries =
+  let ld_library_flags =
+    List.flatten @@ List.map (fun lib -> ["-l"; ":" ^ lib ^ ".a"]) libraries
+  in
   let artifacts = target_files "executables" name platform.name in
   let artifacts' = List.map obj_for artifacts in
   (* HACK: Can we make this compile kernel.exe without sorting? *)
@@ -178,7 +181,7 @@ let executable name ldflags ldflags_suffix =
   (* let filename = "src/executables/" ^ name ^ ".exe" in *)
   let filename = "src/" ^ name ^ ".exe" in
   [ build artifacts;
-    [ld filename (ldflags @ artifacts'' @ ldflags_suffix)]]
+    [ld filename (ldflags @ artifacts'' @ ld_library_flags)]]
 
 (* Functions for manipulating, printing, and executing rules/steps. *)
 
@@ -202,9 +205,6 @@ let kernel =
     [ "-L"; "src/libraries";
       "-T"; "src/link-" ^ platform.name ^ ".ld" ]
   in
-  let ldflags_suffix =
-    List.flatten @@ List.map (fun lib -> ["-l"; ":" ^ lib ^ ".a"]) libraries
-  in
   library "ali"     @
   library "cadel"   @
   library "dmm"     @
@@ -214,7 +214,7 @@ let kernel =
   library "shell"   @
   library "tests"   @
   library "tinker"  @
-  executable "kernel" ldflags ldflags_suffix
+  executable "kernel" ldflags libraries
 
 let all    = kernel
 
