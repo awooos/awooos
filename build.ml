@@ -83,21 +83,6 @@ let executable name ldflags libs =
     [ld ("src/executables/" ^ name ^ ".exe")
         (ldflags @ artifacts'' @ ldflags_libs)]]
 
-(* Functions for manipulating, printing, and executing rules/steps. *)
-
-let print_step _   step = print_endline @@ "$ " ^ String.concat " " step
-let exec_step  env step =
-  print_step env step;
-  exec       env step
-
-let run ?(dry_run=false) env rule =
-  let steps_for rule = List.map (fun x -> x.cmd) (List.flatten rule) in
-  let fn = match dry_run with
-    | true  -> (fun s -> print_step env s)
-    | false -> (fun s -> exec_step  env s)
-  in
-  List.map fn (steps_for rule)
-
 (* Aliases *)
 
 let kernel =
