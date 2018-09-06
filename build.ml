@@ -20,14 +20,14 @@ let env, targets, flags =
   let vars, targets = List.partition (fun s -> String.contains s '=') args in
   (vars, targets, flags)
 
-
-let check_exit_status =
-  function
-  | Unix.WEXITED 0 -> ()
-  | Unix.WEXITED r -> exit r
-  | Unix.WSIGNALED n -> exit 1
-  | Unix.WSTOPPED n -> exit 1
 let exec (cmd_name::args as cmd) =
+  let check_exit_status =
+    function
+    | Unix.WEXITED 0 -> ()
+    | Unix.WEXITED r -> exit r
+    | Unix.WSIGNALED n -> exit 1
+    | Unix.WSTOPPED n -> exit 1
+  in
   let cmd'   = Array.of_list cmd    in
   let env'   = Array.of_list env    in
   let _, stdin' = Unix.pipe ~cloexec:true () in
