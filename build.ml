@@ -3,15 +3,15 @@
 #load "unix.cma"
 
 let libraries = [
-  "ali";
+  "hal";
   "cadel";
-  "dmm";
   "flail";
   "greeter";
-  "hal";
-  "shell";
+  "tinker";
+  "ali";
   "tests";
-  "tinker"
+  "shell";
+  "dmm"
 ]
 
 let env, targets, flags =
@@ -165,7 +165,7 @@ let executable name ldflags =
   let artifacts = target_files "executables" name platform.name in
   let artifacts' = List.map obj_for artifacts in
   [ build artifacts;
-    [ld name (artifacts' @ ldflags)]]
+    [ld ("src/executables/" ^ name ^ ".exe") (artifacts' @ ldflags)]]
 
 (* Functions for manipulating, printing, and executing rules/steps. *)
 
@@ -203,4 +203,6 @@ let kernel =
 
 let all    = kernel
 
-let () = ignore @@ run all
+let () =
+  exec ["bash"; "-c"; "./bin/generate_build_info.sh test i386 > include/awoo/build_info.h"];
+  ignore @@ run all
