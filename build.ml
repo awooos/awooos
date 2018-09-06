@@ -11,7 +11,7 @@ let libraries = [
   "ali";
   "tests";
   "shell";
-  "dmm"
+  "dmm";
 ]
 
 let env, targets, flags =
@@ -142,7 +142,7 @@ let cc  file args =
   {cmd=["clang"] @ flags.cc  @ platform.flags.cc  @ ["-o"; file] @ args}
 let ld  file args =
   print_endline @@ "LD  " ^ file;
-  {cmd=["ld"]    @ flags.ld  @ platform.flags.ld  @ ["-o"; file] @ args}
+  {cmd=["ld"; "-o"; file] @ flags.ld @platform.flags.ld @ args}
 
 (* Functions for creating build steps. *)
 
@@ -161,11 +161,12 @@ let library name =
   [ build artifacts;
     [ar ("src/libraries/" ^ name ^ ".a") artifacts']]
 
-let executable name ldflags =
+let executable name ldflags ldflags_suffix =
   let artifacts = target_files "executables" name platform.name in
   let artifacts' = List.map obj_for artifacts in
+  let filename = "src/executables/" ^ name ^ ".exe" in
   [ build artifacts;
-    [ld ("src/executables/" ^ name ^ ".exe") (artifacts' @ ldflags)]]
+    [ld filename (ldflags @ artifacts' @ ldflags_suffix)]]
 
 (* Functions for manipulating, printing, and executing rules/steps. *)
 
@@ -187,7 +188,9 @@ let run ?(dry_run=false) rule =
 let kernel =
   let ldflags =
     [ "-L"; "src/libraries";
-      "-T"; "src/link-" ^ platform.name ^ ".ld" ] @
+      "-T"; "src/link-" ^ platform.name ^ ".ld" ]
+  in
+  let ldflags_suffix =
     List.flatten @@ List.map (fun lib -> ["-l"; ":" ^ lib ^ ".a"]) libraries
   in
   library "ali"     @
@@ -199,7 +202,7 @@ let kernel =
   library "shell"   @
   library "tests"   @
   library "tinker"  @
-  executable "kernel" ldflags
+  executable "kernel" ldflags ldflags_suffix
 
 let all    = kernel
 
