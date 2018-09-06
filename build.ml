@@ -115,18 +115,18 @@ let executable name ldflags libraries =
 
 (* Functions for manipulating, printing, and executing rules/steps. *)
 
-let steps_for   rule = List.map (fun x -> x.cmd) (List.flatten rule)
 let print_step  step = print_endline @@ "$ " ^ String.concat " " step
-let run_step    step =
+let exec_step   step =
   print_step step;
   exec env step
-let fake_run    rule = List.map print_step  @@ steps_for rule
-let real_run    rule = List.map run_step    @@ steps_for rule
 
 let run ?(dry_run=false) rule =
-  match dry_run with
-  | true    -> fake_run rule
-  | false   -> real_run rule
+  let steps_for rule = List.map (fun x -> x.cmd) (List.flatten rule) in
+  let fn = match dry_run with
+    | true  -> print_step
+    | false -> exec_step
+  in
+  List.map fn (steps_for rule)
 
 (* Aliases *)
 
