@@ -51,7 +51,6 @@ let obj_for file = Filename.remove_extension file ^ ".o"
 (* Types *)
 
 type tool_flags = { asm  : string list;
-                    ar   : string list;
                     cc   : string list;
                     ld   : string list;
                     qemu : string list }
@@ -101,7 +100,6 @@ let target_files category name platform_name =
 
 let lib_include_flag lib = "-Isrc/libraries/" ^ lib ^ "/include"
 let flags = { asm   = [];
-              ar    = [];
               cc    = ["-std=c11"; "-c"; "-pedantic-errors"; "-gdwarf-2";
                        "-nostdinc"; "-ffreestanding";
                        "-fno-stack-protector"; "-fno-builtin";
@@ -116,8 +114,7 @@ let flags = { asm   = [];
 
 (* Platform flags *)
 
-let i386_flags = { ar   = [];
-                   asm  = ["-felf32"];
+let i386_flags = { asm  = ["-felf32"];
                    cc   = ["-m32"];
                    ld   = ["-melf_i386"];
                    qemu = ["-no-reboot"; "-device";
@@ -132,10 +129,8 @@ let i386 = { name  = "i386";
 (* Build commands and configuration. *)
 
 let platform = i386
-let ar  file args =
-  {cmd=["ar"; "rcs"] @ flags.ar  @ platform.flags.ar  @ [file] @ args}
-let asm file args =
-  {cmd=["nasm"]  @ flags.asm @ platform.flags.asm @ ["-o"; file] @ args}
+let ar  file args = {cmd=["ar"; "rcs"; file] @ args}
+let asm file args = {cmd=["nasm"; "-o"; file] @ platform.flags.asm @ args}
 let cc  file args =
   {cmd=["clang"] @ flags.cc  @ platform.flags.cc  @ ["-o"; file] @ args}
 let ld  file args =
