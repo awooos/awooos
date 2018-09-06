@@ -73,17 +73,15 @@ let library name =
   [ build artifacts;
     [ar ("src/libraries/" ^ name ^ ".a") artifacts']]
 
-let executable name ldflags libraries =
-  let ld_library_flags =
-    List.flatten @@ List.map (fun lib -> ["-l"; ":" ^ lib ^ ".a"]) libraries
-  in
+let executable name ldflags libs =
+  let ldflags_libs = List.map (fun lib -> "-l:" ^ lib ^ ".a") libs in
   let artifacts = target_files exts "executables" name platform.name in
   let artifacts' = List.map obj_for artifacts in
   (* HACK: Can we make this compile kernel.exe without sorting? *)
   let artifacts'' = sort_strings artifacts' in
-  let filename = "src/executables/" ^ name ^ ".exe" in
   [ build artifacts;
-    [ld filename (ldflags @ artifacts'' @ ld_library_flags)]]
+    [ld ("src/executables/" ^ name ^ ".exe")
+        (ldflags @ artifacts'' @ ldflags_libs)]]
 
 (* Functions for manipulating, printing, and executing rules/steps. *)
 
@@ -115,7 +113,7 @@ let kernel =
   library "tinker"  @
   executable "kernel" ldflags libraries
 
-let all    = kernel
+let all = kernel
 
 let () =
   let env, targets = parse_cli_args Sys.argv in
