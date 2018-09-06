@@ -133,16 +133,12 @@ let i386 = { name  = "i386";
 
 let platform = i386
 let ar  file args =
-  print_endline @@ "AR  " ^ file;
   {cmd=["ar"; "rcs"] @ flags.ar  @ platform.flags.ar  @ [file] @ args}
 let asm file args =
-  print_endline @@ "ASM " ^ file;
   {cmd=["nasm"]  @ flags.asm @ platform.flags.asm @ ["-o"; file] @ args}
 let cc  file args =
-  print_endline @@ "CC  " ^ file;
   {cmd=["clang"] @ flags.cc  @ platform.flags.cc  @ ["-o"; file] @ args}
 let ld  file args =
-  print_endline @@ "LD  " ^ file;
   {cmd=["ld"; "-o"; file] @ flags.ld @platform.flags.ld @ args}
 
 (* Functions for creating build steps. *)
