@@ -73,7 +73,7 @@ generated_headers:
 	${AS} ${ASFLAGS} -o $@ $<
 
 src/kernel.exe: ${OBJFILES} ${LIBRARIES}
-	${LD} -o $@ -L src/libraries ${LDFLAGS} -T src/link-${TARGET}.ld src/executables/kernel/src/start-${TARGET}.o src/executables/kernel/src/main.o ${KERNEL_LDFLAGS}
+	${LD} -o $@ ${LDFLAGS} -L src/libraries -T src/link-${TARGET}.ld src/executables/kernel/src/0-start-${TARGET}.o src/executables/kernel/src/main.o ${KERNEL_LDFLAGS}
 
 %.a: ${OBJFILES}
 	${AR} rcs $@ $(filter $*/%,$^)

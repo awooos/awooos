@@ -161,12 +161,24 @@ let library name =
   [ build artifacts;
     [ar ("src/libraries/" ^ name ^ ".a") artifacts']]
 
+let rec sort_strings lst =
+  match lst with
+  | []         -> []
+  | [a]        -> [a]
+  | a::b::tail ->
+    if a <= b
+    then [a; b] @ (sort_strings tail)
+    else [b; a] @ (sort_strings tail)
+
 let executable name ldflags ldflags_suffix =
   let artifacts = target_files "executables" name platform.name in
   let artifacts' = List.map obj_for artifacts in
-  let filename = "src/executables/" ^ name ^ ".exe" in
+  (* HACK: Can we make this compile kernel.exe without sorting? *)
+  let artifacts'' = sort_strings artifacts' in
+  (* let filename = "src/executables/" ^ name ^ ".exe" in *)
+  let filename = "src/" ^ name ^ ".exe" in
   [ build artifacts;
-    [ld filename (ldflags @ artifacts' @ ldflags_suffix)]]
+    [ld filename (ldflags @ artifacts'' @ ldflags_suffix)]]
 
 (* Functions for manipulating, printing, and executing rules/steps. *)
 
