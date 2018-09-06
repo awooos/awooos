@@ -110,7 +110,8 @@ let flags = { asm   = [];
                        "-Wno-missing-prototypes"; "-Wno-vla";
                        "-Iinclude/"] @
                       List.map lib_include_flag libraries;
-              ld    = ["-nostdlib"; "-g"; "--whole-archive"];
+              ld    = ["-nostdlib"; "-g"; "--whole-archive";
+                       "-L"; "src/libraries"];
               qemu  = [] }
 
 (* Platform flags *)
@@ -201,10 +202,7 @@ let run ?(dry_run=false) rule =
 (* Aliases *)
 
 let kernel =
-  let ldflags =
-    [ "-L"; "src/libraries";
-      "-T"; "src/link-" ^ platform.name ^ ".ld" ]
-  in
+  let ldflags = ["-T"; "src/link-" ^ platform.name ^ ".ld" ] in
   library "ali"     @
   library "cadel"   @
   library "dmm"     @
