@@ -1,3 +1,21 @@
+(* *** Types *** *)
+
+type tool_flags = { asm  : string list;
+                    cc   : string list;
+                    ld   : string list;
+                    qemu : string list }
+type platform = { name  : string;
+                  flags : tool_flags;
+                  (* TODO: qemu is a tool. it should be identified as such. *)
+                  qemu  : string }
+
+(* Note: the `cmd` type is only here to ease debugging.
+ * Getting errors about "string list list list" vs "string list list" is
+ * less than great, and I found that this helped. *)
+type cmd = { cmd : string list }
+
+(* *** Execute programs *** *)
+
 (* Execute a program, print its output, and return its exit code. *)
 let exec env (cmd_name::args as cmd) =
   let check_exit_status =
@@ -53,6 +71,13 @@ let find_platform_files dir platform_name exts =
       find_by_ext path exts
   else
       []
+
+let target_files exts category name platform_name =
+  let catdir = Filename.concat "src"  category in
+  let dir    = Filename.concat catdir name in
+  find_src_files        dir "src"         exts @
+  find_platform_files   dir platform_name exts
+
 
 (* *** String manipulation functions. *** *)
 

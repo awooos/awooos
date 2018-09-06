@@ -21,29 +21,7 @@ let env, targets, flags =
   let vars, targets = List.partition (fun s -> String.contains s '=') args in
   (vars, targets, flags)
 
-(* Types *)
-
-type tool_flags = { asm  : string list;
-                    cc   : string list;
-                    ld   : string list;
-                    qemu : string list }
-type platform = { name  : string;
-                  flags : tool_flags;
-                  (* TODO: qemu is a tool. it should be identified as such. *)
-                  qemu  : string }
-
-(* Note: the `cmd` type is only here to ease debugging.
- * Getting errors about "string list list list" vs "string list list" is
- * less than great, and I found that this helped. *)
-type cmd = { cmd : string list }
-
-let target_files category name platform_name =
-  let exts   = [".c"; ".asm"] in
-  let catdir = Filename.concat "src"  category in
-  let dir    = Filename.concat catdir name in
-  find_src_files        dir "src"         exts @
-  find_platform_files   dir platform_name exts
-
+let exts = [".c"; ".asm"]
 
 (* General tool flags *)
 
@@ -96,7 +74,7 @@ let build' file =
 let build files = List.map build' files
 
 let library name =
-  let artifacts = target_files "libraries" name platform.name in
+  let artifacts = target_files exts "libraries" name platform.name in
   let artifacts' = List.map obj_for artifacts in
   [ build artifacts;
     [ar ("src/libraries/" ^ name ^ ".a") artifacts']]
@@ -105,7 +83,7 @@ let executable name ldflags libraries =
   let ld_library_flags =
     List.flatten @@ List.map (fun lib -> ["-l"; ":" ^ lib ^ ".a"]) libraries
   in
-  let artifacts = target_files "executables" name platform.name in
+  let artifacts = target_files exts "executables" name platform.name in
   let artifacts' = List.map obj_for artifacts in
   (* HACK: Can we make this compile kernel.exe without sorting? *)
   let artifacts'' = sort_strings artifacts' in
