@@ -90,3 +90,11 @@ let rec sort_strings lst =
     then [a; b] @ (sort_strings tail)
     else [b; a] @ (sort_strings tail)
 
+(* *** Handle command-line arguments. *** *)
+
+let parse_cli_args argv =
+  let args          = List.tl (Array.to_list Sys.argv) in
+  let flags, args   = List.partition (fun s -> String.get s 0 == '-') args in
+  let vars, targets = List.partition (fun s -> String.contains s '=') args in
+  (vars, targets)
+

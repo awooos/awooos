@@ -15,12 +15,6 @@ let libraries = [
   "dmm";
 ]
 
-let env, targets, flags =
-  let args          = List.tl (Array.to_list Sys.argv) in
-  let flags, args   = List.partition (fun s -> String.get s 0 == '-') args in
-  let vars, targets = List.partition (fun s -> String.contains s '=') args in
-  (vars, targets, flags)
-
 let exts = [".c"; ".asm"]
 
 (* General tool flags *)
@@ -93,16 +87,16 @@ let executable name ldflags libraries =
 
 (* Functions for manipulating, printing, and executing rules/steps. *)
 
-let print_step  step = print_endline @@ "$ " ^ String.concat " " step
-let exec_step   step =
-  print_step step;
-  exec env step
+let print_step _   step = print_endline @@ "$ " ^ String.concat " " step
+let exec_step  env step =
+  print_step env step;
+  exec       env step
 
-let run ?(dry_run=false) rule =
+let run ?(dry_run=false) env rule =
   let steps_for rule = List.map (fun x -> x.cmd) (List.flatten rule) in
   let fn = match dry_run with
-    | true  -> print_step
-    | false -> exec_step
+    | true  -> (fun s -> print_step env s)
+    | false -> (fun s -> exec_step  env s)
   in
   List.map fn (steps_for rule)
 
@@ -124,5 +118,6 @@ let kernel =
 let all    = kernel
 
 let () =
+  let env, targets = parse_cli_args Sys.argv in
   exec env ["bash"; "-c"; "./bin/generate_build_info.sh test i386 > include/awoo/build_info.h"];
-  ignore @@ run all
+  ignore @@ run env all
