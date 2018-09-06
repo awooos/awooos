@@ -5,8 +5,6 @@ BUILD_TYPE ?= debug
 ISO_DIR  ?= iso/
 ISO_FILE ?= ${ISO_DIR}/${NAME}${NAME_SUFFIX}-${TARGET}-${BUILD_TYPE}.iso
 
-PRETTY_PRINT := @./bin/pretty-print-command.sh
-
 override CFLAGS += -std=c11 -pedantic-errors -gdwarf-2 -nostdinc     \
 					-ffreestanding -fno-stack-protector -fno-builtin \
 					-fdiagnostics-show-option -Werror -Weverything   \
@@ -72,28 +70,28 @@ make/.mk:
 	$(error TARGET is undefined. Set it on the command line or in config.mk)
 
 %.o: %.c
-	${PRETTY_PRINT} CC "$@" ${CC} ${CFLAGS} ${C_INCLUDES} -c $< -o $@
+	${CC} ${CFLAGS} ${C_INCLUDES} -c $< -o $@
 
 %.o: %.asm
-	${PRETTY_PRINT} AS "$@" ${AS} ${ASFLAGS} -o $@ $<
+	${AS} ${ASFLAGS} -o $@ $<
 
 src/kernel.exe: ${LIBRARIES}
-	${PRETTY_PRINT} LD "$@" ${LD} -o $@ -L src/libraries ${LDFLAGS} -T src/link-${TARGET}.ld src/executables/kernel/src/start-${TARGET}.o src/executables/kernel/src/main.o ${KERNEL_LDFLAGS}
+	${LD} -o $@ -L src/libraries ${LDFLAGS} -T src/link-${TARGET}.ld src/executables/kernel/src/start-${TARGET}.o src/executables/kernel/src/main.o ${KERNEL_LDFLAGS}
 
 %.a: ${OBJFILES}
-	${PRETTY_PRINT} AR "$@" ${AR} rcs $@ $(filter $*/%,$^)
+	${AR} rcs $@ $(filter $*/%,$^)
 
 iso: ${ISO_FILE}
 ${ISO_FILE}: src/kernel.exe
 	@cp -r assets/isofs/ ./
 	@cp src/kernel.exe isofs/
-	${PRETTY_PRINT} ISO "$@" xorriso -report_about HINT -abort_on WARNING -as mkisofs -quiet -boot-info-table -R -b boot/grub/stage2_eltorito -no-emul-boot -boot-load-size 4 -input-charset utf-8 -o ${ISO_FILE} isofs
+	xorriso -report_about HINT -abort_on WARNING -as mkisofs -quiet -boot-info-table -R -b boot/grub/stage2_eltorito -no-emul-boot -boot-load-size 4 -input-charset utf-8 -o ${ISO_FILE} isofs
 
 test: lint
 	@$(MAKE) BUILD_TYPE=test qemu
 
 lint:
-	${PRETTY_PRINT} "LINT" "-" clang-check $(filter %.c,${SRCFILES}) -- ${C_INCLUDES}
+	clang-check $(filter %.c,${SRCFILES}) -- ${C_INCLUDES}
 
 qemu: iso
 	${QEMU} ${QEMU_FLAGS} -vga std -serial stdio -cdrom ${ISO_FILE}
