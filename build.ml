@@ -144,7 +144,6 @@ let build' file =
   | ".asm"  -> asm (obj_for file) [file]
   | ".c"    -> cc  (obj_for file) [file]
   | _       -> {cmd=[]}
-
 let build files = List.map build' files
 
 let library name =
@@ -170,8 +169,7 @@ let executable name ldflags libraries =
   let artifacts' = List.map obj_for artifacts in
   (* HACK: Can we make this compile kernel.exe without sorting? *)
   let artifacts'' = sort_strings artifacts' in
-  (* let filename = "src/executables/" ^ name ^ ".exe" in *)
-  let filename = "src/" ^ name ^ ".exe" in
+  let filename = "src/executables/" ^ name ^ ".exe" in
   [ build artifacts;
     [ld filename (ldflags @ artifacts'' @ ld_library_flags)]]
 
