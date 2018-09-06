@@ -35,20 +35,23 @@ ALL_FILES := $(wildcard            \
 				src/libraries/*/src/*/*/   \
 				src/libraries/*/platform-${TARGET}/*/    \
 				src/libraries/*/platform-${TARGET}/*/*/  \
-				src/kernel/*)
+				src/executables/kernel/src/*/ \
+				src/executables/kernel/platform-${TARGET}/*/)
 SRCFILES := $(filter %.c,${ALL_FILES}) $(filter %.asm,${ALL_FILES})
 OBJFILES := $(patsubst %.asm, %.o, $(patsubst %.c, %.o, ${SRCFILES}))
 
 # Any directory directly under src/libraries/ is treated as a library.
 LIBRARIES := $(patsubst %/,%.a,$(filter %/,$(wildcard src/libraries/*/)))
 
+# Any directory directly under src/executables/ is treated as an executable.
+EXECUTABLES := $(patsubst %/,%.a,$(filter %/,$(wildcard src/executables/*/)))
+
 # ISO_FILE is the final location of the generated ISO.
 ISO_DIR := iso/
 ISO_FILENAME := ${NAME}${NAME_SUFFIX}-${TARGET}-${BUILD_TYPE}.iso
 ISO_FILE := ${ISO_DIR}/${ISO_FILENAME}
 
-
-all: src/kernel.exe
+all: ${EXECUTABLES}
 
 # Make sure config.mk exists. This shouldn't be automated, so print an error.
 config.mk:
@@ -69,7 +72,7 @@ generated_headers:
 %.o: %.asm
 	${AS} ${ASFLAGS} -o $@ $<
 
-src/kernel.exe: ${LIBRARIES}
+src/kernel.exe: ${OBJFILES} ${LIBRARIES}
 	${LD} -o $@ -L src/libraries ${LDFLAGS} -T src/link-${TARGET}.ld src/executables/kernel/src/start-${TARGET}.o src/executables/kernel/src/main.o ${KERNEL_LDFLAGS}
 
 %.a: ${OBJFILES}
@@ -116,7 +119,10 @@ list-events:
 	@grep -rEho '(event_trigger|event_watch)\(".*"' src | tr '("' '\t ' | sort
 
 clean:
-	@rm -rf ./isofs ${ISO_DIR}*.iso ${OBJFILES} ${LIBRARIES} src/*.exe
+	@rm -f ${OBJFILES} ${LIBRARIES} ${EXECUTABLES}
+	@rm -rf ./isofs
+	@rm -f ${ISO_DIR}*.iso
+	@rm -f include/awoo/build_info.h
 
 .PHONY: all iso clean test qemu qemu-monitor clean fetch-submodules update-submodules generated_headers
 
