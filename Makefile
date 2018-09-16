@@ -44,7 +44,7 @@ OBJFILES := $(patsubst %.asm, %.o, $(patsubst %.c, %.o, ${SRCFILES}))
 LIBRARIES := $(patsubst %/,%.a,$(filter %/,$(wildcard src/libraries/*/)))
 
 # Any directory directly under src/executables/ is treated as an executable.
-EXECUTABLES := $(patsubst %/,%.a,$(filter %/,$(wildcard src/executables/*/)))
+EXECUTABLES := $(patsubst %/,%.exe,$(filter %/,$(wildcard src/executables/*/)))
 
 # ISO_FILE is the final location of the generated ISO.
 ISO_DIR := iso
@@ -72,16 +72,16 @@ generated_headers:
 %.o: %.asm
 	${AS} ${ASFLAGS} -o $@ $<
 
-src/kernel.exe: ${OBJFILES} ${LIBRARIES}
+src/executables/kernel.exe: ${OBJFILES} ${LIBRARIES}
 	${LD} -o $@ ${LDFLAGS} -L src/libraries -T src/link-${TARGET}.ld src/executables/kernel/src/0-start-${TARGET}.o src/executables/kernel/src/main.o ${KERNEL_LDFLAGS}
 
 %.a: ${OBJFILES}
 	${AR} rcs $@ $(filter $*/%,$^)
 
 iso: ${ISO_FILE}
-${ISO_FILE}: src/kernel.exe
+${ISO_FILE}: ${EXECUTABLES}
 	@cp -r assets/isofs/ ./
-	@cp src/kernel.exe isofs/
+	@cp ${EXECUTABLES} isofs/
 	xorriso -report_about HINT -abort_on WARNING -as mkisofs -quiet -boot-info-table -R -b boot/grub/stage2_eltorito -no-emul-boot -boot-load-size 4 -input-charset utf-8 -o ${ISO_FILE} isofs
 
 test: lint
