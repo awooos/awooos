@@ -96,12 +96,6 @@ qemu: iso
 qemu-monitor: iso
 	${QEMU} ${QEMU_FLAGS} -monitor stdio -cdrom ${ISO_FILE}
 
-bochs: iso
-	cd iso && ${BOCHS} -q -f bochsrc-${TARGET}.txt
-
-vbox: iso
-	VirtualBox --startvm ${NAME} --debug-statistics --debug-command-line --start-running
-
 # Generate a nightly build.
 nightly:
 	$(MAKE) BUILD_TYPE=nightly NAME_SUFFIX="-$(shell date +'%Y-%m-%d')" iso
