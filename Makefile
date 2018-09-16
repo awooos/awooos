@@ -47,7 +47,7 @@ LIBRARIES := $(patsubst %/,%.a,$(filter %/,$(wildcard src/libraries/*/)))
 EXECUTABLES := $(patsubst %/,%.a,$(filter %/,$(wildcard src/executables/*/)))
 
 # ISO_FILE is the final location of the generated ISO.
-ISO_DIR := iso/
+ISO_DIR := iso
 ISO_FILENAME := ${NAME}${NAME_SUFFIX}-${TARGET}-${BUILD_TYPE}.iso
 ISO_FILE := ${ISO_DIR}/${ISO_FILENAME}
 
@@ -115,7 +115,7 @@ list-events:
 clean:
 	@rm -f ${OBJFILES} ${LIBRARIES} ${EXECUTABLES}
 	@rm -rf ./isofs
-	@rm -f ${ISO_DIR}*.iso
+	@rm -f ${ISO_DIR}/*.iso
 	@rm -f include/awoo/build_info.h
 
 .PHONY: all iso clean test qemu qemu-monitor clean fetch-submodules update-submodules generated_headers
