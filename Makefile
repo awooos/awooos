@@ -1,5 +1,12 @@
 NAME := awoo
+TARGET ?= i386
 BUILD_TYPE ?= debug
+
+CC   := clang
+AS   := nasm
+AR   := ar
+LD   := ld
+QEMU ?= qemu-system-${TARGET}
 
 override CFLAGS += -std=c11 -pedantic-errors -gdwarf-2 -nostdinc     \
 					-ffreestanding -fno-stack-protector -fno-builtin \
@@ -10,14 +17,10 @@ override ASFLAGS +=
 
 C_INCLUDES := -I include $(patsubst %,-I %,$(wildcard src/libraries/*/include))
 
-# NOTE: Includes go in reverse order, so AWOO_MAKE_CONFIG overrides TARGET.mk.
-# Using a variable allows Docker-based builds to specify config.mk.dist.
-AWOO_MAKE_CONFIG ?= config.mk
-include ${AWOO_MAKE_CONFIG}
+# NOTE: Includes go in reverse order, so config.mk overrides ${TARGET}.mk.
+-include config.mk
 # If ${TARGET} is not defined, this matches the make/.mk rule.
 include make/${TARGET}.mk
-
-QEMU ?= qemu-system-${TARGET}
 
 ifeq (${BUILD_TYPE},test)
 # 1. Don't reboot on exit.
@@ -52,10 +55,6 @@ ISO_FILENAME := ${NAME}${NAME_SUFFIX}-${TARGET}-${BUILD_TYPE}.iso
 ISO_FILE := ${ISO_DIR}/${ISO_FILENAME}
 
 all: ${EXECUTABLES}
-
-# Make sure config.mk exists. This shouldn't be automated, so print an error.
-config.mk:
-	$(error Please copy config.mk.dist to config.mk and adjust it as needed)
 
 # This rule is triggered by "include make/${TARGET}.mk" if TARGET is undefined.
 # This shouldn't be automated, so print an error.

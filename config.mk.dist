@@ -1,8 +1,0 @@
-# Use ?= for TARGET, so it can be overridden on the command line.
-TARGET  ?= i386
-
-CC      := clang
-AS      := nasm
-AR      := ar
-RANLIB  := ranlib
-LD      := ld
