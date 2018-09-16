@@ -20,7 +20,8 @@ let exts = [".c"; ".asm"]
 (* General tool flags *)
 
 let lib_include_flag lib = "-Isrc/libraries/" ^ lib ^ "/include"
-let flags = { asm   = [];
+let flags = { name  = "defaults";
+              asm   = [];
               cc    = ["-std=c11"; "-c"; "-pedantic-errors"; "-gdwarf-2";
                        "-nostdinc"; "-ffreestanding";
                        "-fno-stack-protector"; "-fno-builtin";
@@ -33,29 +34,25 @@ let flags = { asm   = [];
                        "-L"; "src/libraries"];
               qemu  = [] }
 
-(* Platform flags *)
+let i386 = { name = "i386";
+             asm  = ["-felf32"];
+             cc   = ["-m32"];
+             ld   = ["-melf_i386"];
+             qemu = ["-no-reboot"; "-device";
+                     "isa-debug-exit;iobase=0xf4;iosize=0x04"] }
 
-let i386_flags = { asm  = ["-felf32"];
-                   cc   = ["-m32"];
-                   ld   = ["-melf_i386"];
-                   qemu = ["-no-reboot"; "-device";
-                           "isa-debug-exit;iobase=0xf4;iosize=0x04"] }
-
-(* Platforms *)
-
-let i386 = { name  = "i386";
-             flags = i386_flags;
-             qemu  = "qemu-system-i386" }
+let qemu_exe platform = "qemu-system-" ^ platform.name
+let qemu platform args = exec ([qemu_exe platform] @ args)
 
 (* Build commands and configuration. *)
 
 let platform = i386
 let ar  file args = {cmd=["ar"; "rcs"; file] @ args}
-let asm file args = {cmd=["nasm"; "-o"; file] @ platform.flags.asm @ args}
+let asm file args = {cmd=["nasm"; "-o"; file] @ platform.asm @ args}
 let cc  file args =
-  {cmd=["clang"] @ flags.cc  @ platform.flags.cc  @ ["-o"; file] @ args}
+  {cmd=["clang"] @ flags.cc  @ platform.cc  @ ["-o"; file] @ args}
 let ld  file args =
-  {cmd=["ld"; "-o"; file] @ flags.ld @ platform.flags.ld @ args}
+  {cmd=["ld"; "-o"; file] @ flags.ld @ platform.ld @ args}
 
 (* Functions for creating build steps. *)
 

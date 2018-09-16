@@ -1,13 +1,10 @@
 (* *** Types *** *)
 
-type tool_flags = { asm  : string list;
+type tool_flags = { name : string;
+                    asm  : string list;
                     cc   : string list;
                     ld   : string list;
                     qemu : string list }
-type platform = { name  : string;
-                  flags : tool_flags;
-                  (* TODO: qemu is a tool. it should be identified as such. *)
-                  qemu  : string }
 
 (* Note: the `cmd` type is only here to ease debugging.
  * Getting errors about "string list list list" vs "string list list" is
