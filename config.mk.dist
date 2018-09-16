@@ -6,8 +6,3 @@ AS      := nasm
 AR      := ar
 RANLIB  := ranlib
 LD      := ld
-
-BOCHS   := bochs
-
-# NOTE: xorriso, mkisofs, _and_ genisoimage may all have different defaults.
-MKISOFS := xorriso -as mkisofs
