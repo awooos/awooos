@@ -1,5 +1,12 @@
 NAME := awoo
+TARGET ?= i386
 BUILD_TYPE ?= debug
+
+CC   := clang
+AS   := nasm
+AR   := ar
+LD   := ld
+QEMU ?= qemu-system-${TARGET}
 
 override CFLAGS += -std=c11 -pedantic-errors -gdwarf-2 -nostdinc     \
 					-ffreestanding -fno-stack-protector -fno-builtin \
@@ -10,14 +17,10 @@ override ASFLAGS +=
 
 C_INCLUDES := -I include $(patsubst %,-I %,$(wildcard src/libraries/*/include))
 
-# NOTE: Includes go in reverse order, so AWOO_MAKE_CONFIG overrides TARGET.mk.
-# Using a variable allows Docker-based builds to specify config.mk.dist.
-AWOO_MAKE_CONFIG ?= config.mk
-include ${AWOO_MAKE_CONFIG}
+# NOTE: Includes go in reverse order, so config.mk overrides ${TARGET}.mk.
+-include config.mk
 # If ${TARGET} is not defined, this matches the make/.mk rule.
 include make/${TARGET}.mk
-
-QEMU ?= qemu-system-${TARGET}
 
 ifeq (${BUILD_TYPE},test)
 # 1. Don't reboot on exit.
@@ -35,24 +38,23 @@ ALL_FILES := $(wildcard            \
 				src/libraries/*/src/*/*/   \
 				src/libraries/*/platform-${TARGET}/*/    \
 				src/libraries/*/platform-${TARGET}/*/*/  \
-				src/kernel/*)
+				src/executables/kernel/src/*/ \
+				src/executables/kernel/platform-${TARGET}/*/)
 SRCFILES := $(filter %.c,${ALL_FILES}) $(filter %.asm,${ALL_FILES})
 OBJFILES := $(patsubst %.asm, %.o, $(patsubst %.c, %.o, ${SRCFILES}))
 
 # Any directory directly under src/libraries/ is treated as a library.
 LIBRARIES := $(patsubst %/,%.a,$(filter %/,$(wildcard src/libraries/*/)))
 
+# Any directory directly under src/executables/ is treated as an executable.
+EXECUTABLES := $(patsubst %/,%.exe,$(filter %/,$(wildcard src/executables/*/)))
+
 # ISO_FILE is the final location of the generated ISO.
-ISO_DIR := iso/
+ISO_DIR := iso
 ISO_FILENAME := ${NAME}${NAME_SUFFIX}-${TARGET}-${BUILD_TYPE}.iso
 ISO_FILE := ${ISO_DIR}/${ISO_FILENAME}
 
-
-all: src/kernel.exe
-
-# Make sure config.mk exists. This shouldn't be automated, so print an error.
-config.mk:
-	$(error Please copy config.mk.dist to config.mk and adjust it as needed)
+all: ${EXECUTABLES}
 
 # This rule is triggered by "include make/${TARGET}.mk" if TARGET is undefined.
 # This shouldn't be automated, so print an error.
@@ -69,16 +71,16 @@ generated_headers:
 %.o: %.asm
 	${AS} ${ASFLAGS} -o $@ $<
 
-src/kernel.exe: ${LIBRARIES}
-	${LD} -o $@ -L src/libraries ${LDFLAGS} -T src/link-${TARGET}.ld src/kernel/start-${TARGET}.o src/kernel/main.o ${KERNEL_LDFLAGS}
+src/executables/kernel.exe: ${OBJFILES} ${LIBRARIES}
+	${LD} -o $@ ${LDFLAGS} -L src/libraries -T src/link-${TARGET}.ld src/executables/kernel/src/0-start-${TARGET}.o src/executables/kernel/src/main.o ${KERNEL_LDFLAGS}
 
 %.a: ${OBJFILES}
 	${AR} rcs $@ $(filter $*/%,$^)
 
 iso: ${ISO_FILE}
-${ISO_FILE}: src/kernel.exe
+${ISO_FILE}: ${EXECUTABLES}
 	@cp -r assets/isofs/ ./
-	@cp src/kernel.exe isofs/
+	@cp ${EXECUTABLES} isofs/
 	xorriso -report_about HINT -abort_on WARNING -as mkisofs -quiet -boot-info-table -R -b boot/grub/stage2_eltorito -no-emul-boot -boot-load-size 4 -input-charset utf-8 -o ${ISO_FILE} isofs
 
 test: lint
@@ -92,12 +94,6 @@ qemu: iso
 
 qemu-monitor: iso
 	${QEMU} ${QEMU_FLAGS} -monitor stdio -cdrom ${ISO_FILE}
-
-bochs: iso
-	cd iso && ${BOCHS} -q -f bochsrc-${TARGET}.txt
-
-vbox: iso
-	VirtualBox --startvm ${NAME} --debug-statistics --debug-command-line --start-running
 
 # Generate a nightly build.
 nightly:
@@ -116,7 +112,10 @@ list-events:
 	@grep -rEho '(event_trigger|event_watch)\(".*"' src | tr '("' '\t ' | sort
 
 clean:
-	@rm -rf ./isofs ${ISO_DIR}*.iso ${OBJFILES} ${LIBRARIES} src/*.exe
+	@rm -f ${OBJFILES} ${LIBRARIES} ${EXECUTABLES}
+	@rm -rf ./isofs
+	@rm -f ${ISO_DIR}/*.iso
+	@rm -f include/awoo/build_info.h
 
 .PHONY: all iso clean test qemu qemu-monitor clean fetch-submodules update-submodules generated_headers
 
