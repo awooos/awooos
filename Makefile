@@ -111,13 +111,17 @@ update-submodules:
 list-events:
 	@grep -rEho '(event_trigger|event_watch)\(".*"' src | tr '("' '\t ' | sort
 
+docs:
+	doxygen doxygen.conf
+
 clean:
+	@rm -rf docs/
 	@rm -f ${OBJFILES} ${LIBRARIES} ${EXECUTABLES}
 	@rm -rf ./isofs
 	@rm -f ${ISO_DIR}/*.iso
 	@rm -f include/awoo/build_info.h
 
-.PHONY: all iso clean test qemu qemu-monitor clean fetch-submodules update-submodules generated_headers
+.PHONY: all iso clean test qemu qemu-monitor clean fetch-submodules update-submodules generated_headers docs
 
 # Don't auto-delete .o files.
 .SECONDARY: ${OBJFILES}

@@ -1,3 +1,6 @@
+# Doxygen output
+docs/
+
 # Generated CD images
 *.iso
 
