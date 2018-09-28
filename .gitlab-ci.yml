@@ -1,0 +1,33 @@
+# We have a GitLab mirror which hosts the documentation,
+# since they have a thing for just treating a directory
+# as pages?!
+#
+# GITHUB, PLEASE ADD THIS.
+#
+# Based on https://gitlab.com/pages/doxygen/blob/master/.gitlab-ci.yml
+
+image: alpine
+
+before_script:
+- apk update
+- apk add doxygen
+## Uncomment the following line if you use graphviz dot graphs
+#- apk add ttf-freefont graphviz
+
+test:
+  script:
+  - doxygen doxygen.conf
+  except:
+  - master
+
+pages:
+  script:
+  - doxygen doxygen.conf
+  - mv docs/html/ public/
+  # TODO: LaTeX -> PDF?
+  artifacts:
+    paths:
+    - public
+  only:
+  - master
+
