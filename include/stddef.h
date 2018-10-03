@@ -7,6 +7,11 @@
  * http://www.open-std.org/jtc1/sc22/wg14/www/docs/n1548.pdf
  * https://sourceforge.net/p/predef/wiki/Standards/
  *
+ * To generate a list of predefined macros:
+ * clang -std=c11 -m32 -nostdinc -ffreestanding -dM -E -x c /dev/null
+ *
+ * TODO: Add standard macros.
+ *
  */
 
 
@@ -14,14 +19,12 @@
 //#define __STDC_VERSION__ 201112L // C11
 
 #define NULL ((void*)0)
+//#define offsetof(type, member_designator) TODO
 
-#ifdef __x86_64
-    // 8 bytes.
-    typedef unsigned long int size_t;
-#elif __i386
-    // 4 bytes.
-    typedef unsigned int size_t;
-#endif
+typedef __PTRDIFF_TYPE__ ptrdiff_t;
+typedef __SIZE_TYPE__ size_t;
+// TODO: ssize_t?
+typedef __WCHAR_TYPE__ wchar_t;
 
 #endif /* STDDEF_H */
 
