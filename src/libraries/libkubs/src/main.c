@@ -1,7 +1,5 @@
+#include <libkubs.h>
 #include <stddef.h>
-
-typedef void (Kubs_PanicFn)(const char *message, const char *function,
-        const char *filename, size_t line);
 
 static Kubs_PanicFn *panicfn = NULL;
 
@@ -21,7 +19,7 @@ void kubs_init(Kubs_PanicFn *panicfn_)
 
 void __mulodi4()
 {
-    // TODO: Implement __mulodi4()
+    // TODO: Implement, or remove the need for, __mulodi4()
 }
 
 // FIXME: add caller pc to the error message (possibly as "ubsan: error-type
@@ -31,9 +29,12 @@ void __mulodi4()
     kubs_panic("ubsan: " msg, __FUNCTION__, __FILE__, __LINE__); \
   }
 
+#define XHANDLER_NORECOVER(name, msg)                             \
+  void __ubsan_handle_##name##_abort() { /* no-op. */ }
+
 HANDLER_NORECOVER(type_mismatch, "type-mismatch")
 HANDLER_NORECOVER(add_overflow, "add-overflow")
-HANDLER_NORECOVER(sub_overflow, "sub-overflow")
+XHANDLER_NORECOVER(sub_overflow, "sub-overflow")
 HANDLER_NORECOVER(mul_overflow, "mul-overflow")
 HANDLER_NORECOVER(negate_overflow, "negate-overflow")
 HANDLER_NORECOVER(divrem_overflow, "divrem-overflow")
@@ -53,4 +54,4 @@ HANDLER_NORECOVER(nullability_arg, "nullability-arg")
 HANDLER_NORECOVER(nullability_return, "nullability-return")
 HANDLER_NORECOVER(pointer_overflow, "pointer-overflow")
 HANDLER_NORECOVER(cfi_check_fail, "cfi-check-fail")
-HANDLER_NORECOVER(type_mismatch_v1, "type-mismatch-v1")
+XHANDLER_NORECOVER(type_mismatch_v1, "type-mismatch-v1")

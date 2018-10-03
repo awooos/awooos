@@ -1,5 +1,6 @@
 #include <ali/event.h>
 #include <dmm.h>
+#include <libkubs.h>
 #include "panic.h"
 #include <stddef.h>
 
@@ -13,6 +14,7 @@ void hal_panic_init(Hal_PanicFn *panicfn)
 __attribute__((constructor))
 void hal_panic_register_events()
 {
+    event_watch("register panic function", (void (*)(void*))kubs_init);
     event_watch("register panic function", (void (*)(void*))hal_panic_init);
     event_watch("register panic function", (void (*)(void*))dmm_init);
 }
