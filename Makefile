@@ -9,6 +9,9 @@ LD   := ld
 QEMU ?= qemu-system-${TARGET}
 
 override CFLAGS += -std=c11 -pedantic-errors -gdwarf-2 -nostdinc     \
+					-fsanitize=undefined,integer,nullability \
+					-fno-sanitize-recover=undefined,integer,nullability \
+					-g -fno-omit-frame-pointer \
 					-ffreestanding -fno-stack-protector -fno-builtin \
 					-fdiagnostics-show-option -Werror -Weverything   \
 					-Wno-cast-qual -Wno-missing-prototypes -Wno-vla
