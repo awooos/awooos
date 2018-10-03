@@ -17,11 +17,6 @@ void kubs_init(Kubs_PanicFn *panicfn_)
     panicfn = panicfn_;
 }
 
-void __mulodi4()
-{
-    // TODO: Implement, or remove the need for, __mulodi4()
-}
-
 // FIXME: add caller pc to the error message (possibly as "ubsan: error-type
 // @1234ABCD").
 #define HANDLER_NORECOVER(name, msg)                             \
