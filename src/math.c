@@ -1,6 +1,6 @@
 #include <math.h>
 
-int32_t abs(int32_t n) {
+int abs(int n) {
     if (n < 0) {
         return n * -1;
     } else {
