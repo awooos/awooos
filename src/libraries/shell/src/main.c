@@ -32,6 +32,16 @@ void shell_run(char *buffer)
                 print("\n");
             }
         }
+    } else if(COMMAND("awooo")) {
+        print("awoo");
+        // TODO: implement atoi() or equivalent.
+        /*
+        if(result->num_pieces >= 1)
+            for(size_t i=0; i < atoi(result->pieces[0]); ++i)
+                print("o");
+        */
+
+        print("\n");
     } else {
         print("Error: Unknown command: ");
         println(result->pieces[0]);
