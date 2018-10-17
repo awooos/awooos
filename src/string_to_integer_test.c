@@ -1,0 +1,26 @@
+#include <tinker.h>
+#include <stdint.h>
+#include <stdlib.h>
+#include <ali/number.h>
+
+size_t test_ali_str_to_int_assertions(void)
+{
+    TEST_HAS_ASSERTIONS();
+
+    TEST_ASSERT(atoi("10") == 10);
+    TEST_ASSERT(atoi("1234567890") == 1234567890);
+    TEST_ASSERT(atoi("000000001234567890") == 1234567890);
+
+    TEST_ASSERT(strtol("abcd", NULL, 16) == 0xabcd);
+    TEST_ASSERT(strtol("ABCD", NULL, 16) == 0xABCD);
+    TEST_ASSERT(strtoll("12a3bc89f", NULL, 16) == 0x12a3bc89f);
+
+    // TODO: Test strtol() with a non-null endptr.
+
+    TEST_ASSERTIONS_RETURN();
+}
+
+void add_ali_str_to_int_tests(void)
+{
+    tinker_add_test(ali_str_to_int_assertions);
+}
