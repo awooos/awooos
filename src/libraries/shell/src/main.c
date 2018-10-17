@@ -32,6 +32,16 @@ void shell_run(char *buffer)
                 print("\n");
             }
         }
+    } else if(COMMAND("awooo")) {
+        print(result->pieces[0]);
+
+        if(result->num_pieces >= 1) {
+            for(int i = 0; i < atoi(result->pieces[1]); ++i) {
+                print("o");
+            }
+        }
+
+        print("\n");
     } else {
         print("Error: Unknown command: ");
         println(result->pieces[0]);
