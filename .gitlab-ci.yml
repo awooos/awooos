@@ -10,7 +10,7 @@ image: alpine
 
 before_script:
 - apk update
-- apk add doxygen
+- apk add doxygen git
 ## Uncomment the following line if you use graphviz dot graphs
 #- apk add ttf-freefont graphviz
 
