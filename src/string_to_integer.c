@@ -22,6 +22,12 @@ static bool is_digit(char c, int base) {
 long long int strtoll(const char *nptr, char **endptr, int base)
 {
     long long int ret = 0;
+    bool neg = false;
+
+    if(*nptr == '-') {
+        neg = true;
+        nptr++;
+    }
 
     for(; is_digit(*nptr, base); nptr++)
         ret = base * ret + digit(*nptr);
@@ -29,7 +35,7 @@ long long int strtoll(const char *nptr, char **endptr, int base)
     if(endptr != NULL)
         *endptr = (char*)nptr;
 
-    return ret;
+    return neg ? -ret : ret;
 }
 
 long int strtol(const char *nptr, char **endptr, int base)
