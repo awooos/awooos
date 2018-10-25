@@ -5,8 +5,6 @@
 #include <stdlib.h>
 #include <string.h>
 
-#include <ali/number.h>
-
 // A 1KB buffer for command input should be enough.
 // If it's not, please rethink some life choices.
 // Or change this magic number. Either works.
