@@ -24,6 +24,5 @@ test: build/dmm-test
 
 clean:
 	rm -rf build
-	rm -f build/dmm-test
 
 .PHONY: all clean test build-deps
