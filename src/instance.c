@@ -23,8 +23,17 @@ void dmm_call_location(DMM_CallLocation *call_location,
 void *dmm_instance_add_memory_region(void *instance, void *start, size_t length)
 {
     DMM_MallocHeader *header = (DMM_MallocHeader*)start;
+
+    if (length == 0) {
+        dmm_panic("memory region has size of zero");
+    }
+
     header->magic = DMM_HEADER_MAGIC;
     header->size = length - sizeof(DMM_MallocHeader);
+    if (header->size <= 0) {
+        dmm_panic("memory region is too small for header");
+    }
+
     header->used = 0;
     header->data = (void*)(header + 1);
     header->next = DMM_UNASSIGNED_REGION;
