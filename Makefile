@@ -17,7 +17,7 @@ build-deps:
 
 build/dmm-test: $(SOURCES)
 	$(MAKE) build-deps
-	${CC} ${CFLAGS} ${CINCLUDES} $^ build/deps/tinker/src/main.c test/n_to_str.c test/main.c -o $@
+	${CC} ${CFLAGS} ${CINCLUDES} $^ build/deps/tinker/src/main.c test/main.c -o $@
 
 test: build/dmm-test
 	./build/dmm-test
