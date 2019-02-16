@@ -38,7 +38,7 @@ static mmap_entry mmaps[10];
 void init_mmap() {
     for (size_t idx = 0; idx < 10; idx++) {
         printf("alloc, idx=%zu\n", idx);
-        new_mmap_entry(&mmaps[idx], 1000);
+        new_mmap_entry(&mmaps[idx], 1024 * 1024 * idx);
     }
 }
 
