@@ -1,5 +1,6 @@
-sudo: required
-language: python
+sudo: false
+language: c
+compiler: clang
 
 branches:
   only:
@@ -10,15 +11,8 @@ branches:
     # Build pull requests.
     - master
 
-services:
-  - docker
-
-env:
-  global:
-    - MAKEFLAGS="-j 2"
-
 script:
-  - ./bin/make test
+  - make test
 
 notifications:
   email:
