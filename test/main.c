@@ -10,7 +10,7 @@ void add_dmm_tests(void);
 noreturn void _panic(const char *message, const char *function,
         const char *filename, size_t line)
 {
-    // loosely copy Rust's panic mesasge format.
+    // loosely copy Rust's panic message format.
     fprintf(stderr, "function '%s' panicked at '%s', %s:%zu\n", function, message, filename, line);
     exit(1);
 }
