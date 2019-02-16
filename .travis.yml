@@ -1,0 +1,26 @@
+sudo: required
+language: python
+
+branches:
+  only:
+    # This is where pull requests from "bors r+" are built.
+    - staging
+    # This is where pull requests from "bors try" are built.
+    - trying
+    # Build pull requests.
+    - master
+
+services:
+  - docker
+
+env:
+  global:
+    - MAKEFLAGS="-j 2"
+
+script:
+  - ./bin/make test
+
+notifications:
+  email:
+    on_success: change # default: change
+    on_failure: change # default: always
