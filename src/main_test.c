@@ -59,7 +59,7 @@ size_t test_dmm_allocate_the_universe()
         // If you encounter this error, you need to give DMM bigger chunks.
         // The chunks should be at least the ALLOCATE_THE_UNIVERSE_CHUNK_SIZE
         // bytes in length.
-        TEST_RETURN(TEST_FAILURE, "Allocated no chunks -- universe is too small to allocate anything.");
+        TEST_RETURN(TEST_FAILURE, "Allocated no chunks -- universe is too small.");
     }
 
     // Check that all the allocations with the test flag set are of the size
