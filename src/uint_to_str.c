@@ -19,7 +19,7 @@ char *flail_uint_to_str(char buffer[UINT64_BUFSIZE],
         n /= radix;
     }
 
-    for (size_t idx = 0; idx < TINKER_UINT64_BUFSIZE; idx++) {
+    for (size_t idx = 0; idx < UINT64_BUFSIZE; idx++) {
         // If the first char is _not_ zero, or the second char is NULL, stop.
         if (buffer[0] != '0' || buffer[1] == '\0') {
             break;
