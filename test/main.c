@@ -4,10 +4,8 @@
 void add_dmm_tests(void);
 
 char *shitty_print(const char *str) {
-    size_t len = strlen(str);
-
-    for (size_t idx = 0; idx < len; idx++) {
-        putchar(str[idx]);
+    for (char *s = (char*)str; *s; s++) {
+        putchar(*s);
     }
     return (char*)str;
 }
