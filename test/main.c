@@ -59,6 +59,6 @@ int main(void)
         return 1;
     }
 
-    //deinit_mmap();
+    deinit_mmap();
     return 0;
 }
