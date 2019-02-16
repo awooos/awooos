@@ -41,6 +41,7 @@ size_t test_dmm_free_sets_header()
 size_t test_dmm_allocate_the_universe()
 {
     DMM_MallocHeader *header;
+    size_t allocated_chunks = 0;
 
     // Allocate everything
     while (1) {
@@ -48,9 +49,17 @@ size_t test_dmm_allocate_the_universe()
         if (region == NULL) {
             break;
         }
+        allocated_chunks += 1;
 
         header = ((DMM_MallocHeader*)region) - 1;
         header->flags = DMM_HEADER_FLAG_TEST;
+    }
+
+    if (allocated_chunks == 0) {
+        // If you encounter this error, you need to give DMM bigger chunks.
+        // The chunks should be at least the ALLOCATE_THE_UNIVERSE_CHUNK_SIZE
+        // bytes in length.
+        TEST_RETURN(TEST_FAILURE, "Allocated no chunks -- universe is too small.");
     }
 
     // Check that all the allocations with the test flag set are of the size
