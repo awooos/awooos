@@ -1,6 +1,5 @@
 #include <stdio.h>
 #include <tinker.h>
-#include <stdlib.h>
 #include <string.h>
 #include <stdint.h>
 
