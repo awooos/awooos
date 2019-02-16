@@ -37,14 +37,12 @@ void new_mmap_entry(mmap_entry *entry, size_t size) {
 static mmap_entry mmaps[10];
 void init_mmap() {
     for (size_t idx = 0; idx < 10; idx++) {
-        printf("alloc, idx=%zu\n", idx);
-        new_mmap_entry(&mmaps[idx], 1024 * 1024 * idx);
+        new_mmap_entry(&mmaps[idx], 1024 * 1024 * (idx + 1));
     }
 }
 
 void deinit_mmap() {
     for (size_t idx = 0; idx < 10; idx++) {
-        printf("free, idx=%zu\n", idx);
         free(mmaps[idx].data);
     }
 }
