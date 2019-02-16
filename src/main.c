@@ -43,6 +43,41 @@ static const char *test_status_messages[4] = {
     "Assertion failed",
 };
 
+// Hacktastic int-to-string function, so we don't need nonstandard
+// functionality (e.g. tinker_uint_to_str()) or snprintf().
+//
+// If we can get an snprintf() that doesn't rely on malloc() into Ali,
+// we should (in theory) be able to switch without hesitation.
+//
+// ASSUMPTION: number will never be larger than can fit in a uint64_t.
+// NOTE: If the buffer is too small, the string gets truncated.
+#define TINKER_UINT64_BUFSIZE 21 // <digits in uint64_t> + <1 byte for NULL>
+char *tinker_uint_to_str(char buffer[TINKER_UINT64_BUFSIZE], size_t n)
+{
+    size_t radix = 10;
+
+    // Set the entire buffer to NULL bytes.
+    // (Inlined memset() to avoid dependencies.)
+    for (size_t idx = 0; idx < TINKER_UINT64_BUFSIZE; idx++) {
+        buffer[idx] = 0;
+    }
+
+    // Loop through the digits and add them in reverse order,
+    // starting at the end of the string and working back.
+    for (size_t idx = TINKER_UINT64_BUFSIZE - 1; idx > 0; idx--) {
+        buffer[idx - 1] = "0123456789abcdef"[n % radix];
+        n /= radix;
+    }
+
+    for (size_t idx = 0;
+            (idx < TINKER_UINT64_BUFSIZE) && (buffer[idx] == '0');
+            idx++) {
+        buffer++;
+    }
+
+    return buffer;
+}
+
 char *tinker_print(const char *string)
 {
     return _tinker_print(string);
@@ -76,7 +111,7 @@ void _tinker_print_results(size_t status,
         tinker_print("\n");
 
         // X) <test name>
-        tinker_print(n_to_str(total + 1));
+        tinker_print(tinker_uint_to_str(total + 1));
         tinker_print(") ");
 
         tinker_print(test_status_messages[status]);
@@ -95,7 +130,7 @@ void _tinker_print_results(size_t status,
         tinker_print("In ");
         tinker_print(file);
         tinker_print(":");
-        tinker_print(n_to_str(line));
+        tinker_print(tinker_uint_to_str(line));
         tinker_print("\n");
     }
 }
@@ -120,19 +155,19 @@ bool tinker_run_tests(TinkerPrintFn *printfn_)
     tinker_print("\n\n");
 
     tinker_print("Total tests: ");
-    tinker_print(n_to_str(total));
+    tinker_print(tinker_uint_to_str(total));
     tinker_print("\n");
 
     tinker_print("     Passed: ");
-    tinker_print(n_to_str(passed));
+    tinker_print(tinker_uint_to_str(passed));
     tinker_print("\n");
 
     tinker_print("     Failed: ");
-    tinker_print(n_to_str(failed));
+    tinker_print(tinker_uint_to_str(failed));
     tinker_print("\n");
 
     tinker_print("    Skipped: ");
-    tinker_print(n_to_str(skipped));
+    tinker_print(tinker_uint_to_str(skipped));
     tinker_print("\n\n");
 
     if (failed > 0) {
