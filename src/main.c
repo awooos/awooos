@@ -70,9 +70,11 @@ char *tinker_uint_to_str(size_t n)
         n /= radix;
     }
 
-    for (size_t idx = 0;
-            (idx < TINKER_UINT64_BUFSIZE) && (buffer[idx] == '0');
-            idx++) {
+    for (size_t idx = 0; idx < TINKER_UINT64_BUFSIZE; idx++) {
+        // If the first char is _not_ zero, or the second char is NULL, stop.
+        if (buffer[0] != '0' || buffer[1] == '\0') {
+            break;
+        }
         buffer++;
     }
 
