@@ -2,7 +2,7 @@ CC := clang
 
 SOURCES := $(wildcard src/*.c)
 
-CINCLUDES := -Ibuild/deps/tinker/include -Itest/ -Iinclude
+CINCLUDES := -Ibuild/deps/tinker/include -Iinclude
 
 override CFLAGS += -std=c11 -pedantic-errors \
 					-fdiagnostics-show-option -Werror -Weverything \
