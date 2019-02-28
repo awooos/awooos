@@ -69,20 +69,20 @@ int strcmp(const char *s1, const char *s2)
 
 int strncmp(const char *s1, const char *s2, size_t n)
 {
-    size_t i = 0;
+    const char *a = s1;
+    const char *b = s2;
 
-    while (i < n && s1[i] && s2[i]){
-        if (s1[i] > s2[i]) {
-            return s1[i] - s2[i];
-        }
-        if (s1[i] < s2[i]) {
-            return s2[i] - s1[i];
-        }
-
-        i += 1;
+    while ( n && *a && (*a == *b) ) {
+        ++a;
+        ++b;
+        --n;
     }
 
-    return 0;
+    if (n == 0) {
+        return 0;
+    } else {
+        return *a - *b;
+    }
 }
 
 // char *strchr(const char *s, int c);

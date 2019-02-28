@@ -6,5 +6,6 @@
 void add_ali_str_tests(void);
 void add_ali_number_tests(void);
 void add_ali_str_to_int_tests(void);
+void add_ali_string_tests(void);
 
 #endif

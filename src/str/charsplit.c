@@ -8,35 +8,25 @@ char **charsplit(char *input, char token)
 {
     char *str = input;
     size_t len = strlen(str);
-    char *buffer = malloc(len);
+    char *buffer = malloc(len + 1);
 
-    // Storage for pieces
+    memcpy(buffer, input, len);
+    buffer[len] = 0; // Add a null terminator, just to be sure.
+
+    // Pointers to individual pieces.
     size_t piece_idx = 0;
-    size_t piece_length = 0;
-    char **pieces = malloc(sizeof(char *) * ALI_SPLIT_MAX_PIECES);
-    for (size_t i = 0; i < ALI_SPLIT_MAX_PIECES; i++) {
-        pieces[i] = NULL;
-    }
+    char **pieces = calloc(ALI_SPLIT_MAX_PIECES, sizeof(char*));
 
-    for (size_t i = 0; i < len; i++) {
-        char c = *str;
-        buffer[piece_length] = c;
-
-        if (c == token) {
-            buffer[piece_length] = 0;
-            pieces[piece_idx] = buffer;
-            buffer = malloc((len - i) + 1);
-            piece_length = 0;
-            piece_idx++;
-            str++;
-        }
-
-        str++;
-        piece_length++;
-    }
-
-    buffer[piece_length] = 0;
     pieces[piece_idx] = buffer;
+    piece_idx++;
+
+    for (size_t idx = 0; idx < len; idx++) {
+        if (buffer[idx] == token) {
+            buffer[idx] = 0;
+            pieces[piece_idx] = (buffer + idx + 1);
+            piece_idx++;
+        }
+    }
 
     return pieces;
 }
