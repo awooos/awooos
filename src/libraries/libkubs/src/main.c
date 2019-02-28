@@ -31,8 +31,9 @@ void kubs_init(Kubs_PanicFn *panicfn_)
 
 HANDLER_NORECOVER(type_mismatch, "type-mismatch")
 HANDLER_NORECOVER(add_overflow, "add-overflow")
+// FIXME: Use XHANDLER_NORECOVER->HANDLER_NORECOVER for _everything_.
 XHANDLER_NORECOVER(sub_overflow, "sub-overflow")
-HANDLER_NORECOVER(mul_overflow, "mul-overflow")
+XHANDLER_NORECOVER(mul_overflow, "mul-overflow")
 HANDLER_NORECOVER(negate_overflow, "negate-overflow")
 HANDLER_NORECOVER(divrem_overflow, "divrem-overflow")
 HANDLER_NORECOVER(shift_out_of_bounds, "shift-out-of-bounds")
