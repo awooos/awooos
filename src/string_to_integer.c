@@ -30,7 +30,8 @@ long long int strtoll(const char *nptr, char **endptr, int base)
     }
 
     if (base < 2 || base > 36) {
-        return EINVAL;
+        // TODO: errno = EINVAL;
+        return -1;
     }
 
     if(*nptr == '-') {
@@ -38,8 +39,18 @@ long long int strtoll(const char *nptr, char **endptr, int base)
         nptr++;
     }
 
-    for(; is_digit(*nptr, base); nptr++)
-        ret = base * ret + digit(*nptr);
+    for(; is_digit(*nptr, base); nptr++) {
+        int d = digit(*nptr);
+        if (d == INT_MAX) {
+            // TODO: errno = ERANGE;
+            if (endptr != NULL) {
+                **endptr = *nptr;
+            }
+            break;
+        }
+
+        ret = base * ret + d;
+    }
 
     if(endptr != NULL)
         *endptr = (char*)nptr;
