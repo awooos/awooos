@@ -92,7 +92,7 @@ void *_dmm_instance_malloc(void *instance, size_t size, const char function[],
     }
 
     if (result->magic != DMM_HEADER_MAGIC) {
-        dmm_panic("memory region header had invalid magic");
+        _dmm_panic("memory region header had invalid magic (_dmm_instance_malloc)", function, filename, line);
     }
 
     // Calculate the size of the memory chunk after the allocated region.
@@ -135,14 +135,9 @@ void _dmm_instance_free(void *instance, void *ptr, const char function[],
     // We don't need the instance, but include it in the API for consistency.
     (void)instance;
 
-    // +function+, +filename+, and +line+ aren't currently used.
-    (void)function;
-    (void)filename;
-    (void)line;
-
     DMM_MallocHeader *header = (DMM_MallocHeader*)(ptr) - 1;
     if (header->magic != DMM_HEADER_MAGIC) {
-        dmm_panic("memory region header had invalid magic");
+        _dmm_panic("memory region header had invalid magic in _dmm_instance_free", function, filename, line);
     }
 
     header->used = 0;
@@ -166,7 +161,7 @@ void *_dmm_instance_realloc(void *instance, void *ptr, size_t size, const char *
     // Check for memory clobbering.
     header = (DMM_MallocHeader*)(ptr) - 1;
     if (header->magic != DMM_HEADER_MAGIC) {
-        dmm_panic("memory region header had invalid magic");
+        _dmm_panic("memory region header had invalid magic in _dmm_instance_realloc", function, filename, line);
     }
 
     // Allocate new memory chunk.
