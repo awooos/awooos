@@ -3,6 +3,8 @@
 
 static Kubs_PanicFn *panicfn = NULL;
 
+// NOTE: When kubs_panic() is called, it will always be given THIS filename
+//       and a function from HANDLER_NORECOVER().
 void kubs_panic(const char *message, const char *function,
         const char *filename, size_t line)
 {
@@ -21,7 +23,7 @@ void kubs_init(Kubs_PanicFn *panicfn_)
 // @1234ABCD").
 #define HANDLER_NORECOVER(name, msg)                             \
   void __ubsan_handle_##name##_abort() {                         \
-    kubs_panic("ubsan: " msg, __FUNCTION__, __FILE__, __LINE__); \
+    kubs_panic("ubsan: " msg, "unknown function", "(unknown file)", 0); \
   }
 
 #define XHANDLER_NORECOVER(name, msg)                             \
