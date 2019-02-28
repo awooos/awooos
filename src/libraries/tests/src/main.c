@@ -15,7 +15,7 @@ void test_shutdown(bool all_tests_passed)
 {
     // If a test failed, do a test-fail shutdown.
     if (!all_tests_passed) {
-        print("Encountered failing tests; not booting.\n");
+        print("\n\n!!! Encountered failing tests; not booting. !!!\n");
         event_trigger("HAL shutdown test fail", NULL);
     }
 
@@ -36,6 +36,10 @@ void run_tests(void *data)
 
     // Handle things we _only_ do in test builds.
     if (test_build) {
+        if (!all_tests_passed) {
+            test_shutdown(false);
+        }
+
         // This doesn't catch all failures, but it'll catch
         // unintentional infinite loops by causing the CI
         // build to time out.
