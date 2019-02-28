@@ -1,3 +1,4 @@
+#include <errno.h>
 #include <tinker.h>
 #include <stdint.h>
 #include <stdlib.h>
@@ -6,6 +7,13 @@
 size_t test_ali_str_to_int_assertions(void)
 {
     TEST_HAS_ASSERTIONS();
+
+    // The base has to be between 2 and 36, inclusive.
+    // Outside of that range, it should return EINVAL.
+    TEST_ASSERT(strtoll("abcd", NULL, 1) == EINVAL);
+    TEST_ASSERT(strtoll("abcd", NULL, 2) != EINVAL);
+    TEST_ASSERT(strtoll("abcd", NULL, 36) != EINVAL);
+    TEST_ASSERT(strtoll("abcd", NULL, 37) == EINVAL);
 
     TEST_ASSERT(atoi("10") == 10);
     TEST_ASSERT(atoi("1234567890") == 1234567890);

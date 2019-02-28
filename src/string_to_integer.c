@@ -1,3 +1,4 @@
+#include <errno.h>
 #include <stdbool.h>
 #include <stdint.h>
 #include <stdlib.h>
@@ -23,6 +24,14 @@ long long int strtoll(const char *nptr, char **endptr, int base)
 {
     long long int ret = 0;
     bool neg = false;
+
+    if (base == 0) {
+        // TODO: Bullshit auto-detection that is apparently expected.
+    }
+
+    if (base < 2 || base > 36) {
+        return EINVAL;
+    }
 
     if(*nptr == '-') {
         neg = true;
