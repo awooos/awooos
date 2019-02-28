@@ -147,9 +147,19 @@ bool tinker_run_tests(TinkerPrintFn *printfn_)
     total = 0;
 
     for(size_t idx = 0; idx < last_test_index; idx++) {
+        if (TINKER_VERBOSE) {
+            tinker_print("\n- test_");
+            tinker_print(test_cases[idx].name);
+            tinker_print("()\n");
+        }
+
         size_t passed_assertions = test_cases[idx].func();
         ran++;
         total++;
+
+        if (TINKER_VERBOSE) {
+            tinker_print("\n");
+        }
 
         passed += passed_assertions;
         total += passed_assertions;

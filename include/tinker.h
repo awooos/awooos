@@ -6,6 +6,10 @@
 #include <string.h>
 #include <stdlib.h>
 
+#ifndef TINKER_VERBOSE
+#define TINKER_VERBOSE 0
+#endif
+
 typedef char *(TinkerPrintFn)(const char *string);
 static TinkerPrintFn *_tinker_print = NULL;
 
@@ -38,7 +42,11 @@ char *tinker_print(const char *string);
 
 #define TEST_ASSERT(CODE)   if (CODE) {                             \
     passed_assertions += 1;             \
-    tinker_print(".");                  \
+    if (TINKER_VERBOSE) { \
+        tinker_print("-- "); tinker_print(#CODE); tinker_print("\n"); \
+    } else { \
+        tinker_print(".");                  \
+    } \
 } else {                                \
     TEST_RETURN2(TEST_ASSERTION_FAILURE,\
 #CODE, passed_assertions);      \
