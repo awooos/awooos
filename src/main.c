@@ -109,7 +109,9 @@ void _tinker_print_results(size_t status,
 
 
     if(status == TEST_SUCCESS) {
-        tinker_print(".");
+        if (!TINKER_VERBOSE) {
+            tinker_print(".");
+        }
     } else {
         tinker_print("\n");
 
@@ -148,7 +150,7 @@ bool tinker_run_tests(TinkerPrintFn *printfn_)
 
     for(size_t idx = 0; idx < last_test_index; idx++) {
         if (TINKER_VERBOSE) {
-            tinker_print("\n- test_");
+            tinker_print("- test_");
             tinker_print(test_cases[idx].name);
             tinker_print("()\n");
         }
