@@ -13,6 +13,9 @@ size_t test_awkward_assertions()
     ret = __mulodi4(UINT64_MAX, 2, &overflow);
     TEST_ASSERT(overflow == 1);
 
+    ret = __mulodi4(2, UINT64_MAX, &overflow);
+    TEST_ASSERT(overflow == 1);
+
     ret = __mulodi4((UINT64_MAX - 1) / 2, 2, &overflow);
     TEST_ASSERT(overflow == 0);
     TEST_ASSERT(ret == (UINT64_MAX - 1));

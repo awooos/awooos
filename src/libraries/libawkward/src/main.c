@@ -22,16 +22,13 @@ uint64_t __udivdi3(uint64_t a, uint64_t b)
 // 64-bit multiplication with overflow detection.
 uint64_t __mulodi4(uint64_t a, uint64_t b, int *overflow)
 {
-    uint64_t ret = 0;
-    *overflow = 0;
-
-    while (b-- > 0) {
-        if (ret > (UINT64_MAX - a)) {
-            *overflow = 1;
-            break;
-        }
-
-        ret += a;
+    // `(a * b) > c` if and only if `a > (c / b)`.
+    // UINT64_MAX is c.
+    // Thus, `a > (UINT64_MAX / b)` implies `(a * b) > c`
+    if (b > 0 && a > (UINT64_MAX / b)) {
+        *overflow = 1;
+    } else {
+        *overflow = 0;
     }
-    return ret;
+    return a * b;
 }
