@@ -140,6 +140,11 @@ void _dmm_instance_free(void *instance, void *ptr, const char function[],
     (void)instance;
 
     DMM_MallocHeader *header = (DMM_MallocHeader*)(ptr) - 1;
+
+    if (ptr == NULL) {
+        return;
+    }
+
     if (header->magic != DMM_HEADER_MAGIC) {
         _dmm_panic("memory region header had invalid magic in _dmm_instance_free", function, filename, line);
     }
