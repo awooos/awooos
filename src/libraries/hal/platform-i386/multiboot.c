@@ -56,8 +56,10 @@ void multiboot_add_mmap_entry(MultibootMemoryMapEntry *mmap_entry)
         mmap_entry->length -= 1;
     }
 
-    // If we get an entry that contains the kernel, just skip
-    // it for the sake of simplicity.
+    // If we get an entry that contains the kernel, only use the portion
+    // after the kernel.
+    //
+    // QUESTIONABLE ASSUMPTION: The portion before the kernel won't be useful.
     //
     // An alternative approach would be to split it into two
     // entries -- e.g.,
@@ -65,7 +67,8 @@ void multiboot_add_mmap_entry(MultibootMemoryMapEntry *mmap_entry)
     //     (hal_kernel_end + 1) through <end of actual entry>
     if (((size_t)mmap_entry->addr >= hal_kernel_start) &&
             ((size_t)mmap_entry->addr <= hal_kernel_end)) {
-        return;
+        mmap_entry->size -= (hal_kernel_end - mmap_entry->addr);
+        mmap_entry->addr = hal_kernel_end;
     }
 
     // If we get this far, add the memory region to DMM.
