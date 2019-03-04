@@ -28,6 +28,10 @@ void *dmm_instance_add_memory_region(void *instance, void *start, size_t length)
         dmm_panic("memory region has size of zero");
     }
 
+    if (start == NULL) {
+        dmm_panic("cannot add NULL memory region");
+    }
+
     header->magic = DMM_HEADER_MAGIC;
     header->size = length - sizeof(DMM_MallocHeader);
     if (header->size <= 0) {
