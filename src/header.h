@@ -20,6 +20,7 @@ typedef struct dmm_malloc_header_s {
     size_t size;
     size_t used; // A bit space-inefficient, but means we only require one type.
     size_t flags; // Currently only used for tests
+    void *instance;
     void *data;
     struct dmm_malloc_header_s *next;
     DMM_CallLocation call_location;
