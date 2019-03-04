@@ -26,9 +26,15 @@ void dmm_consolidate(void *instance)
             curr != NULL && curr->next != NULL;
             curr = curr->next) {
         if (!curr->used && !curr->next->used) {
-            curr->next = curr->next->next;
-            curr->size += curr->next->size + sizeof(curr->next);
+            continue;
         }
+
+        if ((DMM_MallocHeader*)((size_t)curr->data + 1) != curr->next) {
+            continue;
+        }
+
+        curr->size += curr->next->size + sizeof(curr->next);
+        curr->next = curr->next->next;
     }
 }
 
@@ -137,7 +143,7 @@ void *_dmm_instance_malloc(void *instance, size_t size, const char function[],
 
     // Create a new header after the data, if the remaining data size is
     // large enough to fit the header.
-    if (next_size > 0) {
+    if (next_size > sizeof(DMM_MallocHeader)) {
         void *next = (void *)((size_t)(result + 1) + size);
         DMM_MallocHeader *next_header = (DMM_MallocHeader*)next;
         _dmm_memset(next, 0, sizeof(DMM_MallocHeader));
