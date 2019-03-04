@@ -29,7 +29,7 @@ void dmm_consolidate(void *instance)
             continue;
         }
 
-        if ((DMM_MallocHeader*)((size_t)curr->data + 1) != curr->next) {
+        if ((DMM_MallocHeader*)((size_t)curr->data + curr->size) != curr->next) {
             continue;
         }
 
