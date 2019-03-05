@@ -95,9 +95,9 @@ char *int64_to_str_radix(int64_t n, size_t radix)
 
         tmp[0] = '-';
         strncpy((tmp + 1), result, length);
-        result = tmp;
-        // TODO: Once DMM memory leak checks are in place, uncomment the following line.
-        //free(tmp);
+
+        free(result);
+        return tmp;
     }
 
     return result;
