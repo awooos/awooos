@@ -20,12 +20,34 @@ void dmm_call_location(DMM_CallLocation *call_location,
     call_location->line = line;
 }
 
+void dmm_consolidate(void *instance)
+{
+    for (DMM_MallocHeader *curr = (DMM_MallocHeader*)instance;
+            curr != NULL && curr->next != NULL;
+            curr = curr->next) {
+        if (!curr->used && !curr->next->used) {
+            continue;
+        }
+
+        if ((DMM_MallocHeader*)((size_t)curr->data + curr->size) != curr->next) {
+            continue;
+        }
+
+        curr->size += curr->next->size + sizeof(curr->next);
+        curr->next = curr->next->next;
+    }
+}
+
 void *dmm_instance_add_memory_region(void *instance, void *start, size_t length)
 {
     DMM_MallocHeader *header = (DMM_MallocHeader*)start;
 
     if (length == 0) {
         dmm_panic("memory region has size of zero");
+    }
+
+    if (start == NULL) {
+        dmm_panic("cannot add NULL memory region");
     }
 
     header->magic = DMM_HEADER_MAGIC;
@@ -37,6 +59,11 @@ void *dmm_instance_add_memory_region(void *instance, void *start, size_t length)
     header->used = 0;
     header->data = (void*)(header + 1);
     header->next = DMM_UNASSIGNED_REGION;
+    if (instance == NULL) {
+        header->instance = start;
+    } else {
+        header->instance = instance;
+    }
 
     if (instance != DMM_UNASSIGNED_REGION && instance != NULL) {
         DMM_MallocHeader *last = (DMM_MallocHeader *)instance;
@@ -55,6 +82,8 @@ void *dmm_instance_add_memory_region(void *instance, void *start, size_t length)
         }
     }
 
+    dmm_consolidate(instance);
+
     return (void *)header;
 }
 
@@ -68,6 +97,10 @@ DMM_MallocHeader *dmm_instance_get_first_free_chunk(void *instance, size_t size)
     while (1) {
         if (chunk->magic != DMM_HEADER_MAGIC) {
             dmm_panic("memory region header had invalid magic");
+        }
+
+        if (chunk->instance != instance) {
+            dmm_panic("memory region had unexpected instance");
         }
 
         if ((chunk->size >= size) && (chunk->used == 0)) {
@@ -110,7 +143,7 @@ void *_dmm_instance_malloc(void *instance, size_t size, const char function[],
 
     // Create a new header after the data, if the remaining data size is
     // large enough to fit the header.
-    if (next_size > 0) {
+    if (next_size > sizeof(DMM_MallocHeader)) {
         void *next = (void *)((size_t)(result + 1) + size);
         DMM_MallocHeader *next_header = (DMM_MallocHeader*)next;
         _dmm_memset(next, 0, sizeof(DMM_MallocHeader));
@@ -120,6 +153,7 @@ void *_dmm_instance_malloc(void *instance, size_t size, const char function[],
         next_header->used = 0;
         next_header->data = (void*)(next_header + 1);
         next_header->next = result->next;
+        next_header->instance = result->instance;
 
         // Set the header of this chunk to point to the new header.
         result->next = next_header;
@@ -128,22 +162,26 @@ void *_dmm_instance_malloc(void *instance, size_t size, const char function[],
     return result->data;
 }
 
-// FIXME: _dmm_instance_free() doesn't/can't check if +ptr+ belongs to +instnace+.
 void _dmm_instance_free(void *instance, void *ptr, const char function[],
         const char filename[], size_t line)
 {
-    // We don't need the instance, but include it in the API for consistency.
-    (void)instance;
-
     DMM_MallocHeader *header = (DMM_MallocHeader*)(ptr) - 1;
+
+    if (ptr == NULL) {
+        return;
+    }
+
+    if (header->instance != instance) {
+        _dmm_panic("memory region has unexpected instance in _dmm_instance_free", function, filename, line);
+    }
+
     if (header->magic != DMM_HEADER_MAGIC) {
         _dmm_panic("memory region header had invalid magic in _dmm_instance_free", function, filename, line);
     }
 
     header->used = 0;
 
-    // TODO: merge this chunk with adjacent chunks if they're both marked
-    //       as free and belong to this instance.
+    dmm_consolidate(instance);
 }
 
 // TODO: Have _dmm_instance_realloc() resize a chunk if possible.
