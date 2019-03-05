@@ -1,8 +1,5 @@
-#include <ali.h>
+#include <ali/text.h>
 #include <ali/event.h>
-#include <ali/number.h>
-#include <stdlib.h>
-#include <string.h>
 
 char *print(const char *string)
 {
@@ -11,15 +8,10 @@ char *print(const char *string)
     return (char*)string;
 }
 
-char *println(const char *string){
-    size_t length = strlen(string);
-    char *new_string = malloc(length + 2);
-    strncpy(new_string, string, length);
-    new_string[length] = '\n';
-    new_string[length + 1] = '\0';
-
-    print(new_string);
-    free(new_string);
+char *println(const char *string)
+{
+    print(string);
+    print("\n");
 
     return (char*)string;
 }

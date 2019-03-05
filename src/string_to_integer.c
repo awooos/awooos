@@ -3,20 +3,21 @@
 #include <stdint.h>
 #include <stdlib.h>
 
-static int digit(char c) {
-    if ('0' <= c && c <= '9')
+static int digit(char c)
+{
+    if ('0' <= c && c <= '9') {
         return (c - '0');
-
-    else if ('a' <= c && c <= 'z')
+    } else if ('a' <= c && c <= 'z') {
         return ((c - 'a') + 10);
-
-    else if ('A' <= c && c <= 'Z')
+    } else if ('A' <= c && c <= 'Z') {
         return ((c - 'A') + 10);
-
-    else return INT_MAX;
+    } else {
+        return INT_MAX;
+    }
 }
 
-static bool is_digit(char c, int base) {
+static bool is_digit(char c, int base)
+{
     return digit(c) < base;
 }
 
@@ -52,8 +53,9 @@ long long int strtoll(const char *nptr, char **endptr, int base)
         ret = base * ret + d;
     }
 
-    if(endptr != NULL)
+    if(endptr != NULL) {
         *endptr = (char*)nptr;
+    }
 
     return neg ? -ret : ret;
 }
@@ -77,4 +79,3 @@ long long atoll(const char *nptr)
 {
     return strtoll(nptr, NULL, 10);
 }
-
