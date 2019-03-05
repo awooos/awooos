@@ -56,16 +56,46 @@ void multiboot_add_mmap_entry(MultibootMemoryMapEntry *mmap_entry)
         mmap_entry->length -= 1;
     }
 
-    // If we get an entry that contains the kernel, just skip
-    // it for the sake of simplicity.
+    // If we get an entry that contains the kernel, only use the portion
+    // after the kernel.
+    //
+    // QUESTIONABLE ASSUMPTION: The portion before the kernel won't be useful.
     //
     // An alternative approach would be to split it into two
     // entries -- e.g.,
     //     <start of actual entry> through (hal_kernel_start - 1)
     //     (hal_kernel_end + 1) through <end of actual entry>
-    if (((size_t)mmap_entry->addr >= hal_kernel_start) &&
-            ((size_t)mmap_entry->addr <= hal_kernel_end)) {
+
+    // If the entry contains nothing but the kernel, just skip it.
+    if ((mmap_entry->addr >= (uint64_t)hal_kernel_start) &&
+            ((mmap_entry->addr + mmap_entry->size) <= (uint64_t)hal_kernel_end)) {
         return;
+    }
+
+    // If the entry starts before the kernel but ends after the start of
+    // the kernel, take the part before the kernel.
+    //
+    // This is set up so that the part after the kernel, if any,
+    // will be added later in the function.
+    if ((mmap_entry->addr < (uint64_t)hal_kernel_start) &&
+            ((mmap_entry->addr + mmap_entry->size) >= (uint64_t)hal_kernel_start)
+        ) {
+        uint64_t adjustment = (mmap_entry->addr - hal_kernel_start);
+
+        // Add the region before the kernel.
+        dmm_add_memory_region((void*)mmap_entry->addr, (size_t)(mmap_entry->size - adjustment));
+
+        // Adjust the mmap entry to point to the start of the kernel.
+        mmap_entry->addr += adjustment;
+        mmap_entry->size -= adjustment;
+    }
+
+    // If the the entry starts inside the kernel, adjust it to be after
+    // the kernel.
+    if ((mmap_entry->addr >= (uint64_t)hal_kernel_start) ||
+            (mmap_entry->addr <= (uint64_t)hal_kernel_end)) {
+        mmap_entry->size -= (hal_kernel_end - mmap_entry->addr);
+        mmap_entry->addr = hal_kernel_end;
     }
 
     // If we get this far, add the memory region to DMM.
