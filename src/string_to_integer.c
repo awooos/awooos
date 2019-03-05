@@ -4,16 +4,15 @@
 #include <stdlib.h>
 
 static int digit(char c) {
-    if ('0' <= c && c <= '9')
+    if ('0' <= c && c <= '9') {
         return (c - '0');
-
-    else if ('a' <= c && c <= 'z')
+    } else if ('a' <= c && c <= 'z') {
         return ((c - 'a') + 10);
-
-    else if ('A' <= c && c <= 'Z')
+    } else if ('A' <= c && c <= 'Z') {
         return ((c - 'A') + 10);
-
-    else return INT_MAX;
+    } else {
+        return INT_MAX;
+    }
 }
 
 static bool is_digit(char c, int base) {
