@@ -15,13 +15,6 @@ noreturn void _panic(const char *message, const char *function,
     exit(1);
 }
 
-char *shitty_print(const char *str) {
-    for (char *s = (char*)str; *s; s++) {
-        putchar(*s);
-    }
-    return (char*)str;
-}
-
 typedef struct mmap_entry_s {
     char *data;
     size_t size;
@@ -54,7 +47,7 @@ int main(void)
     dmm_init(&_panic);
 
     init_mmap();
-    if (!tinker_run_tests(&shitty_print)) {
+    if (!tinker_run_tests(&putchar)) {
         deinit_mmap();
         return 1;
     }
