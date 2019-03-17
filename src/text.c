@@ -4,6 +4,8 @@
 
 // Writes the provided character (+c+) to the provided stream (+stream+).
 //
+// +c+ is cast to an unsigned char internally.
+//
 // Returns EOF on write error, or +c+ otherwise.
 //
 // FIXME: Actually handle streams.
@@ -12,7 +14,7 @@ int fputc(int c, FILE *stream)
     (void)stream;
 
     /* Start hacky bullshit */
-    char str[2] = {(unsigned char)character, 0};
+    char str[2] = {(char)c, 0};
     event_trigger("print string", (char*)str);
     /* End hacky bullshit */
 
@@ -27,8 +29,10 @@ int fputc(int c, FILE *stream)
 // FIXME: Actually handle streams.
 int fputs(const char *s, FILE *stream)
 {
+    (void)stream;
+
     /* Start hacky bullshit */
-    event_trigger("print string", (char*)str);
+    event_trigger("print string", (char*)s);
     event_trigger("print string", "\n");
     /* End hacky bullshit */
 

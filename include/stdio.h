@@ -10,14 +10,21 @@
  *
  */
 
-typedef FILE size_t;
-typedef fpos_t size_t;
+typedef size_t FILE;
+typedef size_t fpos_t;
+
+// Disable warnings/errors for reserved ID macros, so we can define some.
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wreserved-id-macro"
 
 // _IO*BF expand to integer constant expressions with distinct values,
 // suitable for use as the third argument to the +setvbuf+ function.
 #define _IOFBF 0 // Fully buffered.
 #define _IOLBF 1 // Line buffered.
 #define _IONBF 2 // Not buffered.
+
+// Re-enable warnings/errors for reserved ID macros.
+#pragma clang diagnostic pop
 
 // Integer constant expression that is the size of the buffer used by the
 // +setvbuf+ function.
@@ -59,9 +66,10 @@ typedef fpos_t size_t;
 //extern FILE *stdin;
 //extern FILE *stdout;
 //extern FILE *stderr;
-static FILE *stdin  = 0;
-static FILE *stdout = 1;
-static FILE *stderr = 2;
+// HACK: These are gauranteed-distinct, but don't provide any actual information.
+static FILE *stdin  = (FILE*)0;
+static FILE *stdout = (FILE*)1;
+static FILE *stderr = (FILE*)2;
 
 int fputc(int c, FILE *stream);
 #define putc(c, stream) fputc(c, stream)
