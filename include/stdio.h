@@ -72,8 +72,8 @@ static FILE *stdout = (FILE*)1;
 static FILE *stderr = (FILE*)2;
 
 int fputc(int c, FILE *stream);
-#define putc(c, stream) fputc(c, stream)
-#define putchar(c) putc(c, stdout)
+int putc(int c, FILE *stream);
+int putchar(int c);
 
 int fputs(const char *string, FILE *stream);
 int puts(const char *string);

@@ -21,6 +21,16 @@ int fputc(int c, FILE *stream)
     return c;
 }
 
+int putc(int c, FILE *stream)
+{
+    return fputc(c, stream);
+}
+
+int putchar(int c)
+{
+    return putc(c, stdout);
+}
+
 // Writes the provided string (+s+) to the provided stream (+stream+).
 // The terminating null character is not written.
 //
