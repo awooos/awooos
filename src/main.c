@@ -84,7 +84,7 @@ char *tinker_uint_to_str(size_t n)
 char *tinker_print(const char *string)
 {
     for (char *s = (char*)string; *s; s++) {
-        _tinker_putc(*s);
+        _tinker_putchar(*s);
     }
     return (char*)string;
 }
@@ -143,9 +143,9 @@ void _tinker_print_results(size_t status,
     }
 }
 
-bool tinker_run_tests(TinkerPutcFn *putcfn)
+bool tinker_run_tests(TinkerPutcharFn *putcharfn)
 {
-    _tinker_putc = putcfn;
+    _tinker_putchar = putcharfn;
 
     tinker_print("\nRunning tests:\n\n");
 

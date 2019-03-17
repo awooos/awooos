@@ -10,8 +10,8 @@
 #define TINKER_VERBOSE 0
 #endif
 
-typedef int (TinkerPutcFn)(int c);
-static TinkerPutcFn *_tinker_putc = NULL;
+typedef int (TinkerPutcharFn)(int c);
+static TinkerPutcharFn *_tinker_putchar = NULL;
 
 typedef struct TestCase_s {
     char name[1024];
@@ -19,7 +19,7 @@ typedef struct TestCase_s {
 } TestCase;
 
 void _tinker_add_test(const char *n, size_t (*fn)(void));
-bool tinker_run_tests(TinkerPutcFn *putcfn);
+bool tinker_run_tests(TinkerPutcharFn *putcharfn);
 void _tinker_print_results(size_t status,
         const char *message, const char *file, size_t line);
 
