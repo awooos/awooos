@@ -83,7 +83,8 @@ char *tinker_uint_to_str(size_t n)
 
 char *tinker_print(const char *string)
 {
-    return _tinker_print(string);
+    _tinker_print(string);
+    return string;
 }
 
 void _tinker_add_test(const char *name, size_t (*function_ptr)(void))

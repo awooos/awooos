@@ -10,7 +10,7 @@
 #define TINKER_VERBOSE 0
 #endif
 
-typedef char *(TinkerPrintFn)(const char *string);
+typedef int (TinkerPrintFn)(const char *string);
 static TinkerPrintFn *_tinker_print = NULL;
 
 typedef struct TestCase_s {
