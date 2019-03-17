@@ -143,9 +143,9 @@ void _tinker_print_results(size_t status,
     }
 }
 
-bool tinker_run_tests(TinkerPutcFn *putcfn_)
+bool tinker_run_tests(TinkerPutcFn *putcfn)
 {
-    _tinker_putc = putc_;
+    _tinker_putc = putcfn;
 
     tinker_print("\nRunning tests:\n\n");
 
