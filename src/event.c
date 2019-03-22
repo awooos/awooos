@@ -16,7 +16,7 @@ AliEventGroup *_ali_event_create_group(const char *event_name)
     AliEventGroup *group;
 
     // Too many events. :(
-    if (number_of_events > ALI_EVENT_MAX_EVENT_GROUPS) {
+    if (number_of_events >= ALI_EVENT_MAX_EVENT_GROUPS) {
         return NULL;
     }
 
@@ -52,7 +52,7 @@ bool event_watch(const char *event_name, AliEventHandler *handler)
     }
 
     // If there's too many handlers, return false.
-    if (group->number_of_handlers > ALI_EVENT_MAX_HANDLERS_PER_GROUP) {
+    if (group->number_of_handlers >= ALI_EVENT_MAX_HANDLERS_PER_GROUP) {
         return false;
     }
 
