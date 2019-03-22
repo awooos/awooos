@@ -1,5 +1,5 @@
 #include <ali/event.h>
-#include <ali/text.h>
+#include <stdio.h>
 #include <dmm.h>
 #include <flail.h>
 #include <hal.h>
@@ -15,7 +15,7 @@ void test_shutdown(bool all_tests_passed)
 {
     // If a test failed, do a test-fail shutdown.
     if (!all_tests_passed) {
-        print("\n\n!!! Encountered failing tests; not booting. !!!\n");
+        puts("\n\n!!! Encountered failing tests; not booting. !!!");
         event_trigger("HAL shutdown test fail", NULL);
     }
 
@@ -32,7 +32,7 @@ void run_tests(void *data)
     ADD_TESTS(ali);
     ADD_TESTS(dmm);
 
-    all_tests_passed = tinker_run_tests(&print);
+    all_tests_passed = tinker_run_tests(&putchar);
 
     // Handle things we _only_ do in test builds.
     if (test_build) {
