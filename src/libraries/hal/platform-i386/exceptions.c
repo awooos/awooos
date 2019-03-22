@@ -49,7 +49,7 @@ static const char *irq_names[16] = {
     "IRQ 4 serial 2",
     "IRQ 5 parallel 2/3",
     "IRQ 6 floppy controller",
-    "IRQ 7 parallel 1"
+    "IRQ 7 parallel 1",
 
     // PIC 2.
     "IRQ 8 real-time clock",
