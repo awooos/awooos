@@ -3,7 +3,6 @@ TARGET ?= i386
 BUILD_TYPE ?= debug
 
 CC := clang
-AR := ar
 
 SRCFILES := src/main.c
 C_INCLUDES := -Iinclude
