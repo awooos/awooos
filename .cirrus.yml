@@ -15,3 +15,5 @@ Test_task:
   script:
     - git submodule update --init
     - make test
+  build_artifacts:
+      path: iso/awoo-i386-test.iso
