@@ -6,10 +6,12 @@ Lint_task:
   container:
     dockerfile: Dockerfile
   script:
+    - git submodule update --init
     - make lint
 
 Test_task:
   container:
     dockerfile: Dockerfile
   script:
+    - git submodule update --init
     - make test
