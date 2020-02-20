@@ -11,7 +11,11 @@ QEMU ?= qemu-system-${TARGET}
 override CFLAGS += -std=c11 -pedantic-errors -gdwarf-2 -nostdinc     \
 					-ffreestanding -fno-stack-protector -fno-builtin \
 					-fdiagnostics-show-option -Werror -Weverything   \
-					-Wno-cast-qual -Wno-missing-prototypes -Wno-vla
+					-Wno-cast-qual -Wno-missing-prototypes -Wno-vla  \
+					-Wno-extra-semi-stmt
+# NOTE: -Wextra-semi-stmt was introduced between 5.0.1 and 9.0.0.
+#       I discovered this in the process of moving to Cirrus CI, and have
+#       yet to look into it farther. For now, it's just disabled.
 override LDFLAGS += -nostdlib -g --whole-archive
 override ASFLAGS +=
 
