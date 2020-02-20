@@ -4,12 +4,13 @@
 #include <stdlib.h>
 
 /*
- * Test suite for the AwooOS kernel.
+ * Test framework with very few dependencies.
+ * Built for kernel development, theoretically usable for other things.
  *
  * How to add a test:
  *    Assume for this example your test is named "cow"
  *
- *    size_t TestCow()
+ *    size_t test_cow()
  *    {
  *       TEST_RETURN(status, message);
  *    }
@@ -20,11 +21,17 @@
  *     - TEST_FATAL   (test failed, fatal - will not let the system boot)
  *
  *    message is a string or NULL.
- * 
+ *
  *    If message is NULL, no explanatory message is printed.
  */
 
-static TestCase test_cases[2048];
+#ifndef TINKER_MAX_TESTS
+/// The number of tests to (statically) allocate space for.
+/// Can be overridden by defining TINKER_MAX_TESTS at compile time.
+#   define TINKER_MAX_TESTS 2048
+#endif
+
+static TestCase test_cases[TINKER_MAX_TESTS];
 
 static size_t last_test_index = 0;
 
@@ -34,7 +41,7 @@ static size_t passed = 0;
 static size_t failed = 0;
 static size_t skipped = 0;
 
-
+// Text representations of test states.
 static const char *test_status_messages[4] = {
     "Passed",
     "Failure",
@@ -43,13 +50,11 @@ static const char *test_status_messages[4] = {
 };
 
 // Hacktastic int-to-string function, so we don't need nonstandard
-// functionality (e.g. tinker_uint_to_str()) or snprintf().
-//
-// If we can get an snprintf() that doesn't rely on malloc() into Ali,
-// we should (in theory) be able to switch without hesitation.
+// functionality or snprintf().
 //
 // ASSUMPTION: number will never be larger than can fit in a uint64_t.
 // NOTE: If the buffer is too small, the string gets truncated.
+/// @private
 #define TINKER_UINT64_BUFSIZE 21 // <digits in uint64_t> + <1 byte for NULL>
 static char uint_to_str_buffer[TINKER_UINT64_BUFSIZE] = {0};
 char *tinker_uint_to_str(size_t n)
@@ -80,7 +85,12 @@ char *tinker_uint_to_str(size_t n)
 
     return buffer;
 }
+// Undefine constant which was only used to simplify things above.
+#undef TINKER_UINT64_BUFSIZE
 
+
+// Print a string, using the putchar()-equivalent passed to tinker_run_tests().
+/// @private
 char *tinker_print(const char *string)
 {
     for (char *s = (char*)string; *s; s++) {
@@ -89,6 +99,11 @@ char *tinker_print(const char *string)
     return (char*)string;
 }
 
+
+/// Adds a test to the test suite.
+///
+/// You probably want tinker_add_test(name), which is equivalent to
+/// _tinker_add_test("name", test_name).
 void _tinker_add_test(const char *name, size_t (*function_ptr)(void))
 {
     size_t idx = last_test_index;
@@ -99,6 +114,9 @@ void _tinker_add_test(const char *name, size_t (*function_ptr)(void))
     last_test_index += 1;
 }
 
+
+// Prints the results of a test.
+/// @private
 void _tinker_print_results(size_t status,
         const char *message, const char *file, size_t line)
 {
@@ -112,29 +130,41 @@ void _tinker_print_results(size_t status,
 
 
     if(status == TEST_SUCCESS) {
+        // If we get to this branch, the test passed.
+
+        // If TINKER_VERBOSE is true, we print info in `tinker_run_tests()`.
+        // Otherwise, we print a dot (".") here.
         if (!TINKER_VERBOSE) {
             tinker_print(".");
         }
     } else {
+        // If we get to this branch, the test failed.
+
+        // If the last test passed and `TINKER_VERBOSE` is zero, a newline
+        // avoids printing the message after a long sequence of dots
+        // (from passed tests).
+        //
+        // Otherwise, a newline helps break up large chunks of text to
+        // improve readability.
         tinker_print("\n");
 
-        // X) <test name>
+        // "<test number>) "
         tinker_print(tinker_uint_to_str(total + 1));
         tinker_print(") ");
 
+        // "<test status message>: <test name>\n"
         tinker_print(test_status_messages[status]);
         tinker_print(": ");
-
         tinker_print(test_cases[ran].name);
         tinker_print("\n");
-        tinker_print("        ");
 
+        // "        <message>\n"
+        tinker_print("        ");
         tinker_print(message);
         tinker_print("\n");
 
-        // Padding to line up with prior lines.
+        // "   In <filename>:<line number>\n"
         tinker_print("   ");
-
         tinker_print("In ");
         tinker_print(file);
         tinker_print(":");
@@ -143,6 +173,11 @@ void _tinker_print_results(size_t status,
     }
 }
 
+/// Run the test suite.
+///
+/// `putcharfn` is a pointer to a function with the same signature as
+/// `putchar`:
+///     int putchar(int c)
 bool tinker_run_tests(TinkerPutcharFn *putcharfn)
 {
     _tinker_putchar = putcharfn;
