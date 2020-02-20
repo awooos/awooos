@@ -14,6 +14,6 @@ Test_task:
     dockerfile: Dockerfile
   script:
     - git submodule update --init
-    - make test
+    - make test-iso
   build_artifacts:
       path: iso/awoo-i386-test.iso

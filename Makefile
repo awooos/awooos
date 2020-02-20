@@ -87,6 +87,9 @@ ${ISO_FILE}: ${EXECUTABLES}
 	@cp ${EXECUTABLES} isofs/
 	xorriso -report_about HINT -abort_on WARNING -as mkisofs -quiet -boot-info-table -R -b boot/grub/stage2_eltorito -no-emul-boot -boot-load-size 4 -input-charset utf-8 -o ${ISO_FILE} isofs
 
+test-iso:
+	@$(MAKE) BUILD_TYPE=test iso
+
 test: lint
 	@$(MAKE) BUILD_TYPE=test qemu
 
