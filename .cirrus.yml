@@ -1,0 +1,25 @@
+# Allow compute credits usage for collaborators and anything pushed to the
+# master, staging, and trying branches. (So bors can use them.)
+use_compute_credits: $CIRRUS_USER_COLLABORATOR == 'true' || $CIRRUS_BRANCH == 'master' || $CIRRUS_BRANCH == 'staging' || $CIRRUS_BRANCH == 'trying'
+
+
+# Default configuration
+task_template: &TASK_TEMPLATE
+  container:
+    image: fedora:31
+  env:
+    MAKEFLAGS: "-j 2"
+  install_script:
+    - dnf install -y clang make qemu qemu-system-x86 syslinux xorriso
+
+# Actual tasks.
+
+Lint_task:
+  << : *TASK_TEMPLATE
+  script:
+    - make lint
+
+Test_task:
+  << : *TASK_TEMPLATE
+  script:
+    - make test
