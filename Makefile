@@ -11,11 +11,7 @@ QEMU ?= qemu-system-${TARGET}
 override CFLAGS += -std=c11 -pedantic-errors -gdwarf-2 -nostdinc     \
 					-ffreestanding -fno-stack-protector -fno-builtin \
 					-fdiagnostics-show-option -Werror -Weverything   \
-					-Wno-cast-qual -Wno-missing-prototypes -Wno-vla  \
-					-Wno-extra-semi-stmt
-# NOTE: -Wextra-semi-stmt was introduced between 5.0.1 and 9.0.0.
-#       I discovered this in the process of moving to Cirrus CI, and have
-#       yet to look into it farther. For now, it's just disabled.
+					-Wno-cast-qual -Wno-missing-prototypes -Wno-vla
 override LDFLAGS += -nostdlib -g --whole-archive
 override ASFLAGS +=
 
@@ -86,9 +82,6 @@ ${ISO_FILE}: ${EXECUTABLES}
 	@cp -r assets/isofs/ ./
 	@cp ${EXECUTABLES} isofs/
 	xorriso -report_about HINT -abort_on WARNING -as mkisofs -quiet -boot-info-table -R -b boot/grub/stage2_eltorito -no-emul-boot -boot-load-size 4 -input-charset utf-8 -o ${ISO_FILE} isofs
-
-test-iso:
-	@$(MAKE) BUILD_TYPE=test iso
 
 test: lint
 	@$(MAKE) BUILD_TYPE=test qemu
