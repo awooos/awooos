@@ -9,3 +9,11 @@ Lint_task:
     - apt-get update && apt-get install -y make clang
   script:
     - make lint
+
+#Test_task:
+#  container:
+#    image: debian:buster-slim
+#  install_script:
+#    - apt-get update && apt-get install -y make clang
+#  script:
+#    - make test
