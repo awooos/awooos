@@ -4,16 +4,16 @@ use_compute_credits: $CIRRUS_USER_COLLABORATOR == 'true' || $CIRRUS_BRANCH == 'm
 
 Lint_task:
   container:
-    image: debian:buster-slim
+    image: fedora:31
   install_script:
-    - apt-get update && apt-get install -y make clang
+    - dnf install -y make clang
   script:
     - make lint
 
 #Test_task:
 #  container:
-#    image: debian:buster-slim
+#    image: fedora:31
 #  install_script:
-#    - apt-get update && apt-get install -y make clang
+#    - dnf install -y make clang
 #  script:
 #    - make test
