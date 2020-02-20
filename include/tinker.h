@@ -7,6 +7,8 @@
 #include <stdlib.h>
 
 #ifndef TINKER_VERBOSE
+/// 0 = normal
+/// 1 = verbose
 #define TINKER_VERBOSE 0
 #endif
 
