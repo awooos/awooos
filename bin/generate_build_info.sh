@@ -2,7 +2,7 @@
 
 SCM_REV=$(git describe --tags HEAD --always)
 
-if [ "$1" == "test" ]; then
+if [ "$1" = "test" ]; then
   TEST_BUILD=1
 else
   TEST_BUILD=0
