@@ -12,7 +12,7 @@ Lint_task:
 
 Build_task:
   depends_on:
-    - lint
+    - Lint
   container:
     dockerfile: Dockerfile
   setup_script:
@@ -24,7 +24,7 @@ Build_task:
 
 Test_task:
   depends_on:
-    - build
+    - Build
   container:
     dockerfile: Dockerfile
   setup_script:
