@@ -11,6 +11,8 @@ Lint_task:
     - make lint
 
 Build_task:
+  depends_on:
+    - lint
   container:
     dockerfile: Dockerfile
   setup_script:
@@ -21,6 +23,8 @@ Build_task:
       path: iso/awoo-i386-test.iso
 
 Test_task:
+  depends_on:
+    - build
   container:
     dockerfile: Dockerfile
   setup_script:
