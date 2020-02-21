@@ -22,6 +22,7 @@ Build_task:
   build_artifacts:
       path: iso/awoo-i386-test.iso
 
+# TODO: See if Docker Pipe can use "dockerfile:" instead of "image:".
 Test_task:
   depends_on:
     - Build
@@ -29,6 +30,7 @@ Test_task:
     dockerfile: Dockerfile
   setup_script:
     - git submodule update --init
+    - sleep 5 # arbitrary delay in hopes of making it actually be available?
     - https://api.cirrus-ci.com/v1/artifact/build/${CIRRUS_BUILD_ID}/Build/build.zip
     - unzip build.zip
   script:
