@@ -2,7 +2,10 @@ NAME := awoo
 TARGET ?= i386
 BUILD_TYPE ?= debug
 
-CC   ?= clang
+# Using ?= doesn't work because Make predefines $CC as "cc".
+ifeq (${CC},cc)
+CC   := clang
+endif
 AS   := nasm
 AR   := ar
 LD   := ld
