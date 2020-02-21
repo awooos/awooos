@@ -9,11 +9,18 @@ Lint_task:
     - git submodule update --init
     - make lint
 
-Test_task:
+Build_task:
   container:
     dockerfile: Dockerfile
   script:
     - git submodule update --init
-    - make test
+    - make BUILD_TYPE=test iso
   build_artifacts:
       path: iso/awoo-i386-test.iso
+
+#Test_task:
+#  container:
+#    dockerfile: Dockerfile
+#  script:
+#    - git submodule update --init
+#    - make test
