@@ -2,11 +2,12 @@ NAME := awoo
 TARGET ?= i386
 BUILD_TYPE ?= debug
 
-CC   := clang
+CC   ?= clang
 AS   := nasm
 AR   := ar
 LD   := ld
 QEMU ?= qemu-system-${TARGET}
+CLANG_CHECK ?= clang-check
 
 override CFLAGS += -std=c11 -pedantic-errors -gdwarf-2 -nostdinc     \
 					-ffreestanding -fno-stack-protector -fno-builtin \
@@ -87,7 +88,7 @@ test: lint
 	@$(MAKE) BUILD_TYPE=test qemu
 
 lint: generated_headers
-	clang-check $(filter %.c,${SRCFILES}) -- ${C_INCLUDES}
+	${CLANG_CHECK} $(filter %.c,${SRCFILES}) -- ${C_INCLUDES}
 
 qemu: iso
 	${QEMU} ${QEMU_FLAGS} -m 6M -vga std -serial stdio -cdrom ${ISO_FILE}
