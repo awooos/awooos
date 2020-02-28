@@ -12,9 +12,9 @@ implementation, and other things.
 
 Required headers:
 
-| Header      | Required features | Notes |
-|-------------|-------------------|-------|
-| `stddef.h`  | `size_t`, `NULL`  |       |
+| Header      | Required features |
+|-------------|-------------------|
+| `stddef.h`  | `size_t`          |
 
 ## Usage
 

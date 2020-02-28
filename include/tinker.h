@@ -10,7 +10,8 @@
 #endif
 
 typedef int (TinkerPutcharFn)(int c);
-static TinkerPutcharFn *_tinker_putchar = NULL;
+// This would normally be set to NULL, but this avoids needing that defined.
+static TinkerPutcharFn *_tinker_putchar = 0;
 
 #define TINKER_TEST_NAME_BUFFER_LENGTH 1024
 typedef struct TestCase_s {
