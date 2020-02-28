@@ -1,5 +1,6 @@
 #include <tinker.h>
 #include <stdint.h>
+#include <string.h>
 #include <ali/number.h>
 
 size_t test_ali_n_to_str_assertions()

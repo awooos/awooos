@@ -1,6 +1,7 @@
 #include <tinker.h>
 #include <stdint.h>
 #include <stdlib.h>
+#include <string.h>
 #include <ali/str.h>
 
 #include "charsplit_test.h"

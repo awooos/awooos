@@ -1,5 +1,6 @@
 #include <tinker.h>
 #include <stddef.h>
+#include <string.h>
 
 size_t test_ali_string_assertions(void)
 {
