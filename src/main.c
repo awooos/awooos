@@ -108,7 +108,19 @@ void _tinker_add_test(const char *name, size_t (*function_ptr)(void))
 {
     size_t idx = last_test_index;
 
-    strcpy(test_cases[idx].name, name);
+    size_t i;
+    for (i = 0; i <= TINKER_TEST_NAME_BUFFER_LENGTH; i++) {
+        if (i == TINKER_TEST_NAME_BUFFER_LENGTH && name[i]) {
+            tinker_print("\n\n!!! ERROR: Buffer overflow in _tinker_add_test() !!!\n\n");
+        }
+
+        test_cases[idx].name[i] = name[i];
+
+        if (!name[i]) {
+            break;
+        }
+    }
+    test_cases[idx].name[i] = 0;
     test_cases[idx].func = function_ptr;
 
     last_test_index += 1;

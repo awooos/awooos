@@ -15,8 +15,9 @@
 typedef int (TinkerPutcharFn)(int c);
 static TinkerPutcharFn *_tinker_putchar = NULL;
 
+#define TINKER_TEST_NAME_BUFFER_LENGTH 1024
 typedef struct TestCase_s {
-    char name[1024];
+    char name[TINKER_TEST_NAME_BUFFER_LENGTH];
     size_t (*func) (void);
 } TestCase;
 
