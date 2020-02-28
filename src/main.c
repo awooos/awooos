@@ -1,7 +1,5 @@
 #include <tinker.h>
 #include <stddef.h>
-#include <string.h>
-#include <stdlib.h>
 
 /*
  * Test framework with very few dependencies.

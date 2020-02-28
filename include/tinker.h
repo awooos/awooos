@@ -2,8 +2,6 @@
 #define TINKER_H
 
 #include <stddef.h>
-#include <string.h>
-#include <stdlib.h>
 
 #ifndef TINKER_VERBOSE
 /// 0 = normal
