@@ -14,10 +14,7 @@ Required headers:
 
 | Header      | Required features | Notes |
 |-------------|-------------------|-------|
-| `stdbool.h` | `bool`            | Only used for the return type of `tinker_run_tests()` |
 | `stddef.h`  | `size_t`, `NULL`  |       |
-| `string.h`  | `strcpy()`        |       |
-| `stdlib.h`  | Not sure? TBD     |       |
 
 ## Usage
 
