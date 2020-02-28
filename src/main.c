@@ -190,7 +190,9 @@ void _tinker_print_results(size_t status,
 /// `putcharfn` is a pointer to a function with the same signature as
 /// `putchar`:
 ///     int putchar(int c)
-bool tinker_run_tests(TinkerPutcharFn *putcharfn)
+///
+/// @returns 1 on success, 0 on failure
+int tinker_run_tests(TinkerPutcharFn *putcharfn)
 {
     _tinker_putchar = putcharfn;
 
@@ -236,8 +238,8 @@ bool tinker_run_tests(TinkerPutcharFn *putcharfn)
     tinker_print("\n\n");
 
     if (failed > 0) {
-        return false;
+        return 0;
     }
 
-    return true;
+    return 1;
 }

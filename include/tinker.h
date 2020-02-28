@@ -2,7 +2,6 @@
 #define TINKER_H
 
 #include <stddef.h>
-#include <stdbool.h>
 #include <string.h>
 #include <stdlib.h>
 
@@ -22,7 +21,7 @@ typedef struct TestCase_s {
 } TestCase;
 
 void _tinker_add_test(const char *n, size_t (*fn)(void));
-bool tinker_run_tests(TinkerPutcharFn *putcharfn);
+int tinker_run_tests(TinkerPutcharFn *putcharfn);
 void _tinker_print_results(size_t status,
         const char *message, const char *file, size_t line);
 
