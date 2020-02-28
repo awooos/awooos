@@ -1,3 +1,4 @@
+#include <ali.h>
 #include <ali/event.h>
 #include <stdio.h>
 #include <dmm.h>
