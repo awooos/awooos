@@ -1,5 +1,4 @@
 #include <tinker.h>
-#include <stddef.h>
 
 /*
  * Test framework with very few dependencies.
@@ -8,7 +7,7 @@
  * How to add a test:
  *    Assume for this example your test is named "cow"
  *
- *    size_t test_cow()
+ *    int test_cow()
  *    {
  *       TEST_RETURN(status, message);
  *    }
@@ -31,13 +30,13 @@
 
 static TestCase test_cases[TINKER_MAX_TESTS];
 
-static size_t last_test_index = 0;
+static unsigned long last_test_index = 0;
 
-static size_t ran = 0;
-static size_t total = 0;
-static size_t passed = 0;
-static size_t failed = 0;
-static size_t skipped = 0;
+static unsigned long ran = 0;
+static unsigned long total = 0;
+static unsigned long passed = 0;
+static unsigned long failed = 0;
+static unsigned long skipped = 0;
 
 // Text representations of test states.
 static const char *test_status_messages[4] = {
@@ -53,27 +52,28 @@ static const char *test_status_messages[4] = {
 // ASSUMPTION: number will never be larger than can fit in a uint64_t.
 // NOTE: If the buffer is too small, the string gets truncated.
 /// @private
+//FIXME: Change to UINT32 size.
 #define TINKER_UINT64_BUFSIZE 21 // <digits in uint64_t> + <1 byte for NULL>
 static char uint_to_str_buffer[TINKER_UINT64_BUFSIZE] = {0};
-char *tinker_uint_to_str(size_t n)
+char *tinker_uint_to_str(unsigned long n)
 {
     char *buffer = uint_to_str_buffer;
-    size_t radix = 10;
+    unsigned long radix = 10;
 
     // Set the entire buffer to NULL bytes.
     // (Inlined memset() to avoid dependencies.)
-    for (size_t idx = 0; idx < TINKER_UINT64_BUFSIZE; idx++) {
+    for (unsigned long idx = 0; idx < TINKER_UINT64_BUFSIZE; idx++) {
         buffer[idx] = 0;
     }
 
     // Loop through the digits and add them in reverse order,
     // starting at the end of the string and working back.
-    for (size_t idx = TINKER_UINT64_BUFSIZE - 1; idx > 0; idx--) {
+    for (unsigned long idx = TINKER_UINT64_BUFSIZE - 1; idx > 0; idx--) {
         buffer[idx - 1] = "0123456789abcdef"[n % radix];
         n /= radix;
     }
 
-    for (size_t idx = 0; idx < TINKER_UINT64_BUFSIZE; idx++) {
+    for (unsigned long idx = 0; idx < TINKER_UINT64_BUFSIZE; idx++) {
         // If the first char is _not_ zero, or the second char is NULL, stop.
         if (buffer[0] != '0' || buffer[1] == '\0') {
             break;
@@ -102,11 +102,11 @@ char *tinker_print(const char *string)
 ///
 /// You probably want tinker_add_test(name), which is equivalent to
 /// _tinker_add_test("name", test_name).
-void _tinker_add_test(const char *name, size_t (*function_ptr)(void))
+void _tinker_add_test(const char *name, TinkerTestcaseFn *func)
 {
-    size_t idx = last_test_index;
+    unsigned long idx = last_test_index;
 
-    size_t i;
+    unsigned long i;
     for (i = 0; i <= TINKER_TEST_NAME_BUFFER_LENGTH; i++) {
         if (i == TINKER_TEST_NAME_BUFFER_LENGTH && name[i]) {
             tinker_print("\n\n!!! ERROR: Buffer overflow in _tinker_add_test() !!!\n\n");
@@ -119,7 +119,7 @@ void _tinker_add_test(const char *name, size_t (*function_ptr)(void))
         }
     }
     test_cases[idx].name[i] = 0;
-    test_cases[idx].func = function_ptr;
+    test_cases[idx].func = func;
 
     last_test_index += 1;
 }
@@ -127,8 +127,8 @@ void _tinker_add_test(const char *name, size_t (*function_ptr)(void))
 
 // Prints the results of a test.
 /// @private
-void _tinker_print_results(size_t status,
-        const char *message, const char *file, size_t line)
+void _tinker_print_results(int status,
+        const char *message, const char *file, unsigned long line)
 {
     if(status == TEST_SUCCESS) {
         passed++;
@@ -198,14 +198,21 @@ int tinker_run_tests(TinkerPutcharFn *putcharfn)
 
     total = 0;
 
-    for(size_t idx = 0; idx < last_test_index; idx++) {
+    for(unsigned long idx = 0; idx < last_test_index; idx++) {
         if (TINKER_VERBOSE) {
             tinker_print("- test_");
             tinker_print(test_cases[idx].name);
             tinker_print("()\n");
         }
 
-        size_t passed_assertions = test_cases[idx].func();
+        int passed_assertions = test_cases[idx].func();
+
+        if (passed_assertions < 0) {
+            tinker_print("\n!!! Test returned a negative number!!!\n");
+            tinker_print("    This is probably some kind of bug/error!\n");
+            passed_assertions = 0;
+        }
+
         ran++;
         total++;
 
@@ -213,8 +220,8 @@ int tinker_run_tests(TinkerPutcharFn *putcharfn)
             tinker_print("\n");
         }
 
-        passed += passed_assertions;
-        total += passed_assertions;
+        passed += (unsigned long)passed_assertions;
+        total += (unsigned long)passed_assertions;
     }
 
     tinker_print("\n\n");

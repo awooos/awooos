@@ -1,8 +1,6 @@
 #ifndef TINKER_H
 #define TINKER_H
 
-#include <stddef.h>
-
 #ifndef TINKER_VERBOSE
 /// 0 = normal
 /// 1 = verbose
@@ -13,16 +11,18 @@ typedef int (TinkerPutcharFn)(int c);
 // This would normally be set to NULL, but this avoids needing that defined.
 static TinkerPutcharFn *_tinker_putchar = 0;
 
+typedef int (TinkerTestcaseFn)(void);
+
 #define TINKER_TEST_NAME_BUFFER_LENGTH 1024
 typedef struct TestCase_s {
     char name[TINKER_TEST_NAME_BUFFER_LENGTH];
-    size_t (*func) (void);
+    TinkerTestcaseFn *func;
 } TestCase;
 
-void _tinker_add_test(const char *n, size_t (*fn)(void));
+void _tinker_add_test(const char *n, TinkerTestcaseFn *func);
 int tinker_run_tests(TinkerPutcharFn *putcharfn);
-void _tinker_print_results(size_t status,
-        const char *message, const char *file, size_t line);
+void _tinker_print_results(int status,
+        const char *message, const char *file, unsigned long line);
 
 char *tinker_print(const char *string);
 
@@ -39,7 +39,9 @@ char *tinker_print(const char *string);
 
 #define TEST_RETURN(STATUS, MESSAGE) TEST_RETURN2(STATUS, MESSAGE, 0)
 
-#define TEST_HAS_ASSERTIONS() size_t passed_assertions = 0;
+// NOTE: the type for `passed_assertions` *must* match the return type
+//       for `TinkerTestcaseFn`.
+#define TEST_HAS_ASSERTIONS() int passed_assertions = 0;
 
 #define TEST_ASSERT(CODE)   if (CODE) {                             \
     passed_assertions += 1;             \
