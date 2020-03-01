@@ -3,7 +3,7 @@
 #include <string.h>
 #include <ali/number.h>
 
-size_t test_ali_n_to_str_assertions()
+int test_ali_n_to_str_assertions()
 {
     TEST_HAS_ASSERTIONS();
 
@@ -42,7 +42,7 @@ size_t test_ali_n_to_str_assertions()
     TEST_ASSERTIONS_RETURN();
 }
 
-size_t test_ali_is_number()
+int test_ali_is_number()
 {
     void *not_a_number;
 
@@ -55,7 +55,7 @@ size_t test_ali_is_number()
     TEST_ASSERTIONS_RETURN();
 }
 
-size_t test_ali_signedness_assertions()
+int test_ali_signedness_assertions()
 {
     TEST_HAS_ASSERTIONS();
 
