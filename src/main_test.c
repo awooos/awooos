@@ -4,7 +4,7 @@
 #include "main.h"
 #include "main_test.h"
 
-size_t test_dmm_malloc()
+int test_dmm_malloc()
 {
     TEST_HAS_ASSERTIONS();
 
@@ -20,7 +20,7 @@ size_t test_dmm_malloc()
     TEST_ASSERTIONS_RETURN();
 }
 
-size_t test_dmm_free_sets_header()
+int test_dmm_free_sets_header()
 {
     TEST_HAS_ASSERTIONS();
 
@@ -38,7 +38,7 @@ size_t test_dmm_free_sets_header()
     TEST_ASSERTIONS_RETURN();
 }
 
-size_t test_dmm_allocate_the_universe()
+int test_dmm_allocate_the_universe()
 {
     DMM_MallocHeader *header;
     size_t allocated_chunks = 0;

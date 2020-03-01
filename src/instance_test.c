@@ -8,7 +8,7 @@
 
 static DMM_MallocHeader *test_instance = DMM_UNASSIGNED_REGION;
 
-size_t test_dmm_instance_add_region()
+int test_dmm_instance_add_region()
 {
     TEST_HAS_ASSERTIONS();
 
@@ -31,7 +31,7 @@ size_t test_dmm_instance_add_region()
     TEST_ASSERTIONS_RETURN();
 }
 
-size_t test_dmm_instance_malloc()
+int test_dmm_instance_malloc()
 {
     TEST_HAS_ASSERTIONS();
 
@@ -47,7 +47,7 @@ size_t test_dmm_instance_malloc()
     TEST_ASSERTIONS_RETURN();
 }
 
-size_t test_dmm_instance_free_sets_header()
+int test_dmm_instance_free_sets_header()
 {
     TEST_HAS_ASSERTIONS();
 
