@@ -9,8 +9,8 @@
 #define ALLOCATE_THE_UNIVERSE_CHUNK_SIZE (634 * 1024) // 634K
 //#define ALLOCATE_THE_UNIVERSE_CHUNK_SIZE (1024 * 1024) // 1M
 
-int test_dmm_malloc(void);
-int test_dmm_free_sets_header(void);
-int test_dmm_allocate_the_universe(void);
+void test_dmm_malloc(void);
+void test_dmm_free_sets_header(void);
+void test_dmm_allocate_the_universe(void);
 
 #endif
