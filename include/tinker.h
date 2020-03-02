@@ -4,7 +4,9 @@
 #ifndef TINKER_VERBOSE
 /// 0 = normal
 /// 1 = verbose
-#define TINKER_VERBOSE 0
+static unsigned int tinker_verbose = 0;
+#else
+static unsigned int tinker_verbose = 1;
 #endif
 
 typedef int (TinkerPutcharFn)(int c);

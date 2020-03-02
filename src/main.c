@@ -142,15 +142,15 @@ void _tinker_print_results(int status,
     if(status == TEST_SUCCESS) {
         // If we get to this branch, the test passed.
 
-        // If TINKER_VERBOSE is true, we print info in `tinker_run_tests()`.
-        // Otherwise, we print a dot (".") here.
-        if (!TINKER_VERBOSE) {
+        // If `tinker_verbose` is 0, we print a dot (".") here.
+        // Otherwise, we print info in `tinker_run_tests()`.
+        if (tinker_verbose == 0) {
             tinker_print(".");
         }
     } else {
         // If we get to this branch, the test failed.
 
-        // If the last test passed and `TINKER_VERBOSE` is zero, a newline
+        // If the last test passed and `tinker_verbose` is zero, a newline
         // avoids printing the message after a long sequence of dots
         // (from passed tests).
         //
@@ -188,12 +188,12 @@ int _tinker_assert(int success, const char *code)
     if (success) {
         total++;
         passed++;
-        if (TINKER_VERBOSE) {
+        if (tinker_verbose == 0) {
+            tinker_print(".");
+        } else {
             tinker_print("-- ");
             tinker_print(code);
             tinker_print("\n");
-        } else {
-            tinker_print(".");
         }
         return 1;
     } else {
@@ -218,7 +218,7 @@ int tinker_run_tests(TinkerPutcharFn *putcharfn)
     total = 0;
 
     for(unsigned long idx = 0; idx < last_test_index; idx++) {
-        if (TINKER_VERBOSE) {
+        if (tinker_verbose != 0) {
             tinker_print("- test_");
             tinker_print(test_cases[idx].name);
             tinker_print("()\n");
@@ -229,7 +229,7 @@ int tinker_run_tests(TinkerPutcharFn *putcharfn)
         ran++;
         total++;
 
-        if (TINKER_VERBOSE) {
+        if (tinker_verbose != 0) {
             tinker_print("\n");
         }
     }
