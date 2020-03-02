@@ -9,7 +9,7 @@
  *
  *    void test_cow()
  *    {
- *       TEST_RETURN(status, message);
+ *       TINKER_FINISH(status, message);
  *    }
  *
  *    status is one of the TEST_* variables in include/kernel/colpa/test.h:
@@ -183,10 +183,10 @@ void _tinker_print_results(int status,
     }
 }
 
-void _tinker_assert(int success, const char *code)
+int _tinker_assert(int success, const char *code)
 {
-    total++;
     if (success) {
+        total++;
         passed++;
         if (TINKER_VERBOSE) {
             tinker_print("-- ");
@@ -195,9 +195,10 @@ void _tinker_assert(int success, const char *code)
         } else {
             tinker_print(".");
         }
+        return 1;
     } else {
-        failed++;
         _tinker_print_results(TEST_ASSERTION_FAILURE, code, __FILE__, __LINE__);
+        return 0;
     }
 }
 

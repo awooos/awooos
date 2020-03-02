@@ -26,7 +26,7 @@ void _tinker_print_results(int status,
 
 char *tinker_print(const char *string);
 
-void _tinker_assert(int success, const char *code);
+int _tinker_assert(int success, const char *code);
 
 #define tinker_add_test(NAME) _tinker_add_test(test_##NAME, #NAME)
 
@@ -37,13 +37,10 @@ enum tinker_test_result {
     TEST_ASSERTION_FAILURE,
 };
 
-#define TEST_RETURN(STATUS, MESSAGE) _tinker_print_results(STATUS, MESSAGE, __FILE__, __LINE__)
+#define TINKER_FINISH(STATUS, MESSAGE) _tinker_print_results(STATUS, MESSAGE, __FILE__, __LINE__)
 
+#define tinker_assert(CODE) if (!_tinker_assert((CODE), #CODE)) { return; }
 
-#define tinker_assert(CODE) _tinker_assert((CODE), #CODE)
-// For backwards-compatibility until the refactor is properly done.
-#define TEST_ASSERT(CODE) tinker_assert(CODE)
-
-#define TEST_ASSERTIONS_RETURN() _tinker_print_results(TEST_SUCCESS, "All assertions passed.", __FILE__, __LINE__)
+#define TINKER_ASSERTIONS_FINISH() TINKER_FINISH(TEST_SUCCESS, "All assertions passed.")
 
 #endif
