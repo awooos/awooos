@@ -10,9 +10,6 @@ static unsigned int tinker_verbose = 1;
 #endif
 
 typedef int (TinkerPutcharFn)(int c);
-// This would normally be set to NULL, but this avoids needing that defined.
-static TinkerPutcharFn *_tinker_putchar = 0;
-
 typedef void (TinkerTestcaseFn)(void);
 
 #define TINKER_TEST_NAME_BUFFER_LENGTH 1024

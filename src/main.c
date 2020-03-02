@@ -28,6 +28,9 @@
 #   define TINKER_MAX_TESTS 2048
 #endif
 
+// This would normally be set to NULL, but this avoids needing that defined.
+static TinkerPutcharFn *_tinker_putchar = 0;
+
 static TestCase test_cases[TINKER_MAX_TESTS];
 
 static unsigned long last_test_index = 0;
