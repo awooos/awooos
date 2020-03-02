@@ -6,7 +6,8 @@ CINCLUDES := -Ibuild/deps/tinker/include -Iinclude
 
 override CFLAGS += -std=c11 -pedantic-errors \
 					-fdiagnostics-show-option -Werror -Weverything \
-					-Wno-cast-qual -Wno-missing-prototypes -Wno-vla
+					-Wno-cast-qual -Wno-missing-prototypes -Wno-vla \
+					-Wno-documentation-unknown-command
 
 all: build/dmm-test
 

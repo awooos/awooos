@@ -4,41 +4,37 @@
 #include "main.h"
 #include "main_test.h"
 
-size_t test_dmm_malloc()
+void test_dmm_malloc()
 {
-    TEST_HAS_ASSERTIONS();
-
     void *region = dmm_malloc(10);
-    TEST_ASSERT(region != NULL);
+    tinker_assert(region != NULL);
 
     DMM_MallocHeader *header = ((DMM_MallocHeader*)region) - 1;
 
-    TEST_ASSERT(header->size == 10);
-    TEST_ASSERT(header->used == 1);
-    TEST_ASSERT(header->data == region);
+    tinker_assert(header->size == 10);
+    tinker_assert(header->used == 1);
+    tinker_assert(header->data == region);
 
-    TEST_ASSERTIONS_RETURN();
+    TINKER_ASSERTIONS_FINISH();
 }
 
-size_t test_dmm_free_sets_header()
+void test_dmm_free_sets_header()
 {
-    TEST_HAS_ASSERTIONS();
-
     void *region = dmm_malloc(10);
-    TEST_ASSERT(region != NULL);
+    tinker_assert(region != NULL);
 
     DMM_MallocHeader *header = ((DMM_MallocHeader*)region) - 1;
 
-    TEST_ASSERT(header->used == 1);
+    tinker_assert(header->used == 1);
 
     dmm_free(region);
 
-    TEST_ASSERT(header->used == 0);
+    tinker_assert(header->used == 0);
 
-    TEST_ASSERTIONS_RETURN();
+    TINKER_ASSERTIONS_FINISH();
 }
 
-size_t test_dmm_allocate_the_universe()
+void test_dmm_allocate_the_universe()
 {
     DMM_MallocHeader *header;
     size_t allocated_chunks = 0;
@@ -59,7 +55,7 @@ size_t test_dmm_allocate_the_universe()
         // If you encounter this error, you need to give DMM bigger chunks.
         // The chunks should be at least the ALLOCATE_THE_UNIVERSE_CHUNK_SIZE
         // bytes in length.
-        TEST_RETURN(TEST_FAILURE, "Allocated no chunks -- universe is too small.");
+        TINKER_FINISH(TEST_FAILURE, "Allocated no chunks -- universe is too small.");
     }
 
     // Check that all the allocations with the test flag set are of the size
@@ -72,7 +68,7 @@ size_t test_dmm_allocate_the_universe()
 
         if ((header->flags & DMM_HEADER_FLAG_TEST) == 1) {
             if (header->size != (ALLOCATE_THE_UNIVERSE_CHUNK_SIZE - sizeof(DMM_MallocHeader))) {
-                TEST_RETURN(TEST_FAILURE, "An allocated test chunk was not of the expected size.");
+                TINKER_FINISH(TEST_FAILURE, "An allocated test chunk was not of the expected size.");
             }
         }
 
@@ -97,5 +93,5 @@ size_t test_dmm_allocate_the_universe()
         header = next;
     }
 
-    TEST_RETURN(TEST_SUCCESS, "Allocating the universe test passed.");
+    TINKER_FINISH(TEST_SUCCESS, "Allocating the universe test passed.");
 }

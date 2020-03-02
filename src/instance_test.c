@@ -8,59 +8,53 @@
 
 static DMM_MallocHeader *test_instance = DMM_UNASSIGNED_REGION;
 
-size_t test_dmm_instance_add_region()
+void test_dmm_instance_add_region()
 {
-    TEST_HAS_ASSERTIONS();
-
     size_t length = 128;
 
     void *region = dmm_malloc(length);
-    TEST_ASSERT(region != NULL); // sanity check
+    tinker_assert(region != NULL); // sanity check
 
     void *result = dmm_instance_add_memory_region(test_instance, region, length);
-    TEST_ASSERT(result != DMM_UNASSIGNED_REGION);
-    TEST_ASSERT(result != NULL);
+    tinker_assert(result != DMM_UNASSIGNED_REGION);
+    tinker_assert(result != NULL);
     test_instance = result;
 
     // Actually check the header
     DMM_MallocHeader *header = (DMM_MallocHeader *)region;
-    TEST_ASSERT(header->size == length - sizeof(DMM_MallocHeader));
-    TEST_ASSERT(header->used == 0);
-    TEST_ASSERT(header->data == (void *)(header + 1));
+    tinker_assert(header->size == length - sizeof(DMM_MallocHeader));
+    tinker_assert(header->used == 0);
+    tinker_assert(header->data == (void *)(header + 1));
 
-    TEST_ASSERTIONS_RETURN();
+    TINKER_ASSERTIONS_FINISH();
 }
 
-size_t test_dmm_instance_malloc()
+void test_dmm_instance_malloc()
 {
-    TEST_HAS_ASSERTIONS();
-
     void *region = dmm_instance_malloc(test_instance, 10);
-    TEST_ASSERT(region != NULL);
+    tinker_assert(region != NULL);
 
     DMM_MallocHeader *header = ((DMM_MallocHeader*)region) - 1;
 
-    TEST_ASSERT(header->size == 10);
-    TEST_ASSERT(header->used == 1);
-    TEST_ASSERT(header->data == region);
+    tinker_assert(header->size == 10);
+    tinker_assert(header->used == 1);
+    tinker_assert(header->data == region);
 
-    TEST_ASSERTIONS_RETURN();
+    TINKER_ASSERTIONS_FINISH();
 }
 
-size_t test_dmm_instance_free_sets_header()
+void test_dmm_instance_free_sets_header()
 {
-    TEST_HAS_ASSERTIONS();
-
     void *region = dmm_instance_malloc(test_instance, 10);
-    TEST_ASSERT(region != NULL);
+    tinker_assert(region != NULL);
 
     DMM_MallocHeader *header = ((DMM_MallocHeader*)region) - 1;
 
-    TEST_ASSERT(header->used == 1);
+    tinker_assert(header->used == 1);
 
     dmm_instance_free(test_instance, region);
 
-    TEST_ASSERT(header->used == 0);
+    tinker_assert(header->used == 0);
 
-    TEST_ASSERTIONS_RETURN();
+    TINKER_ASSERTIONS_FINISH();
 }
