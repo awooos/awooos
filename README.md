@@ -22,7 +22,7 @@ For now, here's an example:
 #include <stdio.h> // for putchar()
 
 // unit test
-long test_some_function() {
+int test_some_function() {
     some_function();
 
     if (!<some test condition>) {
@@ -40,7 +40,7 @@ long test_some_function() {
 }
 
 // collection of assertions.
-long test_math() {
+int test_math() {
     // Does some initial setup that `TEST_ASSERT()` requires.
     TEST_HAS_ASSERTIONS();
 
