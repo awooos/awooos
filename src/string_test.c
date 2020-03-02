@@ -2,7 +2,7 @@
 #include <stddef.h>
 #include <string.h>
 
-size_t test_ali_string_assertions(void)
+int test_ali_string_assertions(void)
 {
     TEST_HAS_ASSERTIONS();
 

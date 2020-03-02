@@ -4,7 +4,7 @@
 #include <stdlib.h>
 #include <ali/number.h>
 
-size_t test_ali_str_to_int_assertions(void)
+int test_ali_str_to_int_assertions(void)
 {
     TEST_HAS_ASSERTIONS();
 

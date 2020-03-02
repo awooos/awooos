@@ -6,7 +6,7 @@
 
 #include "shellsplit_test.h"
 
-size_t test_ali_str_shellsplit()
+int test_ali_str_shellsplit()
 {
     TEST_HAS_ASSERTIONS();
 

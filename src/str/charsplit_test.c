@@ -6,7 +6,7 @@
 
 #include "charsplit_test.h"
 
-size_t test_ali_str_charsplit()
+int test_ali_str_charsplit()
 {
     TEST_HAS_ASSERTIONS();
 
