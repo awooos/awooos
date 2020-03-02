@@ -6,16 +6,14 @@
 
 #include "charsplit_test.h"
 
-int test_ali_str_charsplit()
+void test_ali_str_charsplit()
 {
-    TEST_HAS_ASSERTIONS();
-
     const char *test_str = "test!test two!test three";
     char **test_output = charsplit((char *)test_str, '!');
-    TEST_ASSERT(strcmp(test_output[0], "test") == 0);
-    TEST_ASSERT(strcmp(test_output[1], "test two") == 0);
-    TEST_ASSERT(strcmp(test_output[2], "test three") == 0);
+    tinker_assert(strcmp(test_output[0], "test") == 0);
+    tinker_assert(strcmp(test_output[1], "test two") == 0);
+    tinker_assert(strcmp(test_output[2], "test three") == 0);
 
-    TEST_ASSERTIONS_RETURN();
+    TINKER_ASSERTIONS_FINISH();
 }
 
