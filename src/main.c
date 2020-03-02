@@ -9,7 +9,7 @@
  *
  *    void test_cow()
  *    {
- *       TINKER_FINISH(status, message);
+ *       tinker_finish(status, message);
  *    }
  *
  *    status is one of the TEST_* variables in include/kernel/colpa/test.h:
@@ -111,7 +111,7 @@ void _tinker_add_test(TinkerTestcaseFn *func, const char *name)
     unsigned long i;
     for (i = 0; i <= TINKER_TEST_NAME_BUFFER_LENGTH; i++) {
         if (i == TINKER_TEST_NAME_BUFFER_LENGTH && name[i]) {
-            tinker_print("\n\n!!! ERROR: Buffer overflow in _tinker_add_test() !!!\n\n");
+            tinker_print("\n\n!!! ERROR: _tinker_add_test(): name is too long, and will be truncated.\n\n");
         }
 
         test_cases[idx].name[i] = name[i];
@@ -134,7 +134,7 @@ void _tinker_print_results(int status,
 {
     if(status == TEST_SUCCESS) {
         passed++;
-    } else if (status == TEST_FAILURE || status == TEST_ASSERTION_FAILURE) {
+    } else if (status == TEST_FAILURE) {
         failed++;
     } else if (status == TEST_SKIP) {
         skipped++;
@@ -185,7 +185,8 @@ void _tinker_print_results(int status,
     }
 }
 
-int _tinker_assert(int success, const char *code)
+int _tinker_assert(int success,
+        const char *code, const char *file, unsigned long line)
 {
     if (success) {
         total++;
@@ -199,7 +200,7 @@ int _tinker_assert(int success, const char *code)
         }
         return 1;
     } else {
-        _tinker_print_results(TEST_ASSERTION_FAILURE, code, __FILE__, __LINE__);
+        _tinker_print_results(TEST_FAILURE, code, file, line);
         return 0;
     }
 }
