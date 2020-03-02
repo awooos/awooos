@@ -9,7 +9,7 @@ void test_hal_assertions()
 {
     tinker_assert(hal_get_magic() == MULTIBOOT_MAGIC);
 
-    TINKER_ASSERTIONS_FINISH();
+    tinker_pass();
 }
 
 void add_hal_tests()
