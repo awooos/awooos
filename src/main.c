@@ -55,7 +55,6 @@ static const char *test_status_messages[4] = {
 // ASSUMPTION: number will never be larger than can fit in a uint64_t.
 // NOTE: If the buffer is too small, the string gets truncated.
 /// @private
-//FIXME: Change to UINT32 size.
 #define TINKER_UINT64_BUFSIZE 21 // <digits in uint64_t> + <1 byte for NULL>
 static char uint_to_str_buffer[TINKER_UINT64_BUFSIZE] = {0};
 char *tinker_uint_to_str(unsigned long n)
