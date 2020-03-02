@@ -12,7 +12,7 @@ void test_ali_string_assertions(void)
     tinker_assert(strcmp(str1, str2) != 0);
     tinker_assert(strcmp(str1, str2) == -32);
 
-    TINKER_ASSERTIONS_FINISH();
+    tinker_pass();
 }
 
 void add_ali_string_tests(void)

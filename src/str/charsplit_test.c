@@ -14,6 +14,6 @@ void test_ali_str_charsplit()
     tinker_assert(strcmp(test_output[1], "test two") == 0);
     tinker_assert(strcmp(test_output[2], "test three") == 0);
 
-    TINKER_ASSERTIONS_FINISH();
+    tinker_pass();
 }
 

@@ -40,7 +40,7 @@ void test_ali_str_to_int_assertions(void)
     tinker_assert(end16 == str + 5);
     tinker_assert(end10 == str + 3);
 
-    TINKER_ASSERTIONS_FINISH();
+    tinker_pass();
 }
 
 void add_ali_str_to_int_tests(void)
