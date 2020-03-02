@@ -26,6 +26,8 @@ void _tinker_print_results(int status,
 
 char *tinker_print(const char *string);
 
+void _tinker_test_assert(int success, const char *code);
+
 #define tinker_add_test(NAME) _tinker_add_test(#NAME, test_##NAME)
 
 #define TEST_SUCCESS            0
@@ -33,28 +35,16 @@ char *tinker_print(const char *string);
 #define TEST_SKIP               2
 #define TEST_ASSERTION_FAILURE  3
 
-#define TEST_RETURN2(STATUS, MESSAGE, PASSED_ASSERTIONS)            \
+#define TEST_RETURN2(STATUS, MESSAGE)            \
     _tinker_print_results(STATUS, MESSAGE, __FILE__, __LINE__);    \
-    return PASSED_ASSERTIONS
+    return 0
 
-#define TEST_RETURN(STATUS, MESSAGE) TEST_RETURN2(STATUS, MESSAGE, 0)
+#define TEST_RETURN(STATUS, MESSAGE) TEST_RETURN2(STATUS, MESSAGE)
 
-// NOTE: the type for `passed_assertions` *must* match the return type
-//       for `TinkerTestcaseFn`.
-#define TEST_HAS_ASSERTIONS() int passed_assertions = 0;
+#define TEST_HAS_ASSERTIONS() (void)0;
 
-#define TEST_ASSERT(CODE)   if (CODE) {                             \
-    passed_assertions += 1;             \
-    if (TINKER_VERBOSE) { \
-        tinker_print("-- "); tinker_print(#CODE); tinker_print("\n"); \
-    } else { \
-        tinker_print(".");                  \
-    } \
-} else {                                \
-    TEST_RETURN2(TEST_ASSERTION_FAILURE,\
-#CODE, passed_assertions);      \
-}
+#define TEST_ASSERT(CODE) _tinker_test_assert((CODE), #CODE)
 
-#define TEST_ASSERTIONS_RETURN()    TEST_RETURN2(TEST_SUCCESS, "All assertions passed.", passed_assertions)
+#define TEST_ASSERTIONS_RETURN()    TEST_RETURN2(TEST_SUCCESS, "All assertions passed.")
 
 #endif

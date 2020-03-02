@@ -183,6 +183,24 @@ void _tinker_print_results(int status,
     }
 }
 
+void _tinker_test_assert(int success, const char *code)
+{
+    total++;
+    if (success) {
+        passed++;
+        if (TINKER_VERBOSE) {
+            tinker_print("-- ");
+            tinker_print(code);
+            tinker_print("\n");
+        } else {
+            tinker_print(".");
+        }
+    } else {
+        failed++;
+        _tinker_print_results(TEST_ASSERTION_FAILURE, code, __FILE__, __LINE__);
+    }
+}
+
 /// Run the test suite.
 ///
 /// `putcharfn` is a pointer to a function with the same signature as
@@ -205,13 +223,7 @@ int tinker_run_tests(TinkerPutcharFn *putcharfn)
             tinker_print("()\n");
         }
 
-        int passed_assertions = test_cases[idx].func();
-
-        if (passed_assertions < 0) {
-            tinker_print("\n!!! Test returned a negative number!!!\n");
-            tinker_print("    This is probably some kind of bug/error!\n");
-            passed_assertions = 0;
-        }
+        test_cases[idx].func();
 
         ran++;
         total++;
@@ -219,9 +231,6 @@ int tinker_run_tests(TinkerPutcharFn *putcharfn)
         if (TINKER_VERBOSE) {
             tinker_print("\n");
         }
-
-        passed += (unsigned long)passed_assertions;
-        total += (unsigned long)passed_assertions;
     }
 
     tinker_print("\n\n");
