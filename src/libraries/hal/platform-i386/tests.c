@@ -5,13 +5,11 @@
 
 uint32_t hal_get_magic(void);
 
-int test_hal_assertions()
+void test_hal_assertions()
 {
-    TEST_HAS_ASSERTIONS();
+    tinker_assert(hal_get_magic() == MULTIBOOT_MAGIC);
 
-    TEST_ASSERT(hal_get_magic() == MULTIBOOT_MAGIC);
-
-    TEST_ASSERTIONS_RETURN();
+    TINKER_ASSERTIONS_FINISH();
 }
 
 void add_hal_tests()
