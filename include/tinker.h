@@ -11,7 +11,7 @@ typedef int (TinkerPutcharFn)(int c);
 // This would normally be set to NULL, but this avoids needing that defined.
 static TinkerPutcharFn *_tinker_putchar = 0;
 
-typedef int (TinkerTestcaseFn)(void);
+typedef void (TinkerTestcaseFn)(void);
 
 #define TINKER_TEST_NAME_BUFFER_LENGTH 1024
 typedef struct TestCase_s {
@@ -19,32 +19,31 @@ typedef struct TestCase_s {
     TinkerTestcaseFn *func;
 } TestCase;
 
-void _tinker_add_test(const char *n, TinkerTestcaseFn *func);
+void _tinker_add_test(TinkerTestcaseFn *func, const char *name);
 int tinker_run_tests(TinkerPutcharFn *putcharfn);
 void _tinker_print_results(int status,
         const char *message, const char *file, unsigned long line);
 
 char *tinker_print(const char *string);
 
-void _tinker_test_assert(int success, const char *code);
+void _tinker_assert(int success, const char *code);
 
-#define tinker_add_test(NAME) _tinker_add_test(#NAME, test_##NAME)
+#define tinker_add_test(NAME) _tinker_add_test(test_##NAME, #NAME)
 
-#define TEST_SUCCESS            0
-#define TEST_FAILURE            1
-#define TEST_SKIP               2
-#define TEST_ASSERTION_FAILURE  3
+enum tinker_test_result {
+    TEST_SUCCESS,
+    TEST_FAILURE,
+    TEST_SKIP,
+    TEST_ASSERTION_FAILURE,
+};
 
-#define TEST_RETURN2(STATUS, MESSAGE)            \
-    _tinker_print_results(STATUS, MESSAGE, __FILE__, __LINE__);    \
-    return 0
+#define TEST_RETURN(STATUS, MESSAGE) _tinker_print_results(STATUS, MESSAGE, __FILE__, __LINE__)
 
-#define TEST_RETURN(STATUS, MESSAGE) TEST_RETURN2(STATUS, MESSAGE)
 
-#define TEST_HAS_ASSERTIONS() (void)0;
+#define tinker_assert(CODE) _tinker_assert((CODE), #CODE)
+// For backwards-compatibility until the refactor is properly done.
+#define TEST_ASSERT(CODE) tinker_assert(CODE)
 
-#define TEST_ASSERT(CODE) _tinker_test_assert((CODE), #CODE)
-
-#define TEST_ASSERTIONS_RETURN()    TEST_RETURN2(TEST_SUCCESS, "All assertions passed.")
+#define TEST_ASSERTIONS_RETURN() _tinker_print_results(TEST_SUCCESS, "All assertions passed.", __FILE__, __LINE__)
 
 #endif

@@ -7,7 +7,7 @@
  * How to add a test:
  *    Assume for this example your test is named "cow"
  *
- *    int test_cow()
+ *    void test_cow()
  *    {
  *       TEST_RETURN(status, message);
  *    }
@@ -101,8 +101,8 @@ char *tinker_print(const char *string)
 /// Adds a test to the test suite.
 ///
 /// You probably want tinker_add_test(name), which is equivalent to
-/// _tinker_add_test("name", test_name).
-void _tinker_add_test(const char *name, TinkerTestcaseFn *func)
+/// _tinker_add_test(test_name, "name").
+void _tinker_add_test(TinkerTestcaseFn *func, const char *name)
 {
     unsigned long idx = last_test_index;
 
@@ -183,7 +183,7 @@ void _tinker_print_results(int status,
     }
 }
 
-void _tinker_test_assert(int success, const char *code)
+void _tinker_assert(int success, const char *code)
 {
     total++;
     if (success) {
