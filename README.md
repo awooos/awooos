@@ -1,7 +1,9 @@
 # Tinker
 
-A low-level test framework for C code, which only requires a partial libc
-and a pointer to a `putchar()`-compatible function.
+A low-level test framework for C code, which only requires a C11
+compiler and a pointer to a `putchar()`-compatible function.
+
+(It may work with a pre-C11 compiler, but this has not been tested.)
 
 Source: https://github.com/awooos/tinker
 Issues: https://github.com/awooos/tinker/issues
@@ -9,15 +11,6 @@ Issues: https://github.com/awooos/tinker/issues
 
 This makes it incredibly useful for testing memory managers, a libc
 implementation, and other things.
-
-Required headers:
-
-| Header      | Required features | Notes |
-|-------------|-------------------|-------|
-| `stdbool.h` | `bool`            | Only used for the return type of `tinker_run_tests()` |
-| `stddef.h`  | `size_t`, `NULL`  |       |
-| `string.h`  | `strcpy()`        |       |
-| `stdlib.h`  | Not sure? TBD     |       |
 
 ## Usage
 
@@ -29,7 +22,7 @@ For now, here's an example:
 #include <stdio.h> // for putchar()
 
 // unit test
-size_t test_some_function() {
+int test_some_function() {
     some_function();
 
     if (!<some test condition>) {
@@ -47,7 +40,7 @@ size_t test_some_function() {
 }
 
 // collection of assertions.
-size_t test_math() {
+int test_math() {
     // Does some initial setup that `TEST_ASSERT()` requires.
     TEST_HAS_ASSERTIONS();
 
