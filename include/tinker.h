@@ -26,8 +26,6 @@ int tinker_run_tests(TinkerPutcharFn *putcharfn);
 void _tinker_print_results(int status,
         const char *message, const char *file, unsigned long line);
 
-char *tinker_print(const char *string);
-
 int _tinker_assert(int success, const char *code);
 
 #define tinker_add_test(NAME) _tinker_add_test(test_##NAME, #NAME)
