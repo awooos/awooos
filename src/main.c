@@ -7,9 +7,9 @@
  * How to add a test:
  *    Assume for this example your test is named "cow"
  *
- *    int test_cow()
+ *    void test_cow()
  *    {
- *       TEST_RETURN(status, message);
+ *       TINKER_FINISH(status, message);
  *    }
  *
  *    status is one of the TEST_* variables in include/kernel/colpa/test.h:
@@ -101,8 +101,8 @@ char *tinker_print(const char *string)
 /// Adds a test to the test suite.
 ///
 /// You probably want tinker_add_test(name), which is equivalent to
-/// _tinker_add_test("name", test_name).
-void _tinker_add_test(const char *name, TinkerTestcaseFn *func)
+/// _tinker_add_test(test_name, "name").
+void _tinker_add_test(TinkerTestcaseFn *func, const char *name)
 {
     unsigned long idx = last_test_index;
 
@@ -183,6 +183,25 @@ void _tinker_print_results(int status,
     }
 }
 
+int _tinker_assert(int success, const char *code)
+{
+    if (success) {
+        total++;
+        passed++;
+        if (TINKER_VERBOSE) {
+            tinker_print("-- ");
+            tinker_print(code);
+            tinker_print("\n");
+        } else {
+            tinker_print(".");
+        }
+        return 1;
+    } else {
+        _tinker_print_results(TEST_ASSERTION_FAILURE, code, __FILE__, __LINE__);
+        return 0;
+    }
+}
+
 /// Run the test suite.
 ///
 /// `putcharfn` is a pointer to a function with the same signature as
@@ -205,13 +224,7 @@ int tinker_run_tests(TinkerPutcharFn *putcharfn)
             tinker_print("()\n");
         }
 
-        int passed_assertions = test_cases[idx].func();
-
-        if (passed_assertions < 0) {
-            tinker_print("\n!!! Test returned a negative number!!!\n");
-            tinker_print("    This is probably some kind of bug/error!\n");
-            passed_assertions = 0;
-        }
+        test_cases[idx].func();
 
         ran++;
         total++;
@@ -219,9 +232,6 @@ int tinker_run_tests(TinkerPutcharFn *putcharfn)
         if (TINKER_VERBOSE) {
             tinker_print("\n");
         }
-
-        passed += (unsigned long)passed_assertions;
-        total += (unsigned long)passed_assertions;
     }
 
     tinker_print("\n\n");

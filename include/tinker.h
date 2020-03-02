@@ -11,7 +11,7 @@ typedef int (TinkerPutcharFn)(int c);
 // This would normally be set to NULL, but this avoids needing that defined.
 static TinkerPutcharFn *_tinker_putchar = 0;
 
-typedef int (TinkerTestcaseFn)(void);
+typedef void (TinkerTestcaseFn)(void);
 
 #define TINKER_TEST_NAME_BUFFER_LENGTH 1024
 typedef struct TestCase_s {
@@ -19,42 +19,28 @@ typedef struct TestCase_s {
     TinkerTestcaseFn *func;
 } TestCase;
 
-void _tinker_add_test(const char *n, TinkerTestcaseFn *func);
+void _tinker_add_test(TinkerTestcaseFn *func, const char *name);
 int tinker_run_tests(TinkerPutcharFn *putcharfn);
 void _tinker_print_results(int status,
         const char *message, const char *file, unsigned long line);
 
 char *tinker_print(const char *string);
 
-#define tinker_add_test(NAME) _tinker_add_test(#NAME, test_##NAME)
+int _tinker_assert(int success, const char *code);
 
-#define TEST_SUCCESS            0
-#define TEST_FAILURE            1
-#define TEST_SKIP               2
-#define TEST_ASSERTION_FAILURE  3
+#define tinker_add_test(NAME) _tinker_add_test(test_##NAME, #NAME)
 
-#define TEST_RETURN2(STATUS, MESSAGE, PASSED_ASSERTIONS)            \
-    _tinker_print_results(STATUS, MESSAGE, __FILE__, __LINE__);    \
-    return PASSED_ASSERTIONS
+enum tinker_test_result {
+    TEST_SUCCESS,
+    TEST_FAILURE,
+    TEST_SKIP,
+    TEST_ASSERTION_FAILURE,
+};
 
-#define TEST_RETURN(STATUS, MESSAGE) TEST_RETURN2(STATUS, MESSAGE, 0)
+#define TINKER_FINISH(STATUS, MESSAGE) _tinker_print_results(STATUS, MESSAGE, __FILE__, __LINE__)
 
-// NOTE: the type for `passed_assertions` *must* match the return type
-//       for `TinkerTestcaseFn`.
-#define TEST_HAS_ASSERTIONS() int passed_assertions = 0;
+#define tinker_assert(CODE) if (!_tinker_assert((CODE), #CODE)) { return; }
 
-#define TEST_ASSERT(CODE)   if (CODE) {                             \
-    passed_assertions += 1;             \
-    if (TINKER_VERBOSE) { \
-        tinker_print("-- "); tinker_print(#CODE); tinker_print("\n"); \
-    } else { \
-        tinker_print(".");                  \
-    } \
-} else {                                \
-    TEST_RETURN2(TEST_ASSERTION_FAILURE,\
-#CODE, passed_assertions);      \
-}
-
-#define TEST_ASSERTIONS_RETURN()    TEST_RETURN2(TEST_SUCCESS, "All assertions passed.", passed_assertions)
+#define TINKER_ASSERTIONS_FINISH() TINKER_FINISH(TEST_SUCCESS, "All assertions passed.")
 
 #endif
