@@ -1,6 +1,7 @@
 #include <tinker.h>
 
-/*
+/* @file main.c
+ *
  * Test framework that just needs a C11 compiler and a pointer to a
  * putchar()-compatible function.
  *
@@ -14,6 +15,8 @@
  *            tinker_fail("Explain the failure here.");
  *        }
  *    }
+ *
+ * See tinker.h for detailed API documentation.
  */
 
 #ifndef TINKER_MAX_TESTS
@@ -85,12 +88,11 @@ char *tinker_uint_to_str(unsigned long n)
 
 // Print a string, using the putchar()-equivalent passed to tinker_run_tests().
 /// @private
-char *tinker_print(const char *string)
+void tinker_print(const char *string)
 {
     for (char *s = (char*)string; *s; s++) {
         _tinker_putchar(*s);
     }
-    return (char*)string;
 }
 
 
@@ -121,20 +123,40 @@ void _tinker_add_test(TinkerTestcaseFn *func, const char *name)
 }
 
 
-// Prints the results of a test.
+/// Prints the results of a test. Used internally by _tinker_print_results()
+/// and for tests.
+///
+/// @param[in]  _print   Either a pointer `tinker_print()` or NULL.
+/// @param[out]  _total  A pointer to an accumulator for number of total tests.
+/// @param[out] _passed  A pointer to an accumulator for number of passed tests.
+/// @param[out] _failed  A pointer to an accumulator for number of failed tests.
+/// @param[out] _skipped A pointer to an accumulator for number of skipped tests.
+/// @param[in]  status   One of TEST_SUCCESS, TEST_FAILURE, or TEST_SKIPPED.
+/// @param[in]  message  A string explaining the test results.
+/// @param[in]  file     The file the relevant test is in.
+/// @param[in]  line     The line the relevant test is on.
+///
 /// @private
-void _tinker_print_results(int status,
-        const char *message, const char *file, unsigned long line)
+void _tinker_low_level_print_results(TinkerPrintFn *_print,
+        unsigned long *_total, unsigned long *_passed,
+        unsigned long *_failed, unsigned long *_skipped,
+        int status, const char *message, const char *file, unsigned long line)
 {
-    total++;
+    (*_total)++;
     if(status == TEST_SUCCESS) {
-        passed++;
+        (*_passed)++;
     } else if (status == TEST_FAILURE) {
-        failed++;
+        (*_failed)++;
     } else if (status == TEST_SKIP) {
-        skipped++;
+        (*_skipped)++;
     }
 
+    // In normal usage, a valid pointer is provided to _print().
+    // If _print is 0/NULL, we're running the test suite, and don't want
+    // to print anything.
+    if (!_print) {
+        return;
+    }
 
     if(status == TEST_SUCCESS) {
         // If we get to this branch, the test passed.
@@ -142,7 +164,7 @@ void _tinker_print_results(int status,
         // If `tinker_verbose` is 0, we print a dot (".") here.
         // Otherwise, we print info in `tinker_run_tests()`.
         if (tinker_verbose == 0) {
-            tinker_print(".");
+            _print(".");
         }
     } else {
         // If we get to this branch, the test failed.
@@ -153,33 +175,58 @@ void _tinker_print_results(int status,
         //
         // Otherwise, a newline helps break up large chunks of text to
         // improve readability.
-        tinker_print("\n");
+        _print("\n");
 
         // "<test number>) "
-        tinker_print(tinker_uint_to_str(total + 1));
-        tinker_print(") ");
+        _print(tinker_uint_to_str((*_total) + 1));
+        _print(") ");
 
         // "<test status message>: <test name>\n"
-        tinker_print(test_status_messages[status]);
-        tinker_print(": ");
-        tinker_print(test_cases[ran].name);
-        tinker_print("\n");
+        _print(test_status_messages[status]);
+        _print(": ");
+        _print(test_cases[ran].name);
+        _print("\n");
 
         // "        <message>\n"
-        tinker_print("        ");
-        tinker_print(message);
-        tinker_print("\n");
+        _print("        ");
+        _print(message);
+        _print("\n");
 
         // "   In <filename>:<line number>\n"
-        tinker_print("   ");
-        tinker_print("In ");
-        tinker_print(file);
-        tinker_print(":");
-        tinker_print(tinker_uint_to_str(line));
-        tinker_print("\n");
+        _print("   ");
+        _print("In ");
+        _print(file);
+        _print(":");
+        _print(tinker_uint_to_str(line));
+        _print("\n");
     }
 }
 
+/// Prints the results of a test.
+///
+/// @param[in]  status   One of TEST_SUCCESS, TEST_FAILURE, or TEST_SKIPPED.
+/// @param[in]  message  A string explaining the test results.
+/// @param[in]  file     The file the relevant test is in.
+/// @param[in]  line     The line the relevant test is on
+///
+/// @private
+void _tinker_print_results(int status,
+        const char *message, const char *file, unsigned long line)
+{
+    _tinker_low_level_print_results(&tinker_print,
+            &total, &passed, &failed, &skipped,
+            status, message, file, line);
+}
+
+/// Asserts that an expression returns a truthy value.
+/// You probably want the tinker_assert() macro instead.
+///
+/// @param[in] success  Whether the assertion passed.
+/// @param[in] code     A string representation of the code.
+/// @param[in] file     The file the assertion is in (likely __FILE__).
+/// @param[in] line     The line the assertion is on (likely __LINE__).
+///
+/// @private
 int _tinker_assert(int success,
         const char *code, const char *file, unsigned long line)
 {
@@ -200,13 +247,7 @@ int _tinker_assert(int success,
     }
 }
 
-/// Run the test suite.
-///
-/// `putcharfn` is a pointer to a function with the same signature as
-/// `putchar`:
-///     int putchar(int c)
-///
-/// @returns 1 on success, 0 on failure
+// See tinker.h for usage information.
 int tinker_run_tests(TinkerPutcharFn *putcharfn)
 {
     _tinker_putchar = putcharfn;

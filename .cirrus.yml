@@ -10,10 +10,14 @@ Lint_task:
   script:
     - make lint
 
-#Test_task:
-#  container:
-#    image: fedora:31
-#  install_script:
-#    - dnf install -y make clang
-#  script:
-#    - make test
+Test_task:
+  depends_on:
+    - Lint
+  container:
+    image: fedora:31
+  install_script:
+    - dnf install -y make clang
+  build_script:
+    - make ./tinker-test
+  script:
+    - make test
