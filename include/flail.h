@@ -3,9 +3,9 @@
 
 #include <stddef.h>
 
-typedef char *FlailPrintFn(const char*);
+typedef int FlailPutcharFn(int);
 
-void flail_init(const char *info_str_, FlailPrintFn *flail_print_);
+void flail_init(const char *info_str_, FlailPutcharFn *flail_putchar_);
 
 void _flail_panic(const char *message, const char *function,
         const char *filename, size_t line);

@@ -5,13 +5,21 @@
 
 static unsigned int in_panic = 0;
 static const char *info_str = NULL;
-static FlailPrintFn *flail_print = NULL;
+static FlailPutcharFn *flail_putchar = NULL;
 
+// Print a string, using the putchar()-equivalent passed to tinker_run_tests().
+/// @private
+void flail_print(const char *string)
+{
+    for (char *s = (char*)string; *s; s++) {
+        flail_putchar(*s);
+    }
+}
 
-void flail_init(const char *info_str_, FlailPrintFn *flail_print_)
+void flail_init(const char *info_str_, FlailPutcharFn *flail_putchar_)
 {
     info_str = info_str_;
-    flail_print = flail_print_;
+    flail_putchar = flail_putchar_;
 }
 
 void flail_stack_dump_hex(size_t *_stack)
