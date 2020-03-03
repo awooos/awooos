@@ -7,9 +7,9 @@
 #include <tinker.h>
 
 #define ADD_TESTS(TEST_CATEGORY) { \
-        print("Adding " #TEST_CATEGORY " tests... ");  \
-        add_##TEST_CATEGORY##_tests();                  \
-        print("Done!\n");                              \
+        fputs("Adding " #TEST_CATEGORY " tests... ", stdout);  \
+        add_##TEST_CATEGORY##_tests(); \
+        fputs("Done!\n", stdout);      \
     };
 
 void test_shutdown(bool all_tests_passed)
