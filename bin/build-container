@@ -1,3 +1,3 @@
 #!/bin/bash
 
-docker build -t awoo-builder:latest .
+docker build -t awooos/awoo-builder:latest .
