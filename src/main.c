@@ -1,25 +1,19 @@
 #include <tinker.h>
 
 /*
- * Test framework with very few dependencies.
- * Built for kernel development, theoretically usable for other things.
+ * Test framework that just needs a C11 compiler and a pointer to a
+ * putchar()-compatible function.
  *
  * How to add a test:
- *    Assume for this example your test is named "cow"
  *
  *    void test_cow()
  *    {
- *       tinker_finish(status, message);
+ *        if (moo()) {
+ *            tinker_pass();
+ *        } else {
+ *            tinker_fail("Explain the failure here.");
+ *        }
  *    }
- *
- *    status is one of the TEST_* variables in include/kernel/colpa/test.h:
- *     - TEST_SUCCESS (test passed)
- *     - TEST_FAILURE (test failed, nonfatal)
- *     - TEST_FATAL   (test failed, fatal - will not let the system boot)
- *
- *    message is a string or NULL.
- *
- *    If message is NULL, no explanatory message is printed.
  */
 
 #ifndef TINKER_MAX_TESTS
@@ -132,6 +126,7 @@ void _tinker_add_test(TinkerTestcaseFn *func, const char *name)
 void _tinker_print_results(int status,
         const char *message, const char *file, unsigned long line)
 {
+    total++;
     if(status == TEST_SUCCESS) {
         passed++;
     } else if (status == TEST_FAILURE) {
@@ -230,7 +225,6 @@ int tinker_run_tests(TinkerPutcharFn *putcharfn)
         test_cases[idx].func();
 
         ran++;
-        total++;
 
         if (tinker_verbose != 0) {
             tinker_print("\n");

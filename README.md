@@ -22,45 +22,42 @@ For now, here's an example:
 #include <stdio.h> // for putchar()
 
 // unit test
-int test_some_function() {
-    some_function();
+void test_some_function() {
+    bool result = some_function();
 
-    if (!<some test condition>) {
-        // Using TEST_FATAL fails the test and stops the test suite immediately.
-        TEST_RETURN(TEST_FATAL, "Failure reason");
+    if (result == 0) {
+        tinker_pass()
+    } else if (result == 1) {
+        tinker_fail("Failure reason #1.");
+    } else if (result == 2) {
+        tinker_fail("Failure reason #2.");
     }
-
-    if (!<some other test condition>) {
-        // Using TEST_FAILURE fails the test, but lets the test suite continue.
-        TEST_RETURN(TEST_FAILURE, "Failure reason");
-    }
-
-      // Using TEST_SUCCESS indicates that the test passed.
-      TEST_RETURN(TEST_SUCCESS, "Success message");
 }
 
 // collection of assertions.
-int test_math() {
-    // Does some initial setup that `TEST_ASSERT()` requires.
-    TEST_HAS_ASSERTIONS();
+void test_math() {
+    tinker_assert(1 + 1 == 2);
+    tinker_assert(1 - 1 == 0);
+    tinker_assert(2 * 2 == 4);
+    tinker_assert(4 / 2 == 2);
+}
 
-    TEST_ASSERT(1 + 1 == 2);
-    TEST_ASSERT(1 - 1 == 0);
-    TEST_ASSERT(2 * 2 == 4);
-    TEST_ASSERT(4 / 2 == 2);
+void test_unfinished() {
+    tinker_skip("Not implemented.");
+    return;
 
-    // Does cleanup and prints the results.
-    TEST_ASSERTIONS_RETURN();
+    // <test unfinished functionality here>
 }
 
 void add_tests() {
   tinker_add_test(some_function);
   tinker_add_test(math);
+  tinker_add_test(unfinished);
 }
 
 int main() {
   add_tests();
-  tinker_run_tests(putchar);
+  tinker_run_tests(&putchar);
 }
 ```
 
