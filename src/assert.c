@@ -1,17 +1,18 @@
 #include <ali/number.h>
+#include <stdio.h>
 #include <assert.h>
 
 void __ali_assert_fail(const char *expr, const char *file,
                         unsigned int line, const char *func)
 {
     // TODO: Implement a significantly better version.
-    print("???: ");
-    print(file);
-    print(":");
+    fputs("???: ", stdout);
+    fputs(file, stdout);
+    fputs(":", stdout);
     print_number(line);
-    print(": ");
-    print(func);
-    print("Assertion `");
-    print(expr);
-    print("' failed.");
+    fputs(": ", stdout);
+    fputs(func, stdout);
+    fputs("Assertion `", stdout);
+    fputs(expr, stdout);
+    fputs("' failed.", stdout);
 }

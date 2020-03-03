@@ -1,9 +1,24 @@
 #include <ali.h>
 #include <ali/modifiers.h>
-#include <string.h>
-#include <stdint.h>
 #include <stdbool.h>
+#include <stdint.h>
+#include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
+
+char *ali_number_print(const char *string)
+{
+    fputs(string, stdout);
+
+    return (char*)string;
+}
+
+char *ali_number_println(const char *string)
+{
+    puts(string);
+
+    return (char*)string;
+}
 
 // YOLO
 NEEDS_IMPROVEMENT uint64_t uint64_div(uint64_t a, uint64_t b)
