@@ -43,32 +43,26 @@ int fputs(const char *s, FILE *stream)
 
     /* Start hacky bullshit */
     event_trigger("print string", (char*)s);
-    event_trigger("print string", "\n");
     /* End hacky bullshit */
 
     return 1;
 }
 
-// Writes the provided string (+s+) to stdout.
-//
-// Returns EOF on write error, or a non-negative value on success.
+/// Writes the provided string (@p s) and a trailing newline to stdout.
+///
+/// Returns EOF on write error, or a non-negative value on success.
 int puts(const char *s)
 {
-    return fputs(s, stdout);
+    if (fputs(s, stdout) < 0) {
+        return EOF;
+    }
+    return fputs("\n", stdout);
 }
 
 // TODO: Remove print().
 char *print(const char *string)
 {
     event_trigger("print string", (char*)string);
-
-    return (char*)string;
-}
-
-// TODO: Remove println().
-char *println(const char *string)
-{
-    puts(string);
 
     return (char*)string;
 }
