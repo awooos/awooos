@@ -36,8 +36,6 @@ void test_ali_n_to_str_assertions()
     tinker_assert(strcmp(n_to_str(2), "2") == 0);
     tinker_assert(strcmp(n_to_str(123), "123") == 0);
     tinker_assert(strcmp(n_to_str(9001), "9001") == 0);
-
-    TINKER_ASSERTIONS_FINISH();
 }
 
 void test_ali_is_number()
@@ -47,8 +45,6 @@ void test_ali_is_number()
     tinker_assert(is_number(1) == 1);
     tinker_assert(is_number(not_a_number) == 0);
     tinker_assert(is_number(test_ali_is_number) == 0);
-
-    TINKER_ASSERTIONS_FINISH();
 }
 
 void test_ali_signedness_assertions()
@@ -108,8 +104,6 @@ void test_ali_signedness_assertions()
     tinker_assert(is_unsigned((signed int)-255) == 0);
     tinker_assert(is_unsigned((signed long)-255) == 0);
     tinker_assert(is_unsigned((signed long long)-255) == 0);
-
-    TINKER_ASSERTIONS_FINISH();
 }
 
 void add_ali_number_tests()

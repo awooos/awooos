@@ -15,6 +15,4 @@ void test_ali_str_shellsplit()
     tinker_assert(strcmp(test_output->pieces[1], "test test") == 0);
     tinker_assert(strcmp(test_output->pieces[2], "test test") == 0);
     tinker_assert(strcmp(test_output->pieces[3], "test test") == 0);
-
-    TINKER_ASSERTIONS_FINISH();
 }
