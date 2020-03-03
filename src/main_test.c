@@ -14,8 +14,6 @@ void test_dmm_malloc()
     tinker_assert(header->size == 10);
     tinker_assert(header->used == 1);
     tinker_assert(header->data == region);
-
-    tinker_pass();
 }
 
 void test_dmm_free_sets_header()
@@ -30,8 +28,6 @@ void test_dmm_free_sets_header()
     dmm_free(region);
 
     tinker_assert(header->used == 0);
-
-    tinker_pass();
 }
 
 void test_dmm_allocate_the_universe()
