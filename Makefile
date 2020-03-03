@@ -20,7 +20,7 @@ override CFLAGS += -std=c11 -pedantic-errors -gdwarf-2 -nostdinc     \
 override LDFLAGS += -nostdlib -g --whole-archive
 override ASFLAGS +=
 
-C_INCLUDES := -I include $(patsubst %,-I %,$(wildcard src/libraries/*/include))
+C_INCLUDES := -Iinclude $(patsubst %,-I%,$(wildcard src/libraries/*/include))
 
 # NOTE: Includes go in reverse order, so config.mk overrides ${TARGET}.mk.
 -include config.mk
@@ -120,6 +120,9 @@ list-events:
 docs:
 	doxygen doxygen.conf
 
+compile_flags.txt:
+	@echo ${CFLAGS} ${C_INCLUDES} | sed 's/ \+/\n/g' > compile_flags.txt
+
 clean:
 	@rm -rf docs/
 	@rm -f ${OBJFILES} ${LIBRARIES} ${EXECUTABLES}
@@ -127,7 +130,8 @@ clean:
 	@rm -f ${ISO_DIR}/*.iso
 	@rm -f include/awoo/build_info.h
 
-.PHONY: all iso clean test qemu qemu-monitor clean fetch-submodules update-submodules generated_headers docs
+# compile_flags.txt isn't actually phony, but this means it _always_ generates it.
+.PHONY: all iso clean test qemu qemu-monitor clean fetch-submodules update-submodules generated_headers docs compile_flags.txt
 
 # Don't auto-delete .o files.
 .SECONDARY: ${OBJFILES}
