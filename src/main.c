@@ -85,12 +85,11 @@ char *tinker_uint_to_str(unsigned long n)
 
 // Print a string, using the putchar()-equivalent passed to tinker_run_tests().
 /// @private
-char *tinker_print(const char *string)
+void tinker_print(const char *string)
 {
     for (char *s = (char*)string; *s; s++) {
         _tinker_putchar(*s);
     }
-    return (char*)string;
 }
 
 
@@ -123,18 +122,26 @@ void _tinker_add_test(TinkerTestcaseFn *func, const char *name)
 
 // Prints the results of a test.
 /// @private
-void _tinker_print_results(int status,
-        const char *message, const char *file, unsigned long line)
+void _tinker_low_level_print_results(TinkerPrintFn *_print,
+        unsigned long *_total, unsigned long *_passed,
+        unsigned long *_failed, unsigned long *_skipped,
+        int status, const char *message, const char *file, unsigned long line)
 {
-    total++;
+    (*_total)++;
     if(status == TEST_SUCCESS) {
-        passed++;
+        (*_passed)++;
     } else if (status == TEST_FAILURE) {
-        failed++;
+        (*_failed)++;
     } else if (status == TEST_SKIP) {
-        skipped++;
+        (*_skipped)++;
     }
 
+    // In normal usage, a valid pointer is provided to _print().
+    // If _print is 0/NULL, we're running the test suite, and don't want
+    // to print anything.
+    if (!_print) {
+        return;
+    }
 
     if(status == TEST_SUCCESS) {
         // If we get to this branch, the test passed.
@@ -142,7 +149,7 @@ void _tinker_print_results(int status,
         // If `tinker_verbose` is 0, we print a dot (".") here.
         // Otherwise, we print info in `tinker_run_tests()`.
         if (tinker_verbose == 0) {
-            tinker_print(".");
+            _print(".");
         }
     } else {
         // If we get to this branch, the test failed.
@@ -153,31 +160,39 @@ void _tinker_print_results(int status,
         //
         // Otherwise, a newline helps break up large chunks of text to
         // improve readability.
-        tinker_print("\n");
+        _print("\n");
 
         // "<test number>) "
-        tinker_print(tinker_uint_to_str(total + 1));
-        tinker_print(") ");
+        _print(tinker_uint_to_str((*_total) + 1));
+        _print(") ");
 
         // "<test status message>: <test name>\n"
-        tinker_print(test_status_messages[status]);
-        tinker_print(": ");
-        tinker_print(test_cases[ran].name);
-        tinker_print("\n");
+        _print(test_status_messages[status]);
+        _print(": ");
+        _print(test_cases[ran].name);
+        _print("\n");
 
         // "        <message>\n"
-        tinker_print("        ");
-        tinker_print(message);
-        tinker_print("\n");
+        _print("        ");
+        _print(message);
+        _print("\n");
 
         // "   In <filename>:<line number>\n"
-        tinker_print("   ");
-        tinker_print("In ");
-        tinker_print(file);
-        tinker_print(":");
-        tinker_print(tinker_uint_to_str(line));
-        tinker_print("\n");
+        _print("   ");
+        _print("In ");
+        _print(file);
+        _print(":");
+        _print(tinker_uint_to_str(line));
+        _print("\n");
     }
+}
+
+void _tinker_print_results(int status,
+        const char *message, const char *file, unsigned long line)
+{
+    _tinker_low_level_print_results(&tinker_print,
+            &total, &passed, &failed, &skipped,
+            status, message, file, line);
 }
 
 int _tinker_assert(int success,

@@ -10,6 +10,7 @@ static unsigned int tinker_verbose = 0;
 static unsigned int tinker_verbose = 1;
 #endif
 
+typedef void (TinkerPrintFn)(const char *string);
 typedef int (TinkerPutcharFn)(int c);
 typedef void (TinkerTestcaseFn)(void);
 
