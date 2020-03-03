@@ -57,9 +57,10 @@ char *int64_to_str_radix(int64_t n, size_t radix);
 #define n_to_str(n) n_to_str_radix(n, 10)
 
 // Helper functions for printing numbers!
+char *ali_number_print(const char *string);
 char *ali_number_println(const char *string);
 
-#define print_number(n) free(print(n_to_str(n)))
+#define print_number(n) free(ali_number_print(n_to_str(n)))
 #define print_number_radix(n, radix) free(ali_number_println(n_to_str_radix(n, radix)))
 #define println_number(n) free(ali_number_println(n_to_str(n)))
 #define println_number_radix(n, radix) free(ali_number_println(n_to_str_radix(n, radix)))

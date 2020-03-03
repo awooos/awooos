@@ -6,6 +6,13 @@
 #include <stdlib.h>
 #include <string.h>
 
+char *ali_number_print(const char *string)
+{
+    fputs(string, stdout);
+
+    return (char*)string;
+}
+
 char *ali_number_println(const char *string)
 {
     puts(string);
