@@ -11,6 +11,8 @@ Lint_task:
     - make lint
 
 Test_task:
+  depends_on:
+    - Lint
   container:
     image: fedora:31
   install_script:
