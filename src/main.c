@@ -1,25 +1,19 @@
 #include <tinker.h>
 
 /*
- * Test framework with very few dependencies.
- * Built for kernel development, theoretically usable for other things.
+ * Test framework that just needs a C11 compiler and a pointer to a
+ * putchar()-compatible function.
  *
  * How to add a test:
- *    Assume for this example your test is named "cow"
  *
  *    void test_cow()
  *    {
- *       TINKER_FINISH(status, message);
+ *        if (moo()) {
+ *            tinker_pass();
+ *        } else {
+ *            tinker_fail("Explain the failure here.");
+ *        }
  *    }
- *
- *    status is one of the TEST_* variables in include/kernel/colpa/test.h:
- *     - TEST_SUCCESS (test passed)
- *     - TEST_FAILURE (test failed, nonfatal)
- *     - TEST_FATAL   (test failed, fatal - will not let the system boot)
- *
- *    message is a string or NULL.
- *
- *    If message is NULL, no explanatory message is printed.
  */
 
 #ifndef TINKER_MAX_TESTS
@@ -27,6 +21,9 @@
 /// Can be overridden by defining TINKER_MAX_TESTS at compile time.
 #   define TINKER_MAX_TESTS 2048
 #endif
+
+// This would normally be set to NULL, but this avoids needing that defined.
+static TinkerPutcharFn *_tinker_putchar = 0;
 
 static TestCase test_cases[TINKER_MAX_TESTS];
 
@@ -52,7 +49,6 @@ static const char *test_status_messages[4] = {
 // ASSUMPTION: number will never be larger than can fit in a uint64_t.
 // NOTE: If the buffer is too small, the string gets truncated.
 /// @private
-//FIXME: Change to UINT32 size.
 #define TINKER_UINT64_BUFSIZE 21 // <digits in uint64_t> + <1 byte for NULL>
 static char uint_to_str_buffer[TINKER_UINT64_BUFSIZE] = {0};
 char *tinker_uint_to_str(unsigned long n)
@@ -109,7 +105,7 @@ void _tinker_add_test(TinkerTestcaseFn *func, const char *name)
     unsigned long i;
     for (i = 0; i <= TINKER_TEST_NAME_BUFFER_LENGTH; i++) {
         if (i == TINKER_TEST_NAME_BUFFER_LENGTH && name[i]) {
-            tinker_print("\n\n!!! ERROR: Buffer overflow in _tinker_add_test() !!!\n\n");
+            tinker_print("\n\n!!! ERROR: _tinker_add_test(): name is too long, and will be truncated.\n\n");
         }
 
         test_cases[idx].name[i] = name[i];
@@ -130,9 +126,10 @@ void _tinker_add_test(TinkerTestcaseFn *func, const char *name)
 void _tinker_print_results(int status,
         const char *message, const char *file, unsigned long line)
 {
+    total++;
     if(status == TEST_SUCCESS) {
         passed++;
-    } else if (status == TEST_FAILURE || status == TEST_ASSERTION_FAILURE) {
+    } else if (status == TEST_FAILURE) {
         failed++;
     } else if (status == TEST_SKIP) {
         skipped++;
@@ -142,15 +139,15 @@ void _tinker_print_results(int status,
     if(status == TEST_SUCCESS) {
         // If we get to this branch, the test passed.
 
-        // If TINKER_VERBOSE is true, we print info in `tinker_run_tests()`.
-        // Otherwise, we print a dot (".") here.
-        if (!TINKER_VERBOSE) {
+        // If `tinker_verbose` is 0, we print a dot (".") here.
+        // Otherwise, we print info in `tinker_run_tests()`.
+        if (tinker_verbose == 0) {
             tinker_print(".");
         }
     } else {
         // If we get to this branch, the test failed.
 
-        // If the last test passed and `TINKER_VERBOSE` is zero, a newline
+        // If the last test passed and `tinker_verbose` is zero, a newline
         // avoids printing the message after a long sequence of dots
         // (from passed tests).
         //
@@ -183,21 +180,22 @@ void _tinker_print_results(int status,
     }
 }
 
-int _tinker_assert(int success, const char *code)
+int _tinker_assert(int success,
+        const char *code, const char *file, unsigned long line)
 {
     if (success) {
         total++;
         passed++;
-        if (TINKER_VERBOSE) {
+        if (tinker_verbose == 0) {
+            tinker_print(".");
+        } else {
             tinker_print("-- ");
             tinker_print(code);
             tinker_print("\n");
-        } else {
-            tinker_print(".");
         }
         return 1;
     } else {
-        _tinker_print_results(TEST_ASSERTION_FAILURE, code, __FILE__, __LINE__);
+        _tinker_print_results(TEST_FAILURE, code, file, line);
         return 0;
     }
 }
@@ -218,7 +216,7 @@ int tinker_run_tests(TinkerPutcharFn *putcharfn)
     total = 0;
 
     for(unsigned long idx = 0; idx < last_test_index; idx++) {
-        if (TINKER_VERBOSE) {
+        if (tinker_verbose != 0) {
             tinker_print("- test_");
             tinker_print(test_cases[idx].name);
             tinker_print("()\n");
@@ -227,9 +225,8 @@ int tinker_run_tests(TinkerPutcharFn *putcharfn)
         test_cases[idx].func();
 
         ran++;
-        total++;
 
-        if (TINKER_VERBOSE) {
+        if (tinker_verbose != 0) {
             tinker_print("\n");
         }
     }
