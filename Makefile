@@ -67,6 +67,7 @@ make/.mk:
 	$(error TARGET is undefined. Set it on the command line or in config.mk)
 
 generated_headers:
+	mkdir -p include/awoo
 	./bin/generate_build_info.sh ${BUILD_TYPE} ${TARGET} > ./include/awoo/build_info.h
 
 %.o: %.c generated_headers
