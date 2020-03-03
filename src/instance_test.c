@@ -25,8 +25,6 @@ void test_dmm_instance_add_region()
     tinker_assert(header->size == length - sizeof(DMM_MallocHeader));
     tinker_assert(header->used == 0);
     tinker_assert(header->data == (void *)(header + 1));
-
-    TINKER_ASSERTIONS_FINISH();
 }
 
 void test_dmm_instance_malloc()
@@ -39,8 +37,6 @@ void test_dmm_instance_malloc()
     tinker_assert(header->size == 10);
     tinker_assert(header->used == 1);
     tinker_assert(header->data == region);
-
-    TINKER_ASSERTIONS_FINISH();
 }
 
 void test_dmm_instance_free_sets_header()
@@ -55,6 +51,4 @@ void test_dmm_instance_free_sets_header()
     dmm_instance_free(test_instance, region);
 
     tinker_assert(header->used == 0);
-
-    TINKER_ASSERTIONS_FINISH();
 }

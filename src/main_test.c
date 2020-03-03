@@ -14,8 +14,6 @@ void test_dmm_malloc()
     tinker_assert(header->size == 10);
     tinker_assert(header->used == 1);
     tinker_assert(header->data == region);
-
-    TINKER_ASSERTIONS_FINISH();
 }
 
 void test_dmm_free_sets_header()
@@ -30,8 +28,6 @@ void test_dmm_free_sets_header()
     dmm_free(region);
 
     tinker_assert(header->used == 0);
-
-    TINKER_ASSERTIONS_FINISH();
 }
 
 void test_dmm_allocate_the_universe()
@@ -55,7 +51,7 @@ void test_dmm_allocate_the_universe()
         // If you encounter this error, you need to give DMM bigger chunks.
         // The chunks should be at least the ALLOCATE_THE_UNIVERSE_CHUNK_SIZE
         // bytes in length.
-        TINKER_FINISH(TEST_FAILURE, "Allocated no chunks -- universe is too small.");
+        tinker_fail("Allocated no chunks -- universe is too small.");
     }
 
     // Check that all the allocations with the test flag set are of the size
@@ -68,7 +64,7 @@ void test_dmm_allocate_the_universe()
 
         if ((header->flags & DMM_HEADER_FLAG_TEST) == 1) {
             if (header->size != (ALLOCATE_THE_UNIVERSE_CHUNK_SIZE - sizeof(DMM_MallocHeader))) {
-                TINKER_FINISH(TEST_FAILURE, "An allocated test chunk was not of the expected size.");
+                tinker_fail("An allocated test chunk was not of the expected size.");
             }
         }
 
@@ -93,5 +89,5 @@ void test_dmm_allocate_the_universe()
         header = next;
     }
 
-    TINKER_FINISH(TEST_SUCCESS, "Allocating the universe test passed.");
+    tinker_pass();
 }
