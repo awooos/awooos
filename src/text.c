@@ -58,11 +58,3 @@ int puts(const char *s)
     }
     return fputs("\n", stdout);
 }
-
-// TODO: Remove print().
-char *print(const char *string)
-{
-    event_trigger("print string", (char*)string);
-
-    return (char*)string;
-}
