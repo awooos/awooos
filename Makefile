@@ -15,7 +15,8 @@ CLANG_CHECK ?= clang-check
 override CFLAGS += -std=c11 -pedantic-errors -gdwarf-2 -nostdinc     \
 					-ffreestanding -fno-stack-protector -fno-builtin \
 					-fdiagnostics-show-option -Werror -Weverything   \
-					-Wno-cast-qual -Wno-missing-prototypes -Wno-vla
+					-Wno-cast-qual -Wno-missing-prototypes -Wno-vla  \
+					-Wno-documentation-unknown-command
 override LDFLAGS += -nostdlib -g --whole-archive
 override ASFLAGS +=
 
