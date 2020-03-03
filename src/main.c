@@ -1,6 +1,7 @@
 #include <tinker.h>
 
-/*
+/* @file main.c
+ *
  * Test framework that just needs a C11 compiler and a pointer to a
  * putchar()-compatible function.
  *
@@ -14,6 +15,8 @@
  *            tinker_fail("Explain the failure here.");
  *        }
  *    }
+ *
+ * See tinker.h for detailed API documentation.
  */
 
 #ifndef TINKER_MAX_TESTS
@@ -120,7 +123,19 @@ void _tinker_add_test(TinkerTestcaseFn *func, const char *name)
 }
 
 
-// Prints the results of a test.
+/// Prints the results of a test. Used internally by _tinker_print_results()
+/// and for tests.
+///
+/// @param[in]  _print   Either a pointer `tinker_print()` or NULL.
+/// @param[out]  _total  A pointer to an accumulator for number of total tests.
+/// @param[out] _passed  A pointer to an accumulator for number of passed tests.
+/// @param[out] _failed  A pointer to an accumulator for number of failed tests.
+/// @param[out] _skipped A pointer to an accumulator for number of skipped tests.
+/// @param[in]  status   One of TEST_SUCCESS, TEST_FAILURE, or TEST_SKIPPED.
+/// @param[in]  message  A string explaining the test results.
+/// @param[in]  file     The file the relevant test is in.
+/// @param[in]  line     The line the relevant test is on.
+///
 /// @private
 void _tinker_low_level_print_results(TinkerPrintFn *_print,
         unsigned long *_total, unsigned long *_passed,
@@ -187,6 +202,14 @@ void _tinker_low_level_print_results(TinkerPrintFn *_print,
     }
 }
 
+/// Prints the results of a test.
+///
+/// @param[in]  status   One of TEST_SUCCESS, TEST_FAILURE, or TEST_SKIPPED.
+/// @param[in]  message  A string explaining the test results.
+/// @param[in]  file     The file the relevant test is in.
+/// @param[in]  line     The line the relevant test is on
+///
+/// @private
 void _tinker_print_results(int status,
         const char *message, const char *file, unsigned long line)
 {
@@ -195,6 +218,15 @@ void _tinker_print_results(int status,
             status, message, file, line);
 }
 
+/// Asserts that an expression returns a truthy value.
+/// You probably want the tinker_assert() macro instead.
+///
+/// @param[in] success  Whether the assertion passed.
+/// @param[in] code     A string representation of the code.
+/// @param[in] file     The file the assertion is in (likely __FILE__).
+/// @param[in] line     The line the assertion is on (likely __LINE__).
+///
+/// @private
 int _tinker_assert(int success,
         const char *code, const char *file, unsigned long line)
 {
@@ -215,13 +247,7 @@ int _tinker_assert(int success,
     }
 }
 
-/// Run the test suite.
-///
-/// `putcharfn` is a pointer to a function with the same signature as
-/// `putchar`:
-///     int putchar(int c)
-///
-/// @returns 1 on success, 0 on failure
+// See tinker.h for usage information.
 int tinker_run_tests(TinkerPutcharFn *putcharfn)
 {
     _tinker_putchar = putcharfn;
