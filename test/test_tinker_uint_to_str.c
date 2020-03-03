@@ -16,7 +16,7 @@ void test_tinker_uint_to_str(void)
     tinker_assert(strcmp(tinker_uint_to_str(4294967295), "4294967295") == 0);
 }
 
-void add_tinker_main_tests(void)
+void add_tinker_uint_to_str_tests(void)
 {
     tinker_add_test(tinker_uint_to_str);
 }
