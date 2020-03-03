@@ -4,7 +4,7 @@ use_compute_credits: $CIRRUS_USER_COLLABORATOR == 'true' || $CIRRUS_BRANCH == 'm
 
 Lint_task:
   container:
-    image: awooos/awoo-builder
+    dockerfile: Dockerfile
   setup_script:
     - git submodule update --init
   script:
@@ -14,7 +14,7 @@ Test_task:
   depends_on:
     - Lint
   container:
-    image: awooos/awoo-builder
+    dockerfile: Dockerfile
   setup_script:
     - git submodule update --init
   script:
