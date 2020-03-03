@@ -1,12 +1,12 @@
 #include <ali/event.h>
-#include <ali/text.h>
 #include <flail.h>
+#include <stdio.h>
 
 void hal_flail_init(void *data)
 {
     const char *kernel_info = (char*)data;
 
-    flail_init(kernel_info, &print);
+    flail_init(kernel_info, &putchar);
 
     event_trigger("register panic function", (void*)&_flail_panic);
 }

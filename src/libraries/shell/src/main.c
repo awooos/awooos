@@ -1,11 +1,9 @@
 #include <ali/event.h>
 #include <ali/str.h>
-#include <ali/text.h>
 #include <keyboard.h>
+#include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-
-#include <ali/number.h>
 
 // A 1KB buffer for command input should be enough.
 // If it's not, please rethink some life choices.
@@ -16,35 +14,35 @@
 
 void shell_print_prompt()
 {
-    print("# ");
+    fputs("# ", stdout);
 }
 
 void shell_run(char *buffer)
 {
     ShellSplitResult *result = shellsplit(buffer);
-    print("\n");
+    fputs("\n", stdout);
     if (COMMAND("echo")) {
         for (size_t i = 1; i < result->num_pieces; i++) {
-            print(result->pieces[i]);
+            fputs(result->pieces[i], stdout);
             if (i < result->num_pieces) {
-                print(" ");
+                fputs(" ", stdout);
             } else {
-                print("\n");
+                fputs("\n", stdout);
             }
         }
     } else if(COMMAND("awooo")) {
-        print(result->pieces[0]);
+        fputs(result->pieces[0], stdout);
 
         if(result->num_pieces >= 1) {
             for(int i = 0; i < atoi(result->pieces[1]); ++i) {
-                print("o");
+                fputs("o", stdout);
             }
         }
 
-        print("\n");
+        fputs("\n", stdout);
     } else {
-        print("Error: Unknown command: ");
-        println(result->pieces[0]);
+        fputs("Error: Unknown command: ", stdout);
+        puts(result->pieces[0]);
     }
 }
 
@@ -64,7 +62,7 @@ void shell_keyboard_callback(void *data)
 
     if ((event->c == '\n') && (idx == 0)) {
         // No command to run.
-        print("\n");
+        fputs("\n", stdout);
         shell_print_prompt();
         return;
     }
@@ -97,22 +95,22 @@ void shell_keyboard_callback(void *data)
         }
 
         // HACK: Oh my god this is a horrible way to clear the line.
-        print("\r");
-        for (int i = 0; i < 79; i++) { print(" "); }
-        print("\r");
+        fputs("\r", stdout);
+        for (int i = 0; i < 79; i++) { fputs(" ", stdout); }
+        fputs("\r", stdout);
         shell_print_prompt();
-        print(buffer);
+        fputs(buffer, stdout);
     } else {
         // Store the character.
         buffer[idx] = event->c;
         idx++;
-        print(buffer + idx - 1);
+        fputs(buffer + idx - 1, stdout);
     }
 }
 
 void shell_init()
 {
-    println("AwooOS Interactive Shell.");
+    puts("AwooOS Interactive Shell.");
     shell_print_prompt();
 }
 

@@ -1,7 +1,7 @@
 #include "ports.h"
 #include <ali/event.h>
 #include <ali/modifiers.h>
-#include <ali/text.h>
+#include <stdio.h>
 #include <stddef.h>
 
 void wait_for_keyboard_controller()
@@ -14,7 +14,7 @@ void wait_for_keyboard_controller()
 // Hard shutdown: Disable interrupts then do a keyboard RESET.
 void hal_shutdown_hard()
 {
-    print("\r\nDoing a hard shutdown.\r\n");
+    puts("\r\nDoing a hard shutdown.\r\n");
 
     event_trigger("HAL interrupts disable", NULL);
 

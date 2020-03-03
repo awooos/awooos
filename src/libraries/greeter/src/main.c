@@ -1,15 +1,15 @@
 #include <ali/event.h>
-#include <ali/text.h>
+#include <stdio.h>
 
 void greeter_display_greeting(void *data)
 {
     char **metadata = (char**)data;
 
     for (size_t idx = 0; metadata[idx] != NULL; idx++) {
-        print(metadata[idx]);
+        fputs(metadata[idx], stdout);
     }
 
-    print("\r\n\r\n");
+    fputs("\r\n\r\n", stdout);
 }
 
 __attribute__((constructor))
