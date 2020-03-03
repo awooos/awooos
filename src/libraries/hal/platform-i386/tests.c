@@ -8,8 +8,6 @@ uint32_t hal_get_magic(void);
 void test_hal_assertions()
 {
     tinker_assert(hal_get_magic() == MULTIBOOT_MAGIC);
-
-    tinker_pass();
 }
 
 void add_hal_tests()
