@@ -19,6 +19,7 @@ override CFLAGS += -std=c11 -pedantic-errors \
 					-Wno-cast-qual -Wno-missing-prototypes -Wno-vla \
 					-Wno-documentation-unknown-command \
 					-Wno-extra-semi-stmt \
+					-Wno-unknown-warning-option
 					# -nodefaultlibs -lc \
 
 all: build/ali-test
