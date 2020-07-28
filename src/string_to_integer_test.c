@@ -2,7 +2,6 @@
 #include <tinker.h>
 #include <stdint.h>
 #include <stdlib.h>
-#include <ali/number.h>
 
 void test_ali_str_to_int_assertions(void)
 {
