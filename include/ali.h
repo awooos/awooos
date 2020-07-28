@@ -1,7 +1,6 @@
 #ifndef ALI_H
 #define ALI_H
 
-#include <ali/text.h>
 #include <stdint.h>
 #include <stddef.h>
 

@@ -12,7 +12,7 @@ static int digit(char c)
     } else if ('A' <= c && c <= 'Z') {
         return ((c - 'A') + 10);
     } else {
-        return INT_MAX;
+        return -1;
     }
 }
 
@@ -42,10 +42,10 @@ long long int strtoll(const char *nptr, char **endptr, int base)
 
     for(; is_digit(*nptr, base); nptr++) {
         int d = digit(*nptr);
-        if (d == INT_MAX) {
+        if (d == -1) {
             // TODO: errno = ERANGE;
             if (endptr != NULL) {
-                **endptr = *nptr;
+                *endptr = (char*)nptr;
             }
             break;
         }

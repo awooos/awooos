@@ -1,5 +1,4 @@
 #include <stdio.h>
-#include <ali/text.h>
 #include <ali/event.h>
 
 // Writes the provided character (+c+) to the provided stream (+stream+).
@@ -26,7 +25,13 @@ int putc(int c, FILE *stream)
     return fputc(c, stream);
 }
 
+// HACK: When testing things outside of a kernel, defining `putchar()`
+//       breaks everything.
+#ifdef ALI_PUTCHAR_NAME
+int ALI_PUTCHAR_NAME(int c)
+#else
 int putchar(int c)
+#endif
 {
     return putc(c, stdout);
 }
