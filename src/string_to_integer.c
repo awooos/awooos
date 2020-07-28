@@ -45,7 +45,7 @@ long long int strtoll(const char *nptr, char **endptr, int base)
         if (d == -1) {
             // TODO: errno = ERANGE;
             if (endptr != NULL) {
-                **endptr = *nptr;
+                *endptr = (char*)nptr;
             }
             break;
         }

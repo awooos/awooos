@@ -8,10 +8,27 @@ void test_ali_str_to_int_assertions(void)
     // The base has to be between 2 and 36, inclusive.
     // Outside of that range, it should set errno to EINVAL.
     /*
-    tinker_assert(strtoll("abcd", NULL, 1) == EINVAL);
-    tinker_assert(strtoll("abcd", NULL, 2) != EINVAL);
-    tinker_assert(strtoll("abcd", NULL, 36) != EINVAL);
-    tinker_assert(strtoll("abcd", NULL, 37) == EINVAL);
+    int errsv;
+    errno = 0;
+    strtoll("abcd", NULL, 1);
+    errsv = errno;
+    tinker_assert(errsv == EINVAL);
+
+    errno = 0;
+    strtoll("abcd", NULL, 2);
+    errsv = errno;
+    tinker_assert(errsv != EINVAL);
+
+    errno = 0;
+    strtoll("abcd", NULL, 36);
+    errsv = errno;
+    tinker_assert(errsv != EINVAL);
+
+    errno = 0;
+    ret = strtoll("abcd", NULL, 37);
+    errsv = errno;
+    tinker_assert(ret == -1);
+    tinker_assert(errsv == EINVAL);
     */
 
     tinker_assert(atoi("10") == 10);
