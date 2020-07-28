@@ -1,0 +1,23 @@
+# Allow compute credits usage for collaborators and anything pushed to the
+# master, staging, and trying branches. (So bors can use them.)
+use_compute_credits: $CIRRUS_USER_COLLABORATOR == 'true' || $CIRRUS_BRANCH == 'master' || $CIRRUS_BRANCH == 'staging' || $CIRRUS_BRANCH == 'trying'
+
+#Lint_task:
+#  container:
+#    image: debian:10-slim
+#  install_script:
+#    - apt-get update
+#    - apt-get install -y make
+#  script:
+#    - make lint
+
+Test_task:
+  #depends_on:
+  #  - Lint
+  container:
+    image: debian:10-slim
+  install_script:
+    - apt-get update
+    - apt-get install -y build-essential git
+  script:
+    - make test
