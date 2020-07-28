@@ -18,6 +18,6 @@ Test_task:
     image: debian:10-slim
   install_script:
     - apt-get update
-    - apt-get install -y build-essential git
+    - apt-get install -y build-essential clang git
   script:
     - make test
