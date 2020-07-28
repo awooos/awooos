@@ -2,7 +2,21 @@
 #include <math.h>
 #include <stddef.h>
 
-void test_ali_math_assertions(void)
+void test_ali_abs_assertions(void) {
+    tinker_assert(abs(0) == 0);
+    tinker_assert(abs(1) == 1);
+    tinker_assert(abs(-1) == 1);
+
+    tinker_assert(fabs(0.0) == 0.0);
+    tinker_assert(fabs(0.1) == 0.1);
+    tinker_assert(fabs(-0.1) == 0.1);
+    tinker_assert(fabs(1.0) == 1.0);
+    tinker_assert(fabs(-1.0) == 1.0);
+    tinker_assert(fabs(1.1) == 1.1);
+    tinker_assert(fabs(-1.1) == 1.1);
+}
+
+void test_ali_sqrt_assertions(void)
 {
     tinker_assert(sqrt(2.0) == 1.414213562373095);
     tinker_assert(sqrt(3.0) == 1.7320508075688772);
@@ -26,5 +40,6 @@ void test_ali_math_assertions(void)
 
 void add_ali_math_tests(void)
 {
-    tinker_add_test(ali_math_assertions);
+    tinker_add_test(ali_abs_assertions);
+    tinker_add_test(ali_sqrt_assertions);
 }
