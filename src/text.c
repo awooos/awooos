@@ -1,5 +1,4 @@
 #include <stdio.h>
-#include <ali/text.h>
 #include <ali/event.h>
 
 // Writes the provided character (+c+) to the provided stream (+stream+).
