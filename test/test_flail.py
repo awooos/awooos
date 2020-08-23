@@ -4,7 +4,6 @@ Tests for the flail-test executable.
 
 from pathlib import Path
 import subprocess
-from textwrap import dedent
 
 
 def test_flail():
