@@ -8,6 +8,7 @@ from textwrap import dedent
 
 
 def test_flail():
+    """Basic integration test for Flail."""
     path = Path(__file__).resolve().parent / 'flail-test'
     result = subprocess.run(str(path), capture_output=True, text=True, check=True)
 
