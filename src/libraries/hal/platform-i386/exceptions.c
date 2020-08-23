@@ -108,7 +108,7 @@ void hal_irq_remap()
 }
 
 #define EXCEPTION(n) extern void hal_exception_##n(void); \
-    hal_idt_register_exception(n, (size_t)hal_exception_##n);
+    hal_idt_register_exception(n, (size_t)hal_exception_##n)
 
 void hal_exceptions_init()
 {
