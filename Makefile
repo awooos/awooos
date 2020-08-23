@@ -5,10 +5,8 @@ SOURCES := $(wildcard src/*.c)
 
 override CFLAGS += -std=c11 -pedantic-errors \
 					-fdiagnostics-show-option -Werror -Weverything \
-					-Wno-cast-qual -Wno-missing-prototypes -Wno-vla \
-					-Wno-documentation-unknown-command \
-					-Wno-extra-semi-stmt \
-					-Wno-unknown-warning-option
+					-Wno-cast-qual -Wno-missing-prototypes \
+					-Wno-documentation-unknown-command
 
 all: test
 
@@ -22,6 +20,6 @@ lint:
 	${CLANG_CHECK} $(filter %.c,${SOURCES}) -- ${CINCLUDES}
 
 clean:
-	rm -rf build
+	rm -f test/flail-test
 
 .PHONY: all clean test
