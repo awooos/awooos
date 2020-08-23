@@ -39,14 +39,14 @@ endif
 KERNEL_LDFLAGS := $(patsubst src/libraries/%/,-l :%.a,$(filter %/,$(wildcard src/libraries/*/)))
 
 ALL_FILES := $(wildcard            \
-				src/libraries/*/src/*/     \
-				src/libraries/*/src/*/*/   \
-				src/libraries/*/src/*/*/*/ \
+				src/libraries/*/src/*     \
+				src/libraries/*/src/*/*   \
+				src/libraries/*/src/*/*/* \
 				src/libraries/tinker/test/test_*.c \
-				src/libraries/*/platform-${TARGET}/*/    \
-				src/libraries/*/platform-${TARGET}/*/*/  \
-				src/executables/kernel/src/*/ \
-				src/executables/kernel/platform-${TARGET}/*/)
+				src/libraries/*/platform-${TARGET}/*    \
+				src/libraries/*/platform-${TARGET}/*/*  \
+				src/executables/kernel/src/* \
+				src/executables/kernel/platform-${TARGET}/*)
 SRCFILES := $(filter %.c,${ALL_FILES}) $(filter %.asm,${ALL_FILES})
 OBJFILES := $(patsubst %.asm, %.o, $(patsubst %.c, %.o, ${SRCFILES}))
 
