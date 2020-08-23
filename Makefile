@@ -2,6 +2,7 @@ CC := clang
 CLANG_CHECK := clang-check
 
 SOURCES := $(wildcard src/*.c)
+CINCLUDES := -Iinclude
 
 override CFLAGS += -std=c11 -pedantic-errors \
 					-fdiagnostics-show-option -Werror -Weverything \
@@ -11,7 +12,7 @@ override CFLAGS += -std=c11 -pedantic-errors \
 all: test
 
 test/flail-test: $(SOURCES)
-	${CC} ${CFLAGS} -Iinclude $^ test/main.c -o $@
+	${CC} ${CFLAGS} ${CINCLUDES} $^ test/main.c -o $@
 
 test: test/flail-test
 	pytest
