@@ -1,6 +1,6 @@
-#include <ali/event.h>
 #include <stdint.h>
 #include "idt.h"
+#include "gdt.h"
 
 static IdtPointer idtd;
 static IdtEntry idt[256] = {{0,0,0,0,0}};
@@ -13,20 +13,13 @@ void hal_idt_load()
 void hal_idt_init()
 {
     // We need the GDT to be initialized first.
-    event_trigger("HAL gdt init", NULL);
+    hal_gdt_init();
 
     idtd.offset = (uint32_t)idt;
     idtd.size = sizeof(IdtEntry) * 256 - 1;
 
     hal_idt_load();
 }
-
-__attribute__((constructor))
-void hal_idt_register_events()
-{
-    event_watch("HAL init", &hal_idt_init);
-}
-
 
 void hal_idt_set_gate(size_t n, uint32_t offset, uint16_t selector,
         uint8_t priv, uint8_t sys, uint8_t gatetype)
