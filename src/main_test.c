@@ -1,17 +1,10 @@
 #include <flail.h>
 #include "main.h"
 
-// Trigger an intentional kernel panic.
-// If there's something wrong, e.g. a recursive panic, it'll likely
-// run indefinitely.
+// Trigger most of a kernel panic.
 //
-// On Travis CI, this will result in a build error after 10 minutes of
-// printing no output.
-//
-// This isn't the most robust test, but it's better than nothing.
-//
-// NOTE: We use _flail_print_panic() instead of the usual flail_panic() so
-//       we can continue running after the fake panic.
+// This calls `_flail_print_panic()` directly instead of calling
+// `flail_panic()`, so it doesn't hang forever.
 void test_flail_intentional_panic()
 {
     _flail_print_panic("This kernel panic is intentional.", __FUNCTION__, __FILE__, __LINE__);
