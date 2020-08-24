@@ -3,6 +3,19 @@
 #include "main.h"
 #include "uint_to_str.h"
 
+#if defined(__i386__) && __i386__
+#    define FLAIL_GET_STACK_START(r) __asm__("mov %%ebp, %0" : "=r"(r))
+#elif defined(__x86_64__) && __x86_64__
+#    define FLAIL_GET_STACK_START(r) __asm__("mov %%rbp, %0" : "=r"(r))
+#endif
+
+#if defined(__i386__) && __i386__
+#    define FLAIL_GET_STACK_END(r) __asm__("mov %%esp, %0" : "=r"(r))
+#elif defined(__x86_64__) && __x86_64__
+#    define FLAIL_GET_STACK_END(r) __asm__("mov %%rsp, %0" : "=r"(r))
+#endif
+
+
 static unsigned int in_panic = 0;
 static const char *info_str = NULL;
 static FlailPutcharFn *flail_putchar = NULL;
@@ -22,24 +35,40 @@ void flail_init(const char *info_str_, FlailPutcharFn *flail_putchar_)
     flail_putchar = flail_putchar_;
 }
 
-void flail_stack_dump_hex(size_t *_stack)
+void flail_stack_dump_hex(size_t *stack_start, size_t *_stack_end)
 {
-    size_t *stack = _stack;
     char buffer[UINT64_BUFSIZE];
 
-    for (size_t original_stack = (size_t)stack;
-            (size_t)stack < ((original_stack + 0x1000) & (size_t)(~(0x1000 - 1)));
-            stack++) {
-        flail_print("0x");
-        flail_print(flail_uint_to_str(buffer, (size_t)stack, 16));
-        flail_print(": 0x");
-        flail_print(flail_uint_to_str(buffer, *stack, 16));
-        flail_print("\n");
+    int max_frames = 20;
+    size_t frame; // stack pointer
+    size_t ip;
+    size_t stack_end;
 
-        if (*stack == 0x0) {
-            break;
+    (void)stack_start;
+    (void)_stack_end;
+    //if (stack_start == (size_t*)0) {
+        FLAIL_GET_STACK_START(frame);
+        FLAIL_GET_STACK_END(stack_end);
+    //} else {
+    //    frame = *stack_start;
+    //    stack_end = *_stack_end;
+    //}
+    for (int i = 0; i < max_frames; i++) {
+        size_t *frame_ptr = (size_t*)frame;
+        frame = frame_ptr[0];
+        ip = frame_ptr[1];
+
+        if (frame < stack_end) {
+            return;
         }
+
+        flail_print("0x");
+        flail_print(flail_uint_to_str(buffer, frame, 16));
+        flail_print(": 0x");
+        flail_print(flail_uint_to_str(buffer, ip, 16));
+        flail_print("\n");
     }
+    flail_print("[...]\n");
 }
 
 void _flail_print_panic(const char *message, const char *function,

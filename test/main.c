@@ -5,7 +5,7 @@
 
 
 void flail_stack_dump(void) {
-    size_t stack[] = {
+    size_t stack[6] = {
         0x1,                // Smallest valid/non-NULL value.
         0x2,                // Arbitrary.
         0xbadf00d,          // Arbitrary.
@@ -13,7 +13,7 @@ void flail_stack_dump(void) {
         0x9999999999999999, // Biggest integer size_t can fit.
         0x0,                // Terminating NULL.
     };
-    flail_stack_dump_hex(stack);
+    flail_stack_dump_hex(stack, stack + 5);
 }
 
 void flail_wait_forever(void) {

@@ -12,6 +12,6 @@ void flail_wait_forever(void);
 void _flail_print_panic(const char *message, const char *function,
         const char *filename, size_t line);
 
-void flail_stack_dump_hex(size_t *_stack);
+void flail_stack_dump_hex(size_t *stack_start, size_t *_stack_end);
 
 #endif
