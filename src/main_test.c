@@ -1,5 +1,5 @@
 #include <flail.h>
-#include "main.h"
+#include <flail/internal.h>
 
 // Trigger most of a kernel panic.
 //

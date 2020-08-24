@@ -29,7 +29,6 @@ def test_flail():
     assert lines.pop(0).endswith(": 0xbadf00d")
     assert lines.pop(0).endswith(": 0xdeadbeef")
     assert lines.pop(0).endswith(": 0x9999999999999999")
-    assert lines.pop(0).endswith(": 0x0")
 
     assert end == dedent("""\
         Kernel panic: This kernel panic is intentional.
