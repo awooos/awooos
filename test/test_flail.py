@@ -33,5 +33,5 @@ def test_flail():
 
     assert end == dedent("""\
         Kernel panic: This kernel panic is intentional.
-         src/main_test.c:17 (test_flail_intentional_panic)
+         src/main_test.c:10 (test_flail_intentional_panic)
         """)
