@@ -17,14 +17,12 @@ A library for implementing kernel panics.
 // Operating system information to include in the panic message.
 const char *info_str = "Some Operating System v1.0";
 
-int custom_putchar(int c)
-{
+int custom_putchar(int c) {
   // Implement me!
   return c; // It "worked."
 }
 
-void kernel_main()
-{
+void kernel_main() {
     flail_init(info_str, &custom_putchar);
     flail_panic("oh no");
 }
