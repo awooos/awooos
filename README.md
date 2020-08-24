@@ -6,7 +6,7 @@ A library for implementing kernel panics.
 
 1. An `stddef.h` which defines `size_t`.
 2. A `putchar()`-equivalent. It does not need to have any specific name.
-   * Accepts a single `int` and, presumably, prints it.
+   * Accepts a single `int` and, presumably, prints it (after casting to an `unsigned char`).
    * The return value isn't used, but I recommend following the POSIX/C standards.
 
 ## Usage
