@@ -59,7 +59,7 @@ void _flail_print_panic(const char *message, const char *function,
     flail_print("\r\n\r\n");
 
     flail_print(message);
-    flail_print("\r\n\r\n");
+    flail_print("\r\n\r\n\r\n");
 
     flail_print("Stack dump:\r\n\r\n");
 
