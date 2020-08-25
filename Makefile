@@ -39,14 +39,14 @@ endif
 KERNEL_LDFLAGS := $(patsubst src/libraries/%/,-l :%.a,$(filter %/,$(wildcard src/libraries/*/)))
 
 ALL_FILES := $(wildcard            \
-				src/libraries/*/src/*/     \
-				src/libraries/*/src/*/*/   \
-				src/libraries/*/src/*/*/*/ \
+				src/libraries/*/src/*     \
+				src/libraries/*/src/*/*   \
+				src/libraries/*/src/*/*/* \
 				src/libraries/tinker/test/test_*.c \
-				src/libraries/*/platform-${TARGET}/*/    \
-				src/libraries/*/platform-${TARGET}/*/*/  \
-				src/executables/kernel/src/*/ \
-				src/executables/kernel/platform-${TARGET}/*/)
+				src/libraries/*/platform-${TARGET}/*    \
+				src/libraries/*/platform-${TARGET}/*/*  \
+				src/executables/kernel/src/* \
+				src/executables/kernel/platform-${TARGET}/*)
 SRCFILES := $(filter %.c,${ALL_FILES}) $(filter %.asm,${ALL_FILES})
 OBJFILES := $(patsubst %.asm, %.o, $(patsubst %.c, %.o, ${SRCFILES}))
 
@@ -79,7 +79,7 @@ generated_headers:
 	${AS} ${ASFLAGS} -o $@ $<
 
 src/executables/kernel.exe: ${OBJFILES} ${LIBRARIES}
-	${LD} -o $@ ${LDFLAGS} -L src/libraries -T src/link-${TARGET}.ld src/executables/kernel/src/0-start-${TARGET}.o src/executables/kernel/src/main.o ${KERNEL_LDFLAGS}
+	${LD} -o $@ ${LDFLAGS} -L src/libraries -T src/executables/kernel/platform-${TARGET}/link.ld src/executables/kernel/platform-${TARGET}/start.o src/executables/kernel/src/main.o ${KERNEL_LDFLAGS}
 
 %.a: ${OBJFILES}
 	${AR} rcs $@ $(filter $*/%,$^)

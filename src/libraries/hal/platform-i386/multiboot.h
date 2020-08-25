@@ -3,6 +3,8 @@
 
 #include <stdint.h>
 
+void hal_multiboot_init(void);
+
 typedef struct multiboot_info_s
 {
     uint32_t flags;

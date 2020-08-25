@@ -25,4 +25,6 @@ typedef struct idt_entry_s {
 
 void hal_idt_register_exception(size_t n, uint32_t offset);
 
+void hal_idt_init(void);
+
 #endif
