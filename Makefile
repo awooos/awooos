@@ -25,6 +25,7 @@ lint:
 	${CLANG_CHECK} $(filter %.c,${SOURCES}) -- ${CINCLUDES}
 
 clean:
+	rm **/*.o
 	rm -f test/flail-test
 
 .PHONY: all clean test
