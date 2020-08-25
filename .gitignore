@@ -1,4 +1,5 @@
 test/flail-test
+__pycache__/
 
 # Prerequisites
 *.d

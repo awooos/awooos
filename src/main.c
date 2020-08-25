@@ -1,6 +1,6 @@
 #include <flail.h>
+#include <flail/platform.h>
 #include <stddef.h>
-#include "main.h"
 #include "uint_to_str.h"
 
 static unsigned int in_panic = 0;
@@ -20,26 +20,6 @@ void flail_init(const char *info_str_, FlailPutcharFn *flail_putchar_)
 {
     info_str = info_str_;
     flail_putchar = flail_putchar_;
-}
-
-void flail_stack_dump_hex(size_t *_stack)
-{
-    size_t *stack = _stack;
-    char buffer[UINT64_BUFSIZE];
-
-    for (size_t original_stack = (size_t)stack;
-            (size_t)stack < ((original_stack + 0x1000) & (size_t)(~(0x1000 - 1)));
-            stack++) {
-        flail_print("0x");
-        flail_print(flail_uint_to_str(buffer, (size_t)stack, 16));
-        flail_print(": 0x");
-        flail_print(flail_uint_to_str(buffer, *stack, 16));
-        flail_print("\n");
-
-        if (*stack == 0x0) {
-            break;
-        }
-    }
 }
 
 void _flail_print_panic(const char *message, const char *function,
