@@ -30,6 +30,6 @@ Website_Deploy_task:
   env:
     SITE_DEPLOY_URL: ENCRYPTED[a72c2254cebc55a572c0ba5aa726bc8587aabf391652881c655d697405ca6c9dbcc3f4a06306b12e8f0ca4c2168143c4]
   install_script:
-    - "apt-get update && apt-get install curl"
+    - "apt-get update && apt-get install -y curl"
   script:
     - "curl -X POST -d '{}' ${SITE_DEPLOY_URL}"
