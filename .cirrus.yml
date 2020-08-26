@@ -21,3 +21,10 @@ Test_task:
     - make test
   build_artifacts:
       path: iso/awoo-i386-test.iso
+
+# Initiate a website deploy.
+Website_Deploy_task:
+  only_if: $CIRRUS_BRANCH == 'master'
+  env:
+    SITE_DEPLOY_URL: ENCRYPTED[a72c2254cebc55a572c0ba5aa726bc8587aabf391652881c655d697405ca6c9dbcc3f4a06306b12e8f0ca4c2168143c4]
+  script: "curl -X POST -d '{}' ${SITE_DEPLOY_URL}"
