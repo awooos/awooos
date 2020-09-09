@@ -51,7 +51,7 @@ int tinker_run_tests(TinkerPutcharFn *putcharfn);
 /// @def tinker_assert(CODE)
 /// Assert th at `CODE` returns a truthy value.
 /// On failure, prints failure information and returns immediately.
-#define tinker_assert(CODE) if (!_tinker_assert((CODE), #CODE, __FILE__, __LINE__)) { return; }
+#define tinker_assert(CODE) do { if (!_tinker_assert((CODE), #CODE, __FILE__, __LINE__)) { return; } } while(0)
 
 /// @def tinker_pass()
 /// Indicate that a test passed.
