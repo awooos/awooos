@@ -1,16 +1,13 @@
 # Tinker
 
-A low-level test framework for C code, which only requires a C11
+A test framework for C code, which only requires a C11
 compiler and a pointer to a `putchar()`-compatible function.
 
 (It may work with a pre-C11 compiler, but this has not been tested.)
 
 Source: https://github.com/awooos/tinker
+
 Issues: https://github.com/awooos/tinker/issues
-
-
-This makes it incredibly useful for testing memory managers, a libc
-implementation, and other things.
 
 ## Usage
 
