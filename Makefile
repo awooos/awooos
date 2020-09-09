@@ -1,6 +1,7 @@
 CC := clang
 
 SOURCES := $(wildcard src/*.c)
+TEST_SOURCES := test/main.c
 
 CINCLUDES := -Ibuild/deps/tinker/include -Iinclude
 
@@ -18,10 +19,13 @@ build-deps:
 
 build/dmm-test: $(SOURCES)
 	$(MAKE) build-deps
-	${CC} ${CFLAGS} ${CINCLUDES} $^ build/deps/tinker/src/main.c test/main.c -o $@
+	${CC} ${CFLAGS} ${CINCLUDES} $^ build/deps/tinker/src/main.c ${TEST_SOURCES} -o $@
 
 test: build/dmm-test
 	./build/dmm-test
+
+lint: build-deps
+	clang-check ${SOURCES} -- ${CINCLUDES}
 
 clean:
 	rm -rf build
