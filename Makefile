@@ -25,7 +25,7 @@ test: build/dmm-test
 	./build/dmm-test
 
 lint: build-deps
-	clang-check ${SOURCES} ${TEST_SOURCES} -- ${CINCLUDES}
+	clang-check ${SOURCES} -- ${CINCLUDES}
 
 clean:
 	rm -rf build

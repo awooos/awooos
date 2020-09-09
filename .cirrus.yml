@@ -6,7 +6,7 @@ Lint_task:
   container:
     image: fedora:31
   install_script:
-    - dnf install -y make clang
+    - dnf install -y make clang git
   script:
     - make lint
 
@@ -16,7 +16,7 @@ Test_task:
   container:
     image: fedora:31
   install_script:
-    - dnf install -y make clang
+    - dnf install -y make clang git
   build_script:
     - make
   script:
