@@ -4,6 +4,7 @@
 #include <dmm.h>
 #include <flail.h>
 #include <hal.h>
+#include <timer.h>
 #include <tinker.h>
 
 #define ADD_TESTS(TEST_CATEGORY) { \
@@ -32,6 +33,7 @@ void run_tests(void *data)
     ADD_TESTS(hal);
     ADD_TESTS(ali);
     ADD_TESTS(dmm);
+    ADD_TESTS(timer);
 
     all_tests_passed = tinker_run_tests(&putchar);
 
