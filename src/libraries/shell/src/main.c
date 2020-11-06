@@ -1,9 +1,11 @@
 #include <ali/event.h>
 #include <ali/str.h>
+#include <ali/number.h>
 #include <keyboard.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <timer.h>
 
 // A 1KB buffer for command input should be enough.
 // If it's not, please rethink some life choices.
@@ -30,7 +32,10 @@ void shell_run(char *buffer)
                 fputs("\n", stdout);
             }
         }
-    } else if(COMMAND("awooo")) {
+    } else if (COMMAND("uptime")) {
+        print_number(gtimer_in_milliseconds());
+        puts(" milliseconds\n");
+    } else if (COMMAND("awoo")) {
         fputs(result->pieces[0], stdout);
 
         if(result->num_pieces >= 1) {

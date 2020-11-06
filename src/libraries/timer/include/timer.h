@@ -20,8 +20,8 @@ void timer_copy(Timer *original, Timer *copy);
 
 void gtimer_increment_us(uint32_t microseconds);
 void gtimer_increment_ms(uint32_t milliseconds);
-TimerDuration gtimer_in_microseconds(Timer *timer);
-TimerDuration gtimer_in_milliseconds(Timer *timer);
+TimerDuration gtimer_in_microseconds(void);
+TimerDuration gtimer_in_milliseconds(void);
 void gtimer_copy(Timer *copy);
 
 void add_timer_tests(void);
