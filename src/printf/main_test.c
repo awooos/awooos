@@ -47,6 +47,14 @@ void test_ali_printf_assertions(void)
     // Set str to the letter "x" repeated 19 times.
     memset(str, (int)'x', 19);
     str[19] = 0;
+    // Test snprintf using %p.
+    void *ptr = (void*)0x1234ef7;
+    ret = snprintf(str, 20, "0x%p", ptr);
+    tinker_assert(strncmp((const char*)str, "0x1234ef7", 20) == 0);
+
+    // Set str to the letter "x" repeated 19 times.
+    memset(str, (int)'x', 19);
+    str[19] = 0;
     // Test snprintf using %e, %E (scientific notation).
     tinker_fail("no %e or %E support");
 
@@ -55,6 +63,18 @@ void test_ali_printf_assertions(void)
     str[19] = 0;
     // Test snprintf using %f, %F (floating point).
     tinker_fail("no %f or %F support");
+
+    // Set str to the letter "x" repeated 19 times.
+    memset(str, (int)'x', 19);
+    str[19] = 0;
+    // Test snprintf using %g, %G (floating point).
+    tinker_fail("no %g or %G support");
+
+    // Set str to the letter "x" repeated 19 times.
+    memset(str, (int)'x', 19);
+    str[19] = 0;
+    // Test snprintf using %a, %A (floating point).
+    tinker_fail("no %a or %A support");
 }
 
 void add_ali_printf_tests(void)

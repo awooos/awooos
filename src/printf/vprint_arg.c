@@ -14,6 +14,7 @@ int ali_vprint_arg(char *str, size_t size, const char *format, int *consumed, va
     char tmp_c;
     int tmp_i;
     unsigned int tmp_u;
+    unsigned long long tmp_ull;
 
     const char *p = format;
 
@@ -109,12 +110,15 @@ int ali_vprint_arg(char *str, size_t size, const char *format, int *consumed, va
         }
         return (int)tmp_s_len;
     }
-    /*
-    case 'p':
+    case 'p': {
         // Pointer address.
-        va_arg(args, unsigned int);
-        break;
-    */
+        // Unsigned hexadecimal integer, lowercase.
+        tmp_ull = (unsigned long)va_arg(args, void*);
+        return ali_sprintnu(
+            str, size, 1 /* min_length */,
+            tmp_ull, 16 /* base */, SP_NONE /* flags */, 1 /* precision */
+        );
+    }
     case 'n':
         // Nothing printed.
         return 0;
