@@ -17,7 +17,12 @@ void test_ali_string_assertions(void)
     tinker_assert(strlen("") == 0);
 
     tinker_assert((char*)memchr(str1, ' ', 10) == str1 + 3);
-    tinker_assert((unsigned long)((char*)memchr(str1, '\0', 13) - str1) == strlen(str1));
+    tinker_assert((char*)memchr(str1, 'L', 10) == str1 + 2);
+    tinker_assert((char*)memchr(str1, 'd', 10) == str1 + 8);
+
+    tinker_assert(strnlen("hello world", 15) == 11);
+    tinker_assert(strnlen("hello world", 11) == 11);
+    tinker_assert(strnlen("hello world", 5) == 5);
 }
 
 void add_ali_string_tests(void)

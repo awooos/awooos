@@ -114,6 +114,19 @@ size_t strlen(const char *str)
     return i;
 }
 
+size_t strnlen(const char *str, size_t maxlen)
+{
+    // Find the first instance of a null byte within maxlen bytes, if it exists.
+    char *found = memchr(str, '\0', maxlen);
+    if (found) {
+        // If one was found, subtractiong the pointers gives us the length.
+        return (size_t)(found - str);
+    } else {
+        // If one was not found, strnlen is capped at maxlen.
+        return maxlen;
+    }
+}
+
 char *strrev(char *str)
 {
     size_t length = strlen(str);
