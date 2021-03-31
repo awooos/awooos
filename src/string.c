@@ -35,6 +35,18 @@ void *memset(void *s, int c, size_t n)
     return s;
 }
 
+void *memchr(const void *s, int c, size_t n)
+{
+    unsigned char *buf = (unsigned char*)s;
+    for (size_t i = 0; i < n; i++) {
+        if (buf[i] == c) {
+            return (void*)(buf + i);
+        }
+    }
+
+    return NULL;
+}
+
 char *strcpy(char *dest, const char *src)
 {
     return strncpy(dest, src, strlen(src));
