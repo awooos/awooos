@@ -1,6 +1,7 @@
 #ifndef ALI__MAIN_TEST_H
 #define ALI__MAIN_TEST_H
 
+void add_ali_ctype_tests(void);
 void add_ali_math_tests(void);
 void add_ali_number_tests(void);
 void add_ali_printf_tests(void);

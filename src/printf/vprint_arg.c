@@ -49,11 +49,10 @@ int ali_vprint_arg(char *str, size_t size, const char *format, int *consumed, va
         );
     case 'X':
         // Unsigned hexadecimal integer, uppercase.
-        // TODO: Make this uppercase.
         tmp_u = va_arg(args, unsigned int);
         return ali_sprintnu(
             str, size, 1 /* min_length */,
-            tmp_u, 16 /* base */, 0 /* flags */, 1 /* precision */
+            tmp_u, 16 /* base */, SP_UPPER /* flags */, 1 /* precision */
         );
     /*
     case 'f':
