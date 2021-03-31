@@ -35,6 +35,18 @@ void *memset(void *s, int c, size_t n)
     return s;
 }
 
+void *memchr(const void *s, int c, size_t n)
+{
+    unsigned char *buf = (unsigned char*)s;
+    for (size_t i = 0; i < n; i++) {
+        if (buf[i] == c) {
+            return (void*)(buf + i);
+        }
+    }
+
+    return NULL;
+}
+
 char *strcpy(char *dest, const char *src)
 {
     return strncpy(dest, src, strlen(src));
@@ -100,6 +112,19 @@ size_t strlen(const char *str)
     }
 
     return i;
+}
+
+size_t strnlen(const char *str, size_t maxlen)
+{
+    // Find the first instance of a null byte within maxlen bytes, if it exists.
+    char *found = memchr(str, '\0', maxlen);
+    if (found) {
+        // If one was found, subtractiong the pointers gives us the length.
+        return (size_t)(found - str);
+    } else {
+        // If one was not found, strnlen is capped at maxlen.
+        return maxlen;
+    }
 }
 
 char *strrev(char *str)
