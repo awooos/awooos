@@ -13,7 +13,7 @@ int ali_vprint_arg(char *str, size_t size, const char *format, int *consumed, va
 
     char tmp_c;
     int tmp_i;
-    double tmp_d;
+    //double tmp_d;
     unsigned int tmp_u;
     unsigned long long tmp_ull;
 
