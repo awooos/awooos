@@ -13,6 +13,7 @@ int ali_vprint_arg(char *str, size_t size, const char *format, int *consumed, va
 
     char tmp_c;
     int tmp_i;
+    double tmp_d;
     unsigned int tmp_u;
     unsigned long long tmp_ull;
 
@@ -56,38 +57,60 @@ int ali_vprint_arg(char *str, size_t size, const char *format, int *consumed, va
             tmp_u, 16 /* base */, SP_UPPER /* flags */, 1 /* precision */
         );
     /*
-    case 'f':
+    case 'f': {
         // Decimal floating point, lowercase.
-        va_arg(args, double);
+        tmp_d = va_arg(args, double);
         break;
-    case 'F':
+    }
+    case 'F': {
         // Decimal floating point, uppercase.
-        va_arg(args, double);
+        tmp_d = va_arg(args, double);
         break;
-    case 'e':
+    }
+    case 'e': {
         // Scientific notation (mantissa/exponent), lowercase.
-        va_arg(args, double);
+        tmp_d = va_arg(args, double);
         break;
-    case 'E':
+    }
+    case 'E': {
         // Scientific notation (mantissa/exponent), uppercase.
-        va_arg(args, double);
+        tmp_d = va_arg(args, double);
         break;
-    case 'g':
+    }
+    case 'g': {
         // Use the shortest representation: %e or %f.
-        va_arg(args, double);
+        tmp_d = va_arg(args, double);
+        int len_e = snprintf(NULL, 0, "%e", tmp_d);
+        int len_f = snprintf(NULL, 0, "%f", tmp_d);
+        if (len_e <= len_f) {
+            // TODO: use %e
+        } else {
+            // TODO: use %f
+        }
         break;
-    case 'G':
+    }
+    case 'G': {
         // Use the shortest representation: %E or %F.
-        va_arg(args, double);
+        tmp_d = va_arg(args, double);
+        int len_E = snprintf(NULL, 0, "%E", tmp_d);
+        int len_F = snprintf(NULL, 0, "%F", tmp_d);
+        if (len_E <= len_F) {
+            // TODO: use %e
+        } else {
+            // TODO: use %f
+        }
         break;
-    case 'a':
+    }
+    case 'a': {
         // Hexadecimal floating point, lowercase.
-        va_arg(args, double);
+        tmp_d = va_arg(args, double);
         break;
-    case 'A':
+    }
+    case 'A': {
         // Hexadecimal floating point, uppercase.
-        va_arg(args, double);
+        tmp_d = va_arg(args, double);
         break;
+    }
     */
     case 'c':
         // Character.
