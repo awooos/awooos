@@ -9,32 +9,43 @@ SECTIONS {
 		kernel_code_end = .;
 	}
 
-	.rodata : {
+	.rodata ALIGN(4) : {
 		kernel_rodata_start = .;
 		*(.rodata)
 		kernel_rodata_end = .;
 	}
 
-	.data : {
+	.data ALIGN(4) : {
+		__CTOR_LIST__ = .;
+		*(.ctors)
+		*(.init_array)
+		LONG(0)
+		__CTOR_END__ = .;
+		__DTOR_LIST__ = .;
+		*(.dtors)
+		*(.fini_array)
+		LONG(0)
+		__DTOR_END__ = .;
+
 		kernel_data_start = .;
 		*(.data)
 		kernel_data_end = .;
 	}
 
-	.bss : {
+	.bss ALIGN(4) : {
 		kernel_bss_start = .;
 		*(COMMON)
 		*(.bss)
 		kernel_bss_end = .;
 	}
 
-	.comment : {
+	.comment ALIGN(4) : {
 		kernel_comment_start = .;
 		*(.comment)
 		kernel_comment_end = .;
 	}
 
-	.debug_info : {
+	.debug_info ALIGN(4) : {
 		kernel_debug_info_start = .;
 		*(.debug_info)
 		kernel_debug_info_end = .;
@@ -70,17 +81,6 @@ SECTIONS {
 		kernel_debug_loc_start = .;
 		*(.debug_loc)
 		kernel_debug_loc_end = .;
-	}
-
-	.data : {
-		__CTOR_LIST__ = .;
-		*(.ctors)
-		LONG(0)
-		__CTOR_END__ = .;
-		__DTOR_LIST__ = .;
-		*(.dtors)
-		LONG(0)
-		__DTOR_END__ = .;
 	}
 
 	kernel_end = .;
