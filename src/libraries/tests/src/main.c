@@ -30,10 +30,10 @@ void run_tests(void *data)
     bool all_tests_passed;
     bool test_build = *((bool*)data);
 
-    ADD_TESTS(hal);
-    ADD_TESTS(ali);
-    ADD_TESTS(dmm);
-    ADD_TESTS(timer);
+    ADD_TESTS(hal)
+    ADD_TESTS(ali)
+    ADD_TESTS(dmm)
+    ADD_TESTS(timer)
 
     all_tests_passed = tinker_run_tests(&putchar);
 
