@@ -8,7 +8,7 @@ CC   := clang
 endif
 AS   := nasm
 AR   := ar
-LD   := ld
+LD   := ld.lld
 QEMU ?= qemu-system-${TARGET}
 CLANG_CHECK ?= clang-check
 

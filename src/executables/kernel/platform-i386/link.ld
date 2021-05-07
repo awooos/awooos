@@ -4,30 +4,28 @@ SECTIONS {
 	.text 0x100000 : {
 		kernel_start = .;
 		kernel_code_start = .;
-		*(.mboot)
+		KEEP(*(.mboot))
 		*(.text)
 		kernel_code_end = .;
 	}
 
-	.debug_info : {
-		kernel_debug_info_start = .;
-		*(.debug_info)
-		kernel_debug_info_end = .;
-	}
-
-	.rodata ALIGN (0x1000) : {
+	.rodata : {
 		kernel_rodata_start = .;
 		*(.rodata)
 		kernel_rodata_end = .;
+
+		kernel_comment_start = .;
+		*(.comment)
+		kernel_comment_end = .;
 	}
 
-	.data ALIGN (0x1000) : {
+	.data : {
 		kernel_data_start = .;
 		*(.data)
 		kernel_data_end = .;
 	}
 
-	.bss ALIGN (0x1000) : {
+	.bss : {
 		kernel_bss_start = .;
 		*(COMMON)
 		*(.bss)
@@ -36,11 +34,7 @@ SECTIONS {
 
 	kernel_end = .;
 
-	.text ALIGN (0x1000) : {
-		kernel_comment_start = .;
-		*(.comment)
-		kernel_comment_end = .;
-
+	.debug_info : {
 		kernel_debug_info_start = .;
 		*(.debug_info)
 		kernel_debug_info_end = .;
@@ -78,7 +72,7 @@ SECTIONS {
 		kernel_debug_loc_end = .;
 	}
 
-	.data ALIGN(0x1000) : {
+	.data : {
 		__CTOR_LIST__ = .;
 		*(.ctors)
 		LONG(0)
