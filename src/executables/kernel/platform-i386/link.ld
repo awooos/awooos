@@ -13,10 +13,6 @@ SECTIONS {
 		kernel_rodata_start = .;
 		*(.rodata)
 		kernel_rodata_end = .;
-
-		kernel_comment_start = .;
-		*(.comment)
-		kernel_comment_end = .;
 	}
 
 	.data : {
@@ -32,7 +28,11 @@ SECTIONS {
 		kernel_bss_end = .;
 	}
 
-	kernel_end = .;
+	.comment : {
+		kernel_comment_start = .;
+		*(.comment)
+		kernel_comment_end = .;
+	}
 
 	.debug_info : {
 		kernel_debug_info_start = .;
@@ -82,5 +82,7 @@ SECTIONS {
 		LONG(0)
 		__DTOR_END__ = .;
 	}
+
+	kernel_end = .;
 }
 
