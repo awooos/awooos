@@ -22,6 +22,6 @@ void test_ali_stdarg_assertions(void) {
     _test_args(/* numArgs = */ 0);
 }
 
-void add_ali_stdarg_tests() {
+void add_ali_stdarg_tests(void) {
     tinker_add_test(ali_stdarg_assertions);
 }

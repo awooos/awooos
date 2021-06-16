@@ -1,6 +1,6 @@
 #include "main_test.h"
 
-void add_ali_tests()
+void add_ali_tests(void)
 {
     add_ali_math_tests();
     add_ali_number_tests();
