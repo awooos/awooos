@@ -3,7 +3,7 @@
 #include <string.h>
 #include <ali/number.h>
 
-void test_ali_n_to_str_assertions()
+void test_ali_n_to_str_assertions(void)
 {
     tinker_assert(decimal_places_in_uint64(0, 10) == 1);
     tinker_assert(decimal_places_in_uint64(10, 10) == 2);
@@ -38,7 +38,7 @@ void test_ali_n_to_str_assertions()
     tinker_assert(strcmp(n_to_str(9001), "9001") == 0);
 }
 
-void test_ali_is_number()
+void test_ali_is_number(void)
 {
     void *not_a_number;
 
@@ -47,7 +47,7 @@ void test_ali_is_number()
     tinker_assert(is_number(test_ali_is_number) == 0);
 }
 
-void test_ali_signedness_assertions()
+void test_ali_signedness_assertions(void)
 {
     // Unsigned +1. Should return 1.
     tinker_assert(is_unsigned((unsigned char)1) == 1);
@@ -106,7 +106,7 @@ void test_ali_signedness_assertions()
     tinker_assert(is_unsigned((signed long long)-255) == 0);
 }
 
-void add_ali_number_tests()
+void add_ali_number_tests(void)
 {
     tinker_add_test(ali_n_to_str_assertions);
     tinker_add_test(ali_is_number);
