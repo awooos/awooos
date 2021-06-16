@@ -35,7 +35,7 @@ void hal_init(void *data)
 }
 
 __attribute__((constructor))
-void hal_init_register_events()
+void hal_init_register_events(void)
 {
     event_watch("HAL init", &hal_init);
 }

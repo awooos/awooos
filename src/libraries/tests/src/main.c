@@ -59,7 +59,7 @@ void run_tests(void *data)
 }
 
 __attribute__((constructor))
-void tests_register_events()
+void tests_register_events(void)
 {
     event_watch("tests run", run_tests);
 }

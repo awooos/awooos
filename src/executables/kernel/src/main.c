@@ -24,7 +24,7 @@ void xprintn(size_t number, size_t radix) {
     hal_basic_display_print(tmp);
 }
 
-noreturn void kernel_main()
+noreturn void kernel_main(void)
 {
     bool test_build = (AWOO_TEST_BUILD == 1);
 
