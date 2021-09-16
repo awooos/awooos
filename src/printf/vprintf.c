@@ -3,7 +3,7 @@
 #include <stdlib.h>
 #include <string.h>
 
-int ali_vprint_arg(char *str, size_t size, const char *format, int *consumed, va_list args);
+int ali_vprint_arg(char *str, size_t size, const char *format, int *consumed, va_list args, int length);
 
 // NOTE: To debug anything in this file, using `putchar()` is useful.
 //       Things like `puts` won't always work here, if running the test suite.
@@ -22,7 +22,7 @@ int vsnprintf(char *str, size_t size, const char *format, va_list args) {
         switch (*p) {
         case '%':
             p++; // Skip the % we just matched.
-            tmp = ali_vprint_arg(str + length, size - (size_t)length, p, &consumed, args);
+            tmp = ali_vprint_arg(str + length, size - (size_t)length, p, &consumed, args, length);
             if (tmp < 0) {
                 break;
             }

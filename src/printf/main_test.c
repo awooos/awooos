@@ -75,6 +75,19 @@ void test_ali_printf_assertions(void)
     str[19] = 0;
     // Test snprintf using %a, %A (floating point).
     tinker_skip("no %a or %A support");
+
+    // Set str to the letter "x" repeated 19 times.
+    memset(str, (int)'x', 19);
+    str[19] = 0;
+    // Test snprintf using a complex pattern and multiple instances of %n.
+    int lengthptr1 = 0;
+    int lengthptr2 = 0;
+    int lengthptr3 = 0;
+    ret = snprintf(str, 20, "a%n%s%n%c%c%i%n", &lengthptr1, "bee", &lengthptr2, 'c', 'd', 3, &lengthptr3);
+    tinker_assert(lengthptr1 == 1);
+    tinker_assert(lengthptr2 == 4);
+    tinker_assert(lengthptr3 == 7);
+    tinker_assert(strncmp((const char*)str, "abeecd3", 20) == 0);
 }
 
 void add_ali_printf_tests(void)

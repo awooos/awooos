@@ -185,7 +185,7 @@ void _ali_vprint_parse_conversion_specifier(VprintConversionSpecifier *vspec, co
     }
 }
 
-int ali_vprint_arg(char *str, size_t size, const char *format, int *consumed, va_list args) {
+int ali_vprint_arg(char *str, size_t size, const char *format, int *consumed, va_list args, int length) {
     // Changing the value of *consumed will change `format` for the
     // next iteration. This is useful for, e.g., making sure all of the
     // characters in things like `%.2f` get consumed -- not just the %.
@@ -292,7 +292,7 @@ int ali_vprint_arg(char *str, size_t size, const char *format, int *consumed, va
         // to the output so far is written to it.
         // Nothing is printed.
         int *tmp_intptr = va_arg(args, int*);
-        *tmp_intptr = 0; // TODO: Store the thing.
+        *tmp_intptr = length;
         return 0;
     } else if (vspec.percent) {
         // A literal %.
