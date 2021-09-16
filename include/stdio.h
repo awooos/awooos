@@ -1,6 +1,7 @@
 #ifndef ALI_STDIO_H
 #define ALI_STDIO_H
 
+#include <stdarg.h>
 #include <stddef.h>
 
 /* References
@@ -77,5 +78,13 @@ int putchar(int c);
 
 int fputs(const char *string, FILE *stream);
 int puts(const char *string);
+
+// printf and friends.
+int printf(const char *format, ...);
+int sprintf(char *str, const char *format, ...);
+int snprintf(char *str, size_t size, const char *format, ...);
+int vprintf(const char *format, va_list args);
+int vsnprintf(char *str, size_t size, const char *format, va_list args);
+int vsprintf(char *str, const char *format, va_list args);
 
 #endif

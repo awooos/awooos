@@ -14,22 +14,23 @@ override CFLAGS += -std=c11 -pedantic-errors \
 
 all: build/ali-test
 
-build-deps:
+build/deps/tinker:
 	mkdir -p build/deps/
 	cd build/deps; test -d tinker || git clone https://github.com/awooos/tinker.git
 	cd build/deps/tinker; git pull
 
 build/ali-test: $(SOURCES)
-	$(MAKE) build-deps
+	$(MAKE) build/deps/tinker
 	${CC} ${CFLAGS} ${CINCLUDES} $^ build/deps/tinker/src/main.c test/main.c -o $@
 
-test: build/ali-test
+test: lint build/ali-test
 	./build/ali-test
 
-lint: build-deps
+lint: build/deps/tinker
 	${CLANG_CHECK} $(filter %.c,${SOURCES}) -- ${CINCLUDES}
 
 clean:
+	# (To remove build/deps/tinker do `make veryclean`)
 	rm -rf build/ali-test
 
 veryclean:
