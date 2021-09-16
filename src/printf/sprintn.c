@@ -7,6 +7,7 @@
 #include <ali/number.h>
 
 #include "sprintn.h"
+#include "vprintf.h"
 
 // TODO: Move ali/number/ implementations to here.
 
@@ -16,8 +17,8 @@ void ali_in_place_strtoupper(char *str, size_t size) {
     }
 }
 
-int ali_sprintni(char *str, size_t size, int min_length,
-                 int64_t number, size_t base, int flags, int precision) {
+int ali_sprintni(char *str, size_t size, int min_length, int64_t number,
+        size_t base, VprintFlags *flags, int upper, int precision) {
     char *tmp = int64_to_str_radix(number, base);
     size_t length = strlen(tmp);
 
@@ -25,10 +26,11 @@ int ali_sprintni(char *str, size_t size, int min_length,
         return -1;
     }
 
+    (void)flags;
     (void)min_length;
     (void)precision;
 
-    if (flags & SP_UPPER) {
+    if (upper) {
         ali_in_place_strtoupper(tmp, length);
     }
 
@@ -42,8 +44,8 @@ int ali_sprintni(char *str, size_t size, int min_length,
     return (int)length;
 }
 
-int ali_sprintnu(char *str, size_t size, int min_length,
-                 uint64_t number, size_t base, int flags, int precision) {
+int ali_sprintnu(char *str, size_t size, int min_length, uint64_t number,
+        size_t base, VprintFlags *flags, int upper, int precision) {
     char *tmp = uint64_to_str_radix(number, base);
     size_t length = strlen(tmp);
 
@@ -51,10 +53,11 @@ int ali_sprintnu(char *str, size_t size, int min_length,
         return -1;
     }
 
+    (void)flags;
     (void)min_length;
     (void)precision;
 
-    if (flags & SP_UPPER) {
+    if (upper) {
         ali_in_place_strtoupper(tmp, length);
     }
 
