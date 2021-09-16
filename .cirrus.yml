@@ -2,6 +2,13 @@
 # master, staging, and trying branches. (So bors can use them.)
 use_compute_credits: $CIRRUS_USER_COLLABORATOR == 'true' || $CIRRUS_BRANCH == 'master' || $CIRRUS_BRANCH == 'staging' || $CIRRUS_BRANCH == 'trying'
 
+task:
+  name: CI success
+  container: {image: "busybox"}
+  depends_on:
+    - lint
+    - test
+
 Lint_task:
   container:
     image: debian:10-slim
