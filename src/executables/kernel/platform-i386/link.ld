@@ -32,7 +32,7 @@ SECTIONS {
 		kernel_data_end = .;
 	}
 
-	.bss ALIGN(4) : {
+	.bss ALIGN(32) : {
 		kernel_bss_start = .;
 		*(COMMON)
 		*(.bss)
