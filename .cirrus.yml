@@ -6,8 +6,8 @@ task:
   name: CI success
   container: {image: "busybox"}
   depends_on:
-    - lint
-    - test
+    - Lint
+    - Test
 
 Lint_task:
   container:
