@@ -23,6 +23,9 @@ extern int strncmp(const char *s1, const char *s2, size_t n);
 // extern char *strchr(const char *s, int c);
 // extern char *strrchr(const char *s, int c);
 
+extern char *strdup(const char *str);
+extern char *strndup(const char *str, size_t n);
+
 extern size_t strlen(const char *str);
 extern size_t strnlen(const char *str, size_t maxlen);
 

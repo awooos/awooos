@@ -100,6 +100,21 @@ int strncmp(const char *s1, const char *s2, size_t n)
 // char *strchr(const char *s, int c);
 // char *strrchr(const char *s, int c);
 
+char *strdup(const char *str)
+{
+    return strndup(str, strlen(str));
+}
+
+char *strndup(const char *str, size_t n)
+{
+    char *duplicate = malloc(strlen(str) + 1);
+    if (!duplicate) {
+        return NULL;
+    }
+    strncpy(duplicate, str, n);
+    duplicate[n] = 0;
+    return duplicate;
+}
 
 size_t strlen(const char *str)
 {
