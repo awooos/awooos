@@ -19,9 +19,21 @@ Notable features:
 
 # Development
 
-    $ ./bin/make clean test
+To clone the repository and run the test suite:
 
-This'll run the test suite in Docker and print the results.
+    $ git clone https://github.com/awooos/awooos.git
+    $ cd awooos
+    $ git submodule update --init
+
+To update the repository, if you cloned it previously:
+
+    $ git pull
+    $ git submodule update
+
+To run the test suite:
+
+    $ ./bin/build-container
+    $ ./bin/make clean test
 
 ## Contributing
 
