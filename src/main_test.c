@@ -81,7 +81,7 @@ void test_dmm_allocate_the_universe()
         // Save the value of header->next in case the header disappears when we
         // free() the region (when DMM actually merges free regions)
         DMM_MallocHeader *next = header->next;
-        if ((header->flags & DMM_HEADER_FLAG_TEST) == 1) {
+        if ((header->flags & DMM_HEADER_FLAG_TEST) != 0) {
             header->flags = 0;
             dmm_free(header->data);
         }
