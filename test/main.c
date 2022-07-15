@@ -29,13 +29,13 @@ void new_mmap_entry(mmap_entry *entry, size_t size) {
 }
 
 static mmap_entry mmaps[10];
-void init_mmap() {
+void init_mmap(void) {
     for (size_t idx = 0; idx < 10; idx++) {
         new_mmap_entry(&mmaps[idx], 1024 * 1024 * (idx + 1));
     }
 }
 
-void deinit_mmap() {
+void deinit_mmap(void) {
     for (size_t idx = 0; idx < 10; idx++) {
         free(mmaps[idx].data);
     }
