@@ -66,10 +66,15 @@ all: ${EXECUTABLES}
 
 version-info:
 	${CC} --version
+	@echo
 	${AS} --version
+	@echo
 	${AR} --version
+	@echo
 	${LD} --version
+	@echo
 	${QEMU} --version
+	@echo
 	${CLANG_CHECK} --version
 
 # This rule is triggered by "include make/${TARGET}.mk" if TARGET is undefined.
