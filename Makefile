@@ -98,10 +98,10 @@ lint: generated_headers
 	${CLANG_CHECK} $(filter %.c,${SRCFILES}) -- ${C_INCLUDES}
 
 qemu: iso
-	${QEMU} ${QEMU_FLAGS} -m 6M -vga std -serial stdio -cdrom ${ISO_FILE}
+	${QEMU} ${QEMU_FLAGS} -m 64M -vga std -serial stdio -cdrom ${ISO_FILE}
 
 qemu-monitor: iso
-	${QEMU} ${QEMU_FLAGS} -m 6M -monitor stdio -cdrom ${ISO_FILE}
+	${QEMU} ${QEMU_FLAGS} -m 64M -monitor stdio -cdrom ${ISO_FILE}
 
 # Generate a nightly build.
 nightly:
