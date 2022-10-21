@@ -7,4 +7,4 @@ ENV QEMU_FLAGS="-display none"
 #RUN apk add --no-cache binutils clang lld git llvm5 make nasm qemu qemu-system-i386 syslinux xorriso
 #RUN apk add --no-cache wget unzip
 
-RUN apt-get update && apt-get install -y clang clang-tools git make nasm qemu qemu-system-x86 xorriso wget unzip
+RUN apt-get update && apt-get install -y clang clang-tools lld git make nasm qemu qemu-system-x86 xorriso wget unzip
