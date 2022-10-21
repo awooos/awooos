@@ -64,6 +64,14 @@ ISO_FILE := ${ISO_DIR}/${ISO_FILENAME}
 
 all: ${EXECUTABLES}
 
+version-info:
+	${CC} --version
+	${AS} --version
+	${AR} --version
+	${LD} --version
+	${QEMU} --version
+	${CLANG_CHECK} --version
+
 # This rule is triggered by "include make/${TARGET}.mk" if TARGET is undefined.
 # This shouldn't be automated, so print an error.
 make/.mk:
