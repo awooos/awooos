@@ -45,15 +45,37 @@ void multiboot_validate_info(MultibootInfo *multiboot_info)
 
 void multiboot_add_mmap_entry(MultibootMemoryMapEntry *mmap_entry)
 {
+    puts("        Attempting to add memory map entry");
+
+    if (mmap_entry->type == MULTIBOOT_MEMORY_MAP_UNKNOWN) {
+        puts("          SKIPPED entry (UNKNOWN).");
+        return;
+    }
+    if (mmap_entry->type == MULTIBOOT_MEMORY_MAP_RESERVED) {
+        puts("          SKIPPED entry (RESERVED).");
+        return;
+    }
+    if (mmap_entry->type == MULTIBOOT_MEMORY_MAP_ACPI_RECLAIMABLE) {
+        puts("          SKIPPED entry (ACPI_RECLAIMABLE).");
+        return;
+    }
+    if (mmap_entry->type == MULTIBOOT_MEMORY_MAP_NVS) {
+        puts("          SKIPPED entry (NVS).");
+        return;
+    }
+    if (mmap_entry->type == MULTIBOOT_MEMORY_MAP_BAD_RAM) {
+        puts("          SKIPPED entry (BAD_RAM).");
+        return;
+    }
     if (mmap_entry->type != MULTIBOOT_MEMORY_MAP_AVAILABLE) {
-        puts("        Memory map entry is for an unusable region.");
+        puts("          SKIPPED entry with unexpected value for mmap_entry->type.");
         return;
     }
 
     // If we get an entry starting at 0x0, make it instead start at
     // 0x1 and decrease it's length by 1 byte.
     if ((size_t)mmap_entry->addr == 0) {
-        puts("        Got entry for 0x0 -- starting at 0x1 instead.");
+        puts("          Got entry for 0x0 -- starting at 0x1 instead.");
         mmap_entry->addr += 1;
         mmap_entry->length -= 1;
     }
@@ -71,7 +93,7 @@ void multiboot_add_mmap_entry(MultibootMemoryMapEntry *mmap_entry)
     // If the entry contains nothing but the kernel, just skip it.
     if ((mmap_entry->addr >= (uint64_t)hal_kernel_start) &&
             ((mmap_entry->addr + mmap_entry->size) <= (uint64_t)hal_kernel_end)) {
-        puts("        Memory map entry contains nothing but the kernel; skipping.");
+        puts("          SKIPPED entry nothing but kernel.");
         return;
     }
 
@@ -83,11 +105,12 @@ void multiboot_add_mmap_entry(MultibootMemoryMapEntry *mmap_entry)
     if ((mmap_entry->addr < (uint64_t)hal_kernel_start) &&
             ((mmap_entry->addr + mmap_entry->size) >= (uint64_t)hal_kernel_start)
         ) {
-        puts("        Memory map entry runs into kernel -- adding part before kernel.");
+        puts("          Memory map entry runs into kernel -- adding part before kernel.");
 
         uint64_t adjustment = (mmap_entry->addr - hal_kernel_start);
 
         // Add the region before the kernel.
+        puts("          ADDED  partial region before kernel.");
         dmm_add_memory_region((void*)mmap_entry->addr, (size_t)(mmap_entry->size - adjustment));
 
         // Adjust the mmap entry to point to the start of the kernel.
@@ -99,18 +122,29 @@ void multiboot_add_mmap_entry(MultibootMemoryMapEntry *mmap_entry)
     // the kernel.
     if ((mmap_entry->addr >= (uint64_t)hal_kernel_start) ||
             (mmap_entry->addr <= (uint64_t)hal_kernel_end)) {
-        puts("        Memory map entry overlaps end of kernel -- starting after kernel.");
+        puts("          Memory map entry overlaps end of kernel -- starting after kernel.");
 
         mmap_entry->size -= (hal_kernel_end - mmap_entry->addr);
         mmap_entry->addr = hal_kernel_end;
     }
 
+/*
+    // If the entry starts inside the kernel, skip it.
+    // (Ideally we would just skip the part containing the kernel,
+    //  but that has proven to be more effort than it's worth.)
+    if (((size_t)mmap_entry->addr >= hal_kernel_start) &&
+            ((size_t)mmap_entry->addr <= hal_kernel_end)) {
+        puts("          Memory map entry overlaps kernel -- skipping.");
+        return;
+    }
+*/
+
     // If we get this far, add the memory region to DMM.
     //
     // ASSUMPTION: Despite Multiboot using uint64_t for length, assume
     //             it will always fit in a size_t.
-    puts("        Adding memory map entry to DMM.");
     dmm_add_memory_region((void*)mmap_entry->addr, (size_t)mmap_entry->length);
+    puts("          ADDED  entry to DMM.");
 }
 
 void hal_multiboot_init()
