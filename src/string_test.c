@@ -5,8 +5,8 @@
 
 void test_ali_string_assertions(void)
 {
-    char *str1 = "HAL shutdown";
-    char *str2 = "HAL shutdown test failure";
+    char str1[] = "HAL shutdown";
+    char str2[] = "HAL shutdown test failure";
 
     tinker_assert(strncmp(str1, str2, 25) != 0);
 
@@ -35,6 +35,12 @@ void test_ali_string_assertions(void)
     tinker_assert(strnlen("hello world", 15) == 11);
     tinker_assert(strnlen("hello world", 11) == 11);
     tinker_assert(strnlen("hello world", 5) == 5);
+
+    char snc_src[] = "awoo";
+    char snc_dest[] = "xxxx";
+    tinker_assert(strncpy(snc_dest, snc_src, 2) == snc_dest);
+    tinker_assert(strncmp(snc_dest, "awxx", 5) == 0);
+    tinker_assert(strncmp(snc_dest, "awoo", 5) != 0);
 }
 
 void add_ali_string_tests(void)
