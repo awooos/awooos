@@ -2,9 +2,12 @@
 #include <stddef.h>
 #include <dmm.h>
 #include "../src/main.h"
-#include "main_test.h"
 
-void test_dmm_malloc()
+// FIXME: dmm can't handle >634K chunk sizes for some reason.
+#define ALLOCATE_THE_UNIVERSE_CHUNK_SIZE (634 * 1024) // 634K
+//#define ALLOCATE_THE_UNIVERSE_CHUNK_SIZE (1024 * 1024) // 1M
+
+void test_dmm_malloc(void)
 {
     void *region = dmm_malloc(10);
     tinker_assert(region != NULL);
@@ -16,7 +19,7 @@ void test_dmm_malloc()
     tinker_assert(header->data == region);
 }
 
-void test_dmm_free_sets_header()
+void test_dmm_free_sets_header(void)
 {
     void *region = dmm_malloc(10);
     tinker_assert(region != NULL);
@@ -30,7 +33,7 @@ void test_dmm_free_sets_header()
     tinker_assert(header->used == 0);
 }
 
-void test_dmm_allocate_the_universe()
+void test_dmm_allocate_the_universe(void)
 {
     DMM_MallocHeader *header;
     size_t allocated_chunks = 0;

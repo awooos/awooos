@@ -6,11 +6,13 @@
 #include <string.h>
 #include <tinker.h>
 
-#include "main_test.h"
-#include "instance_test.h"
+void test_dmm_malloc(void);
+void test_dmm_free_sets_header(void);
+void test_dmm_allocate_the_universe(void);
 
-
-void add_dmm_tests(void);
+void test_dmm_instance_add_region(void);
+void test_dmm_instance_malloc(void);
+void test_dmm_instance_free_sets_header(void);
 
 noreturn void _panic(const char *message, const char *function,
         const char *filename, size_t line)
