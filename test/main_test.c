@@ -1,7 +1,7 @@
 #include <tinker.h>
 #include <stddef.h>
 #include <dmm.h>
-#include "main.h"
+#include "../src/main.h"
 #include "main_test.h"
 
 void test_dmm_malloc()

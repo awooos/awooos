@@ -3,7 +3,6 @@
 
 #include <stddef.h>
 #include <dmm.h>
-#include "../src/main.h"
 
 // FIXME: dmm can't handle >634K chunk sizes for some reason.
 #define ALLOCATE_THE_UNIVERSE_CHUNK_SIZE (634 * 1024) // 634K

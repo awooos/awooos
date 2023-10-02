@@ -2,8 +2,8 @@
 #include <stddef.h>
 #include <dmm.h>
 #include <dmm_instance.h>
-#include "header.h"
-#include "instance.h"
+#include "../src/header.h"
+#include "../src/instance.h"
 #include "instance_test.h"
 
 static DMM_MallocHeader *test_instance = DMM_UNASSIGNED_REGION;

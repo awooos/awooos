@@ -1,7 +1,7 @@
 CC := clang
 
 SOURCES := src/main.c src/dmm_string.c src/instance.c
-TEST_SOURCES := src/test.c src/instance_test.c src/main_test.c test/main.c
+TEST_SOURCES := test/instance_test.c test/main_test.c test/main.c
 
 CINCLUDES := -Ibuild/deps/tinker/include -Iinclude
 
