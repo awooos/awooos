@@ -4,7 +4,7 @@ use_compute_credits: $CIRRUS_USER_COLLABORATOR == 'true' || $CIRRUS_BRANCH == 'm
 
 Lint_task:
   container:
-    image: fedora:31
+    image: fedora:38
   install_script:
     - dnf install -y make clang git
   script:
@@ -12,7 +12,7 @@ Lint_task:
 
 Test_task:
   container:
-    image: fedora:31
+    image: fedora:38
   install_script:
     - dnf install -y make clang git
   build_script:
