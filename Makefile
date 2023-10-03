@@ -9,7 +9,7 @@ CFLAGS := ${CFLAGS} -std=c11 -pedantic-errors \
 			-fdiagnostics-show-option -Werror -Weverything \
 			-Wno-cast-qual -Wno-missing-prototypes -Wno-vla \
 			-Wno-documentation-unknown-command \
-			-Wno-reserved-identifier -Wno-unsafe-buffer-usage  # TODO: Try to avoid needing these.
+			-Wno-reserved-identifier -Wno-unsafe-buffer-usage -Wno-declaration-after-statement  # TODO: Try to avoid needing these.
 
 all: build/dmm-test
 
