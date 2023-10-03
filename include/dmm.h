@@ -13,17 +13,17 @@ void dmm_init(DMM_PanicFn *panic_fn);
 
 void dmm_add_memory_region(void *start, size_t length);
 
-void *_dmm_malloc(size_t size, const char function[], const char filename[],
+void *dmm_malloc_(size_t size, const char function[], const char filename[],
         size_t line);
-#define dmm_malloc(size) _dmm_malloc(size, __func__, __FILE__, __LINE__)
+#define dmm_malloc(size) dmm_malloc_(size, __func__, __FILE__, __LINE__)
 
-void _dmm_free(void *ptr, const char function[], const char filename[],
+void dmm_free_(void *ptr, const char function[], const char filename[],
         size_t line);
-#define dmm_free(ptr) _dmm_free(ptr, __func__, __FILE__, __LINE__)
+#define dmm_free(ptr) dmm_free_(ptr, __func__, __FILE__, __LINE__)
 
-void *_dmm_realloc(void *ptr, size_t size, const char function[],
+void *dmm_realloc_(void *ptr, size_t size, const char function[],
         const char filename[], size_t line);
-#define dmm_realloc(ptr, size) _dmm_realloc(ptr, size, __func__, __FILE__, __LINE__)
+#define dmm_realloc(ptr, size) dmm_realloc_(ptr, size, __func__, __FILE__, __LINE__)
 
 // Tests
 void add_dmm_tests(void);

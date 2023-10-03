@@ -5,17 +5,17 @@
 
 void *dmm_instance_add_memory_region(void *instance, void *start, size_t length);
 
-void *_dmm_instance_malloc(void *instance, size_t size, const char function[],
+void *dmm_instance_malloc_(void *instance, size_t size, const char function[],
         const char filename[], size_t line);
-#define dmm_instance_malloc(instance, size) _dmm_instance_malloc(instance, size, __func__, __FILE__, __LINE__)
+#define dmm_instance_malloc(instance, size) dmm_instance_malloc_(instance, size, __func__, __FILE__, __LINE__)
 
-void _dmm_instance_free(void *instance, void *ptr, const char function[],
+void dmm_instance_free_(void *instance, void *ptr, const char function[],
         const char filename[], size_t line);
-#define dmm_instance_free(instance, ptr) _dmm_instance_free(instance, ptr, __func__, __FILE__, __LINE__)
+#define dmm_instance_free(instance, ptr) dmm_instance_free_(instance, ptr, __func__, __FILE__, __LINE__)
 
-void *_dmm_instance_realloc(void *instance, void *ptr, size_t size,
+void *dmm_instance_realloc_(void *instance, void *ptr, size_t size,
         const char function[], const char filename[], size_t line);
-#define dmm_instance_realloc(instance, ptr, size) _dmm_instance_realloc(instance, ptr, size, __func__, __FILE__, __LINE__)
+#define dmm_instance_realloc(instance, ptr, size) dmm_instance_realloc_(instance, ptr, size, __func__, __FILE__, __LINE__)
 
 
 #endif
