@@ -9,11 +9,11 @@
 
 DMM_MallocHeader *dmm_global_instance = DMM_UNASSIGNED_REGION;
 
-DMM_PanicFn *_dmm_panic = NULL;
+DMM_PanicFn *dmm_pvt_panic = NULL;
 
 void dmm_init(DMM_PanicFn *panic_fn)
 {
-    _dmm_panic = panic_fn;
+    dmm_pvt_panic = panic_fn;
 }
 
 void dmm_add_memory_region(void *start, size_t length)
