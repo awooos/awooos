@@ -20,10 +20,10 @@ typedef struct TestCase_s {
     TinkerTestcaseFn *func;
 } TestCase;
 
-void _tinker_add_test(TinkerTestcaseFn *func, const char *name);
-void _tinker_print_results(int status,
+void tinker_add_test_with_name(TinkerTestcaseFn *func, const char *name);
+void tinker_print_results(int status,
         const char *message, const char *file, unsigned long line);
-int _tinker_assert(int success,
+int tinker_low_level_assert(int success,
         const char *code, const char *file, unsigned long line);
 
 enum tinker_test_result {
@@ -46,16 +46,16 @@ int tinker_run_tests(TinkerPutcharFn *putcharfn);
 
 /// @def tinker_add_test(NAME)
 /// Adds function `test_NAME()` as a test, with name `NAME`.
-#define tinker_add_test(NAME) _tinker_add_test(test_##NAME, #NAME)
+#define tinker_add_test(NAME) tinker_add_test_with_name(test_##NAME, #NAME)
 
 /// @def tinker_assert(CODE)
 /// Assert th at `CODE` returns a truthy value.
 /// On failure, prints failure information and returns immediately.
-#define tinker_assert(CODE) do { if (!_tinker_assert((CODE), #CODE, __FILE__, __LINE__)) { return; } } while(0)
+#define tinker_assert(CODE) do { if (!tinker_low_level_assert((CODE), #CODE, __FILE__, __LINE__)) { return; } } while(0)
 
 /// @def tinker_pass()
 /// Indicate that a test passed.
-#define tinker_pass()        _tinker_print_results(TEST_SUCCESS, "Success.", __FILE__, __LINE__)
+#define tinker_pass()        tinker_print_results(TEST_SUCCESS, "Success.", __FILE__, __LINE__)
 
 /// @def tinker_fail(MESSAGE)
 /// Indicate that a test failed. Prints failure information, using `MESSAGE`
@@ -63,7 +63,7 @@ int tinker_run_tests(TinkerPutcharFn *putcharfn);
 ///
 /// NOTE: If you call this in the middle of a function it _won't_ return
 /// immediately. You'll need to explicitly add `return;` afterwards.
-#define tinker_fail(MESSAGE) _tinker_print_results(TEST_FAILURE, MESSAGE,    __FILE__, __LINE__)
+#define tinker_fail(MESSAGE) tinker_print_results(TEST_FAILURE, MESSAGE,    __FILE__, __LINE__)
 
 /// @def tinker_skip(MESSAGE)
 /// Indicate that a test is skipped. Prints information about what was skipped,
@@ -71,6 +71,6 @@ int tinker_run_tests(TinkerPutcharFn *putcharfn);
 ///
 /// NOTE: If you call this in the middle of a function it _won't_ return
 /// immediately. You'll need to explicitly add `return;` afterwards.
-#define tinker_skip(MESSAGE) _tinker_print_results(TEST_SKIP,    MESSAGE,    __FILE__, __LINE__)
+#define tinker_skip(MESSAGE) tinker_print_results(TEST_SKIP,    MESSAGE,    __FILE__, __LINE__)
 
 #endif

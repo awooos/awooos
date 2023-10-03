@@ -26,7 +26,7 @@
 #endif
 
 // This would normally be set to NULL, but this avoids needing that defined.
-static TinkerPutcharFn *_tinker_putchar = 0;
+static TinkerPutcharFn *tinker_putchar = 0;
 
 static TestCase test_cases[TINKER_MAX_TESTS];
 
@@ -91,7 +91,7 @@ char *tinker_uint_to_str(unsigned long n)
 void tinker_print(const char *string)
 {
     for (char *s = (char*)string; *s; s++) {
-        _tinker_putchar(*s);
+        tinker_putchar(*s);
     }
 }
 
@@ -99,8 +99,8 @@ void tinker_print(const char *string)
 /// Adds a test to the test suite.
 ///
 /// You probably want tinker_add_test(name), which is equivalent to
-/// _tinker_add_test(test_name, "name").
-void _tinker_add_test(TinkerTestcaseFn *func, const char *name)
+/// tinker_add_test_with_name(test_name, "name").
+void tinker_add_test_with_name(TinkerTestcaseFn *func, const char *name)
 {
     unsigned long idx = last_test_index;
 
@@ -123,7 +123,7 @@ void _tinker_add_test(TinkerTestcaseFn *func, const char *name)
 }
 
 
-/// Prints the results of a test. Used internally by _tinker_print_results()
+/// Prints the results of a test. Used internally by tinker_print_results()
 /// and for tests.
 ///
 /// @param[in]  _print   Either a pointer `tinker_print()` or NULL.
@@ -137,7 +137,7 @@ void _tinker_add_test(TinkerTestcaseFn *func, const char *name)
 /// @param[in]  line     The line the relevant test is on.
 ///
 /// @private
-void _tinker_low_level_print_results(TinkerPrintFn *_print,
+void tinker_low_level_print_results(TinkerPrintFn *_print,
         unsigned long *_total, unsigned long *_passed,
         unsigned long *_failed, unsigned long *_skipped,
         int status, const char *message, const char *file, unsigned long line)
@@ -210,10 +210,10 @@ void _tinker_low_level_print_results(TinkerPrintFn *_print,
 /// @param[in]  line     The line the relevant test is on
 ///
 /// @private
-void _tinker_print_results(int status,
+void tinker_print_results(int status,
         const char *message, const char *file, unsigned long line)
 {
-    _tinker_low_level_print_results(&tinker_print,
+    tinker_low_level_print_results(&tinker_print,
             &total, &passed, &failed, &skipped,
             status, message, file, line);
 }
@@ -227,7 +227,7 @@ void _tinker_print_results(int status,
 /// @param[in] line     The line the assertion is on (likely __LINE__).
 ///
 /// @private
-int _tinker_assert(int success,
+int tinker_low_level_assert(int success,
         const char *code, const char *file, unsigned long line)
 {
     if (success) {
@@ -242,7 +242,7 @@ int _tinker_assert(int success,
         }
         return 1;
     } else {
-        _tinker_print_results(TEST_FAILURE, code, file, line);
+        tinker_print_results(TEST_FAILURE, code, file, line);
         return 0;
     }
 }
@@ -250,7 +250,7 @@ int _tinker_assert(int success,
 // See tinker.h for usage information.
 int tinker_run_tests(TinkerPutcharFn *putcharfn)
 {
-    _tinker_putchar = putcharfn;
+    tinker_putchar = putcharfn;
 
     tinker_print("\nRunning tests:\n\n");
 
