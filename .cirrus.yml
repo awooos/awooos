@@ -1,12 +1,8 @@
-# Allow compute credits usage for collaborators and anything pushed to the
-# master, staging, and trying branches. (So bors can use them.)
-use_compute_credits: $CIRRUS_USER_COLLABORATOR == 'true' || $CIRRUS_BRANCH == 'master' || $CIRRUS_BRANCH == 'staging' || $CIRRUS_BRANCH == 'trying'
-
 Lint_task:
   container:
-    image: fedora:31
+    image: fedora:38
   install_script:
-    - dnf install -y make clang
+    - dnf install -y make clang clang-tools-extra
   script:
     - make lint
 
@@ -14,7 +10,7 @@ Test_task:
   depends_on:
     - Lint
   container:
-    image: fedora:31
+    image: fedora:38
   install_script:
     - dnf install -y make clang
   build_script:
