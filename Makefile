@@ -1,7 +1,3 @@
-NAME := awoo
-TARGET ?= i386
-BUILD_TYPE ?= debug
-
 CC := clang
 
 SRCFILES := src/main.c
@@ -10,8 +6,10 @@ TEST_SRCFILES := test/main.c test/test_tinker_assert.c test/test_tinker_uint_to_
 
 CFLAGS += -std=c11 -pedantic-errors -gdwarf-2               \
 			-fdiagnostics-show-option -Werror -Weverything   \
+			-Wno-unknown-warning-option \
 			-Wno-cast-qual -Wno-missing-prototypes \
-			-Wno-documentation-unknown-command
+			-Wno-documentation-unknown-command  \
+			-Wno-unsafe-buffer-usage
 
 
 all: tinker-test
