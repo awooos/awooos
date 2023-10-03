@@ -2,7 +2,7 @@
 
 // TODO: Test handling of message, filename, line number.
 
-void _tinker_low_level_print_results(TinkerPrintFn *_print,
+void tinker_low_level_print_results(TinkerPrintFn *_print,
         unsigned long *_total, unsigned long *_passed,
         unsigned long *_failed, unsigned long *_skipped,
         int status, const char *message, const char *file, unsigned long line);
@@ -14,7 +14,7 @@ static unsigned long skipped = 0;
 
 void print_results(int status, const char *message, const char *file, unsigned long line)
 {
-    _tinker_low_level_print_results(0, &total, &passed, &failed, &skipped,
+    tinker_low_level_print_results(0, &total, &passed, &failed, &skipped,
             status, message, file, line);
 }
 

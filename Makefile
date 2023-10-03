@@ -1,17 +1,15 @@
-NAME := awoo
-TARGET ?= i386
-BUILD_TYPE ?= debug
-
 CC := clang
 
-SRCFILES := $(wildcard src/*.c)
+SRCFILES := src/main.c
 C_INCLUDES := -Iinclude
-TEST_SRCFILES := $(wildcard test/*.c)
+TEST_SRCFILES := test/main.c test/test_tinker_assert.c test/test_tinker_uint_to_str.c
 
-override CFLAGS += -std=c11 -pedantic-errors -gdwarf-2               \
-					-fdiagnostics-show-option -Werror -Weverything   \
-					-Wno-cast-qual -Wno-missing-prototypes \
-					-Wno-documentation-unknown-command
+CFLAGS += -std=c11 -pedantic-errors -gdwarf-2               \
+			-fdiagnostics-show-option -Werror -Weverything   \
+			-Wno-unknown-warning-option \
+			-Wno-cast-qual -Wno-missing-prototypes \
+			-Wno-documentation-unknown-command  \
+			-Wno-unsafe-buffer-usage
 
 
 all: tinker-test
