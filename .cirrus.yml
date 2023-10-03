@@ -6,7 +6,7 @@ Lint_task:
   container:
     image: fedora:38
   install_script:
-    - dnf install -y make clang git
+    - dnf install -y make clang git clang-tools-extra
   script:
     - make lint
 
