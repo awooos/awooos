@@ -4,7 +4,7 @@ use_compute_credits: $CIRRUS_USER_COLLABORATOR == 'true' || $CIRRUS_BRANCH == 'm
 
 Lint_task:
   container:
-    image: python:3.8-slim
+    image: python:3.10-slim
   install_script:
     - apt-get update
     - apt-get install -y make clang-tools git
@@ -17,7 +17,7 @@ Test_task:
   depends_on:
     - Lint
   container:
-    image: python:3.8-slim
+    image: python:3.10-slim
   install_script:
     - apt-get update
     - apt-get install -y build-essential clang git
