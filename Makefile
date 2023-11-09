@@ -1,3 +1,5 @@
+.POSIX:
+
 CC := clang
 
 SOURCES := src/main.c src/dmm_string.c src/instance.c
@@ -6,11 +8,7 @@ TEST_SOURCES := test/instance_test.c test/main_test.c test/main.c
 CINCLUDES := -Ibuild/deps/tinker/include -Iinclude
 
 CFLAGS := ${CFLAGS} -std=c11 -pedantic-errors \
-			-fdiagnostics-show-option -Werror -Weverything \
-			-Wno-cast-qual -Wno-missing-prototypes -Wno-vla \
-			-Wno-documentation-unknown-command \
-			-Wno-unknown-warning-option \
-			-Wno-unsafe-buffer-usage -Wno-declaration-after-statement  # TODO: Try to avoid needing these.
+		  -Wall -Wextra -Wconversion -Wcast-qual
 
 all: build/dmm-test
 
