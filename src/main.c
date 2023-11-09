@@ -9,11 +9,11 @@
 
 DMM_MallocHeader *dmm_global_instance = DMM_UNASSIGNED_REGION;
 
-DMM_PanicFn *_dmm_panic = NULL;
+DMM_PanicFn *dmm_pvt_panic = NULL;
 
 void dmm_init(DMM_PanicFn *panic_fn)
 {
-    _dmm_panic = panic_fn;
+    dmm_pvt_panic = panic_fn;
 }
 
 void dmm_add_memory_region(void *start, size_t length)
@@ -32,22 +32,22 @@ DMM_MallocHeader *dmm_get_first_free_chunk(size_t size)
     return dmm_instance_get_first_free_chunk(dmm_global_instance, size);
 }
 
-void *_dmm_malloc(size_t size, const char function[], const char filename[],
+void *dmm_malloc_(size_t size, const char function[], const char filename[],
         size_t line)
 {
-    return _dmm_instance_malloc(dmm_global_instance, size, function,
+    return dmm_instance_malloc_(dmm_global_instance, size, function,
             filename, line);
 }
 
-void _dmm_free(void *ptr, const char function[], const char filename[],
+void dmm_free_(void *ptr, const char function[], const char filename[],
         size_t line)
 {
-    _dmm_instance_free(dmm_global_instance, ptr, function, filename, line);
+    dmm_instance_free_(dmm_global_instance, ptr, function, filename, line);
 }
 
-void *_dmm_realloc(void *ptr, size_t size, const char function[],
+void *dmm_realloc_(void *ptr, size_t size, const char function[],
         const char filename[], size_t line)
 {
-    return _dmm_instance_realloc(dmm_global_instance, ptr, size, function,
+    return dmm_instance_realloc_(dmm_global_instance, ptr, size, function,
             filename, line);
 }

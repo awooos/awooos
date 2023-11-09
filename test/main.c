@@ -14,7 +14,7 @@ void test_dmm_instance_add_region(void);
 void test_dmm_instance_malloc(void);
 void test_dmm_instance_free_sets_header(void);
 
-noreturn void _panic(const char *message, const char *function,
+noreturn void panic(const char *message, const char *function,
         const char *filename, size_t line)
 {
     // loosely copy Rust's panic message format.
@@ -59,7 +59,7 @@ int main(void)
     tinker_add_test(dmm_instance_malloc);
     tinker_add_test(dmm_instance_free_sets_header);
 
-    dmm_init(&_panic);
+    dmm_init(&panic);
 
     init_mmap();
     if (!tinker_run_tests(&putchar)) {
