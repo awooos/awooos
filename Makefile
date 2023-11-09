@@ -1,14 +1,15 @@
 CC := clang
 
-SOURCES := $(wildcard src/*.c)
-TEST_SOURCES := test/main.c
+SOURCES := src/main.c src/dmm_string.c src/instance.c
+TEST_SOURCES := test/instance_test.c test/main_test.c test/main.c
 
 CINCLUDES := -Ibuild/deps/tinker/include -Iinclude
 
-override CFLAGS += -std=c11 -pedantic-errors \
-					-fdiagnostics-show-option -Werror -Weverything \
-					-Wno-cast-qual -Wno-missing-prototypes -Wno-vla \
-					-Wno-documentation-unknown-command
+CFLAGS := ${CFLAGS} -std=c11 -pedantic-errors \
+			-fdiagnostics-show-option -Werror -Weverything \
+			-Wno-cast-qual -Wno-missing-prototypes -Wno-vla \
+			-Wno-documentation-unknown-command \
+			-Wno-reserved-identifier -Wno-unsafe-buffer-usage -Wno-declaration-after-statement  # TODO: Try to avoid needing these.
 
 all: build/dmm-test
 
@@ -19,7 +20,7 @@ build-deps:
 
 build/dmm-test: $(SOURCES)
 	$(MAKE) build-deps
-	${CC} ${CFLAGS} ${CINCLUDES} $^ build/deps/tinker/src/main.c ${TEST_SOURCES} -o $@
+	${CC} ${CFLAGS} ${CINCLUDES} ${SOURCES} build/deps/tinker/src/main.c ${TEST_SOURCES} -o $@
 
 test: build/dmm-test
 	./build/dmm-test

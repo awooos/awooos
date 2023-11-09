@@ -2,13 +2,11 @@
 #include <stddef.h>
 #include <dmm.h>
 #include <dmm_instance.h>
-#include "header.h"
-#include "instance.h"
-#include "instance_test.h"
+#include "../src/header.h"
 
 static DMM_MallocHeader *test_instance = DMM_UNASSIGNED_REGION;
 
-void test_dmm_instance_add_region()
+void test_dmm_instance_add_region(void)
 {
     size_t length = 128;
 
@@ -27,7 +25,7 @@ void test_dmm_instance_add_region()
     tinker_assert(header->data == (void *)(header + 1));
 }
 
-void test_dmm_instance_malloc()
+void test_dmm_instance_malloc(void)
 {
     void *region = dmm_instance_malloc(test_instance, 10);
     tinker_assert(region != NULL);
@@ -39,7 +37,7 @@ void test_dmm_instance_malloc()
     tinker_assert(header->data == region);
 }
 
-void test_dmm_instance_free_sets_header()
+void test_dmm_instance_free_sets_header(void)
 {
     void *region = dmm_instance_malloc(test_instance, 10);
     tinker_assert(region != NULL);
