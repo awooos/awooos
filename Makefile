@@ -8,7 +8,7 @@ CINCLUDES := -Ibuild/deps/tinker/include -Iinclude
 
 CFLAGS := -std=c11 -pedantic-errors \
 		-DALI_PUTCHAR_NAME=ali_putchar \
-		-Wall -Wextra -Wconversion -Wcast-qual
+		-Wall -Wextra -Wconversion
 
 all: build/ali-test
 
