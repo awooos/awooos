@@ -1,5 +1,10 @@
 TARGET ?= $(shell uname -m)
 
+# `uname -m` on FreeBSD is amd64, on Linux it's x86_64.
+ifeq (${TARGET},amd64)
+	TARGET=x86_64
+endif
+
 CC := clang
 CLANG_CHECK := clang-check
 
