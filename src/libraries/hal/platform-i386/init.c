@@ -23,7 +23,7 @@ void hal_init(void *data)
     hal_idt_init();
     hal_multiboot_init();
 
-    ali_init(&_dmm_malloc, &_dmm_free, &_dmm_realloc);
+    ali_init(&dmm_malloc_, &dmm_free_, &dmm_realloc_);
     event_trigger("greeter display", metadata);
     event_trigger("HAL interrupts enable", NULL);
 }
