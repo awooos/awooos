@@ -1,3 +1,9 @@
 #!/bin/bash
 
-"${DOCKER:-docker}" run --rm -it -v "$(pwd):/tmp/work:z" -w /tmp/work --env-file env.docker -u $UID awoo-builder:latest make "$@"
+if [ -z "$DOCKER" ] && ! command -v docker &>/dev/null && command -v podman &>/dev/null; then
+    DOCKER=podman
+fi
+
+: "${DOCKER:=docker}"
+
+"$DOCKER" run --rm -it -v "$(pwd):/tmp/work:Z" -w /tmp/work --env-file env.docker awoo-builder:latest make "$@"

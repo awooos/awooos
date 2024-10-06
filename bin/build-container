@@ -1,3 +1,9 @@
 #!/bin/bash
 
-"${DOCKER:-docker}" build -t awoo-builder:latest .
+if [ -z "$DOCKER" ] && ! command -v docker &>/dev/null && command -v podman &>/dev/null; then
+    DOCKER=podman
+fi
+
+: "${DOCKER:=docker}"
+
+"$DOCKER" build -t awoo-builder:latest .
