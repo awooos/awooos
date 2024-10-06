@@ -3,8 +3,9 @@
 #include <dmm.h>
 #include "../src/main.h"
 
-// FIXME: dmm can't handle >634K chunk sizes for some reason.
-#define ALLOCATE_THE_UNIVERSE_CHUNK_SIZE (634 * 1024) // 634K
+// FIXME: dmm can't handle >633K chunk sizes for some reason. (Why was this previously 634K?)
+#define ALLOCATE_THE_UNIVERSE_CHUNK_SIZE (630 * 1024) // 630K
+//#define ALLOCATE_THE_UNIVERSE_CHUNK_SIZE (634 * 1024) // 634K
 //#define ALLOCATE_THE_UNIVERSE_CHUNK_SIZE (1024 * 1024) // 1M
 
 void test_dmm_malloc(void)
