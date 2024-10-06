@@ -1,0 +1,12 @@
+[*]
+end_of_line = lf
+insert_final_newline = true
+charset = utf-8
+
+[*.{asm,c,h,py,sh}]
+indent_style = space
+indent_size = 4
+
+[*.{json,yml,toml}]
+indent_style = space
+indent_size = 2
