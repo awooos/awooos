@@ -1,3 +1,0 @@
-[submodule "src/libraries/dmm-i386"]
-	path = src/libraries/dmm
-	url = https://github.com/awooos/dmm.git
