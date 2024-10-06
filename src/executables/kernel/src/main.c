@@ -1,4 +1,6 @@
 #include <awoo.h>
+#include <awoo/tests.h>
+#include <hal.h>
 #include <ali/event.h>
 #include <stdnoreturn.h>
 
@@ -16,8 +18,8 @@ noreturn void kernel_main()
         ctors[i]();
     }
 
-    event_trigger("HAL init", (void*)AWOO_INFO);
-    event_trigger("tests run", &test_build);
+    hal_init();
+    tests_run(test_build);
     event_trigger("shell init", NULL);
 
     while(1){

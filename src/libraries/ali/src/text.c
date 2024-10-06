@@ -1,5 +1,5 @@
 #include <stdio.h>
-#include <ali/event.h>
+#include <hal.h>
 
 // Writes the provided character (+c+) to the provided stream (+stream+).
 //
@@ -14,7 +14,7 @@ int fputc(int c, FILE *stream)
 
     /* Start hacky bullshit */
     char str[2] = {(char)c, 0};
-    event_trigger("print string", (char*)str);
+    hal_print((char*)str);
     /* End hacky bullshit */
 
     return c;
@@ -47,7 +47,7 @@ int fputs(const char *s, FILE *stream)
     (void)stream;
 
     /* Start hacky bullshit */
-    event_trigger("print string", (char*)s);
+    hal_print((char*)s);
     /* End hacky bullshit */
 
     return 1;
