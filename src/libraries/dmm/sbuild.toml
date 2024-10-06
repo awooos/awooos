@@ -1,8 +1,0 @@
-library_root = true
-name = "dmm"
-libtype = "C"
-
-object_remove_globs = []
-ignore_source_regex = [
-  "(^|_)test.c$"
-]
