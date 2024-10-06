@@ -1,6 +1,7 @@
 #include <awoo.h>
 #include <awoo/tests.h>
 #include <hal.h>
+#include <timer.h>
 #include <ali/event.h>
 #include <stdnoreturn.h>
 
@@ -19,6 +20,7 @@ noreturn void kernel_main()
     }
 
     hal_init();
+    timer_init();
     tests_run(test_build);
     event_trigger("shell init", NULL);
 
