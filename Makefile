@@ -16,7 +16,8 @@ override CFLAGS += -std=c11 -pedantic-errors -gdwarf-2 -nostdinc     \
 					-ffreestanding -fno-stack-protector -fno-builtin \
 					-fdiagnostics-show-option -Werror -Weverything   \
 					-Wno-cast-qual -Wno-missing-prototypes -Wno-vla  \
-					-Wno-documentation-unknown-command -Wno-missing-noreturn
+					-Wno-documentation-unknown-command -Wno-missing-noreturn \
+					-Wno-missing-field-initializers
 override LDFLAGS += -nostdlib -g --whole-archive
 override ASFLAGS +=
 
