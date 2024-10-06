@@ -1,7 +1,3 @@
 #!/bin/bash
 
-if [ -z "${WHALEDO_UID}" ]; then
-  WHALEDO_UID=$UID
-fi
-
-docker run --rm -it -v "$(pwd):/tmp/work:z" -w /tmp/work --env-file env.whaledo -u $WHALEDO_UID awoo-builder:latest make "$@"
+"${DOCKER:-docker}" run --rm -it -v "$(pwd):/tmp/work:z" -w /tmp/work --env-file env.docker -u $UID awoo-builder:latest make "$@"
