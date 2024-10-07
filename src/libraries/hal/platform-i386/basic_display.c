@@ -1,6 +1,5 @@
 // NOTE: This display driver does NOT implement scrolling, currently.
 
-#include <ali/event.h>
 #include "ports.h"
 #include <stdint.h>
 
@@ -129,10 +128,4 @@ void hal_basic_display_print(const char *string)
 
     // Update the displayed cursor position.
     hal_basic_display_move_cursor(row, col);
-}
-
-__attribute__((constructor))
-void hal_basic_display_register()
-{
-    event_watch("print string", (void (*)(void*))&hal_basic_display_print);
 }

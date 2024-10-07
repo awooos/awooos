@@ -1,5 +1,6 @@
+#include <awoo/tests.h>
 #include <ali.h>
-#include <ali/event.h>
+#include <stdbool.h>
 #include <stdio.h>
 #include <dmm.h>
 #include <flail.h>
@@ -18,17 +19,16 @@ void test_shutdown(bool all_tests_passed)
     // If a test failed, do a test-fail shutdown.
     if (!all_tests_passed) {
         puts("\n\n!!! Encountered failing tests; not booting. !!!");
-        event_trigger("HAL shutdown test fail", NULL);
+        hal_shutdown_test_fail();
     }
 
     // If we get this far, we assume all of the tests passed.
-    event_trigger("HAL shutdown", NULL);
+    hal_shutdown();
 }
 
-void run_tests(void *data)
+void tests_run(bool test_build)
 {
     bool all_tests_passed;
-    bool test_build = *((bool*)data);
 
     ADD_TESTS(hal);
     ADD_TESTS(ali);
@@ -56,10 +56,4 @@ void run_tests(void *data)
         // if it tries to tell QEMU to return a nonzero exit code.
         test_shutdown(all_tests_passed);
     }
-}
-
-__attribute__((constructor))
-void tests_register_events()
-{
-    event_watch("tests run", run_tests);
 }

@@ -1,7 +1,7 @@
 /* NOTE: THIS UART IMPLEMENTATION IS WRITE-ONLY, TO PRINT DEBUG INFORMATION. */
 
-#include <ali/event.h>
 #include "ports.h"
+#include <stdbool.h>
 #include <stdint.h>
 
 // http://wiki.osdev.org/Serial_ports
@@ -53,10 +53,4 @@ void hal_basic_uart_print(const char *string)
         // Write the current character.
         hal_outb(PORT, (uint8_t)*string);
     }
-}
-
-__attribute__((constructor))
-void hal_basic_uart_register_events()
-{
-    event_watch("print string", (void (*)(void*))&hal_basic_uart_print);
 }

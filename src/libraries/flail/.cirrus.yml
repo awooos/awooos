@@ -1,0 +1,26 @@
+# Allow compute credits usage for collaborators and anything pushed to the
+# master, staging, and trying branches. (So bors can use them.)
+use_compute_credits: $CIRRUS_USER_COLLABORATOR == 'true' || $CIRRUS_BRANCH == 'master' || $CIRRUS_BRANCH == 'staging' || $CIRRUS_BRANCH == 'trying'
+
+Lint_task:
+  container:
+    image: python:3.10-slim
+  install_script:
+    - apt-get update
+    - apt-get install -y make clang-tools git
+    - pip3 install -U pylint
+  script:
+    - pylint test
+    - make lint
+
+Test_task:
+  depends_on:
+    - Lint
+  container:
+    image: python:3.10-slim
+  install_script:
+    - apt-get update
+    - apt-get install -y build-essential clang git
+    - pip3 install -U pytest
+  script:
+    - make test

@@ -1,35 +1,36 @@
+#include <awoo.h>
 #include <ali.h>
-#include <ali/event.h>
 #include <dmm.h>
+#include <hal.h>
 #include <stddef.h>
 
 #include "exceptions.h"
 #include "idt.h"
 #include "multiboot.h"
 
+void hal_basic_display_print(const char *string);
+void hal_basic_uart_print(const char *string);
+
 extern char kernel_comment_start;
 
-void hal_init(void *data)
-{
-    const char *metadata[] = {
-        data,
-        "\r\n",
-        "Compiled with: ",
-        &kernel_comment_start,
-        NULL
-    };
+void hal_print(const char *string) {
+    hal_basic_uart_print(string);
+    hal_basic_display_print(string);
+}
 
+void hal_init(void) {
     hal_exceptions_init();
     hal_idt_init();
     hal_multiboot_init();
 
-    ali_init(&_dmm_malloc, &_dmm_free, &_dmm_realloc);
-    event_trigger("greeter display", metadata);
-    event_trigger("HAL interrupts enable", NULL);
-}
+    ali_init(&dmm_malloc_, &dmm_free_, &dmm_realloc_);
 
-__attribute__((constructor))
-void hal_init_register_events()
-{
-    event_watch("HAL init", &hal_init);
+
+    hal_print(AWOO_INFO);
+    hal_print("\r\n");
+    hal_print("Compiled with: ");
+    hal_print(&kernel_comment_start);
+    hal_print("\r\n");
+
+    hal_interrupts_disable();
 }
