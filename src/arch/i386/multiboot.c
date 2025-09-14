@@ -16,6 +16,10 @@ static size_t hal_kernel_end   = (size_t)(&kernel_end) + 1;
 
 void multiboot_validate_info(MultibootInfo *multiboot_info)
 {
+    if (hal_get_magic() != MULTIBOOT_MAGIC) {
+        hal_panic("could not find MULTIBOOT_MAGIC");
+    }
+
 #define multiboot_flag_set(bit) ((multiboot_info->flags & (1 << bit)) != 0)
 
     // Multiboot a.out and ELF flags should never be set simultaneously.

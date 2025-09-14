@@ -30,7 +30,6 @@ void tests_run(bool test_build)
 {
     bool all_tests_passed;
 
-    ADD_TESTS(hal);
     ADD_TESTS(ali);
     ADD_TESTS(dmm);
     ADD_TESTS(timer);

@@ -3,6 +3,8 @@
 
 #include <stdint.h>
 
+#define MULTIBOOT_MAGIC 0x2BADB002
+
 void hal_multiboot_init(void);
 
 typedef struct multiboot_info_s
