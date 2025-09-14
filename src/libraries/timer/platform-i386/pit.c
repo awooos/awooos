@@ -1,6 +1,6 @@
 #include "pit.h"
 #include <ali/event.h>
-#include "../../hal/platform-i386/ports.h"
+#include "../../../arch/i386/ports.h"
 
 void pit_phase(int hz) {
     int divisor = 1193182 / hz;                 // Calculate divisor

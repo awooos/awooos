@@ -50,8 +50,6 @@ ALL_FILES := $(wildcard            \
 SRCFILES := $(filter %.c,${ALL_FILES}) $(filter %.asm,${ALL_FILES})
 OBJFILES := $(patsubst %.asm, %.o, $(patsubst %.c, %.o, ${SRCFILES}))
 
-LIB_OBJFILES := $(filter src/libraries/%,${OBJFILES})
-
 # Any directory directly under src/libraries/ is treated as a library.
 LIBRARIES := $(patsubst %/,%.a,$(filter %/,$(wildcard src/libraries/*/)))
 
@@ -80,7 +78,7 @@ generated_headers:
 	${AS} ${ASFLAGS} -o $@ $<
 
 ${KERNEL}: ${OBJFILES} #${LIBRARIES}
-	${LD} -o $@ ${LDFLAGS} -L src/libraries -T src/arch/${TARGET}/link.ld src/arch/${TARGET}/start.o src/kernel/main.o src/kernel/tests.o ${LIB_OBJFILES}
+	${LD} -o $@ ${LDFLAGS} -L src/libraries -T src/arch/${TARGET}/link.ld ${OBJFILES}
 
 %.a: ${OBJFILES}
 	${AR} rcs $@ $(filter $*/%,$^)

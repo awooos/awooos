@@ -2,7 +2,7 @@
 #include <flail/internal.h>
 #include <flail/platform.h>
 #include <stddef.h>
-#include "../../hal/include/hal.h"
+#include <hal.h>
 #include "../src/uint_to_str.h"
 
 
