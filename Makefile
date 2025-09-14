@@ -45,8 +45,8 @@ ALL_FILES := $(wildcard            \
 				src/libraries/tinker/test/test_*.c \
 				src/libraries/*/platform-${TARGET}/*    \
 				src/libraries/*/platform-${TARGET}/*/*  \
-				src/executables/kernel/src/* \
-				src/executables/kernel/platform-${TARGET}/*)
+				src/kernel/* \
+				src/arch/${TARGET}/*)
 SRCFILES := $(filter %.c,${ALL_FILES}) $(filter %.asm,${ALL_FILES})
 OBJFILES := $(patsubst %.asm, %.o, $(patsubst %.c, %.o, ${SRCFILES}))
 
@@ -55,15 +55,14 @@ LIB_OBJFILES := $(filter src/libraries/%,${OBJFILES})
 # Any directory directly under src/libraries/ is treated as a library.
 LIBRARIES := $(patsubst %/,%.a,$(filter %/,$(wildcard src/libraries/*/)))
 
-# Any directory directly under src/executables/ is treated as an executable.
-EXECUTABLES := $(patsubst %/,%.exe,$(filter %/,$(wildcard src/executables/*/)))
-
 # ISO_FILE is the final location of the generated ISO.
 ISO_DIR := iso
 ISO_FILENAME := ${NAME}${NAME_SUFFIX}-${TARGET}-${BUILD_TYPE}.iso
 ISO_FILE := ${ISO_DIR}/${ISO_FILENAME}
 
-all: ${EXECUTABLES}
+KERNEL := src/kernel.exe
+
+all: ${KERNEL}
 
 # This rule is triggered by "include make/${TARGET}.mk" if TARGET is undefined.
 # This shouldn't be automated, so print an error.
@@ -80,16 +79,16 @@ generated_headers:
 %.o: %.asm
 	${AS} ${ASFLAGS} -o $@ $<
 
-src/executables/kernel.exe: ${OBJFILES} #${LIBRARIES}
-	${LD} -o $@ ${LDFLAGS} -L src/libraries -T src/executables/kernel/platform-${TARGET}/link.ld src/executables/kernel/platform-${TARGET}/start.o src/executables/kernel/src/main.o ${LIB_OBJFILES}
+${KERNEL}: ${OBJFILES} #${LIBRARIES}
+	${LD} -o $@ ${LDFLAGS} -L src/libraries -T src/arch/${TARGET}/link.ld src/arch/${TARGET}/start.o src/kernel/main.o src/kernel/tests.o ${LIB_OBJFILES}
 
 %.a: ${OBJFILES}
 	${AR} rcs $@ $(filter $*/%,$^)
 
 iso: ${ISO_FILE}
-${ISO_FILE}: ${EXECUTABLES}
+${ISO_FILE}: ${KERNEL}
 	@cp -r assets/isofs/ ./
-	@cp ${EXECUTABLES} isofs/
+	@cp ${KERNEL} isofs/
 	xorriso -report_about HINT -abort_on WARNING -as mkisofs -quiet -boot-info-table -R -b boot/grub/stage2_eltorito -no-emul-boot -boot-load-size 4 -input-charset utf-8 -o ${ISO_FILE} isofs
 
 test: lint
