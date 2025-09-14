@@ -26,4 +26,6 @@ void gtimer_copy(Timer *copy);
 
 void add_timer_tests(void);
 
+void timer_init(void);
+
 #endif

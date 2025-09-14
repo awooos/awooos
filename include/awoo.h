@@ -16,4 +16,7 @@
 
 static const char *AWOO_INFO = __AWOO_INFO__;
 
+#include <flail.h>
+#define hal_panic(message) flail_panic_impl(message, __FUNCTION__, __FILE__, __LINE__)
+
 #endif

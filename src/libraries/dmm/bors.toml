@@ -1,0 +1,6 @@
+status = [
+  "Lint",
+  "Test",
+]
+
+delete_merged_branches = true

@@ -1,0 +1,19 @@
+Lint_task:
+  container:
+    image: fedora:38
+  install_script:
+    - dnf install -y make clang clang-tools-extra
+  script:
+    - make lint
+
+Test_task:
+  depends_on:
+    - Lint
+  container:
+    image: fedora:38
+  install_script:
+    - dnf install -y make clang
+  build_script:
+    - make ./tinker-test
+  script:
+    - make test
