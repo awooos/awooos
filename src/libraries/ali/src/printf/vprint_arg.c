@@ -293,6 +293,15 @@ int ali_vprint_arg(char *str, size_t size, const char *format, int *consumed, va
         // Nothing is printed.
         int *tmp_intptr = va_arg(args, int*);
         *tmp_intptr = length;
+
+        if (*tmp_intptr == length) {
+            puts("*tmp_intptr == length");
+        }
+
+        if (length == 1 && vspec.n) {
+            puts("%n + length == 1");
+        }
+
         return 0;
     } else if (vspec.percent) {
         // A literal %.

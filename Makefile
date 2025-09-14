@@ -15,7 +15,8 @@ CLANG_CHECK ?= clang-check
 override CFLAGS += -std=c11 -pedantic-errors -gdwarf-2 -nostdinc     \
 					-ffreestanding -fno-stack-protector -fno-builtin \
 					-fdiagnostics-show-option -Werror -Wall -Wextra \
-					-Wconversion -Wno-missing-field-initializers
+					-Wconversion -Wno-missing-field-initializers \
+					-Wno-strict-prototypes
 override LDFLAGS += -nostdlib -g --whole-archive
 override ASFLAGS +=
 
@@ -49,6 +50,8 @@ ALL_FILES := $(wildcard            \
 SRCFILES := $(filter %.c,${ALL_FILES}) $(filter %.asm,${ALL_FILES})
 OBJFILES := $(patsubst %.asm, %.o, $(patsubst %.c, %.o, ${SRCFILES}))
 
+LIB_OBJFILES := $(filter src/libraries/%,${OBJFILES})
+
 # Any directory directly under src/libraries/ is treated as a library.
 LIBRARIES := $(patsubst %/,%.a,$(filter %/,$(wildcard src/libraries/*/)))
 
@@ -77,8 +80,8 @@ generated_headers:
 %.o: %.asm
 	${AS} ${ASFLAGS} -o $@ $<
 
-src/executables/kernel.exe: ${OBJFILES} ${LIBRARIES}
-	${LD} -o $@ ${LDFLAGS} -L src/libraries -T src/executables/kernel/platform-${TARGET}/link.ld src/executables/kernel/platform-${TARGET}/start.o src/executables/kernel/src/main.o ${KERNEL_LDFLAGS}
+src/executables/kernel.exe: ${OBJFILES} #${LIBRARIES}
+	${LD} -o $@ ${LDFLAGS} -L src/libraries -T src/executables/kernel/platform-${TARGET}/link.ld src/executables/kernel/platform-${TARGET}/start.o src/executables/kernel/src/main.o ${LIB_OBJFILES}
 
 %.a: ${OBJFILES}
 	${AR} rcs $@ $(filter $*/%,$^)

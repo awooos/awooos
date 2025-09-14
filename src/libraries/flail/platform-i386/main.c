@@ -2,6 +2,7 @@
 #include <flail/internal.h>
 #include <flail/platform.h>
 #include <stddef.h>
+#include "../../hal/include/hal.h"
 #include "../src/uint_to_str.h"
 
 
@@ -43,13 +44,13 @@ void flail_stack_dump_with_stack(size_t *stack_start, size_t *_stack_end)
             return;
         }
 
-        flail_print("0x");
-        flail_print(flail_uint_to_str(buffer, frame, 16));
-        flail_print(": 0x");
-        flail_print(flail_uint_to_str(buffer, ip, 16));
-        flail_print("\n");
+        hal_print("0x");
+        hal_print(flail_uint_to_str(buffer, frame, 16));
+        hal_print(": 0x");
+        hal_print(flail_uint_to_str(buffer, ip, 16));
+        hal_print("\n");
     }
-    flail_print("[...]\n");
+    hal_print("[...]\n");
 }
 
 #ifndef FLAIL_DONT_DEFINE_STACK_DUMP

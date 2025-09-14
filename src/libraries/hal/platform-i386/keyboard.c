@@ -6,6 +6,8 @@
 #include "ports.h"
 #include <stdlib.h>
 
+extern void shell_keyboard_callback(void *data); // FIXME: this should eventually not be hard-coded
+
 #define EMPTY_KEYBOARD_EVENT {0,0,0,0,0,0,0,0,0,0,0,0,{0,},0,0}
 
 #define IS_BREAK(x) (scancode & 0x80)
@@ -72,7 +74,7 @@ void hal_keyboard_callback(UNUSED void *data)
         event.c = hal_keyboard_resolve_scancode(keysym_us, scancode);
     }
 
-    event_trigger("keyboard event", &event);
+    shell_keyboard_callback(&event);
 }
 
 __attribute__((constructor))

@@ -5,7 +5,7 @@
 //
 // This calls `_flail_print_panic()` directly instead of calling
 // `flail_panic()`, so it doesn't hang forever.
-void test_flail_intentional_panic()
+void test_flail_intentional_panic(void)
 {
-    _flail_print_panic("This kernel panic is intentional.", __FUNCTION__, __FILE__, __LINE__);
+    flail_print_panic("This kernel panic is intentional.", __FUNCTION__, __FILE__, __LINE__);
 }

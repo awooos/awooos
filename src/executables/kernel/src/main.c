@@ -7,22 +7,16 @@
 
 typedef void (constructor)(void);
 
-extern size_t __CTOR_LIST__;
+extern void shell_init(void); // FIXME: this should eventually become a process
 
 noreturn void kernel_main()
 {
     bool test_build = (AWOO_TEST_BUILD == 1);
 
-    // Run all of the constructors.
-    constructor **ctors = (constructor**)&__CTOR_LIST__;
-    for (size_t i = 0; ctors[i] != NULL; i++) {
-        ctors[i]();
-    }
-
     hal_init();
     timer_init();
     tests_run(test_build);
-    event_trigger("shell init", NULL);
+    shell_init();
 
     while(1){
         // Do nothing forever.

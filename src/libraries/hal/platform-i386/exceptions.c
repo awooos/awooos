@@ -1,7 +1,7 @@
 #include "exceptions.h"
 #include "idt.h"
 #include "irq.h"
-#include "../src/panic.h"
+#include <awoo.h>
 #include "ports.h"
 #include <ali/event.h>
 

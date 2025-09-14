@@ -17,14 +17,15 @@ FLAGS       equ  MODULEALIGN | MEMINFO  ; Multiboot flag field.
 MAGIC       equ  0x1BADB002      ; Magic number so bootloader can find the header.
 CHECKSUM    equ -(MAGIC + FLAGS) ; Checksum required.
 
-; Executable section.
-section .text
+section .mboot
   align 4
   MultiBootHeader:
       dd MAGIC
       dd FLAGS
       dd CHECKSUM
 
+; Executable section.
+section .text
   _start:
     mov  esp, stack_top   ; Set up the stack.
     push ebx              ; Argument to kernel_main.

@@ -6,7 +6,7 @@
 
 #include "shellsplit_test.h"
 
-void test_ali_str_shellsplit()
+void test_ali_str_shellsplit(void)
 {
     const char *test_str = "test \"test test\" 'test test' test\\ test";
     ShellSplitResult *test_output = shellsplit((char*)test_str);

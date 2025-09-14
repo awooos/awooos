@@ -13,12 +13,12 @@ void gtimer_increment_ms(uint32_t milliseconds) {
 }
 
 /// Return the duration stored in the global timer, converted to microseconds.
-uint64_t gtimer_in_microseconds() {
+uint64_t gtimer_in_microseconds(void) {
     return timer_in_microseconds(&_gtimer);
 }
 
 /// Return the duration stored in the global timer, converted to milliseconds.
-uint64_t gtimer_in_milliseconds() {
+uint64_t gtimer_in_milliseconds(void) {
     return timer_in_milliseconds(&_gtimer);
 }
 

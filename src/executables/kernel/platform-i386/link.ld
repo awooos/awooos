@@ -4,12 +4,6 @@ SECTIONS {
 	. = 0x100000;
 	kernel_start = .;
 
-	.debug_info : {
-		kernel_debug_info_start = .;
-		*(.debug_info)
-		kernel_debug_info_end = .;
-	}
-
 	.text : ALIGN (0x1000) {
 		kernel_code_start = .;
 		*(.mboot)
@@ -80,15 +74,11 @@ SECTIONS {
 		kernel_debug_loc_end = .;
 	}
 
-	.data ALIGN(0x1000) : {
-		__CTOR_LIST__ = .;
-		*(.ctors)
-		LONG(0)
-		__CTOR_END__ = .;
-		__DTOR_LIST__ = .;
-		*(.dtors)
-		LONG(0)
-		__DTOR_END__ = .;
+	.debug_info : {
+		kernel_debug_info_start = .;
+		*(.debug_info)
+		kernel_debug_info_end = .;
 	}
+
 }
 

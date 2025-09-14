@@ -6,7 +6,7 @@
 
 #include "charsplit_test.h"
 
-void test_ali_str_charsplit()
+void test_ali_str_charsplit(void)
 {
     const char *test_str = "test!test two!test three";
     char **test_output = charsplit((char *)test_str, '!');

@@ -9,7 +9,7 @@ void test_dmm_instance_add_region(void);
 void test_dmm_instance_malloc(void);
 void test_dmm_instance_free_sets_header(void);
 
-void add_dmm_tests()
+void add_dmm_tests(void)
 {
     // Global instance tests
     tinker_add_test(dmm_malloc);

@@ -22,6 +22,7 @@ void hal_init(void) {
     hal_exceptions_init();
     hal_idt_init();
     hal_multiboot_init();
+    dmm_init(&flail_panic_impl);
 
     ali_init(&dmm_malloc_, &dmm_free_, &dmm_realloc_);
 
